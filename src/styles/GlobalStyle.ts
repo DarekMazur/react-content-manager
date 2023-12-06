@@ -12,6 +12,11 @@ export const GlobalStyle = createGlobalStyle`
       font-size: 62.5%;
       font-family: ${({ theme }) => theme.fonts.main};
     }
+  
+  body {
+      margin: 0;
+      padding: 0;
+  }
 
     *, *::after, *::before {
       box-sizing: inherit;
