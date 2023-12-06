@@ -13,17 +13,6 @@
     "format": "prettier . --write",
     "prepare": "husky install"
   },
-  "lint-staged": {
-    "src/**/*.{js,,jsx,ts,tsx,json}": [
-      "prettier --write",
-      "npm test"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
