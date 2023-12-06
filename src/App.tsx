@@ -1,6 +1,7 @@
 import { GlobalStyle } from './styles/GlobalStyle.ts';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './utils/themes/theme.ts';
+import Footer from './components/Footer/Footer.tsx';
 
 const App = () => {
   return (
@@ -9,6 +10,7 @@ const App = () => {
       <div>
         <p>Clear project</p>
       </div>
+      <Footer />
     </ThemeProvider>
   );
 };
