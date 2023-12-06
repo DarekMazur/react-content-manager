@@ -7,7 +7,7 @@ const FooterWrapper = () => {
   return (
     <Footer>
       <p>RCM4Strapi</p>
-      <Link url="https://lesnygacek.pl" name={data.blogName} size="s" />
+      <Link url={data.blogUrl} name={data.blogName} size="s" />
       <Copyright />
     </Footer>
   );
