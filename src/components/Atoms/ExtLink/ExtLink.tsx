@@ -1,4 +1,4 @@
-import { StyledLink } from './Link.styles.ts';
+import { StyledLink } from './ExtLink.styles.ts';
 
 interface LinkProps {
   url: string;
@@ -6,7 +6,7 @@ interface LinkProps {
   size?: string;
 }
 
-const Link = (props: LinkProps) => {
+const ExtLink = (props: LinkProps) => {
   const { url, name, size } = props;
   return (
     <StyledLink href={url} size={size} target="_blank">
@@ -15,4 +15,4 @@ const Link = (props: LinkProps) => {
   );
 };
 
-export default Link;
+export default ExtLink;

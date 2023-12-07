@@ -1,14 +1,14 @@
 import { Meta, StoryObj } from '@storybook/react';
-import Link from './Link.tsx';
+import ExtLink from './ExtLink.tsx';
 
-const meta: Meta<typeof Link> = {
+const meta: Meta<typeof ExtLink> = {
   tags: ['autodocs'],
-  component: Link,
+  component: ExtLink,
   title: 'External link',
 };
 
 export default meta;
-type Story = StoryObj<typeof Link>;
+type Story = StoryObj<typeof ExtLink>;
 
 /** Component for external link */
 export const Primary: Story = {

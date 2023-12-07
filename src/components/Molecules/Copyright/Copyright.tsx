@@ -1,4 +1,4 @@
-import Link from '../../Atoms/Link/Link.tsx';
+import Link from '../../Atoms/ExtLink/ExtLink.tsx';
 import { StyledCopyright } from './Copyright.styles.ts';
 import { data } from '../../../utils/data.ts';
 import { getDate } from '../../../utils/methods/getDate.ts';
