@@ -4,6 +4,7 @@ import Copyright from './Copyright.tsx';
 const meta: Meta<typeof Copyright> = {
   tags: ['autodocs'],
   component: Copyright,
+  title: 'Molecules/Copyright',
 };
 
 export default meta;

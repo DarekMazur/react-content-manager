@@ -4,7 +4,7 @@ import ExtLink from './ExtLink.tsx';
 const meta: Meta<typeof ExtLink> = {
   tags: ['autodocs'],
   component: ExtLink,
-  title: 'External link',
+  title: 'Atoms/External link',
 };
 
 export default meta;
