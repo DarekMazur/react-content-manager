@@ -18,7 +18,6 @@ const Header = (props: HeaderProps) => {
         <StyledHeader>
           {user && `Hello, ${user.userName}!`}
           <Icon customIcon={user?.avatar} />
-          <Icon />
         </StyledHeader>
       ) : null}
     </>
