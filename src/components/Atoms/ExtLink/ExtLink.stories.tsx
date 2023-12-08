@@ -25,7 +25,7 @@ export const Primary: Story = {
       control: 'select',
       table: {
         defaultValue: {
-          summary: 'lm',
+          summary: 'inherit',
         },
         type: {
           summary: "string: | 's' | 'm' | 'lm' | 'l' | 'xl'",
