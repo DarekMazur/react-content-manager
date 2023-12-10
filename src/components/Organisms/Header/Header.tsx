@@ -1,5 +1,6 @@
 import { StyledHeader } from './Header.styles.ts';
 import Icon from '../../Atoms/Icon/Icon.tsx';
+import MenuList from '../../Molecules/MenuList/MenuList.tsx';
 
 interface HeaderProps {
   isAuthorised: boolean;
@@ -16,8 +17,11 @@ const Header = (props: HeaderProps) => {
     <>
       {isAuthorised ? (
         <StyledHeader>
-          {user && `Hello, ${user.userName}!`}
-          <Icon customIcon={user?.avatar} />
+          <MenuList />
+          <div>
+            {user && `Hello, ${user.userName}!`}
+            <Icon customIcon={user?.avatar} />
+          </div>
         </StyledHeader>
       ) : null}
     </>
