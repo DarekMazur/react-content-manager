@@ -7,7 +7,8 @@ export const StyledMenuListItemLink = styled(NavLink)`
   transition: 200ms color ease-in;
 
   &.active {
-    border-bottom: ${({ theme }) => `0.1rem solid ${theme.colors.lightBlue}`};
+    color: ${({ theme }) => theme.colors.red};
+    border-bottom: ${({ theme }) => `0.1rem solid ${theme.colors.red}`};
     transition:
       200ms border-bottom-color ease-in,
       200ms color ease-in;
