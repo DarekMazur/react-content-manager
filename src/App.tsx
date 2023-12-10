@@ -5,6 +5,7 @@ import FooterWrapper from './components/Organisms/Footer/Footer.tsx';
 import Header from './components/Organisms/Header/Header.tsx';
 import { adminUser } from './utils/data.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home.tsx';
 
 const App = () => {
   const user = {
@@ -15,6 +16,7 @@ const App = () => {
 
   const isAuthorised = () => {
     return adminUser.role.type === 'admin';
+    // return false;
   };
 
   return (
@@ -23,20 +25,7 @@ const App = () => {
         <GlobalStyle />
         <Header user={user} isAuthorised={isAuthorised()} />
         <Routes>
-          <Route
-            path="/"
-            element={
-              isAuthorised() ? (
-                <div>
-                  <p>Dashboard - authorised</p>
-                </div>
-              ) : (
-                <div>
-                  <p>Dashboard - unauthorised</p>
-                </div>
-              )
-            }
-          />
+          <Route path="/" element={<Home isAuthorised={isAuthorised()} />} />
           <Route
             path="articles"
             element={
