@@ -22,6 +22,7 @@ export default meta;
 
 type Story = StoryObj<typeof MenuListItem>;
 
+/** List item for current route */
 export const Active: Story = {
   args: {
     target: '/',
@@ -29,7 +30,7 @@ export const Active: Story = {
   },
 };
 
-export const InActive: Story = {
+export const Inactive: Story = {
   args: {
     target: '/lorem',
     children: 'Inactive menu target',
