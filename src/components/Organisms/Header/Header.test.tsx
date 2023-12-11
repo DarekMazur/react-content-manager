@@ -10,9 +10,7 @@ const user = {
   uuid: adminUser.uuid,
 };
 
-const component = renderWithProvider(
-  <Header isAuthorised={true} user={user} />,
-);
+const component = renderWithProvider(<Header user={user} />);
 
 describe('Header component:', () => {
   it('- should display greetings for logged users', () => {
@@ -22,14 +20,9 @@ describe('Header component:', () => {
   });
 
   it('- should contains icon with user avatar', () => {
-    renderWithProvider(<Header isAuthorised={true} user={user} />);
+    renderWithProvider(<Header user={user} />);
     expect(screen.getByRole('img')).toBeInTheDocument();
     screen.getByAltText(`${adminUser.username} avatar`);
-  });
-
-  it('- should not be visible when user is not authorised', () => {
-    renderWithProvider(<Header isAuthorised={false} />);
-    expect(screen.queryAllByRole('banner')).toHaveLength(0);
   });
 
   it('- rendered component match to snapshot', () => {

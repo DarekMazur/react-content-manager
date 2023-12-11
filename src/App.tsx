@@ -1,22 +1,13 @@
-import FooterWrapper from './components/Organisms/Footer/Footer.tsx';
-import Header from './components/Organisms/Header/Header.tsx';
-import { adminUser } from './utils/data.ts';
-import { Route, Routes } from 'react-router-dom';
-import Home from './pages/Home.tsx';
 import React, { useEffect, useState } from 'react';
 import { getFooterHeight } from './utils/methods/getFooterHeight.ts';
 import AppProviders from './utils/providers/AppProviders.tsx';
+import Authorised from './components/Templates/Authorised/Authorised.tsx';
+import FooterWrapper from './components/Organisms/Footer/Footer.tsx';
+import Unauthorised from './components/Templates/Unauthorised/Unauthorised.tsx';
 
 const App = () => {
-  const user = {
-    userName: adminUser.username,
-    avatar: adminUser.avatar,
-    uuid: adminUser.uuid,
-  };
-
-  const [isAuthorised, setIsAuthorised] = useState(false);
   // const [isAuthorised, setIsAuthorised] = useState(adminUser.role.type === 'admin');
-
+  const [isAuthorised, setIsAuthorised] = useState(false);
   const [wrapperHeight, setWrapperHeight] = useState(0);
 
   const handleMockLogin = (e?: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,59 +21,14 @@ const App = () => {
 
   return (
     <AppProviders>
-      <Header user={user} isAuthorised={isAuthorised} />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              isAuthorised={isAuthorised}
-              handleMockLogin={handleMockLogin}
-              wrapperHeight={wrapperHeight}
-            />
-          }
+      {isAuthorised ? (
+        <Authorised />
+      ) : (
+        <Unauthorised
+          handleMockLogin={handleMockLogin}
+          wrapperHeight={wrapperHeight}
         />
-        <Route
-          path="articles"
-          element={
-            <div>
-              <p>Articles</p>
-            </div>
-          }
-        />
-        <Route
-          path="comments"
-          element={
-            <div>
-              <p>Comments</p>
-            </div>
-          }
-        />
-        <Route
-          path="users"
-          element={
-            <div>
-              <p>Users</p>
-            </div>
-          }
-        />
-        <Route
-          path="user"
-          element={
-            <div>
-              <p>Single user</p>
-            </div>
-          }
-        />
-        <Route
-          path="gallery"
-          element={
-            <div>
-              <p>Gallery</p>
-            </div>
-          }
-        />
-      </Routes>
+      )}
       <FooterWrapper />
     </AppProviders>
   );
