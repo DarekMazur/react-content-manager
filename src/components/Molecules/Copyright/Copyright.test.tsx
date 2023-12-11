@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/dom';
 import '@testing-library/jest-dom';
-import { renderWithProvider } from '../../../utils/helpers/renderWithProvider.tsx';
+import { renderWithProvider } from '../../../utils/providers/renderWithProvider.tsx';
 import Copyright from './Copyright.tsx';
 
 const component = renderWithProvider(<Copyright />);

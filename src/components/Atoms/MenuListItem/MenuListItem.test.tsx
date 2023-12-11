@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/dom';
 import 'jest-styled-components';
 import '@testing-library/jest-dom';
-import { renderWithProvider } from '../../../utils/helpers/renderWithProvider.tsx';
+import { renderWithProvider } from '../../../utils/providers/renderWithProvider.tsx';
 import MenuListItem from './MenuListItem.tsx';
 import { theme } from '../../../utils/themes/theme.ts';
 import { fireEvent } from '@testing-library/react';

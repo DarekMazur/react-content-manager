@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/dom';
 import '@testing-library/jest-dom';
-import { renderWithProvider } from '../../../utils/helpers/renderWithProvider.tsx';
+import { renderWithProvider } from '../../../utils/providers/renderWithProvider.tsx';
 import ExtLink from './ExtLink.tsx';
 
 const customLink = renderWithProvider(
