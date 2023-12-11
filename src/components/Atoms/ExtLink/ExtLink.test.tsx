@@ -29,7 +29,7 @@ describe('Render external link:', () => {
     renderWithProvider(
       <ExtLink url="https://google.com" name="My Link" size="l" />,
     );
-    expect(screen.getByText('My Link')).toHaveStyle('font-size: 48px');
+    expect(screen.getByText('My Link')).toHaveStyle(`font-size: ${2.4 * 16}px`);
   });
 
   it('- rendered component match to snapshot', () => {

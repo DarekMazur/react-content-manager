@@ -6,6 +6,8 @@ import Header from './components/Organisms/Header/Header.tsx';
 import { adminUser } from './utils/data.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.tsx';
+import React, { useEffect, useState } from 'react';
+import { getFooterHeight } from './utils/methods/getFooterHeight.ts';
 
 const App = () => {
   const user = {
@@ -14,18 +16,36 @@ const App = () => {
     uuid: adminUser.uuid,
   };
 
-  const isAuthorised = () => {
-    return adminUser.role.type === 'admin';
-    // return false;
+  const [isAuthorised, setIsAuthorised] = useState(false);
+  // const [isAuthorised, setIsAuthorised] = useState(adminUser.role.type === 'admin');
+
+  const [wrapperHeight, setWrapperHeight] = useState(0);
+
+  const handleMockLogin = (e?: React.ChangeEvent<HTMLInputElement>) => {
+    e && e.preventDefault();
+    setIsAuthorised(true);
   };
+
+  useEffect(() => {
+    setWrapperHeight(getFooterHeight());
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <GlobalStyle />
-        <Header user={user} isAuthorised={isAuthorised()} />
+        <Header user={user} isAuthorised={isAuthorised} />
         <Routes>
-          <Route path="/" element={<Home isAuthorised={isAuthorised()} />} />
+          <Route
+            path="/"
+            element={
+              <Home
+                isAuthorised={isAuthorised}
+                handleMockLogin={handleMockLogin}
+                wrapperHeight={wrapperHeight}
+              />
+            }
+          />
           <Route
             path="articles"
             element={
