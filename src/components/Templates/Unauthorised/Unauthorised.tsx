@@ -1,17 +1,23 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme } from '../../../utils/themes/theme.ts';
 import { Link } from 'react-router-dom';
 import ExtLink from '../../Atoms/ExtLink/ExtLink.tsx';
 import { data } from '../../../utils/data.ts';
 import { StyledUnauthorised } from './Unauthorised.styles.ts';
+import { getFooterHeight } from '../../../utils/methods/getFooterHeight.ts';
 
 interface AuthProps {
   handleMockLogin: () => void;
-  wrapperHeight: number;
 }
 
-const Unauthorised: FC<AuthProps> = ({ handleMockLogin, wrapperHeight }) => {
+const Unauthorised: FC<AuthProps> = ({ handleMockLogin }) => {
+  const [wrapperHeight, setWrapperHeight] = useState(0);
+
+  useEffect(() => {
+    setWrapperHeight(getFooterHeight());
+  }, []);
+
   return (
     <StyledUnauthorised $height={wrapperHeight}>
       <FontAwesomeIcon
