@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/dom';
 import '@testing-library/jest-dom';
-import { renderWithProvider } from '../../../utils/providers/renderWithProvider.tsx';
+import { renderWithProviders } from '../../../utils/providers/renderWithProviders.tsx';
 import Header from './Header.tsx';
 import { adminUser } from '../../../utils/data.ts';
 
@@ -10,7 +10,7 @@ const user = {
   uuid: adminUser.uuid,
 };
 
-const component = renderWithProvider(<Header user={user} />);
+const component = renderWithProviders(<Header user={user} />);
 
 describe('Header component:', () => {
   it('- should display greetings for logged users', () => {
@@ -20,7 +20,7 @@ describe('Header component:', () => {
   });
 
   it('- should contains icon with user avatar', () => {
-    renderWithProvider(<Header user={user} />);
+    renderWithProviders(<Header user={user} />);
     expect(screen.getByRole('img')).toBeInTheDocument();
     screen.getByAltText(`${adminUser.username} avatar`);
   });

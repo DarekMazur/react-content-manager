@@ -1,12 +1,12 @@
 import { screen } from '@testing-library/dom';
 import '@testing-library/jest-dom';
-import { renderWithProvider } from '../../../utils/providers/renderWithProvider.tsx';
+import { renderWithProviders } from '../../../utils/providers/renderWithProviders.tsx';
 import { adminUser } from '../../../utils/data.ts';
 import Icon from './Icon.tsx';
 
-const component = renderWithProvider(<Icon />);
+const component = renderWithProviders(<Icon />);
 
-const componentWithAvt = renderWithProvider(
+const componentWithAvt = renderWithProviders(
   <Icon customIcon={adminUser.avatar} />,
 );
 
@@ -15,12 +15,12 @@ describe('Icon component:', () => {
     expect(screen.getByLabelText(`${adminUser.username}`)).toBeInTheDocument();
   });
   it('- render default icon if url in prop is invalid', () => {
-    renderWithProvider(<Icon customIcon={adminUser.uuid} />);
+    renderWithProviders(<Icon customIcon={adminUser.uuid} />);
     expect(screen.getByLabelText(`${adminUser.username}`)).toBeInTheDocument();
   });
 
   it('- render user avatar as icon if get valid url in prop', () => {
-    renderWithProvider(<Icon customIcon={adminUser.avatar} />);
+    renderWithProviders(<Icon customIcon={adminUser.avatar} />);
     expect(
       screen.getByAltText(`${adminUser.username} avatar`),
     ).toBeInTheDocument();
