@@ -5,6 +5,9 @@ export interface CommentTypes {
   id: number;
   content: string;
   uuid: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date;
   user: UserTypes;
 }
 
@@ -16,10 +19,15 @@ for (let i = 0; i <= randomizeLength; i++) {
   const user: Array<UserTypes> = users.filter(
     (user) => user.id === Math.floor(Math.random() * users.length),
   );
+  const createdDate = faker.date.past();
+
   const comment: CommentTypes = {
     id: i + 1,
     content: faker.lorem.sentence({ min: 1, max: 20 }),
     uuid: faker.string.uuid(),
+    createdAt: createdDate,
+    updatedAt: createdDate,
+    publishedAt: createdDate,
     user: user[0],
   };
 
