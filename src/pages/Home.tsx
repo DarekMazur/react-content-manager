@@ -20,6 +20,7 @@ const Home: FC<HomeProps> = (props) => {
   const articlePublicationDate = `${latestPost.publishedAt?.getDate()}.${latestPost.publishedAt?.getMonth()}.${latestPost.publishedAt?.getFullYear()}, ${latestPost.publishedAt?.getHours()}:${latestPost.publishedAt?.getMinutes()} `;
   const commentPublicationDate = `${latestComment.publishedAt?.getDate()}.${latestComment.publishedAt?.getMonth()}.${latestComment.publishedAt?.getFullYear()}, ${latestComment.publishedAt?.getHours()}:${latestComment.publishedAt?.getMinutes()} `;
 
+  const mostLikedPost = publishedPosts.sort((a, b) => b.likes - a.likes)[0];
   return (
     <main>
       <h3 style={{ textAlign: 'center' }}>
@@ -32,7 +33,7 @@ const Home: FC<HomeProps> = (props) => {
           alignItems: 'center',
         }}
       >
-        <div>
+        <section>
           <h4>Last article:</h4>
           <P>
             {latestPost.title} by {latestPost.author.username} (
@@ -44,12 +45,14 @@ const Home: FC<HomeProps> = (props) => {
             {commentPublicationDate})
           </P>
           <h4>Most liked article:</h4>
-          <P>Dolor (xxx likes)</P>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <P>
+            {mostLikedPost.title} ({mostLikedPost.likes} likes)
+          </P>
+        </section>
+        <section style={{ display: 'flex', flexDirection: 'column' }}>
           <button>Edit post</button>
           <button>Create post</button>
-        </div>
+        </section>
       </div>
     </main>
   );
