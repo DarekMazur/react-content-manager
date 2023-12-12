@@ -1,13 +1,19 @@
-import { adminUser } from '../../../utils/data.ts';
 import Header from '../../Organisms/Header/Header.tsx';
 import { Route, Routes } from 'react-router-dom';
 import Home from '../../../pages/Home.tsx';
+import { mockUsers } from '../../../__mock__/mockUsers.ts';
 
 const Authorised = () => {
+  const getUser = () => {
+    const admins = mockUsers.filter((user) => user.role.id === 1);
+    const getRandomIndex = Math.floor(Math.random() * admins.length);
+
+    return admins[getRandomIndex];
+  };
   const user = {
-    userName: adminUser.username,
-    avatar: adminUser.avatar,
-    uuid: adminUser.uuid,
+    userName: getUser().username,
+    avatar: getUser().avatar,
+    uuid: getUser().uuid,
   };
 
   return (
