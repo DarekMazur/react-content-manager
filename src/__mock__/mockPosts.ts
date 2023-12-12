@@ -9,6 +9,9 @@ interface PostTypes {
   description: string;
   body: string;
   uuid: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
   author: {
     uuid: string;
     username: string;
@@ -21,6 +24,7 @@ interface PostTypes {
 
 export const mockPosts: Array<PostTypes> = [];
 const randomizeLength = Math.floor(Math.random() * 300);
+const draftChance = 25;
 
 const users: Array<UserTypes> = mockUsers.filter((user) => user.role.id !== 4);
 let allComments = mockComments;
@@ -46,12 +50,18 @@ for (let i = 0; i <= randomizeLength; i++) {
       }
     }
 
+    const createdDate = faker.date.past();
+    const isPublished = Math.floor(Math.random() * 100) <= draftChance;
+
     const post: PostTypes = {
       is: i + 1,
       title: faker.lorem.words({ min: 2, max: 6 }),
       description: faker.lorem.words({ min: 0, max: 14 }),
       body: faker.lorem.paragraphs({ min: 5, max: 29 }),
       uuid: faker.string.uuid(),
+      createdAt: createdDate,
+      updatedAt: createdDate,
+      publishedAt: isPublished ? createdDate : null,
       author: {
         uuid: postAuthor[0].uuid,
         username: postAuthor[0].username,
