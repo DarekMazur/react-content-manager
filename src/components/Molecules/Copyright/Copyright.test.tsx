@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/dom';
 import '@testing-library/jest-dom';
-import { renderWithProvider } from '../../../utils/helpers/renderWithProvider.tsx';
+import { renderWithProviders } from '../../../utils/providers/renderWithProviders.tsx';
 import Copyright from './Copyright.tsx';
 
-const component = renderWithProvider(<Copyright />);
+const component = renderWithProviders(<Copyright />);
 const currentYear = new Date();
 
 describe('Copyright component:', () => {
@@ -16,7 +16,7 @@ describe('Copyright component:', () => {
   });
 
   it('- contains current year', () => {
-    renderWithProvider(<Copyright />);
+    renderWithProviders(<Copyright />);
     expect(screen.getByRole('copyright')).toHaveTextContent(
       String(currentYear.getFullYear()),
     );

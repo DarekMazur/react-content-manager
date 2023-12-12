@@ -1,19 +1,21 @@
-import { ThemeProvider } from 'styled-components';
-import { render } from '@testing-library/react';
 import { theme } from '../themes/theme.ts';
 import { GlobalStyle } from '../../styles/GlobalStyle.ts';
-import { JSX, PropsWithChildren } from 'react';
+import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
+import { FC, ReactNode } from 'react';
 
-export const renderWithProvider = (
-  children: PropsWithChildren<JSX.Element>,
-) => {
-  return render(
+interface ProvidersProps {
+  children: ReactNode;
+}
+const AppProviders: FC<ProvidersProps> = ({ children }) => {
+  return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <GlobalStyle />
         {children}
       </BrowserRouter>
-    </ThemeProvider>,
+    </ThemeProvider>
   );
 };
+
+export default AppProviders;
