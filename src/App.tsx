@@ -5,8 +5,7 @@ import FooterWrapper from './components/Organisms/Footer/Footer.tsx';
 import Unauthorised from './components/Templates/Unauthorised/Unauthorised.tsx';
 
 const App = () => {
-  // const [isAuthorised, setIsAuthorised] = useState(adminUser.role.type === 'admin');
-  const [isAuthorised, setIsAuthorised] = useState(false);
+  const [isAuthorised, setIsAuthorised] = useState(true);
 
   const handleMockLogin = (e?: React.ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();

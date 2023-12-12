@@ -1,12 +1,32 @@
 import { UserTypes } from '../__mock__/mockUsers.ts';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import P from '../components/Atoms/Paragraph/P.tsx';
 import { mockPosts } from '../__mock__/mockPosts.ts';
 import { mockComments } from '../__mock__/mockComments.ts';
+import styled from 'styled-components';
 
 interface HomeProps {
   user: UserTypes;
 }
+
+interface ButtonProps {
+  children: ReactNode;
+}
+
+const StyledButton = styled.button`
+  margin: 1rem;
+  width: 25rem;
+  height: 4rem;
+  border-radius: 1.2rem;
+  border: none;
+  font-size: ${({ theme }) => theme.fontSize.lm};
+  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.blue};
+`;
+
+const Button: FC<ButtonProps> = ({ children }) => {
+  return <StyledButton>{children}</StyledButton>;
+};
 
 const Home: FC<HomeProps> = (props) => {
   const { user } = props;
@@ -31,6 +51,7 @@ const Home: FC<HomeProps> = (props) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          gap: '2rem',
         }}
       >
         <section>
@@ -50,8 +71,8 @@ const Home: FC<HomeProps> = (props) => {
           </P>
         </section>
         <section style={{ display: 'flex', flexDirection: 'column' }}>
-          <button>Edit post</button>
-          <button>Create post</button>
+          <Button>Edit post</Button>
+          <Button>Create post</Button>
         </section>
       </div>
     </main>
