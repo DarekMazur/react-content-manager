@@ -12,6 +12,7 @@ interface PostTypes {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
+  likes: number;
   author: {
     uuid: string;
     username: string;
@@ -62,6 +63,7 @@ for (let i = 0; i <= randomizeLength; i++) {
       createdAt: createdDate,
       updatedAt: createdDate,
       publishedAt: isPublished ? createdDate : null,
+      likes: faker.number.int({ min: 0, max: 500 }),
       author: {
         uuid: postAuthor[0].uuid,
         username: postAuthor[0].username,
