@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyledIcon } from './Icon.styles.ts';
-import { adminUser } from '../../../utils/data.ts';
 
 interface IconProps {
   customIcon?: string;
@@ -13,12 +12,9 @@ const Icon = (props: IconProps) => {
   return (
     <StyledIcon>
       {customIcon && imageUrlRegex.test(customIcon) ? (
-        <img src={customIcon} alt={`${adminUser.username} avatar`} />
+        <img src={customIcon} alt={`avatar`} />
       ) : (
-        <FontAwesomeIcon
-          icon={['fas', 'user']}
-          aria-label={`${adminUser.username}`}
-        />
+        <FontAwesomeIcon icon={['fas', 'user']} aria-label={`User icon`} />
       )}
     </StyledIcon>
   );
