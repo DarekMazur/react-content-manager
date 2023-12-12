@@ -14,5 +14,5 @@ export const StyledParagraph = styled.p<ParagraphStyleProps>`
   font-weight: ${({ $weight, theme }) =>
     $weight ? theme.fontWeight[$weight] : 'inherit'};
   font-family: ${({ $family, theme }) =>
-    $family ? theme.fontFamily[$family] : 'inherit'};
+    $family ? theme.fonts[$family] : 'inherit'};
 `;

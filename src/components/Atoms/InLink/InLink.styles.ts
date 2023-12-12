@@ -12,7 +12,7 @@ export const StyledInLink = styled(Link)`
     position: absolute;
     background-color: ${({ theme }) => theme.colors.red};
     width: 110%;
-    height: 0.3rem;
+    height: 0.2rem;
     bottom: 0;
     left: -5%;
     transform: scaleX(0);

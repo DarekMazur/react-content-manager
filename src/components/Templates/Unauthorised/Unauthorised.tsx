@@ -8,7 +8,7 @@ import LockIcon from '../../Atoms/LockIcon/LockIcon.tsx';
 import P from '../../Atoms/Paragraph/P.tsx';
 
 interface AuthProps {
-  handleMockLogin: () => void;
+  handleMockLogin?: () => void;
 }
 
 const Unauthorised: FC<AuthProps> = ({ handleMockLogin }) => {
