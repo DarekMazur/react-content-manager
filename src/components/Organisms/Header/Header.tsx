@@ -1,13 +1,10 @@
 import { StyledHeader } from './Header.styles.ts';
 import Icon from '../../Atoms/Icon/Icon.tsx';
 import MenuList from '../../Molecules/MenuList/MenuList.tsx';
+import { UserTypes } from '../../../__mock__/mockUsers.ts';
 
 interface HeaderProps {
-  user?: {
-    userName: string;
-    avatar?: string;
-    uuid: string;
-  };
+  user: UserTypes;
 }
 
 const Header = (props: HeaderProps) => {
@@ -16,7 +13,7 @@ const Header = (props: HeaderProps) => {
     <StyledHeader>
       <MenuList />
       <div>
-        {user && `Hello, ${user.userName}!`}
+        {user && `Hello, ${user.username}!`}
         <Icon customIcon={user?.avatar} />
       </div>
     </StyledHeader>

@@ -10,17 +10,13 @@ const getUser = () => {
 
   return admins[getRandomIndex];
 };
-const user = {
-  userName: getUser().username,
-  avatar: getUser().avatar,
-  uuid: getUser().uuid,
-};
+const user = getUser();
 
 const component = renderWithProviders(<Header user={user} />);
 
 describe('Header component:', () => {
   it('- should display greetings for logged users', () => {
-    expect(screen.getByText(`Hello, ${user.userName}!`)).toBeInTheDocument();
+    expect(screen.getByText(`Hello, ${user.username}!`)).toBeInTheDocument();
   });
 
   it('- should contains icon with user avatar', () => {

@@ -10,17 +10,13 @@ const Authorised = () => {
 
     return admins[getRandomIndex];
   };
-  const user = {
-    userName: getUser().username,
-    avatar: getUser().avatar,
-    uuid: getUser().uuid,
-  };
+  const user = getUser();
 
   return (
     <>
       <Header user={user} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home user={user} />} />
         <Route
           path="articles"
           element={
