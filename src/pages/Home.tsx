@@ -22,14 +22,14 @@ const StyledButton = styled.button`
   font-size: ${({ theme }) => theme.fontSize.lm};
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.blue};
+  cursor: pointer;
 `;
 
 const Button: FC<ButtonProps> = ({ children }) => {
   return <StyledButton>{children}</StyledButton>;
 };
 
-const Home: FC<HomeProps> = (props) => {
-  const { user } = props;
+const Home: FC<HomeProps> = ({ user }) => {
   const publishedPosts = mockPosts.filter((post) => post.publishedAt !== null);
   const latestPost = publishedPosts.sort(
     (a, b) => Number(b.publishedAt) - Number(a.publishedAt),
@@ -49,7 +49,7 @@ const Home: FC<HomeProps> = (props) => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-evenly',
           alignItems: 'center',
           gap: '2rem',
         }}
@@ -62,8 +62,8 @@ const Home: FC<HomeProps> = (props) => {
           </P>
           <h4>Last comment:</h4>
           <P>
-            {latestComment.user.username} at {latestPost.title} (
-            {commentPublicationDate})
+            {latestComment.user.username}
+            at {latestPost.title} ({commentPublicationDate})
           </P>
           <h4>Most liked article:</h4>
           <P>

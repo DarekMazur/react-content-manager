@@ -19,7 +19,7 @@ const randomizeLength = Math.floor(Math.random() * 30);
 const bannedChance = 15;
 
 for (let i = 0; i <= randomizeLength; i++) {
-  const roleId = Math.floor(Math.random() * 4) + 1;
+  const roleId = faker.number.int({ min: 1, max: 4 });
   const userRole = mockRoles.filter((role) => role.id === roleId);
   const isBlocked = Math.floor(Math.random() * 100) <= bannedChance;
   const user = {

@@ -31,7 +31,7 @@ const users: Array<UserTypes> = mockUsers.filter((user) => user.role.id !== 4);
 let allComments = mockComments;
 
 for (let i = 0; i <= randomizeLength; i++) {
-  const userId = Math.floor(Math.random() * mockUsers.length) + 1;
+  const userId = faker.number.int({ min: 1, max: mockUsers.length });
   const postAuthor: Array<UserTypes> = users.filter(
     (user) => user.id === userId,
   );
