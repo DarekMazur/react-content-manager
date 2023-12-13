@@ -1,13 +1,13 @@
-import { UserTypes } from '../__mock__/mockUsers.ts';
+import { UserTypes } from '../../__mock__/mockUsers.ts';
 import { FC } from 'react';
-import P from '../components/Atoms/Paragraph/P.tsx';
-import { mockPosts, PostTypes } from '../__mock__/mockPosts.ts';
-import { CommentTypes, mockComments } from '../__mock__/mockComments.ts';
-import InLink from '../components/Atoms/InLink/InLink.tsx';
-import Button from '../components/Atoms/Button/Button.tsx';
-import Wrapper from '../components/Organisms/Wrapper/Wrapper.tsx';
-import Heading from '../components/Atoms/Heading/Heading.tsx';
-import { getLatest } from '../utils/methods/getLatest.ts';
+import P from '../../components/Atoms/Paragraph/P.tsx';
+import { mockPosts, PostTypes } from '../../__mock__/mockPosts.ts';
+import { CommentTypes, mockComments } from '../../__mock__/mockComments.ts';
+import InLink from '../../components/Atoms/InLink/InLink.tsx';
+import Button from '../../components/Atoms/Button/Button.tsx';
+import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
+import Heading from '../../components/Atoms/Heading/Heading.tsx';
+import { getLatest } from '../../utils/methods/getLatest.ts';
 import { faker } from '@faker-js/faker';
 
 interface HomeProps {
