@@ -5,11 +5,17 @@ interface WrapperProps {
   children: ReactNode;
   align?: string;
   justify?: string;
+  role?: string;
 }
 
-const Wrapper: FC<WrapperProps> = ({ children, justify, align }) => {
+const Wrapper: FC<WrapperProps> = ({
+  children,
+  justify,
+  align,
+  role = 'wrapper',
+}) => {
   return (
-    <StyledWrapper $justify={justify} $align={align}>
+    <StyledWrapper role={role} $justify={justify} $align={align}>
       {children}
     </StyledWrapper>
   );
