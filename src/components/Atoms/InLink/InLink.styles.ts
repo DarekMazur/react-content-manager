@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const StyledInLink = styled(Link)`
   color: ${({ theme }) => theme.colors.blue};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
   text-decoration: none;
   position: relative;
   transition: 100ms color ease-in;
