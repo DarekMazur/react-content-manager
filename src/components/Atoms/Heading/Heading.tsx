@@ -20,7 +20,9 @@ const Heading: FC<HeadingProps> = ({
 }) => {
   return (
     <StyledHeading
-      as={tag}
+      as={
+        ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(String(tag)) ? tag : 'h3'
+      }
       $align={align}
       $size={size}
       $padding={padding}
