@@ -20,7 +20,7 @@ export interface PostTypes {
     avatar: string;
     role: RoleTypes;
   };
-  comments: Array<CommentTypes>;
+  comments: Array<CommentTypes> | null;
 }
 
 export const mockPosts: Array<PostTypes> = [];
