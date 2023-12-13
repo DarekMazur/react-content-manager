@@ -8,15 +8,23 @@ import Button from '../components/Atoms/Button/Button.tsx';
 import Wrapper from '../components/Organisms/Wrapper/Wrapper.tsx';
 import Heading from '../components/Atoms/Heading/Heading.tsx';
 import { getLatest } from '../utils/methods/getLatest.ts';
+import { faker } from '@faker-js/faker';
 
 interface HomeProps {
   user: UserTypes;
 }
 
 const Home: FC<HomeProps> = ({ user }) => {
+  //mock state
   const publishedPosts = mockPosts.filter((post) => post.publishedAt !== null);
   const allComments = mockComments;
+  const randomPost =
+    publishedPosts[
+      faker.number.int({ min: 0, max: publishedPosts.length - 1 })
+    ];
   const mostLikedPost = publishedPosts.sort((a, b) => b.likes - a.likes)[0];
+  const latestPost = getLatest(publishedPosts);
+  const latestComment = getLatest(allComments);
 
   return (
     <main>
@@ -36,23 +44,23 @@ const Home: FC<HomeProps> = ({ user }) => {
           </Heading>
           <P>
             <InLink
-              target={`post/id=${getLatest(publishedPosts).latest.id}`}
-              name={(getLatest(publishedPosts).latest as PostTypes).title}
+              target={`post/id=${latestPost.latest.id}`}
+              name={(latestPost.latest as PostTypes).title}
             />{' '}
-            by {(getLatest(publishedPosts).latest as PostTypes).author.username}{' '}
-            ({getLatest(publishedPosts).publishedDate})
+            by {(latestPost.latest as PostTypes).author.username} (
+            {latestPost.publishedDate})
           </P>
           <Heading tag="h4" size="lm">
             Last comment:
           </Heading>
           <P>
-            {(getLatest(allComments).latest as CommentTypes).user.username}
+            {(latestComment.latest as CommentTypes).user.username}
             at{' '}
             <InLink
-              target={`post/id=${getLatest(publishedPosts).latest.id}`}
-              name={(getLatest(publishedPosts).latest as PostTypes).title}
+              target={`post/id=${randomPost.id}`}
+              name={randomPost.title}
             />{' '}
-            ({getLatest(allComments).publishedDate})
+            ({latestComment.publishedDate})
           </P>
           <Heading tag="h4" size="lm">
             Most liked article:

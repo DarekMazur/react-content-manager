@@ -11,7 +11,15 @@ export const getLatest = (array: Array<CommentTypes | PostTypes>) => {
     latest: CommentTypes | PostTypes;
   }
   const latestData: LatestTypes = {
-    publishedDate: `${latest.publishedAt?.getDate()}.${latest.publishedAt?.getMonth()}.${latest.publishedAt?.getFullYear()}, ${latest.publishedAt?.getHours()}:${latest.publishedAt?.getMinutes()}`,
+    publishedDate: `${latest.publishedAt?.getDate()}.${
+      latest.publishedAt?.getMonth() && latest.publishedAt?.getMonth() > 9
+        ? latest.publishedAt?.getMonth()
+        : `0${latest.publishedAt?.getMonth()}`
+    }.${latest.publishedAt?.getFullYear()}, ${latest.publishedAt?.getHours()}:${
+      latest.publishedAt?.getMinutes() && latest.publishedAt?.getMinutes() > 9
+        ? latest.publishedAt?.getMinutes()
+        : `0${latest.publishedAt?.getMinutes()}`
+    }`,
     latest,
   };
   return latestData;
