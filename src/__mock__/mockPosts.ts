@@ -4,7 +4,7 @@ import { RoleTypes } from './mockRoles.ts';
 import { CommentTypes, mockComments } from './mockComments.ts';
 
 interface PostTypes {
-  is: number;
+  id: number;
   title: string;
   description: string;
   body: string;
@@ -55,7 +55,7 @@ for (let i = 0; i <= randomizeLength; i++) {
     const isPublished = Math.floor(Math.random() * 100) <= draftChance;
 
     const post: PostTypes = {
-      is: i + 1,
+      id: i + 1,
       title: faker.lorem.words({ min: 2, max: 6 }),
       description: faker.lorem.words({ min: 0, max: 14 }),
       body: faker.lorem.paragraphs({ min: 5, max: 29 }),
