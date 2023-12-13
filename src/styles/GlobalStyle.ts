@@ -16,6 +16,8 @@ export const GlobalStyle = createGlobalStyle`
   body {
       margin: 0;
       padding: 0;
+      font-size: ${({ theme }) => theme.fontSize.m};
+      color: ${({ theme }) => theme.colors.darkBlue};
   }
   
   #root {
