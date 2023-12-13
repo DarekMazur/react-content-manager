@@ -3,7 +3,7 @@ import { mockUsers, UserTypes } from './mockUsers.ts';
 import { RoleTypes } from './mockRoles.ts';
 import { CommentTypes, mockComments } from './mockComments.ts';
 
-interface PostTypes {
+export interface PostTypes {
   id: number;
   title: string;
   description: string;

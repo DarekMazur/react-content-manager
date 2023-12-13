@@ -1,12 +1,13 @@
 import { UserTypes } from '../__mock__/mockUsers.ts';
 import { FC } from 'react';
 import P from '../components/Atoms/Paragraph/P.tsx';
-import { mockPosts } from '../__mock__/mockPosts.ts';
-import { mockComments } from '../__mock__/mockComments.ts';
+import { mockPosts, PostTypes } from '../__mock__/mockPosts.ts';
+import { CommentTypes, mockComments } from '../__mock__/mockComments.ts';
 import InLink from '../components/Atoms/InLink/InLink.tsx';
 import Button from '../components/Atoms/Button/Button.tsx';
 import Wrapper from '../components/Organisms/Wrapper/Wrapper.tsx';
 import Heading from '../components/Atoms/Heading/Heading.tsx';
+import { getLatest } from '../utils/methods/getLatest.ts';
 
 interface HomeProps {
   user: UserTypes;
@@ -14,16 +15,9 @@ interface HomeProps {
 
 const Home: FC<HomeProps> = ({ user }) => {
   const publishedPosts = mockPosts.filter((post) => post.publishedAt !== null);
-  const latestPost = publishedPosts.sort(
-    (a, b) => Number(b.publishedAt) - Number(a.publishedAt),
-  )[0];
-  const latestComment = mockComments.sort(
-    (a, b) => Number(b.publishedAt) - Number(a.publishedAt),
-  )[0];
-  const articlePublicationDate = `${latestPost.publishedAt?.getDate()}.${latestPost.publishedAt?.getMonth()}.${latestPost.publishedAt?.getFullYear()}, ${latestPost.publishedAt?.getHours()}:${latestPost.publishedAt?.getMinutes()} `;
-  const commentPublicationDate = `${latestComment.publishedAt?.getDate()}.${latestComment.publishedAt?.getMonth()}.${latestComment.publishedAt?.getFullYear()}, ${latestComment.publishedAt?.getHours()}:${latestComment.publishedAt?.getMinutes()} `;
-
+  const allComments = mockComments;
   const mostLikedPost = publishedPosts.sort((a, b) => b.likes - a.likes)[0];
+
   return (
     <main>
       <Heading
@@ -42,22 +36,23 @@ const Home: FC<HomeProps> = ({ user }) => {
           </Heading>
           <P>
             <InLink
-              target={`post/id=${latestPost.id}`}
-              name={latestPost.title}
+              target={`post/id=${getLatest(publishedPosts).latest.id}`}
+              name={(getLatest(publishedPosts).latest as PostTypes).title}
             />{' '}
-            by {latestPost.author.username} ({articlePublicationDate})
+            by {(getLatest(publishedPosts).latest as PostTypes).author.username}{' '}
+            ({getLatest(publishedPosts).publishedDate})
           </P>
           <Heading tag="h4" size="lm">
             Last comment:
           </Heading>
           <P>
-            {latestComment.user.username}
+            {(getLatest(allComments).latest as CommentTypes).user.username}
             at{' '}
             <InLink
-              target={`post/id=${latestPost.id}`}
-              name={latestPost.title}
+              target={`post/id=${getLatest(publishedPosts).latest.id}`}
+              name={(getLatest(publishedPosts).latest as PostTypes).title}
             />{' '}
-            ({commentPublicationDate})
+            ({getLatest(allComments).publishedDate})
           </P>
           <Heading tag="h4" size="lm">
             Most liked article:
