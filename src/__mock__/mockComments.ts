@@ -16,9 +16,8 @@ export const mockComments: Array<CommentTypes> = [];
 const randomizeLength = Math.floor(Math.random() * 500);
 
 for (let i = 0; i <= randomizeLength; i++) {
-  const user: Array<UserTypes> = users.filter(
-    (user) => user.id === Math.floor(Math.random() * users.length),
-  );
+  const getID = faker.number.int({ min: 1, max: users.length });
+  const user: UserTypes = users.filter((user) => user.id === getID)[0];
   const createdDate = faker.date.past();
 
   const comment: CommentTypes = {
@@ -28,7 +27,7 @@ for (let i = 0; i <= randomizeLength; i++) {
     createdAt: createdDate,
     updatedAt: createdDate,
     publishedAt: createdDate,
-    user: user[0],
+    user,
   };
 
   mockComments.push(comment);

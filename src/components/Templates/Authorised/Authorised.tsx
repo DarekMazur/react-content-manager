@@ -2,25 +2,26 @@ import Header from '../../Organisms/Header/Header.tsx';
 import { Route, Routes } from 'react-router-dom';
 import Home from '../../../pages/Home.tsx';
 import { mockUsers } from '../../../__mock__/mockUsers.ts';
+import { faker } from '@faker-js/faker';
 
 const Authorised = () => {
+  const users = mockUsers;
   const getUser = () => {
-    const admins = mockUsers.filter((user) => user.role.id === 1);
-    const getRandomIndex = Math.floor(Math.random() * admins.length);
+    const admins = users.filter((user) => user.role.id === 1);
+    if (admins.length === 0) {
+      return users[0];
+    }
 
-    return admins[getRandomIndex];
+    const randomIndex = faker.number.int({ min: 0, max: admins.length - 1 });
+    return admins[randomIndex];
   };
-  const user = {
-    userName: getUser().username,
-    avatar: getUser().avatar,
-    uuid: getUser().uuid,
-  };
+  const user = getUser();
 
   return (
     <>
       <Header user={user} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home user={user} />} />
         <Route
           path="articles"
           element={

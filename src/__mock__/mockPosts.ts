@@ -3,8 +3,8 @@ import { mockUsers, UserTypes } from './mockUsers.ts';
 import { RoleTypes } from './mockRoles.ts';
 import { CommentTypes, mockComments } from './mockComments.ts';
 
-interface PostTypes {
-  is: number;
+export interface PostTypes {
+  id: number;
   title: string;
   description: string;
   body: string;
@@ -12,6 +12,7 @@ interface PostTypes {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
+  likes: number;
   author: {
     uuid: string;
     username: string;
@@ -19,18 +20,18 @@ interface PostTypes {
     avatar: string;
     role: RoleTypes;
   };
-  comments: Array<CommentTypes>;
+  comments: Array<CommentTypes> | null;
 }
 
 export const mockPosts: Array<PostTypes> = [];
-const randomizeLength = Math.floor(Math.random() * 300);
+export const randomizeLength = Math.floor(Math.random() * 300);
 const draftChance = 25;
 
 const users: Array<UserTypes> = mockUsers.filter((user) => user.role.id !== 4);
 let allComments = mockComments;
 
 for (let i = 0; i <= randomizeLength; i++) {
-  const userId = Math.floor(Math.random() * mockUsers.length) + 1;
+  const userId = faker.number.int({ min: 1, max: mockUsers.length });
   const postAuthor: Array<UserTypes> = users.filter(
     (user) => user.id === userId,
   );
@@ -54,14 +55,15 @@ for (let i = 0; i <= randomizeLength; i++) {
     const isPublished = Math.floor(Math.random() * 100) <= draftChance;
 
     const post: PostTypes = {
-      is: i + 1,
-      title: faker.lorem.words({ min: 2, max: 6 }),
+      id: i + 1,
+      title: faker.lorem.sentence({ min: 2, max: 6 }),
       description: faker.lorem.words({ min: 0, max: 14 }),
       body: faker.lorem.paragraphs({ min: 5, max: 29 }),
       uuid: faker.string.uuid(),
       createdAt: createdDate,
       updatedAt: createdDate,
       publishedAt: isPublished ? createdDate : null,
+      likes: faker.number.int({ min: 0, max: 500 }),
       author: {
         uuid: postAuthor[0].uuid,
         username: postAuthor[0].username,
