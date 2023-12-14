@@ -3,278 +3,234 @@ import { faker } from '@faker-js/faker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme } from '../../utils/themes/theme.ts';
 import { getDate } from '../../utils/methods/getDate.ts';
+import InLink from '../../components/Atoms/InLink/InLink.tsx';
+import styled from 'styled-components';
+
+const StyledTable = styled.table`
+  width: 95vw;
+  border-radius: 0.7rem;
+  border: ${({ theme }) => `0.1rem solid ${theme.colors.darkBlue}`};
+  border-spacing: 0;
+
+  thead {
+    tr {
+      color: ${({ theme }) => theme.colors.white};
+    }
+
+    th {
+      height: 4rem;
+      font-weight: ${({ theme }) => theme.fontWeight.regular};
+      background-color: ${({ theme }) => theme.colors.darkBlue};
+
+      &:first-of-type {
+        border-radius: 0.7rem 0 0 0;
+      }
+
+      &:last-of-type {
+        border-radius: 0 0.7rem 0 0;
+      }
+    }
+  }
+
+  tbody {
+    width: 90vw;
+
+    tr {
+      position: relative;
+
+      &::after {
+        position: absolute;
+        content: '';
+        left: 1vw;
+        width: 93vw;
+        border-bottom: ${({ theme }) =>
+          `1px solid ${theme.colors.darkBlueTransparent}`};
+      }
+    }
+
+    td {
+      text-align: center;
+      padding: 0 1rem;
+    }
+  }
+`;
 
 const Articles = () => {
-  const fakeStatus = faker.datatype.boolean();
-  const fakeSticky = faker.datatype.boolean();
+  const Icons = () => {
+    return (
+      <>
+        <InLink
+          target={'/article/id=123'}
+          name={
+            <FontAwesomeIcon
+              style={{ margin: '0 1rem' }}
+              icon={['fas', 'pen']}
+            />
+          }
+        />
+        <InLink
+          target={'/article/id=123?del'}
+          name={
+            <FontAwesomeIcon
+              style={{ margin: '0 1rem' }}
+              icon={['fas', 'trash']}
+            />
+          }
+        />
+      </>
+    );
+  };
+
+  const tempFakePosts = [];
+
+  for (let i = 0; i < 5; i++) {
+    const post = {
+      title: faker.lorem.sentence({ min: 2, max: 5 }),
+      author: faker.person.fullName(),
+      status: faker.datatype.boolean(),
+      sticky: faker.datatype.boolean(),
+      categories: `${faker.lorem.word()}, ${faker.lorem.word()}`,
+      comments: faker.number.int({ min: 0, max: 100 }),
+      likes: faker.number.int({ min: 0, max: 1000 }),
+      publishedAt: getDate(faker.date.recent()),
+      actions: Icons,
+    };
+
+    tempFakePosts.push(post);
+  }
+
+  const tableHeaders = [
+    '',
+    'ID',
+    'Status',
+    'Title',
+    'Author',
+    'Sticky',
+    'Categories',
+    'Comments',
+    'Likes',
+    'Published at',
+    '',
+  ];
 
   return (
     <main>
       <Heading tag="h2" align="center" size="l">
         Articles
       </Heading>
-      <table
+      <div
         style={{
-          width: '95vw',
-          maxWidth: '120rem',
-          borderRadius: '0.7rem',
-          border: `0.1rem solid ${theme.colors.darkBlue}`,
-          borderSpacing: 0,
+          width: '100vw',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <thead
-          style={{
-            backgroundColor: theme.colors.darkBlue,
-            color: theme.colors.white,
-          }}
-        >
-          <tr>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            ></th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              ID
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Title
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Author
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Status
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Sticky
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Categories
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Comments
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Likes
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            >
-              Published at
-            </th>
-            <th
-              style={{
-                fontWeight: theme.fontWeight.regular,
-              }}
-            ></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <span
-                style={{
-                  display: 'block',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '0.4rem',
-                  border: `0.1rem solid ${theme.colors.darkBlue}`,
-                }}
-              />
-            </td>
-            <td>1</td>
-            <td>{faker.lorem.sentence({ min: 2, max: 5 })}</td>
-            <td>{faker.person.fullName()}</td>
-            <td>
-              <span
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '0.4rem',
-                  border: `0.1rem solid ${theme.colors.darkBlue}`,
-                  backgroundColor: fakeStatus
-                    ? theme.colors.darkBlue
-                    : 'transparent',
-                  padding: '0.2rem',
-                }}
-              >
-                {fakeStatus ? (
-                  <FontAwesomeIcon
+        <StyledTable>
+          <thead>
+            <tr>
+              {tableHeaders.map((header) => (
+                <th>{header}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {tempFakePosts.map((post, index) => (
+              <tr>
+                <td
+                  style={{
+                    height: '6rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '1rem',
+                  }}
+                >
+                  <span
                     style={{
-                      color: fakeStatus
-                        ? theme.colors.white
-                        : theme.colors.darkBlue,
-                      fontSize: '1.4rem',
+                      display: 'block',
+                      width: '1.6rem',
+                      height: '1.6rem',
+                      borderRadius: '0.4rem',
+                      border: `0.1rem solid ${theme.colors.darkBlue}`,
                     }}
-                    icon={['fas', 'check']}
                   />
-                ) : null}
-              </span>
-            </td>
-            <td>
-              <span
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '0.4rem',
-                  border: `0.1rem solid ${theme.colors.darkBlue}`,
-                  backgroundColor: fakeSticky
-                    ? theme.colors.darkBlue
-                    : 'transparent',
-                  padding: '0.2rem',
-                }}
-              >
-                {fakeSticky ? (
-                  <FontAwesomeIcon
+                </td>
+                <td>{index + 1}</td>
+
+                <td
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0 1rem',
+                  }}
+                >
+                  <span
                     style={{
-                      color: fakeSticky
-                        ? theme.colors.white
-                        : theme.colors.darkBlue,
-                      fontSize: '1.4rem',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '1.6rem',
+                      height: '1.6rem',
+                      borderRadius: '50%',
+                      backgroundColor: post.status
+                        ? theme.colors.green
+                        : theme.colors.brightBlue,
+                      padding: '0.2rem',
                     }}
-                    icon={['fas', 'check']}
                   />
-                ) : null}
-              </span>
-            </td>
-            <td>
-              {faker.lorem.word()}, {faker.lorem.word()}
-            </td>
-            <td>{faker.number.int({ min: 0, max: 100 })}</td>
-            <td>{faker.number.int({ min: 0, max: 1000 })}</td>
-            <td>{fakeStatus ? getDate(faker.date.recent()) : '-'}</td>
-            <td>
-              <FontAwesomeIcon icon={['fas', 'pen']} />
-              <FontAwesomeIcon icon={['fas', 'trash']} />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <span
-                style={{
-                  display: 'block',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '0.4rem',
-                  border: `0.1rem solid ${theme.colors.darkBlue}`,
-                }}
-              />
-            </td>
-            <td>2</td>
-            <td>{faker.lorem.sentence({ min: 2, max: 5 })}</td>
-            <td>{faker.person.fullName()}</td>
-            <td>
-              <span
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '0.4rem',
-                  border: `0.1rem solid ${theme.colors.darkBlue}`,
-                  backgroundColor: fakeStatus
-                    ? theme.colors.darkBlue
-                    : 'transparent',
-                  padding: '0.2rem',
-                }}
-              >
-                {fakeStatus ? (
-                  <FontAwesomeIcon
+                </td>
+                <td style={{ textAlign: 'left' }}>{post.title}</td>
+                <td style={{ textAlign: 'left' }}>{post.author}</td>
+                <td>
+                  <span
                     style={{
-                      color: fakeStatus
-                        ? theme.colors.white
-                        : theme.colors.darkBlue,
-                      fontSize: '1.4rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '0 1rem',
                     }}
-                    icon={['fas', 'check']}
-                  />
-                ) : null}
-              </span>
-            </td>
-            <td>
-              <span
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '0.4rem',
-                  border: `0.1rem solid ${theme.colors.darkBlue}`,
-                  backgroundColor: fakeSticky
-                    ? theme.colors.darkBlue
-                    : 'transparent',
-                  padding: '0.2rem',
-                }}
-              >
-                {fakeSticky ? (
-                  <FontAwesomeIcon
-                    style={{
-                      color: fakeSticky
-                        ? theme.colors.white
-                        : theme.colors.darkBlue,
-                      fontSize: '1.4rem',
-                    }}
-                    icon={['fas', 'check']}
-                  />
-                ) : null}
-              </span>
-            </td>
-            <td>
-              {faker.lorem.word()}, {faker.lorem.word()}
-            </td>
-            <td>{faker.number.int({ min: 0, max: 100 })}</td>
-            <td>{faker.number.int({ min: 0, max: 1000 })}</td>
-            <td>{fakeStatus ? getDate(faker.date.recent()) : '-'}</td>
-            <td>
-              <FontAwesomeIcon icon={['fas', 'pen']} />
-              <FontAwesomeIcon icon={['fas', 'trash']} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  >
+                    <span
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '1.6rem',
+                        height: '1.6rem',
+                        borderRadius: '0.4rem',
+                        border: `0.1rem solid ${theme.colors.darkBlue}`,
+                        backgroundColor: post.sticky
+                          ? theme.colors.darkBlue
+                          : 'transparent',
+                        padding: '0.2rem',
+                      }}
+                    >
+                      {post.sticky ? (
+                        <FontAwesomeIcon
+                          style={{
+                            color: post.sticky
+                              ? theme.colors.white
+                              : theme.colors.darkBlue,
+                            fontSize: '1.4rem',
+                          }}
+                          icon={['fas', 'check']}
+                        />
+                      ) : null}
+                    </span>
+                  </span>
+                </td>
+                <td>{post.categories}</td>
+                <td>{post.comments}</td>
+                <td>{post.likes}</td>
+                <td>{post.status ? post.publishedAt : '-'}</td>
+                <td style={{ textAlign: 'left' }}>{post.actions()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </StyledTable>
+      </div>
     </main>
   );
 };
