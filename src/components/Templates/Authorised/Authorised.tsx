@@ -21,6 +21,7 @@ const Authorised = () => {
   return (
     <>
       <Header user={user} />
+      {console.log(user)}
       <Routes>
         <Route path="/" element={<Home user={user} />} />
         <Route path="articles" element={<Articles />} />

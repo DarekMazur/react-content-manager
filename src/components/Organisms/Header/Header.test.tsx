@@ -3,10 +3,11 @@ import '@testing-library/jest-dom';
 import { renderWithProviders } from '../../../utils/providers/renderWithProviders.tsx';
 import Header from './Header.tsx';
 import { mockUsers } from '../../../__mock__/mockUsers.ts';
+import { faker } from '@faker-js/faker';
 
 const getUser = () => {
   const admins = mockUsers.filter((user) => user.role.id === 1);
-  const getRandomIndex = Math.floor(Math.random() * admins.length);
+  const getRandomIndex = faker.number.int({ min: 0, max: admins.length - 1 });
 
   return admins[getRandomIndex];
 };
