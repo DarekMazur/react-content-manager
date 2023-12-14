@@ -2,6 +2,7 @@ import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import { faker } from '@faker-js/faker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme } from '../../utils/themes/theme.ts';
+import { getDate } from '../../utils/methods/getDate.ts';
 
 const Articles = () => {
   const fakeStatus = faker.datatype.boolean();
@@ -182,7 +183,7 @@ const Articles = () => {
             </td>
             <td>{faker.number.int({ min: 0, max: 100 })}</td>
             <td>{faker.number.int({ min: 0, max: 1000 })}</td>
-            <td>23.11.2023, 21:28</td>
+            <td>{fakeStatus ? getDate(faker.date.recent()) : '-'}</td>
             <td>
               <FontAwesomeIcon icon={['fas', 'pen']} />
               <FontAwesomeIcon icon={['fas', 'trash']} />
@@ -266,7 +267,7 @@ const Articles = () => {
             </td>
             <td>{faker.number.int({ min: 0, max: 100 })}</td>
             <td>{faker.number.int({ min: 0, max: 1000 })}</td>
-            <td>11.12.2023, 11:08</td>
+            <td>{fakeStatus ? getDate(faker.date.recent()) : '-'}</td>
             <td>
               <FontAwesomeIcon icon={['fas', 'pen']} />
               <FontAwesomeIcon icon={['fas', 'trash']} />
