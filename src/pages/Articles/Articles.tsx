@@ -5,6 +5,7 @@ import { theme } from '../../utils/themes/theme.ts';
 import { getDate } from '../../utils/methods/getDate.ts';
 import InLink from '../../components/Atoms/InLink/InLink.tsx';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 const StyledTable = styled.table`
   width: 95vw;
@@ -113,6 +114,18 @@ const Articles = () => {
     '',
   ];
 
+  const [isExpand, setIsExpand] = useState(false);
+  const [perPage, setPerPage] = useState(10);
+
+  const handleExpand = () => {
+    setIsExpand((prevState) => !prevState);
+  };
+
+  const handleChoseEntriesNumber = (value: number) => {
+    setIsExpand(false);
+    setPerPage(value);
+  };
+
   return (
     <main>
       <Heading tag="h2" align="center" size="l">
@@ -129,14 +142,14 @@ const Articles = () => {
         <StyledTable>
           <thead>
             <tr>
-              {tableHeaders.map((header) => (
-                <th>{header}</th>
+              {tableHeaders.map((header, index) => (
+                <th key={index}>{header}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {tempFakePosts.map((post, index) => (
-              <tr>
+              <tr key={index + 1}>
                 <td
                   style={{
                     height: '6rem',
@@ -230,6 +243,64 @@ const Articles = () => {
             ))}
           </tbody>
         </StyledTable>
+      </div>
+      <div style={{ margin: '1rem 2.5vw', display: 'flex', gap: '1rem' }}>
+        <div style={{ position: 'relative', width: '5rem' }}>
+          <div
+            role="select"
+            onClick={handleExpand}
+            style={{ cursor: 'pointer' }}
+          >
+            <span
+              style={{
+                display: 'inline-block',
+                width: '3rem',
+                textAlign: 'right',
+                paddingRight: '1rem',
+              }}
+            >
+              {perPage}
+            </span>
+            <span>
+              <FontAwesomeIcon
+                style={{ fontSize: '1.2rem' }}
+                icon={['fas', 'chevron-down']}
+              />
+            </span>
+          </div>
+          <ul
+            style={{
+              listStyle: 'none',
+              display: isExpand ? 'block' : 'none',
+              position: 'absolute',
+              left: 0,
+              top: '1rem',
+              padding: 0,
+              width: '5rem',
+              textAlign: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            {[10, 25, 50, 100].map((value) => (
+              <li
+                key={value}
+                role="option"
+                style={{
+                  padding: '0.3rem 0',
+                  color:
+                    perPage === value
+                      ? theme.colors.darkBlue
+                      : theme.colors.blue,
+                }}
+                onClick={() => handleChoseEntriesNumber(value)}
+                value={value}
+              >
+                {value}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <span>articles per page</span>
       </div>
     </main>
   );

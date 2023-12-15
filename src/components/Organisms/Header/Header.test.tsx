@@ -7,6 +7,9 @@ import { faker } from '@faker-js/faker';
 
 const getUser = () => {
   const admins = mockUsers.filter((user) => user.role.id === 1);
+  if (admins.length === 0) {
+    admins.push(mockUsers[0]);
+  }
   const getRandomIndex = faker.number.int({ min: 0, max: admins.length - 1 });
 
   return admins[getRandomIndex];
