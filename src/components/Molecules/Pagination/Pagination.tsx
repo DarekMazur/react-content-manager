@@ -4,6 +4,7 @@ import {
   StyledPagination,
   StyledPaginationNumber,
 } from './Pagination.styles.ts';
+import { theme } from '../../../utils/themes/theme.ts';
 
 interface PaginationProps {
   pages: number;
@@ -29,8 +30,13 @@ const Pagination: FC<PaginationProps> = ({
   return (
     <StyledPagination>
       <FontAwesomeIcon
-        style={{ fontSize: '1.4rem' }}
+        style={{
+          fontSize: '1.4rem',
+          color: current === 1 ? theme.colors.darkBlueTransparent : 'inherit',
+          cursor: current === 1 ? 'auto' : 'pointer',
+        }}
         icon={['fas', 'chevron-left']}
+        onClick={current !== 1 ? () => handlePageChoose(current - 1) : () => {}}
       />
       {paginationValues(pages).map((number) => (
         <StyledPaginationNumber
@@ -43,8 +49,16 @@ const Pagination: FC<PaginationProps> = ({
         </StyledPaginationNumber>
       ))}
       <FontAwesomeIcon
-        style={{ fontSize: '1.4rem' }}
+        style={{
+          fontSize: '1.4rem',
+          color:
+            current === pages ? theme.colors.darkBlueTransparent : 'inherit',
+          cursor: current === pages ? 'auto' : 'pointer',
+        }}
         icon={['fas', 'chevron-right']}
+        onClick={
+          current !== pages ? () => handlePageChoose(current + 1) : () => {}
+        }
       />
     </StyledPagination>
   );

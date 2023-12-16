@@ -5,7 +5,7 @@ import { TablePostDataTypes } from '../components/Organisms/Table/Table.tsx';
 
 export const mockTempPosts: Array<TablePostDataTypes> = [];
 
-for (let i = 0; i < 11; i++) {
+for (let i = 0; i < 110; i++) {
   const post = {
     title: faker.lorem.sentence({ min: 2, max: 5 }),
     author: faker.person.fullName(),
