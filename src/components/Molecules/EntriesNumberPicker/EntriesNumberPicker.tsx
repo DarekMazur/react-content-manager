@@ -39,7 +39,10 @@ const EntriesNumberPicker = () => {
             />
           </span>
         </div>
-        <PickerList isExpand={isExpand}>
+        <PickerList
+          isExpand={isExpand}
+          onClickOutside={() => setIsExpand(false)}
+        >
           {[10, 25, 50, 100].map((value) => (
             <PickerListItem
               key={value}
