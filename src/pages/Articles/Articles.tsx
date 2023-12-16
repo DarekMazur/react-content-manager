@@ -2,53 +2,10 @@ import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import Table from '../../components/Organisms/Table/Table.tsx';
 import EntriesNumberPicker from '../../components/Molecules/EntriesNumberPicker/EntriesNumberPicker.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
+import Pagination from '../../components/Molecules/Pagination/Pagination.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
 import { mockTempPosts } from '../../__mock__/mockTempPosts.tsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components';
-import { FC, useEffect, useState } from 'react';
-
-export const StyledPagination = styled.div`
-  min-width: 4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  span {
-    padding: 0 0.5rem;
-  }
-`;
-
-interface PaginationProps {
-  pages: number;
-}
-
-const Pagination: FC<PaginationProps> = ({ pages }) => {
-  const paginationValues = (pages: number) => {
-    const pagesEnums = [];
-    for (let i = 1; i <= pages; i++) {
-      pagesEnums.push(i);
-    }
-
-    return pagesEnums;
-  };
-
-  return (
-    <StyledPagination>
-      <FontAwesomeIcon
-        style={{ fontSize: '1.4rem' }}
-        icon={['fas', 'chevron-left']}
-      />
-      {paginationValues(pages).map((number) => (
-        <span key={number}>{number}</span>
-      ))}
-      <FontAwesomeIcon
-        style={{ fontSize: '1.4rem' }}
-        icon={['fas', 'chevron-right']}
-      />
-    </StyledPagination>
-  );
-};
+import { useEffect, useState } from 'react';
 
 const Articles = () => {
   const tempFakePosts = mockTempPosts;
