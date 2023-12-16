@@ -6,7 +6,7 @@ export const StyledHeader = styled.header`
   justify-content: space-between;
   gap: 1rem;
   height: 5rem;
-  width: 100vw;
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.darkBlue};
   color: ${({ theme }) => theme.colors.white};
   font-weight: ${({ theme }) => theme.fontWeight.bold};

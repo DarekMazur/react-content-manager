@@ -38,7 +38,7 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l">
         Articles
       </Heading>
-      <Wrapper width="100vw" justify="center" align="center">
+      <Wrapper width="100%" justify="center" align="center">
         <Table headers={articlesTableHeaders} data={tempFakePosts} />
       </Wrapper>
       <Wrapper justify="space-between" align="center" width="97.5vw">
