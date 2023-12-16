@@ -7,6 +7,7 @@ import { articlesTableHeaders } from '../../utils/data.ts';
 import { mockTempPosts } from '../../__mock__/mockTempPosts.tsx';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 
 const Articles = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,16 +20,36 @@ const Articles = () => {
   const getPagesLength = Math.ceil(tempFakePosts.length / perPage);
   const [pages, setPages] = useState(getPagesLength);
 
+  const postsToDisplay = tempFakePosts.slice(
+    (Number(searchParams.get('page')) - 1) * perPage,
+    perPage * Number(searchParams.get('page')),
+  );
+
+  const [wrapperHeight, setWrapperHeight] = useState(0);
+
   useEffect(() => {
-    if (searchParams.get('page')) {
-      console.log(searchParams.get('page'));
-    } else {
+    setWrapperHeight(getFooterHeight() + 50);
+  }, []);
+
+  useEffect(() => {
+    if (!searchParams.get('page')) {
       setSearchParams((params) => {
         params.set('page', '1');
         return params;
       });
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (postsToDisplay.length === 0 && Number(searchParams.get('page')) !== 1) {
+      setSearchParams((params) => {
+        params.set('page', String(Number(searchParams.get('page')) - 1));
+        return params;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postsToDisplay]);
 
   useEffect(() => {
     setPages(getPagesLength);
@@ -55,12 +76,17 @@ const Articles = () => {
   };
 
   return (
-    <main style={{ paddingBottom: '11rem' }}>
+    <main
+      style={{
+        paddingBottom: '11rem',
+        minHeight: `calc(100vh - ${wrapperHeight}px)`,
+      }}
+    >
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Articles
       </Heading>
       <Wrapper width="100%" justify="center" align="flex-start">
-        <Table headers={articlesTableHeaders} data={tempFakePosts} />
+        <Table headers={articlesTableHeaders} data={postsToDisplay} />
       </Wrapper>
       <Wrapper justify="space-between" align="center" width="97.5vw">
         <EntriesNumberPicker

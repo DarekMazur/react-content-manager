@@ -34,6 +34,7 @@ const Pagination: FC<PaginationProps> = ({
       />
       {paginationValues(pages).map((number) => (
         <StyledPaginationNumber
+          key={number}
           $current={current}
           $number={number}
           onClick={() => handlePageChoose(number)}
