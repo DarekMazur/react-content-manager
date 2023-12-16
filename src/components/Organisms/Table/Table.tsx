@@ -1,9 +1,9 @@
 import { ReactNode, FC } from 'react';
-import { theme } from '../../../utils/themes/theme.ts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyledTable } from './Table.styles.ts';
+import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
+import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
 
-type DataTypes = {
+export type TablePostDataTypes = {
   title: string;
   author: string;
   status: boolean;
@@ -17,7 +17,7 @@ type DataTypes = {
 
 interface TableProps {
   headers: Array<string>;
-  data: Array<DataTypes>;
+  data: Array<TablePostDataTypes>;
 }
 
 const Table: FC<TableProps> = ({ headers, data }) => {
@@ -42,18 +42,9 @@ const Table: FC<TableProps> = ({ headers, data }) => {
                 padding: '1rem',
               }}
             >
-              <span
-                style={{
-                  display: 'block',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '0.4rem',
-                  border: `0.1rem solid ${theme.colors.darkBlue}`,
-                }}
-              />
+              <Checkbox isChecked={false} />
             </td>
             <td>{index + 1}</td>
-
             <td
               style={{
                 display: 'flex',
@@ -62,60 +53,12 @@ const Table: FC<TableProps> = ({ headers, data }) => {
                 padding: '0 1rem',
               }}
             >
-              <span
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                  borderRadius: '50%',
-                  backgroundColor: post.status
-                    ? theme.colors.green
-                    : theme.colors.brightBlue,
-                  padding: '0.2rem',
-                }}
-              />
+              <StatusInfo status={post.status} />
             </td>
             <td style={{ textAlign: 'left' }}>{post.title}</td>
             <td style={{ textAlign: 'left' }}>{post.author}</td>
             <td>
-              <span
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '0 1rem',
-                }}
-              >
-                <span
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '1.6rem',
-                    height: '1.6rem',
-                    borderRadius: '0.4rem',
-                    border: `0.1rem solid ${theme.colors.darkBlue}`,
-                    backgroundColor: post.sticky
-                      ? theme.colors.darkBlue
-                      : 'transparent',
-                    padding: '0.2rem',
-                  }}
-                >
-                  {post.sticky ? (
-                    <FontAwesomeIcon
-                      style={{
-                        color: post.sticky
-                          ? theme.colors.white
-                          : theme.colors.darkBlue,
-                        fontSize: '1.4rem',
-                      }}
-                      icon={['fas', 'check']}
-                    />
-                  ) : null}
-                </span>
-              </span>
+              <Checkbox isChecked={post.sticky} />
             </td>
             <td>{post.categories}</td>
             <td>{post.comments}</td>

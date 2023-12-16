@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { theme } from '../../../utils/themes/theme';
+import PickerList from '../PickerList/PickerList.tsx';
+import PickerListItem from '../../Atoms/PickerListItem/PickerListItem';
+import { StyledEntriesPicker } from './EntriesNumberPicker.styles.ts';
 
 const EntriesNumberPicker = () => {
   const [isExpand, setIsExpand] = useState(false);
+  2;
   const [perPage, setPerPage] = useState(10);
 
   const handleExpand = () => {
@@ -16,7 +19,7 @@ const EntriesNumberPicker = () => {
   };
 
   return (
-    <div style={{ margin: '1rem 2.5vw', display: 'flex', gap: '1rem' }}>
+    <StyledEntriesPicker>
       <div style={{ position: 'relative', width: '5rem' }}>
         <div role="select" onClick={handleExpand} style={{ cursor: 'pointer' }}>
           <span
@@ -36,38 +39,19 @@ const EntriesNumberPicker = () => {
             />
           </span>
         </div>
-        <ul
-          style={{
-            listStyle: 'none',
-            display: isExpand ? 'block' : 'none',
-            position: 'absolute',
-            left: 0,
-            top: '1rem',
-            padding: 0,
-            width: '5rem',
-            textAlign: 'center',
-            cursor: 'pointer',
-          }}
-        >
+        <PickerList isExpand={isExpand}>
           {[10, 25, 50, 100].map((value) => (
-            <li
+            <PickerListItem
               key={value}
-              role="option"
-              style={{
-                padding: '0.3rem 0',
-                color:
-                  perPage === value ? theme.colors.darkBlue : theme.colors.blue,
-              }}
-              onClick={() => handleChoseEntriesNumber(value)}
               value={value}
-            >
-              {value}
-            </li>
+              perPage={perPage}
+              onClick={() => handleChoseEntriesNumber(value)}
+            />
           ))}
-        </ul>
+        </PickerList>
       </div>
       <span>articles per page</span>
-    </div>
+    </StyledEntriesPicker>
   );
 };
 
