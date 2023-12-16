@@ -1,23 +1,25 @@
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PickerList from '../PickerList/PickerList.tsx';
 import PickerListItem from '../../Atoms/PickerListItem/PickerListItem';
 import { StyledEntriesPicker } from './EntriesNumberPicker.styles.ts';
+import { FC } from 'react';
 
-const EntriesNumberPicker = () => {
-  const [isExpand, setIsExpand] = useState(false);
-  2;
-  const [perPage, setPerPage] = useState(10);
+interface EntriesPickerProps {
+  isExpand: boolean;
+  perPage: number;
+  handleExpand: () => void;
+  // eslint-disable-next-line no-unused-vars
+  handleChoseEntriesNumber: (value: number) => void;
+  handleClose: () => void;
+}
 
-  const handleExpand = () => {
-    setIsExpand((prevState) => !prevState);
-  };
-
-  const handleChoseEntriesNumber = (value: number) => {
-    setIsExpand(false);
-    setPerPage(value);
-  };
-
+const EntriesNumberPicker: FC<EntriesPickerProps> = ({
+  isExpand,
+  perPage,
+  handleExpand,
+  handleChoseEntriesNumber,
+  handleClose,
+}) => {
   return (
     <StyledEntriesPicker>
       <div style={{ position: 'relative', width: '5rem' }}>
@@ -39,10 +41,7 @@ const EntriesNumberPicker = () => {
             />
           </span>
         </div>
-        <PickerList
-          isExpand={isExpand}
-          onClickOutside={() => setIsExpand(false)}
-        >
+        <PickerList isExpand={isExpand} onClickOutside={handleClose}>
           {[10, 25, 50, 100].map((value) => (
             <PickerListItem
               key={value}
