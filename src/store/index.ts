@@ -12,7 +12,17 @@ const initialUser = {};
 const articlesSlice = createSlice({
   name: 'articles',
   initialState: initialArticlesList,
-  reducers: {},
+  reducers: {
+    updateArticle(state, action) {
+      const index = state.findIndex(
+        (article) => article.id === action.payload.id,
+      );
+      if (index >= 0) {
+        console.log(state[index]);
+        state[index] = action.payload;
+      }
+    },
+  },
 });
 
 const selectedSlice = createSlice({
@@ -35,6 +45,7 @@ const userSlice = createSlice({
 });
 
 export const { addSelected, removeSelected } = selectedSlice.actions;
+export const { updateArticle } = articlesSlice.actions;
 
 export const store = configureStore({
   reducer: {
@@ -42,4 +53,5 @@ export const store = configureStore({
     selected: selectedSlice.reducer,
     user: userSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

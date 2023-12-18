@@ -2,7 +2,11 @@ import { ReactNode, FC, useState } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
 import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
-import { addSelected, removeSelected } from '../../../store/index.ts';
+import {
+  addSelected,
+  removeSelected,
+  updateArticle,
+} from '../../../store/index.ts';
 import { useDispatch } from 'react-redux';
 
 export type TablePostDataTypes = {
@@ -25,11 +29,12 @@ interface TableProps {
 
 const Table: FC<TableProps> = ({ headers, data }) => {
   const dispatch = useDispatch();
+
   const [checkedArticles, setCheckedArticles] = useState<TablePostDataTypes[]>(
     [],
   );
 
-  const handleClick = (id: string) => {
+  const handleClickSelect = (id: string) => {
     const checkedElement = data.find((post) => post.id === id);
     if (checkedElement && checkedArticles.includes(checkedElement)) {
       dispatch(removeSelected(checkedElement));
@@ -40,6 +45,16 @@ const Table: FC<TableProps> = ({ headers, data }) => {
       dispatch(addSelected(checkedElement));
       setCheckedArticles((prevState) => [...prevState, checkedElement]);
     }
+  };
+
+  const handleClickSticky = (id: string) => {
+    const article = data.find((article) => article.id === id);
+    const updateSticky = {
+      ...article,
+      sticky: !article?.sticky,
+    };
+    dispatch(updateArticle(updateSticky));
+    // console.log(articles)
   };
 
   return (
@@ -64,7 +79,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
               }}
             >
               <Checkbox
-                handleClick={handleClick}
+                handleClick={handleClickSelect}
                 id={post.id}
                 isChecked={checkedArticles.includes(post)}
               />
@@ -85,8 +100,8 @@ const Table: FC<TableProps> = ({ headers, data }) => {
             <td>
               <Checkbox
                 isChecked={post.sticky}
-                handleClick={() => {}}
-                id="lorem"
+                handleClick={handleClickSticky}
+                id={post.id}
               />
             </td>
             <td>{post.categories}</td>
