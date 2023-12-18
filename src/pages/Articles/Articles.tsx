@@ -86,10 +86,12 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Articles
       </Heading>
-      <Wrapper width="100%" justify="flex-start" align="center">
-        {selectedArticles.length} articles selected <button>publish all</button>{' '}
-        <button>unpublish all</button>
-      </Wrapper>
+      {selectedArticles.length > 0 ? (
+        <Wrapper width="100%" justify="flex-start" align="center">
+          {selectedArticles.length} articles selected{' '}
+          <button>publish all</button> <button>unpublish all</button>
+        </Wrapper>
+      ) : null}
       <Wrapper width="100%" justify="center" align="flex-start">
         <Table headers={articlesTableHeaders} data={postsToDisplay} />
       </Wrapper>
