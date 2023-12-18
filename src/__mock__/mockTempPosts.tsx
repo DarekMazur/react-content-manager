@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { getDate } from '../utils/methods/getDate.ts';
-import TableActionIcons from '../components/Molecules/TableActionIcons/TableActionIcons.tsx';
+// import TableActionIcons from '../components/Molecules/TableActionIcons/TableActionIcons.tsx';
 import { TablePostDataTypes } from '../components/Organisms/Table/Table.tsx';
 
 export const mockTempPosts: Array<TablePostDataTypes> = [];
@@ -16,7 +16,6 @@ for (let i = 0; i < 110; i++) {
     comments: faker.number.int({ min: 0, max: 100 }),
     likes: faker.number.int({ min: 0, max: 1000 }),
     publishedAt: getDate(faker.date.recent()),
-    actions: <TableActionIcons postId={i + 1} />,
   };
 
   mockTempPosts.push(post);

@@ -8,6 +8,7 @@ import {
   updateArticle,
 } from '../../../store/index.ts';
 import { useDispatch } from 'react-redux';
+import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons.tsx';
 
 export type TablePostDataTypes = {
   title: string;
@@ -18,7 +19,6 @@ export type TablePostDataTypes = {
   comments: number;
   likes: number;
   publishedAt: ReactNode;
-  actions: ReactNode;
   id: string;
 };
 
@@ -108,7 +108,9 @@ const Table: FC<TableProps> = ({ headers, data }) => {
             <td>{post.comments}</td>
             <td>{post.likes}</td>
             <td>{post.status ? post.publishedAt : '-'}</td>
-            <td style={{ textAlign: 'left' }}>{post.actions}</td>
+            <td style={{ textAlign: 'left' }}>
+              <TableActionIcons postId={index + 1} />
+            </td>
           </tr>
         ))}
       </tbody>
