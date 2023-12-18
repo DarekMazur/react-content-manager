@@ -1,5 +1,7 @@
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
-import Table from '../../components/Organisms/Table/Table.tsx';
+import Table, {
+  TablePostDataTypes,
+} from '../../components/Organisms/Table/Table.tsx';
 import EntriesNumberPicker from '../../components/Molecules/EntriesNumberPicker/EntriesNumberPicker.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Pagination from '../../components/Molecules/Pagination/Pagination.tsx';
@@ -8,20 +10,23 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
+import { RootState } from '../../store/index.ts';
 
 const Articles = () => {
-  const articles = useSelector((state) => state.articles);
-  const selectedArticles = useSelector((state) => state.selected);
+  const articles = useSelector<RootState>((state) => state.articles);
+  const selectedArticles = useSelector<RootState>((state) => state.selected);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isExpand, setIsExpand] = useState(false);
   const [perPage, setPerPage] = useState(10);
 
-  const getPagesLength = Math.ceil(articles.length / perPage);
+  const getPagesLength = Math.ceil(
+    (articles as TablePostDataTypes[]).length / perPage,
+  );
   const [pages, setPages] = useState(getPagesLength);
 
-  const postsToDisplay = articles.slice(
+  const postsToDisplay = (articles as TablePostDataTypes[]).slice(
     (Number(searchParams.get('page')) - 1) * perPage,
     perPage * Number(searchParams.get('page')),
   );
@@ -86,9 +91,9 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Articles
       </Heading>
-      {selectedArticles.length > 0 ? (
+      {(selectedArticles as TablePostDataTypes[]).length > 0 ? (
         <Wrapper width="100%" justify="flex-start" align="center">
-          {selectedArticles.length} articles selected{' '}
+          {(selectedArticles as TablePostDataTypes[]).length} articles selected{' '}
           <button>publish all</button> <button>unpublish all</button>
         </Wrapper>
       ) : null}

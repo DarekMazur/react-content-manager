@@ -1,8 +1,12 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { mockTempPosts } from '../__mock__/mockTempPosts';
+import { TablePostDataTypes } from '../components/Organisms/Table/Table';
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 const initialArticlesList = mockTempPosts;
-const initialSelectedItems: [] = [];
+const initialSelectedItems: Array<TablePostDataTypes> = [];
 const initialUser = {};
 
 const articlesSlice = createSlice({
