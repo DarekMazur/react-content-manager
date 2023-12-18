@@ -4,23 +4,24 @@ import EntriesNumberPicker from '../../components/Molecules/EntriesNumberPicker/
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Pagination from '../../components/Molecules/Pagination/Pagination.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
-import { mockTempPosts } from '../../__mock__/mockTempPosts.tsx';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
+import { useSelector } from 'react-redux';
 
 const Articles = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const articles = useSelector((state) => state.articles);
+  const selectedArticles = useSelector((state) => state.selected);
 
-  const tempFakePosts = mockTempPosts;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [isExpand, setIsExpand] = useState(false);
   const [perPage, setPerPage] = useState(10);
 
-  const getPagesLength = Math.ceil(tempFakePosts.length / perPage);
+  const getPagesLength = Math.ceil(articles.length / perPage);
   const [pages, setPages] = useState(getPagesLength);
 
-  const postsToDisplay = tempFakePosts.slice(
+  const postsToDisplay = articles.slice(
     (Number(searchParams.get('page')) - 1) * perPage,
     perPage * Number(searchParams.get('page')),
   );
@@ -85,6 +86,10 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Articles
       </Heading>
+      <Wrapper width="100%" justify="flex-start" align="center">
+        {selectedArticles.length} articles selected <button>publish all</button>{' '}
+        <button>unpublish all</button>
+      </Wrapper>
       <Wrapper width="100%" justify="center" align="flex-start">
         <Table headers={articlesTableHeaders} data={postsToDisplay} />
       </Wrapper>

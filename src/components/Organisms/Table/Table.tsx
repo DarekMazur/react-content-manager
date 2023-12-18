@@ -1,7 +1,9 @@
-import { ReactNode, FC } from 'react';
+import { ReactNode, FC, useState } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
 import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
+import { addSelected, removeSelected } from '../../../store/index.ts';
+import { useDispatch } from 'react-redux';
 
 export type TablePostDataTypes = {
   title: string;
@@ -13,6 +15,7 @@ export type TablePostDataTypes = {
   likes: number;
   publishedAt: ReactNode;
   actions: ReactNode;
+  id: string;
 };
 
 interface TableProps {
@@ -21,6 +24,24 @@ interface TableProps {
 }
 
 const Table: FC<TableProps> = ({ headers, data }) => {
+  const dispatch = useDispatch();
+  const [checkedArticles, setCheckedArticles] = useState<TablePostDataTypes[]>(
+    [],
+  );
+
+  const handleClick = (id: string) => {
+    const checkedElement = data.find((post) => post.id === id);
+    if (checkedElement && checkedArticles.includes(checkedElement)) {
+      dispatch(removeSelected(checkedElement));
+      setCheckedArticles(
+        checkedArticles.filter((article) => article.id !== id),
+      );
+    } else if (checkedElement) {
+      dispatch(addSelected(checkedElement));
+      setCheckedArticles((prevState) => [...prevState, checkedElement]);
+    }
+  };
+
   return (
     <StyledTable>
       <thead>
@@ -42,7 +63,11 @@ const Table: FC<TableProps> = ({ headers, data }) => {
                 padding: '1rem',
               }}
             >
-              <Checkbox isChecked={false} />
+              <Checkbox
+                handleClick={handleClick}
+                id={post.id}
+                isChecked={checkedArticles.includes(post)}
+              />
             </td>
             <td>{index + 1}</td>
             <td
@@ -58,7 +83,11 @@ const Table: FC<TableProps> = ({ headers, data }) => {
             <td style={{ textAlign: 'left' }}>{post.title}</td>
             <td style={{ textAlign: 'left' }}>{post.author}</td>
             <td>
-              <Checkbox isChecked={post.sticky} />
+              <Checkbox
+                isChecked={post.sticky}
+                handleClick={() => {}}
+                id="lorem"
+              />
             </td>
             <td>{post.categories}</td>
             <td>{post.comments}</td>

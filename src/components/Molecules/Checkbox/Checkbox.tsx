@@ -4,12 +4,19 @@ import { theme } from '../../../utils/themes/theme';
 import { StyledCheckbox } from './Checkbox.styles.ts';
 
 interface CheckboxProps {
-  isChecked: boolean;
+  isChecked?: boolean;
+  // eslint-disable-next-line no-unused-vars
+  handleClick: (id: string) => void;
+  id: string;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ isChecked }) => {
+const Checkbox: FC<CheckboxProps> = ({
+  isChecked = false,
+  handleClick,
+  id,
+}) => {
   return (
-    <StyledCheckbox $checked={isChecked}>
+    <StyledCheckbox $checked={isChecked} onClick={() => handleClick(id)}>
       <span>
         {isChecked ? (
           <FontAwesomeIcon

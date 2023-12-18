@@ -7,6 +7,7 @@ export const mockTempPosts: Array<TablePostDataTypes> = [];
 
 for (let i = 0; i < 110; i++) {
   const post = {
+    id: faker.string.uuid(),
     title: faker.lorem.sentence({ min: 2, max: 5 }),
     author: faker.person.fullName(),
     status: faker.datatype.boolean(),
