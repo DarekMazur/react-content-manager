@@ -14,7 +14,7 @@ const articlesSlice = createSlice({
   initialState: initialArticlesList,
   reducers: {
     updateArticle(state, action) {
-      action.payload.forEach((item) => {
+      action.payload.forEach((item: TablePostDataTypes) => {
         const index = state.findIndex((article) => article.id === item.id);
         if (index >= 0) {
           state[index] = item;

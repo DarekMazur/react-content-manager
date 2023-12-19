@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, removeArticle } from '../../../store/index.ts';
 import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
+import { TablePostDataTypes } from '../../Organisms/Table/Table.tsx';
 
 const ActionIcon = styled(StyledInLink)`
   margin: 0 1rem;
@@ -20,8 +21,10 @@ const TableActionIcons: FC<TableActionProps> = ({ postId, id }) => {
   const articles = useSelector<RootState>((state) => state.articles);
   const dispatch = useDispatch();
 
-  const handleDelete = (id) => {
-    const temp = articles.find((article) => article.id === id);
+  const handleDelete = (id: string) => {
+    const temp = (articles as TablePostDataTypes[]).find(
+      (article) => article.id === id,
+    );
     dispatch(removeArticle(temp));
   };
   return (

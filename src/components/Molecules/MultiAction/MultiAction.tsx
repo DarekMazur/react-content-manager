@@ -10,6 +10,7 @@ import {
   updateArticle,
 } from '../../../store/index.ts';
 import { getDate } from '../../../utils/methods/getDate.ts';
+import { TablePostDataTypes } from '../../Organisms/Table/Table.tsx';
 
 interface MultiActionProps {
   counter: number;
@@ -21,8 +22,8 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const dispach = useDispatch();
 
   const handlePublish = () => {
-    const publication = [];
-    selected.forEach((article) => {
+    const publication: TablePostDataTypes[] = [];
+    (selected as TablePostDataTypes[]).forEach((article) => {
       article = {
         ...article,
         publishedAt: article.publishedAt
@@ -37,8 +38,8 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   };
 
   const handleUnpublish = () => {
-    const publication = [];
-    selected.forEach((article) => {
+    const publication: TablePostDataTypes[] = [];
+    (selected as TablePostDataTypes[]).forEach((article) => {
       article = {
         ...article,
         publishedAt: null,
@@ -51,7 +52,9 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   };
 
   const handleDelete = () => {
-    selected.forEach((article) => dispach(removeArticle(article)));
+    (selected as TablePostDataTypes[]).forEach((article) =>
+      dispach(removeArticle(article)),
+    );
 
     dispach(clearSelected());
   };

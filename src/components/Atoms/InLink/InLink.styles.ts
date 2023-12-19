@@ -30,6 +30,7 @@ export const StyledInLink = styled(Link)<StyleProps>`
       $string ? theme.colors.red : theme.colors.blue};
 
     &::after {
-      transform: ${({ $string }) => ($string ? 'scaleX(1)' : 'scale(0)')}
+      transform: ${({ $string }) => ($string ? 'scaleX(1)' : 'scale(0)')};
+    }
   }
 `;
