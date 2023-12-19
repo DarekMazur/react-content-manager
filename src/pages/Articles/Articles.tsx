@@ -6,32 +6,12 @@ import EntriesNumberPicker from '../../components/Molecules/EntriesNumberPicker/
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Pagination from '../../components/Molecules/Pagination/Pagination.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index.ts';
-import ActionButton from '../../components/Atoms/ActionButton/ActionButton.tsx';
-
-interface MultiActionProps {
-  counter: number;
-}
-
-const MultiAction: FC<MultiActionProps> = ({ counter }) => {
-  return (
-    <Wrapper
-      width="100%"
-      justify="flex-start"
-      align="center"
-      padding="2rem 2.4vw"
-    >
-      {counter} article{counter > 1 ? 's' : null} selected{' '}
-      <ActionButton>publish</ActionButton>{' '}
-      <ActionButton>unpublish</ActionButton>{' '}
-      <ActionButton isDel>delete</ActionButton>
-    </Wrapper>
-  );
-};
+import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 
 const Articles = () => {
   const articles = useSelector<RootState>((state) => state.articles);
