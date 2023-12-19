@@ -108,7 +108,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
             <td>{post.likes}</td>
             <td>{post.status ? post.publishedAt : '-'}</td>
             <td style={{ textAlign: 'left' }}>
-              <TableActionIcons postId={index + 1} />
+              <TableActionIcons postId={index + 1} id={post.id} />
             </td>
           </tr>
         ))}

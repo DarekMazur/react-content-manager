@@ -1,12 +1,29 @@
 import { FC } from 'react';
 import InLink from '../../Atoms/InLink/InLink.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, removeArticle } from '../../../store/index.ts';
+import { styled } from 'styled-components';
+import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
+
+const ActionIcon = styled(StyledInLink)`
+  margin: 0 1rem;
+  cursor: pointer;
+`;
 
 interface TableActionProps {
   postId: number;
+  id: string;
 }
 
-const TableActionIcons: FC<TableActionProps> = ({ postId }) => {
+const TableActionIcons: FC<TableActionProps> = ({ postId, id }) => {
+  const articles = useSelector<RootState>((state) => state.articles);
+  const dispatch = useDispatch();
+
+  const handleDelete = (id) => {
+    const temp = articles.find((article) => article.id === id);
+    dispatch(removeArticle(temp));
+  };
   return (
     <>
       <InLink
@@ -15,14 +32,10 @@ const TableActionIcons: FC<TableActionProps> = ({ postId }) => {
           <FontAwesomeIcon style={{ margin: '0 1rem' }} icon={['fas', 'pen']} />
         }
       />
-      <InLink
-        target={`/article/id=${postId}?del`}
-        name={
-          <FontAwesomeIcon
-            style={{ margin: '0 1rem' }}
-            icon={['fas', 'trash']}
-          />
-        }
+      <ActionIcon
+        as={FontAwesomeIcon}
+        onClick={() => handleDelete(id)}
+        icon={['fas', 'trash']}
       />
     </>
   );
