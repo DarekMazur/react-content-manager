@@ -53,8 +53,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
       ...article,
       sticky: !article?.sticky,
     };
-    dispatch(updateArticle(updateSticky));
-    // console.log(articles)
+    dispatch(updateArticle([updateSticky]));
   };
 
   return (

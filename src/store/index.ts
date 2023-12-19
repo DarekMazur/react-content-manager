@@ -14,13 +14,15 @@ const articlesSlice = createSlice({
   initialState: initialArticlesList,
   reducers: {
     updateArticle(state, action) {
-      const index = state.findIndex(
-        (article) => article.id === action.payload.id,
-      );
-      if (index >= 0) {
-        console.log(state[index]);
-        state[index] = action.payload;
-      }
+      action.payload.forEach((item) => {
+        const index = state.findIndex((article) => article.id === item.id);
+        if (index >= 0) {
+          state[index] = item;
+        }
+      });
+    },
+    removeArticle(state, action) {
+      return state.filter((article) => article.id !== action.payload.id);
     },
   },
 });
@@ -45,7 +47,7 @@ const userSlice = createSlice({
 });
 
 export const { addSelected, removeSelected } = selectedSlice.actions;
-export const { updateArticle } = articlesSlice.actions;
+export const { updateArticle, removeArticle } = articlesSlice.actions;
 
 export const store = configureStore({
   reducer: {
