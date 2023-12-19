@@ -5,7 +5,8 @@ import P from '../../Atoms/Paragraph/P.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   RootState,
-  removeSelected,
+  clearSelected,
+  removeArticle,
   updateArticle,
 } from '../../../store/index.ts';
 import { getDate } from '../../../utils/methods/getDate.ts';
@@ -30,8 +31,8 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
         status: true,
       };
       publication.push(article);
-      dispach(removeSelected(article));
     });
+    dispach(clearSelected());
     dispach(updateArticle(publication));
   };
 
@@ -44,13 +45,15 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
         status: false,
       };
       publication.push(article);
-      dispach(removeSelected(article));
     });
+    dispach(clearSelected());
     dispach(updateArticle(publication));
   };
 
   const handleDelete = () => {
-    console.log(selected);
+    selected.forEach((article) => dispach(removeArticle(article)));
+
+    dispach(clearSelected());
   };
 
   return (

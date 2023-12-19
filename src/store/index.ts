@@ -21,6 +21,7 @@ const articlesSlice = createSlice({
         }
       });
     },
+
     removeArticle(state, action) {
       return state.filter((article) => article.id !== action.payload.id);
     },
@@ -37,6 +38,9 @@ const selectedSlice = createSlice({
     removeSelected(state, action) {
       return state.filter((selected) => selected.id !== action.payload.id);
     },
+    clearSelected() {
+      return initialSelectedItems;
+    },
   },
 });
 
@@ -46,7 +50,8 @@ const userSlice = createSlice({
   reducers: {},
 });
 
-export const { addSelected, removeSelected } = selectedSlice.actions;
+export const { addSelected, removeSelected, clearSelected } =
+  selectedSlice.actions;
 export const { updateArticle, removeArticle } = articlesSlice.actions;
 
 export const store = configureStore({
