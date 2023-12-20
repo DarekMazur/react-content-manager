@@ -41,13 +41,6 @@ export const Primary: Story = {
 };
 
 export const Delete: Story = {
-  argTypes: {
-    children: {
-      control: 'text',
-      description: 'Component children',
-      name: 'Label',
-    },
-  },
   args: {
     children: 'delete',
     isDel: true,
