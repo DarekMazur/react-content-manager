@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import PickerListItem from './PickerListItem.tsx';
 import PickerList from '../../Molecules/PickerList/PickerList.tsx';
-import React from 'react';
 
 const meta: Meta<typeof PickerListItem> = {
   tags: ['autodocs'],
