@@ -7,7 +7,7 @@ interface ButtonProps {
   handleClick: () => void;
 }
 
-const Button: FC<ButtonProps> = ({ children, isDel, handleClick }) => {
+const ActionButton: FC<ButtonProps> = ({ children, isDel, handleClick }) => {
   return (
     <StyledActionButton $delete={isDel} onClick={handleClick}>
       {children}
@@ -15,4 +15,4 @@ const Button: FC<ButtonProps> = ({ children, isDel, handleClick }) => {
   );
 };
 
-export default Button;
+export default ActionButton;
