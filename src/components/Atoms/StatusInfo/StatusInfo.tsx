@@ -6,7 +6,7 @@ interface StatusProps {
 }
 
 const StatusInfo: FC<StatusProps> = ({ status }) => {
-  return <StyledStatus $status={status} />;
+  return <StyledStatus role="info" $status={status} />;
 };
 
 export default StatusInfo;
