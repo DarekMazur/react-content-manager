@@ -1,8 +1,9 @@
 import Header from '../../Organisms/Header/Header.tsx';
 import { Route, Routes } from 'react-router-dom';
-import Home from '../../../pages/Home.tsx';
+import Home from '../../../pages/Home/Home.tsx';
 import { mockUsers } from '../../../__mock__/mockUsers.ts';
 import { faker } from '@faker-js/faker';
+import Articles from '../../../pages/Articles/Articles.tsx';
 
 const Authorised = () => {
   const users = mockUsers;
@@ -20,16 +21,10 @@ const Authorised = () => {
   return (
     <>
       <Header user={user} />
+      {console.log(user)}
       <Routes>
         <Route path="/" element={<Home user={user} />} />
-        <Route
-          path="articles"
-          element={
-            <div>
-              <p>Articles</p>
-            </div>
-          }
-        />
+        <Route path="articles" element={<Articles />} />
         <Route
           path="comments"
           element={

@@ -8,7 +8,7 @@ export const Footer = styled.footer`
   padding: 0.5rem;
   margin: 0;
   min-height: 10rem;
-  width: 100vw;
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.darkBlue};
   color: ${({ theme }) => theme.colors.white};
   font-size: ${({ theme }) => theme.fontSize.lm};

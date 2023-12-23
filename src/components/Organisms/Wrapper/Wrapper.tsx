@@ -6,6 +6,8 @@ interface WrapperProps {
   align?: string;
   justify?: string;
   role?: string;
+  width?: string;
+  padding?: string;
 }
 
 const Wrapper: FC<WrapperProps> = ({
@@ -13,9 +15,17 @@ const Wrapper: FC<WrapperProps> = ({
   justify,
   align,
   role = 'wrapper',
+  width,
+  padding,
 }) => {
   return (
-    <StyledWrapper role={role} $justify={justify} $align={align}>
+    <StyledWrapper
+      role={role}
+      $justify={justify}
+      $align={align}
+      $width={width}
+      $padding={padding}
+    >
       {children}
     </StyledWrapper>
   );

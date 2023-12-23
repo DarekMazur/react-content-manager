@@ -11,3 +11,17 @@ export const data: dataTypes = {
   authorName: 'Nerdistry',
   authorUrl: 'https://nerdistry.pl',
 };
+
+export const articlesTableHeaders = [
+  '',
+  'ID',
+  'Status',
+  'Title',
+  'Author',
+  'Sticky',
+  'Categories',
+  'Comments',
+  'Likes',
+  'Published at',
+  '',
+];

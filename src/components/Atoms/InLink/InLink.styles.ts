@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export const StyledInLink = styled(Link)`
-  color: ${({ theme }) => theme.colors.blue};
+interface StyleProps {
+  $string: boolean;
+}
+
+export const StyledInLink = styled(Link)<StyleProps>`
+  color: ${({ theme, $string }) => ($string ? theme.colors.blue : 'inherit')};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   text-decoration: none;
   position: relative;
@@ -22,10 +26,11 @@ export const StyledInLink = styled(Link)`
   }
 
   &:hover {
-    color: ${({ theme }) => theme.colors.red};
+    color: ${({ theme, $string }) =>
+      $string ? theme.colors.red : theme.colors.blue};
 
     &::after {
-      transform: scaleX(1);
+      transform: ${({ $string }) => ($string ? 'scaleX(1)' : 'scale(0)')};
     }
   }
 `;

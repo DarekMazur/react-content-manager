@@ -3,18 +3,22 @@ import { GlobalStyle } from '../../styles/GlobalStyle.ts';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
 import { FC, ReactNode } from 'react';
+import { Provider } from 'react-redux';
+import { store } from '../../store';
 
 interface ProvidersProps {
   children: ReactNode;
 }
 const AppProviders: FC<ProvidersProps> = ({ children }) => {
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <GlobalStyle />
-        {children}
-      </BrowserRouter>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <GlobalStyle />
+          {children}
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   );
 };
 

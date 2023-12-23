@@ -1,5 +1,6 @@
 import { CommentTypes } from '../../__mock__/mockComments.ts';
 import { PostTypes } from '../../__mock__/mockPosts.ts';
+import { getDate } from './getDate.ts';
 
 export const getLatest = (array: Array<CommentTypes | PostTypes>) => {
   const latest = array.sort(
@@ -7,19 +8,11 @@ export const getLatest = (array: Array<CommentTypes | PostTypes>) => {
   )[0];
 
   interface LatestTypes {
-    publishedDate: string;
+    publishedDate: string | null;
     latest: CommentTypes | PostTypes;
   }
   const latestData: LatestTypes = {
-    publishedDate: `${latest.publishedAt?.getDate()}.${
-      latest.publishedAt?.getMonth() && latest.publishedAt?.getMonth() > 9
-        ? latest.publishedAt?.getMonth()
-        : `0${latest.publishedAt?.getMonth()}`
-    }.${latest.publishedAt?.getFullYear()}, ${latest.publishedAt?.getHours()}:${
-      latest.publishedAt?.getMinutes() && latest.publishedAt?.getMinutes() > 9
-        ? latest.publishedAt?.getMinutes()
-        : `0${latest.publishedAt?.getMinutes()}`
-    }`,
+    publishedDate: latest.publishedAt ? getDate(latest.publishedAt) : null,
     latest,
   };
   return latestData;

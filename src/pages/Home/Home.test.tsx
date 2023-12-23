@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/dom';
 import Home from './Home.tsx';
-import { mockUsers } from '../__mock__/mockUsers.ts';
-import { renderWithProviders } from '../utils/providers/renderWithProviders.tsx';
+import { mockUsers } from '../../__mock__/mockUsers.ts';
+import { renderWithProviders } from '../../utils/providers/renderWithProviders.tsx';
 
 const user = mockUsers.filter((user) => user.role.type === 'admin')[0];
 const page = renderWithProviders(<Home user={user} />);
