@@ -5,6 +5,9 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
   "asFragment": [Function],
   "baseElement": <body>
     <div>
+      <p>
+        Are you sure you? This is permanent
+      </p>
       <svg
         aria-hidden="true"
         class="svg-inline--fa fa-lock sc-bdfCDU kUvygu"
@@ -23,6 +26,9 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
     </div>
   </body>,
   "container": <div>
+    <p>
+      Are you sure you? This is permanent
+    </p>
     <svg
       aria-hidden="true"
       class="svg-inline--fa fa-lock sc-bdfCDU kUvygu"

@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { FC, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
+import Confirm from '../../components/Organisms/Confirm/Confirm.tsx';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -15,6 +16,7 @@ const AppProviders: FC<ProvidersProps> = ({ children }) => {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <GlobalStyle />
+          <Confirm />
           {children}
         </BrowserRouter>
       </ThemeProvider>
