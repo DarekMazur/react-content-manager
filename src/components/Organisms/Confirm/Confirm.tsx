@@ -27,6 +27,7 @@ const Confirm = () => {
 
   const handleCancel = () => {
     dispach(switchPopup(false));
+    dispach(clearSelected());
   };
   return (
     <PopupWrapper $isVisible={isPopup as boolean}>
@@ -41,10 +42,12 @@ const Confirm = () => {
           )}
           ? This action is permanent
         </p>
-        <ActionButton handleClick={handleDelete} isDel>
-          delete
-        </ActionButton>
-        <ActionButton handleClick={handleCancel}>cancel</ActionButton>
+        <div>
+          <ActionButton handleClick={handleDelete} isDel>
+            delete
+          </ActionButton>
+          <ActionButton handleClick={handleCancel}>cancel</ActionButton>
+        </div>
       </div>
     </PopupWrapper>
   );

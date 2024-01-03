@@ -6,7 +6,7 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
   "baseElement": <body>
     <div>
       <div
-        class="sc-dlfmHC bpfIOJ"
+        class="sc-dlfmHC jOwVnv"
       >
         <div>
           <p>
@@ -18,16 +18,18 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
             </strong>
             ? This action is permanent
           </p>
-          <button
-            class="sc-bdfCDU sc-gsTDqH ebXxHs dyfnGz"
-          >
-            delete
-          </button>
-          <button
-            class="sc-bdfCDU sc-gsTDqH ebXxHs jcLNlx"
-          >
-            cancel
-          </button>
+          <div>
+            <button
+              class="sc-bdfCDU sc-gsTDqH ebXxHs dyfnGz"
+            >
+              delete
+            </button>
+            <button
+              class="sc-bdfCDU sc-gsTDqH ebXxHs jcLNlx"
+            >
+              cancel
+            </button>
+          </div>
         </div>
       </div>
       <svg
@@ -49,7 +51,7 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
   </body>,
   "container": <div>
     <div
-      class="sc-dlfmHC bpfIOJ"
+      class="sc-dlfmHC jOwVnv"
     >
       <div>
         <p>
@@ -61,16 +63,18 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
           </strong>
           ? This action is permanent
         </p>
-        <button
-          class="sc-bdfCDU sc-gsTDqH ebXxHs dyfnGz"
-        >
-          delete
-        </button>
-        <button
-          class="sc-bdfCDU sc-gsTDqH ebXxHs jcLNlx"
-        >
-          cancel
-        </button>
+        <div>
+          <button
+            class="sc-bdfCDU sc-gsTDqH ebXxHs dyfnGz"
+          >
+            delete
+          </button>
+          <button
+            class="sc-bdfCDU sc-gsTDqH ebXxHs jcLNlx"
+          >
+            cancel
+          </button>
+        </div>
       </div>
     </div>
     <svg

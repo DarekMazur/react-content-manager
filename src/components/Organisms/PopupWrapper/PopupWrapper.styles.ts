@@ -22,5 +22,11 @@ export const PopupWrapper = styled.div<PopupProps>`
     border-radius: 0.5rem;
     width: 30%;
     position: relative;
+
+    div {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
   }
 `;
