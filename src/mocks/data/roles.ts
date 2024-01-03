@@ -4,7 +4,7 @@ export interface RoleTypes {
   description: string;
   type: string;
 }
-export const mockRoles: Array<RoleTypes> = [
+export const roles: Array<RoleTypes> = [
   {
     id: 1,
     name: 'Administrator',

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { mockRoles, RoleTypes } from './roles.ts';
+import { roles, RoleTypes } from './roles.ts';
 
 export interface UserTypes {
   id: number;
@@ -20,7 +20,7 @@ const bannedChance = 15;
 
 for (let i = 0; i <= randomizeLength; i++) {
   const roleId = faker.number.int({ min: 1, max: 4 });
-  const userRole = mockRoles.filter((role) => role.id === roleId);
+  const userRole = roles.filter((role) => role.id === roleId);
   const isBlocked = Math.floor(Math.random() * 100) <= bannedChance;
   const user = {
     id: i + 1,
