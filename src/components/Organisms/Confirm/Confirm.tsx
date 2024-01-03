@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import ActionButton from '../../Atoms/ActionButton/ActionButton';
 
 export const PopupWrapepr = styled.div`
   position: fixed;
@@ -15,7 +16,7 @@ export const PopupWrapepr = styled.div`
   div {
     padding: 4rem 2rem;
     background-color: ${({ theme }) => theme.colors.white};
-    border-radius: 5px;
+    border-radius: 0.5rem;
     width: 30%;
     position: relative;
   }
@@ -26,8 +27,17 @@ const Confirm = () => {
     <PopupWrapepr>
       <div>
         <p>Are you sure you? This is permanent</p>
-        <button>delete</button>
-        <button>cancel</button>
+        <ActionButton
+          handleClick={() => {}}
+          isDel
+        >
+          delete
+        </ActionButton>
+        <ActionButton
+          handleClick={() => {}}
+        >
+          cancel
+        </ActionButton>
       </div>
     </PopupWrapepr>
   );
