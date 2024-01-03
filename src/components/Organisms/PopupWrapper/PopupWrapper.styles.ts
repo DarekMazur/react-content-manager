@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
-export const PopupWrapper = styled.div`
+interface PopupProps {
+  $isVisible: boolean;
+}
+
+export const PopupWrapper = styled.div<PopupProps>`
   position: fixed;
-  display: flex;
   justify-content: center;
   align-items: center;
   top: 0;
@@ -11,6 +14,7 @@ export const PopupWrapper = styled.div`
   right: 0;
   background-color: ${({ theme }) => theme.colors.darkBluePopup};
   z-index: 10;
+  display: ${({ $isVisible }) => ($isVisible ? 'flex' : 'none')};
 
   div {
     padding: 4rem 2rem;

@@ -6,23 +6,33 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
   "baseElement": <body>
     <div>
       <div
-        class="sc-bdfCDU buysun"
+        class="sc-dlfmHC bpfIOJ"
       >
         <div>
           <p>
-            Are you sure you? This is permanent
+            Are you sure you want to delelte 
+             
+            article
+            <strong>
+               
+            </strong>
+            ? This action is permanent
           </p>
-          <button>
+          <button
+            class="sc-bdfCDU sc-gsTDqH ebXxHs dyfnGz"
+          >
             delete
           </button>
-          <button>
+          <button
+            class="sc-bdfCDU sc-gsTDqH ebXxHs jcLNlx"
+          >
             cancel
           </button>
         </div>
       </div>
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-lock sc-gsTDqH OUfYl"
+        class="svg-inline--fa fa-lock sc-hKgKIp LCqwq"
         data-icon="lock"
         data-prefix="fas"
         focusable="false"
@@ -39,23 +49,33 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
   </body>,
   "container": <div>
     <div
-      class="sc-bdfCDU buysun"
+      class="sc-dlfmHC bpfIOJ"
     >
       <div>
         <p>
-          Are you sure you? This is permanent
+          Are you sure you want to delelte 
+           
+          article
+          <strong>
+             
+          </strong>
+          ? This action is permanent
         </p>
-        <button>
+        <button
+          class="sc-bdfCDU sc-gsTDqH ebXxHs dyfnGz"
+        >
           delete
         </button>
-        <button>
+        <button
+          class="sc-bdfCDU sc-gsTDqH ebXxHs jcLNlx"
+        >
           cancel
         </button>
       </div>
     </div>
     <svg
       aria-hidden="true"
-      class="svg-inline--fa fa-lock sc-gsTDqH OUfYl"
+      class="svg-inline--fa fa-lock sc-hKgKIp LCqwq"
       data-icon="lock"
       data-prefix="fas"
       focusable="false"
