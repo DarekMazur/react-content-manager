@@ -5,12 +5,24 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <p>
-        Are you sure you? This is permanent
-      </p>
+      <div
+        class="sc-bdfCDU buysun"
+      >
+        <div>
+          <p>
+            Are you sure you? This is permanent
+          </p>
+          <button>
+            delete
+          </button>
+          <button>
+            cancel
+          </button>
+        </div>
+      </div>
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-lock sc-bdfCDU kUvygu"
+        class="svg-inline--fa fa-lock sc-gsTDqH OUfYl"
         data-icon="lock"
         data-prefix="fas"
         focusable="false"
@@ -26,12 +38,24 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
     </div>
   </body>,
   "container": <div>
-    <p>
-      Are you sure you? This is permanent
-    </p>
+    <div
+      class="sc-bdfCDU buysun"
+    >
+      <div>
+        <p>
+          Are you sure you? This is permanent
+        </p>
+        <button>
+          delete
+        </button>
+        <button>
+          cancel
+        </button>
+      </div>
+    </div>
     <svg
       aria-hidden="true"
-      class="svg-inline--fa fa-lock sc-bdfCDU kUvygu"
+      class="svg-inline--fa fa-lock sc-gsTDqH OUfYl"
       data-icon="lock"
       data-prefix="fas"
       focusable="false"
