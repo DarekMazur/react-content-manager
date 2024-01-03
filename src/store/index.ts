@@ -8,6 +8,7 @@ export type AppDispatch = typeof store.dispatch;
 const initialArticlesList = mockTempPosts;
 const initialSelectedItems: Array<TablePostDataTypes> = [];
 const initialUser = {};
+const initialPopup = false;
 
 const articlesSlice = createSlice({
   name: 'articles',
@@ -50,15 +51,27 @@ const userSlice = createSlice({
   reducers: {},
 });
 
+const popupSlice = createSlice({
+  name: 'popup',
+  initialState: initialPopup,
+  reducers: {
+    switchPopup(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
 export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
 export const { updateArticle, removeArticle } = articlesSlice.actions;
+export const { switchPopup } = popupSlice.actions;
 
 export const store = configureStore({
   reducer: {
     articles: articlesSlice.reducer,
     selected: selectedSlice.reducer,
     user: userSlice.reducer,
+    popup: popupSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   RootState,
   clearSelected,
-  removeArticle,
+  switchPopup,
   updateArticle,
 } from '../../../store/index.ts';
 import { getDate } from '../../../utils/methods/getDate.ts';
@@ -18,6 +18,7 @@ interface MultiActionProps {
 
 const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const selected = useSelector<RootState>((state) => state.selected);
+  const isPopup = useSelector<RootState>((state) => state.popup);
 
   const dispach = useDispatch();
 
@@ -52,11 +53,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   };
 
   const handleDelete = () => {
-    (selected as TablePostDataTypes[]).forEach((article) =>
-      dispach(removeArticle(article)),
-    );
-
-    dispach(clearSelected());
+    dispach(switchPopup(!isPopup));
   };
 
   return (

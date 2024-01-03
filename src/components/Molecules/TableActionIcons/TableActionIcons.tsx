@@ -2,7 +2,12 @@ import { FC } from 'react';
 import InLink from '../../Atoms/InLink/InLink.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, removeArticle } from '../../../store/index.ts';
+import {
+  RootState,
+  addSelected,
+  clearSelected,
+  switchPopup,
+} from '../../../store/index.ts';
 import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
 import { TablePostDataTypes } from '../../Organisms/Table/Table.tsx';
@@ -22,10 +27,12 @@ const TableActionIcons: FC<TableActionProps> = ({ postId, id }) => {
   const dispatch = useDispatch();
 
   const handleDelete = (id: string) => {
+    dispatch(clearSelected());
     const temp = (articles as TablePostDataTypes[]).find(
       (article) => article.id === id,
     );
-    dispatch(removeArticle(temp));
+    dispatch(addSelected(temp));
+    dispatch(switchPopup(true));
   };
   return (
     <>

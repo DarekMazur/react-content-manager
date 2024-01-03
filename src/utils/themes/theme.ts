@@ -6,6 +6,7 @@ export const theme = {
     blue: '#457B9D',
     darkBlue: '#1D3557',
     darkBlueTransparent: '#1d355724',
+    darkBluePopup: '#1d3557ba',
     red: '#E63946',
     green: '#42941B',
   },
