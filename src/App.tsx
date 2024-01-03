@@ -1,25 +1,10 @@
-import React, { useState } from 'react';
 import AppProviders from './utils/providers/AppProviders.tsx';
-import Authorised from './components/Templates/Authorised/Authorised.tsx';
-import FooterWrapper from './components/Organisms/Footer/Footer.tsx';
-import Unauthorised from './components/Templates/Unauthorised/Unauthorised.tsx';
+import Root from './pages/Root/Root.tsx';
 
 const App = () => {
-  const [isAuthorised, setIsAuthorised] = useState(true);
-
-  const handleMockLogin = (e?: React.ChangeEvent<HTMLInputElement>) => {
-    e && e.preventDefault();
-    setIsAuthorised(true);
-  };
-
   return (
     <AppProviders>
-      {isAuthorised ? (
-        <Authorised />
-      ) : (
-        <Unauthorised handleMockLogin={handleMockLogin} />
-      )}
-      <FooterWrapper />
+      <Root />
     </AppProviders>
   );
 };

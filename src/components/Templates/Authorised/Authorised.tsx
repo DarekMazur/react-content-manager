@@ -1,29 +1,19 @@
 import Header from '../../Organisms/Header/Header.tsx';
 import { Route, Routes } from 'react-router-dom';
 import Home from '../../../pages/Home/Home.tsx';
-import { mockUsers } from '../../../__mock__/mockUsers.ts';
-import { faker } from '@faker-js/faker';
 import Articles from '../../../pages/Articles/Articles.tsx';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/index.ts';
+import { UserTypes } from '../../../__mock__/mockUsers.ts';
 
 const Authorised = () => {
-  const users = mockUsers;
-  const getUser = () => {
-    const admins = users.filter((user) => user.role.id === 1);
-    if (admins.length === 0) {
-      return users[0];
-    }
-
-    const randomIndex = faker.number.int({ min: 0, max: admins.length - 1 });
-    return admins[randomIndex];
-  };
-  const user = getUser();
+  const user = useSelector<RootState>((state) => state.user);
 
   return (
     <>
-      <Header user={user} />
-      {console.log(user)}
+      <Header user={user as UserTypes} />
       <Routes>
-        <Route path="/" element={<Home user={user} />} />
+        <Route path="/" element={<Home user={user as UserTypes} />} />
         <Route path="articles" element={<Articles />} />
         <Route
           path="comments"

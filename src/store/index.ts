@@ -48,7 +48,11 @@ const selectedSlice = createSlice({
 const userSlice = createSlice({
   name: 'user',
   initialState: initialUser,
-  reducers: {},
+  reducers: {
+    setUser(state, action) {
+      return (state = action.payload);
+    },
+  },
 });
 
 const popupSlice = createSlice({
@@ -65,6 +69,7 @@ export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
 export const { updateArticle, removeArticle } = articlesSlice.actions;
 export const { switchPopup } = popupSlice.actions;
+export const { setUser } = userSlice.actions;
 
 export const store = configureStore({
   reducer: {
