@@ -72,6 +72,7 @@ export const db = factory({
     updatedAt: () => faker.date.past(),
     publishedAt: nullable<Date>(faker.date.past),
     likes: () => faker.number.int({ min: 0, max: 500 }),
+    categories: () => faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
     author: oneOf('user'),
   },
 });

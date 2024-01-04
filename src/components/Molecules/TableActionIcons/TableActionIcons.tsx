@@ -19,17 +19,17 @@ const ActionIcon = styled(StyledInLink)`
 
 interface TableActionProps {
   postId: number;
-  id: string;
+  uuid: string;
 }
 
-const TableActionIcons: FC<TableActionProps> = ({ postId, id }) => {
+const TableActionIcons: FC<TableActionProps> = ({ postId, uuid }) => {
   const articles = useSelector<RootState>((state) => state.articles);
   const dispatch = useDispatch();
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (uuid: string) => {
     dispatch(clearSelected());
     const temp = (articles as TablePostDataTypes[]).find(
-      (article) => article.id === id,
+      (article) => article.uuid === uuid,
     );
     dispatch(addSelected(temp));
     dispatch(switchPopup(true));
@@ -44,7 +44,7 @@ const TableActionIcons: FC<TableActionProps> = ({ postId, id }) => {
       />
       <ActionIcon
         as={FontAwesomeIcon}
-        onClick={() => handleDelete(id)}
+        onClick={() => handleDelete(uuid)}
         icon={['fas', 'trash']}
       />
     </>

@@ -7,16 +7,16 @@ interface CheckboxProps {
   isChecked?: boolean;
   // eslint-disable-next-line no-unused-vars
   handleClick: (id: string) => void;
-  id: string;
+  uuid: string;
 }
 
 const Checkbox: FC<CheckboxProps> = ({
   isChecked = false,
   handleClick,
-  id,
+  uuid,
 }) => {
   return (
-    <StyledCheckbox $checked={isChecked} onClick={() => handleClick(id)}>
+    <StyledCheckbox $checked={isChecked} onClick={() => handleClick(uuid)}>
       <span>
         {isChecked ? (
           <FontAwesomeIcon

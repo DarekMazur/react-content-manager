@@ -1,14 +1,27 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { mockTempPosts } from '../__mock__/mockTempPosts';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TablePostDataTypes } from '../components/Organisms/Table/Table';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-const initialArticlesList = mockTempPosts;
+const initialArticlesList: Array<TablePostDataTypes> = [];
 const initialSelectedItems: Array<TablePostDataTypes> = [];
 const initialUser = {};
 const initialPopup = false;
+
+const articlesApi = createApi({
+  baseQuery: fetchBaseQuery({
+    baseUrl: '/api/',
+  }),
+  endpoints: (builder) => ({
+    getArticles: builder.query({
+      query: () => 'articles'
+    })
+  })
+})
+
+export const { useGetArticlesQuery } = articlesApi;
 
 const articlesSlice = createSlice({
   name: 'articles',
@@ -16,7 +29,7 @@ const articlesSlice = createSlice({
   reducers: {
     updateArticle(state, action) {
       action.payload.forEach((item: TablePostDataTypes) => {
-        const index = state.findIndex((article) => article.id === item.id);
+        const index = state.findIndex((article) => article.uuid === item.uuid);
         if (index >= 0) {
           state[index] = item;
         }
@@ -73,10 +86,11 @@ export const { setUser } = userSlice.actions;
 
 export const store = configureStore({
   reducer: {
+    [articlesApi.reducerPath]: articlesApi.reducer,
     articles: articlesSlice.reducer,
     selected: selectedSlice.reducer,
     user: userSlice.reducer,
     popup: popupSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(articlesApi.middleware),
 });

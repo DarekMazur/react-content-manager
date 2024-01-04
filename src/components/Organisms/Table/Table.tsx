@@ -1,4 +1,4 @@
-import { ReactNode, FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
 import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
@@ -9,17 +9,30 @@ import {
 } from '../../../store/index.ts';
 import { useDispatch } from 'react-redux';
 import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons.tsx';
+import { RoleTypes, db } from '../../../mocks/db.ts';
+import { CommentTypes } from '../../../__mock__/mockComments.ts';
+import { getDate } from '../../../utils/methods/getDate.ts';
 
 export type TablePostDataTypes = {
+  id: number;
   title: string;
-  author: string;
-  status: boolean;
-  sticky: boolean;
-  categories: string;
-  comments: number;
+  isSticky: boolean;
+  description: string;
+  body: string;
+  uuid: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
   likes: number;
-  publishedAt: ReactNode;
-  id: string;
+  categories: string;
+  author: {
+    uuid: string;
+    username: string;
+    email: string;
+    avatar: string;
+    role: RoleTypes;
+  };
+  comments: Array<CommentTypes> | null;
 };
 
 interface TableProps {
@@ -34,12 +47,12 @@ const Table: FC<TableProps> = ({ headers, data }) => {
     [],
   );
 
-  const handleClickSelect = (id: string) => {
-    const checkedElement = data.find((post) => post.id === id);
+  const handleClickSelect = (uuid: string) => {
+    const checkedElement = data.find((article) => article.uuid === uuid);
     if (checkedElement && checkedArticles.includes(checkedElement)) {
       dispatch(removeSelected(checkedElement));
       setCheckedArticles(
-        checkedArticles.filter((article) => article.id !== id),
+        checkedArticles.filter((article) => article.uuid !== uuid),
       );
     } else if (checkedElement) {
       dispatch(addSelected(checkedElement));
@@ -47,11 +60,11 @@ const Table: FC<TableProps> = ({ headers, data }) => {
     }
   };
 
-  const handleClickSticky = (id: string) => {
-    const article = data.find((article) => article.id === id);
+  const handleClickSticky = (uuid: string) => {
+    const article = data.find((article) => article.uuid === uuid);
     const updateSticky = {
       ...article,
-      sticky: !article?.sticky,
+      sticky: !article?.isSticky,
     };
     dispatch(updateArticle([updateSticky]));
   };
@@ -66,7 +79,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((post, index) => (
+        {data.map((article, index) => (
           <tr key={index + 1}>
             <td
               style={{
@@ -79,8 +92,8 @@ const Table: FC<TableProps> = ({ headers, data }) => {
             >
               <Checkbox
                 handleClick={handleClickSelect}
-                id={post.id}
-                isChecked={checkedArticles.includes(post)}
+                uuid={article.uuid}
+                isChecked={checkedArticles.includes(article)}
               />
             </td>
             <td>{index + 1}</td>
@@ -92,23 +105,31 @@ const Table: FC<TableProps> = ({ headers, data }) => {
                 padding: '0 1rem',
               }}
             >
-              <StatusInfo status={post.status} />
+              <StatusInfo status={article.publishedAt ? true : false} />
             </td>
-            <td style={{ textAlign: 'left' }}>{post.title}</td>
-            <td style={{ textAlign: 'left' }}>{post.author}</td>
+            <td style={{ textAlign: 'left' }}>{article.title}</td>
+            <td style={{ textAlign: 'left' }}>{article.author.username}</td>
             <td>
               <Checkbox
-                isChecked={post.sticky}
+                isChecked={article.isSticky}
                 handleClick={handleClickSticky}
-                id={post.id}
+                uuid={article.uuid}
               />
             </td>
-            <td>{post.categories}</td>
-            <td>{post.comments}</td>
-            <td>{post.likes}</td>
-            <td>{post.status ? post.publishedAt : '-'}</td>
+            <td>{article.categories}</td>
+            <td>{db.comment.count({
+              where: {
+                article: {
+                  uuid: {
+                    equals: article.uuid
+                  }
+                }
+              }
+            })}</td>
+            <td>{article.likes}</td>
+            <td>{article.publishedAt ? getDate(article.publishedAt) : '-'}</td>
             <td style={{ textAlign: 'left' }}>
-              <TableActionIcons postId={index + 1} id={post.id} />
+              <TableActionIcons postId={index + 1} uuid={article.uuid} />
             </td>
           </tr>
         ))}
