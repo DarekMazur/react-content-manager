@@ -51,6 +51,16 @@ export const db = factory({
     role: () =>
       roles[faker.number.int({ min: 0, max: roles.length - 1 })] as any, // eslint-disable-line @typescript-eslint/no-explicit-any
   },
+  comment: {
+    id: () => faker.number.int(),
+    content: () => faker.lorem.sentence({ min: 1, max: 20 }),
+    uuid: primaryKey(faker.string.uuid),
+    createdAt: () => faker.date.past(),
+    updatedAt: () => faker.date.past(),
+    publishedAt: () => faker.date.past(),
+    author: oneOf('user'),
+    article: oneOf('article'),
+  },
   article: {
     uuid: primaryKey(faker.string.uuid),
     id: () => faker.number.int(),
@@ -63,6 +73,5 @@ export const db = factory({
     publishedAt: nullable<Date>(faker.date.past),
     likes: () => faker.number.int({ min: 0, max: 500 }),
     author: oneOf('user'),
-    // comments: () =>
   },
 });
