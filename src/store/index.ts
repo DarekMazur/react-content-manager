@@ -28,10 +28,22 @@ const articlesApi = createApi({
       }),
       invalidatesTags: ['Articles'],
     }),
+    removeArticle: builder.mutation({
+      query: (body) => ({
+        url: 'articles',
+        method: 'DELETE',
+        body,
+      }),
+      invalidatesTags: ['Articles'],
+    }),
   }),
 });
 
-export const { useGetArticlesQuery, useUpdateArticlesMutation } = articlesApi;
+export const {
+  useGetArticlesQuery,
+  useUpdateArticlesMutation,
+  useRemoveArticleMutation,
+} = articlesApi;
 
 const articlesSlice = createSlice({
   name: 'articles',
