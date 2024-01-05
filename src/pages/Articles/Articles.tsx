@@ -1,7 +1,5 @@
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
-import Table, {
-  TablePostDataTypes,
-} from '../../components/Organisms/Table/Table.tsx';
+import Table from '../../components/Organisms/Table/Table.tsx';
 import EntriesNumberPicker from '../../components/Molecules/EntriesNumberPicker/EntriesNumberPicker.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Pagination from '../../components/Molecules/Pagination/Pagination.tsx';
@@ -12,6 +10,7 @@ import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
 import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
+import { ArticleDataTypes } from '../../types/dataTypes.ts';
 
 const Articles = () => {
   const { data: articles = [] } = useGetArticlesQuery();
@@ -91,9 +90,9 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Articles
       </Heading>
-      {(selectedArticles as TablePostDataTypes[]).length > 0 ? (
+      {(selectedArticles as ArticleDataTypes[]).length > 0 ? (
         <MultiAction
-          counter={(selectedArticles as TablePostDataTypes[]).length}
+          counter={(selectedArticles as ArticleDataTypes[]).length}
         />
       ) : null}
       <Wrapper width="100%" justify="center" align="flex-start">

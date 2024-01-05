@@ -7,17 +7,17 @@ import {
   removeArticle,
   switchPopup,
 } from '../../../store/index.ts';
-import { TablePostDataTypes } from '../Table/Table.tsx';
+import { ArticleDataTypes } from '../Table/Table.tsx';
 
 const Confirm = () => {
   const dispach = useDispatch();
   const selected = useSelector<RootState>((state) => state.selected);
   const isPopup = useSelector<RootState>((state) => state.popup);
 
-  const counter = (selected as TablePostDataTypes[]).length;
+  const counter = (selected as ArticleDataTypes[]).length;
 
   const handleDelete = () => {
-    (selected as TablePostDataTypes[]).forEach((article) =>
+    (selected as ArticleDataTypes[]).forEach((article) =>
       dispach(removeArticle(article)),
     );
 
@@ -38,7 +38,7 @@ const Confirm = () => {
           {counter > 1 ? (
             's'
           ) : (
-            <strong> {(selected as TablePostDataTypes[])[0]?.title}</strong>
+            <strong> {(selected as ArticleDataTypes[])[0]?.title}</strong>
           )}
           ? This action is permanent
         </p>

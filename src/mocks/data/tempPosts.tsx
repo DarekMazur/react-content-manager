@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { getDate } from '../../utils/methods/getDate.ts';
-import { TablePostDataTypes } from '../../components/Organisms/Table/Table.tsx';
+import { ArticleDataTypes } from '../../components/Organisms/Table/Table.tsx';
 
-export const mockTempPosts: Array<TablePostDataTypes> = [];
+export const mockTempPosts: Array<ArticleDataTypes> = [];
 
 for (let i = 0; i < 110; i++) {
   const isPublished = faker.datatype.boolean();

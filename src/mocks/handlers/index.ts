@@ -1,13 +1,13 @@
 import { http, HttpResponse } from 'msw';
 import { db } from '../db';
-import { TablePostDataTypes } from '../../components/Organisms/Table/Table';
+import { ArticleDataTypes } from '../../types/dataTypes';
 
 export const handlers = [
   http.get('/api/articles', () => {
     return HttpResponse.json(db.article.getAll());
   }),
   http.patch('/api/articles', async ({ request }) => {
-    const updatedArticle = (await request.json()) as TablePostDataTypes;
+    const updatedArticle = (await request.json()) as ArticleDataTypes;
     if (updatedArticle) {
       db.article.update({
         where: {

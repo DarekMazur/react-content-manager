@@ -10,7 +10,7 @@ import {
 } from '../../../store/index.ts';
 import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
-import { TablePostDataTypes } from '../../Organisms/Table/Table.tsx';
+import { ArticleDataTypes } from '../../Organisms/Table/Table.tsx';
 
 const ActionIcon = styled(StyledInLink)`
   margin: 0 1rem;
@@ -28,7 +28,7 @@ const TableActionIcons: FC<TableActionProps> = ({ postId, uuid }) => {
 
   const handleDelete = (uuid: string) => {
     dispatch(clearSelected());
-    const temp = (articles as TablePostDataTypes[]).find(
+    const temp = (articles as ArticleDataTypes[]).find(
       (article) => article.uuid === uuid,
     );
     dispatch(addSelected(temp));

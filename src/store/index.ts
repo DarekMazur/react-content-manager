@@ -1,12 +1,12 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { TablePostDataTypes } from '../components/Organisms/Table/Table';
+import { ArticleDataTypes } from '../types/dataTypes';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-const initialArticlesList: Array<TablePostDataTypes> = [];
-const initialSelectedItems: Array<TablePostDataTypes> = [];
+const initialArticlesList: Array<ArticleDataTypes> = [];
+const initialSelectedItems: Array<ArticleDataTypes> = [];
 const initialUser = {};
 const initialPopup = false;
 
@@ -16,7 +16,7 @@ const articlesApi = createApi({
   }),
   tagTypes: ['Articles'],
   endpoints: (builder) => ({
-    getArticles: builder.query<TablePostDataTypes[], void>({
+    getArticles: builder.query<ArticleDataTypes[], void>({
       query: () => 'articles',
       providesTags: ['Articles'],
     }),
@@ -38,7 +38,7 @@ const articlesSlice = createSlice({
   initialState: initialArticlesList,
   reducers: {
     updateArticle(state, action) {
-      action.payload.forEach((item: TablePostDataTypes) => {
+      action.payload.forEach((item: ArticleDataTypes) => {
         const index = state.findIndex((article) => article.uuid === item.uuid);
         if (index >= 0) {
           state[index] = item;

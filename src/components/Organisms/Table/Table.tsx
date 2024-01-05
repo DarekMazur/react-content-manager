@@ -8,42 +8,20 @@ import {
   useUpdateArticlesMutation,
 } from '../../../store/index.ts';
 import { useDispatch } from 'react-redux';
+import { ArticleDataTypes } from '../../../types/dataTypes';
 import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons.tsx';
-import { RoleTypes, db } from '../../../mocks/db.ts';
-import { CommentTypes } from '../../../__mock__/mockComments.ts';
+import { db } from '../../../mocks/db.ts';
 import { getDate } from '../../../utils/methods/getDate.ts';
-
-export type TablePostDataTypes = {
-  id: number;
-  title: string;
-  isSticky: boolean;
-  description: string;
-  body: string;
-  uuid: string;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt: Date | null;
-  likes: number;
-  categories: string;
-  author: {
-    uuid: string;
-    username: string;
-    email: string;
-    avatar: string;
-    role: RoleTypes;
-  };
-  comments: Array<CommentTypes> | null;
-};
 
 interface TableProps {
   headers: Array<string>;
-  data: Array<TablePostDataTypes>;
+  data: Array<ArticleDataTypes>;
 }
 
 const Table: FC<TableProps> = ({ headers, data }) => {
   const dispatch = useDispatch();
 
-  const [checkedArticles, setCheckedArticles] = useState<TablePostDataTypes[]>(
+  const [checkedArticles, setCheckedArticles] = useState<ArticleDataTypes[]>(
     [],
   );
 
