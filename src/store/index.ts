@@ -17,11 +17,18 @@ const articlesApi = createApi({
   endpoints: (builder) => ({
     getArticles: builder.query({
       query: () => 'articles'
+    }),
+    updateArticles: builder.mutation({
+      query: (body) => ({
+        url: 'articles',
+        method: 'PATCH',
+        body
+      })
     })
   })
 })
 
-export const { useGetArticlesQuery } = articlesApi;
+export const { useGetArticlesQuery, useUpdateArticlesMutation } = articlesApi;
 
 const articlesSlice = createSlice({
   name: 'articles',

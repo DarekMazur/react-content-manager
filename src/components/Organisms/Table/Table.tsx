@@ -1,11 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
 import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
 import {
   addSelected,
   removeSelected,
-  updateArticle,
+  useUpdateArticlesMutation,
 } from '../../../store/index.ts';
 import { useDispatch } from 'react-redux';
 import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons.tsx';
@@ -46,6 +46,12 @@ const Table: FC<TableProps> = ({ headers, data }) => {
   const [checkedArticles, setCheckedArticles] = useState<TablePostDataTypes[]>(
     [],
   );
+  
+  const [updateArticle, rest] = useUpdateArticlesMutation()
+
+  useEffect(() => {
+    console.log(rest);
+  }, [rest]);
 
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((article) => article.uuid === uuid);
@@ -60,14 +66,19 @@ const Table: FC<TableProps> = ({ headers, data }) => {
     }
   };
 
-  const handleClickSticky = (uuid: string) => {
+  // const handleClickSticky = (uuid: string) => {
+  //   const article = data.find((article) => article.uuid === uuid);
+  //   const updateSticky = {
+  //     ...article,
+  //     sticky: !article?.isSticky,
+  //   };
+  //   dispatch(updateArticle([updateSticky]));
+  // };
+
+  const handleClickSticky = async (uuid: string) => {
     const article = data.find((article) => article.uuid === uuid);
-    const updateSticky = {
-      ...article,
-      sticky: !article?.isSticky,
-    };
-    dispatch(updateArticle([updateSticky]));
-  };
+    await updateArticle({uuid, isSticky: !article?.isSticky})
+  }
 
   return (
     <StyledTable>

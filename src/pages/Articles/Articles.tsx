@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
-import { RootState, useGetArticlesQuery } from '../../store/index.ts';
+import { RootState, useGetArticlesQuery, useUpdateArticlesMutation } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 
 const Articles = () => {
