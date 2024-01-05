@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
 import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
@@ -46,12 +46,14 @@ const Table: FC<TableProps> = ({ headers, data }) => {
   const [checkedArticles, setCheckedArticles] = useState<TablePostDataTypes[]>(
     [],
   );
-  
-  const [updateArticle, rest] = useUpdateArticlesMutation()
 
-  useEffect(() => {
-    console.log(rest);
-  }, [rest]);
+  const [updateArticle] = useUpdateArticlesMutation();
+
+  // const [updateArticle, rest] = useUpdateArticlesMutation()
+
+  // useEffect(() => {
+  //   console.log(rest);
+  // }, [rest]);
 
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((article) => article.uuid === uuid);
@@ -66,19 +68,10 @@ const Table: FC<TableProps> = ({ headers, data }) => {
     }
   };
 
-  // const handleClickSticky = (uuid: string) => {
-  //   const article = data.find((article) => article.uuid === uuid);
-  //   const updateSticky = {
-  //     ...article,
-  //     sticky: !article?.isSticky,
-  //   };
-  //   dispatch(updateArticle([updateSticky]));
-  // };
-
   const handleClickSticky = async (uuid: string) => {
     const article = data.find((article) => article.uuid === uuid);
-    await updateArticle({uuid, isSticky: !article?.isSticky})
-  }
+    await updateArticle({ uuid, isSticky: !article?.isSticky });
+  };
 
   return (
     <StyledTable>
@@ -128,15 +121,17 @@ const Table: FC<TableProps> = ({ headers, data }) => {
               />
             </td>
             <td>{article.categories}</td>
-            <td>{db.comment.count({
-              where: {
-                article: {
-                  uuid: {
-                    equals: article.uuid
-                  }
-                }
-              }
-            })}</td>
+            <td>
+              {db.comment.count({
+                where: {
+                  article: {
+                    uuid: {
+                      equals: article.uuid,
+                    },
+                  },
+                },
+              })}
+            </td>
             <td>{article.likes}</td>
             <td>{article.publishedAt ? getDate(article.publishedAt) : '-'}</td>
             <td style={{ textAlign: 'left' }}>

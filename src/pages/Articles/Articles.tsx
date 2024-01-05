@@ -10,12 +10,12 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
-import { RootState, useGetArticlesQuery, useUpdateArticlesMutation } from '../../store/index.ts';
+import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 
 const Articles = () => {
-  const { data: articles = []} = useGetArticlesQuery();
-  
+  const { data: articles = [] } = useGetArticlesQuery();
+
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,9 +23,7 @@ const Articles = () => {
   const [isExpand, setIsExpand] = useState(false);
   const [perPage, setPerPage] = useState(10);
 
-  const getPagesLength = Math.ceil(
-    articles.length / perPage,
-  );
+  const getPagesLength = Math.ceil(articles.length / perPage);
   const [pages, setPages] = useState(getPagesLength);
 
   const postsToDisplay = articles.slice(
@@ -108,12 +106,12 @@ const Articles = () => {
           handleExpand={handleExpand}
           handleChoseEntriesNumber={handleChoseEntriesNumber}
           handleClose={handleClose}
-          />
+        />
         <Pagination
           pages={pages}
           current={Number(searchParams.get('page'))}
           handlePageChoose={handlePageChoose}
-          />
+        />
       </Wrapper>
     </main>
   );

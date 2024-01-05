@@ -14,19 +14,22 @@ const articlesApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/',
   }),
+  tagTypes: ['Articles'],
   endpoints: (builder) => ({
-    getArticles: builder.query({
-      query: () => 'articles'
+    getArticles: builder.query<TablePostDataTypes[], void>({
+      query: () => 'articles',
+      providesTags: ['Articles'],
     }),
     updateArticles: builder.mutation({
       query: (body) => ({
         url: 'articles',
         method: 'PATCH',
-        body
-      })
-    })
-  })
-})
+        body,
+      }),
+      invalidatesTags: ['Articles'],
+    }),
+  }),
+});
 
 export const { useGetArticlesQuery, useUpdateArticlesMutation } = articlesApi;
 
@@ -99,5 +102,6 @@ export const store = configureStore({
     user: userSlice.reducer,
     popup: popupSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(articlesApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(articlesApi.middleware),
 });
