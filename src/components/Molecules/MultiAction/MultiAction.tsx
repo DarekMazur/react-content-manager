@@ -7,7 +7,7 @@ import {
   RootState,
   clearSelected,
   switchPopup,
-  updateArticle,
+  useUpdateArticleMutation,
 } from '../../../store/index.ts';
 import { ArticleDataTypes } from '../../../types/dataTypes.ts';
 
@@ -17,33 +17,29 @@ interface MultiActionProps {
 
 const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const selected = useSelector<RootState>((state) => state.selected);
-
   const dispach = useDispatch();
+  const [updateArticle] = useUpdateArticleMutation();
 
   const handlePublish = () => {
-    const publication: ArticleDataTypes[] = [];
     (selected as ArticleDataTypes[]).forEach((article) => {
       article = {
         ...article,
         publishedAt: article.publishedAt ? article.publishedAt : new Date(),
       };
-      publication.push(article);
+      updateArticle({ ...article });
     });
     dispach(clearSelected());
-    dispach(updateArticle(publication));
   };
 
   const handleUnpublish = () => {
-    const publication: ArticleDataTypes[] = [];
     (selected as ArticleDataTypes[]).forEach((article) => {
       article = {
         ...article,
         publishedAt: null,
       };
-      publication.push(article);
+      updateArticle({ ...article });
     });
     dispach(clearSelected());
-    dispach(updateArticle(publication));
   };
 
   const handleDelete = () => {

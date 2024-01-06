@@ -30,9 +30,9 @@ const articlesApi = createApi({
       query: () => 'articles',
       providesTags: ['Articles'],
     }),
-    updateArticles: builder.mutation({
+    updateArticle: builder.mutation({
       query: (body) => ({
-        url: 'articles',
+        url: `articles/${body.id}`,
         method: 'PATCH',
         body,
       }),
@@ -60,7 +60,7 @@ const articlesApi = createApi({
 
 export const {
   useGetArticlesQuery,
-  useUpdateArticlesMutation,
+  useUpdateArticleMutation,
   useRemoveArticleMutation,
   useRemoveArticlesMutation,
 } = articlesApi;
@@ -76,10 +76,6 @@ const articlesSlice = createSlice({
           state[index] = item;
         }
       });
-    },
-
-    removeArticle(state, action) {
-      return state.filter((article) => article.id !== action.payload.id);
     },
   },
 });
@@ -115,7 +111,6 @@ const popupSlice = createSlice({
   initialState: initialPopup,
   reducers: {
     switchPopup(state, action) {
-      console.log(action.payload);
       return (state = action.payload);
     },
   },
@@ -123,7 +118,7 @@ const popupSlice = createSlice({
 
 export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
-export const { updateArticle, removeArticle } = articlesSlice.actions;
+export const { updateArticle } = articlesSlice.actions;
 export const { switchPopup } = popupSlice.actions;
 export const { setUser } = userSlice.actions;
 

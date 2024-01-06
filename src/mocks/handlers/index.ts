@@ -6,7 +6,7 @@ export const handlers = [
   http.get('/api/articles', () => {
     return HttpResponse.json(db.article.getAll());
   }),
-  http.patch('/api/articles', async ({ request }) => {
+  http.patch('/api/articles/:id', async ({ request }) => {
     const updatedArticle = (await request.json()) as ArticleDataTypes;
     if (updatedArticle) {
       db.article.update({
@@ -16,7 +16,15 @@ export const handlers = [
           },
         },
         data: {
-          isSticky: () => updatedArticle.isSticky,
+          isSticky: updatedArticle.isSticky,
+          title: updatedArticle.title,
+          description: updatedArticle.description,
+          body: updatedArticle.body,
+          createdAt: updatedArticle.createdAt,
+          updatedAt: updatedArticle.updatedAt,
+          publishedAt: updatedArticle.publishedAt,
+          likes: updatedArticle.likes,
+          categories: updatedArticle.categories,
         },
       });
       return HttpResponse.json(updatedArticle, { status: 201 });
