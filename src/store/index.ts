@@ -11,7 +11,6 @@ export interface PopupTypes {
   title?: string;
 }
 
-const initialArticlesList: Array<ArticleDataTypes> = [];
 const initialSelectedItems: Array<ArticleDataTypes> = [];
 const initialUser = {};
 const initialPopup: PopupTypes = {
@@ -65,21 +64,6 @@ export const {
   useRemoveArticlesMutation,
 } = articlesApi;
 
-const articlesSlice = createSlice({
-  name: 'articles',
-  initialState: initialArticlesList,
-  reducers: {
-    updateArticle(state, action) {
-      action.payload.forEach((item: ArticleDataTypes) => {
-        const index = state.findIndex((article) => article.uuid === item.uuid);
-        if (index >= 0) {
-          state[index] = item;
-        }
-      });
-    },
-  },
-});
-
 const selectedSlice = createSlice({
   name: 'selected',
   initialState: initialSelectedItems,
@@ -118,14 +102,12 @@ const popupSlice = createSlice({
 
 export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
-export const { updateArticle } = articlesSlice.actions;
 export const { switchPopup } = popupSlice.actions;
 export const { setUser } = userSlice.actions;
 
 export const store = configureStore({
   reducer: {
     [articlesApi.reducerPath]: articlesApi.reducer,
-    articles: articlesSlice.reducer,
     selected: selectedSlice.reducer,
     user: userSlice.reducer,
     popup: popupSlice.reducer,
