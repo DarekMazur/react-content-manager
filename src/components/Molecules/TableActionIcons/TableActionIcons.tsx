@@ -1,16 +1,15 @@
 import { FC } from 'react';
 import InLink from '../../Atoms/InLink/InLink.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
-  RootState,
-  addSelected,
   clearSelected,
   switchPopup,
+  useGetArticlesQuery,
 } from '../../../store/index.ts';
 import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
-import { ArticleDataTypes } from '../../Organisms/Table/Table.tsx';
+import { ArticleDataTypes } from '../../../types/dataTypes.ts';
 
 const ActionIcon = styled(StyledInLink)`
   margin: 0 1rem;
@@ -18,33 +17,40 @@ const ActionIcon = styled(StyledInLink)`
 `;
 
 interface TableActionProps {
-  postId: number;
-  uuid: string;
+  id: number;
 }
 
-const TableActionIcons: FC<TableActionProps> = ({ postId, uuid }) => {
-  const articles = useSelector<RootState>((state) => state.articles);
+const TableActionIcons: FC<TableActionProps> = ({ id }) => {
+  const { data: articles = [] } = useGetArticlesQuery();
   const dispatch = useDispatch();
 
-  const handleDelete = (uuid: string) => {
+  const article = (articles as ArticleDataTypes[]).find(
+    (article) => article.id === id,
+  );
+
+  const handleDelete = (id: number) => {
+    console.log(articles);
     dispatch(clearSelected());
-    const temp = (articles as ArticleDataTypes[]).find(
-      (article) => article.uuid === uuid,
+    dispatch(
+      switchPopup({
+        isOpen: true,
+        ids: [id],
+        title: article ? article.title : undefined,
+      }),
     );
-    dispatch(addSelected(temp));
-    dispatch(switchPopup(true));
   };
+
   return (
     <>
       <InLink
-        target={`/article/id=${postId}`}
+        target={`/article/id=${id}`}
         name={
           <FontAwesomeIcon style={{ margin: '0 1rem' }} icon={['fas', 'pen']} />
         }
       />
       <ActionIcon
         as={FontAwesomeIcon}
-        onClick={() => handleDelete(uuid)}
+        onClick={() => handleDelete(id)}
         icon={['fas', 'trash']}
       />
     </>

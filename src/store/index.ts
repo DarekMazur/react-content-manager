@@ -5,10 +5,20 @@ import { ArticleDataTypes } from '../types/dataTypes';
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+export interface PopupTypes {
+  isOpen: boolean;
+  ids: number[];
+  title?: string;
+}
+
 const initialArticlesList: Array<ArticleDataTypes> = [];
 const initialSelectedItems: Array<ArticleDataTypes> = [];
 const initialUser = {};
-const initialPopup = false;
+const initialPopup: PopupTypes = {
+  isOpen: false,
+  ids: [],
+  title: undefined,
+};
 
 const articlesApi = createApi({
   baseQuery: fetchBaseQuery({
@@ -29,10 +39,10 @@ const articlesApi = createApi({
       invalidatesTags: ['Articles'],
     }),
     removeArticle: builder.mutation({
-      query: (body) => ({
-        url: 'articles',
+      query: (id) => ({
+        url: `articles/${id}`,
         method: 'DELETE',
-        body,
+        credentials: 'include',
       }),
       invalidatesTags: ['Articles'],
     }),
@@ -95,6 +105,7 @@ const popupSlice = createSlice({
   initialState: initialPopup,
   reducers: {
     switchPopup(state, action) {
+      console.log(action.payload);
       return (state = action.payload);
     },
   },

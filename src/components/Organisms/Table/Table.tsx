@@ -46,9 +46,9 @@ const Table: FC<TableProps> = ({ headers, data }) => {
     }
   };
 
-  const handleClickSticky = async (uuid: string) => {
+  const handleClickSticky = (uuid: string) => {
     const article = data.find((article) => article.uuid === uuid);
-    await updateArticle({ uuid, isSticky: !article?.isSticky });
+    updateArticle({ uuid, isSticky: !article?.isSticky });
   };
 
   return (
@@ -113,7 +113,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
             <td>{article.likes}</td>
             <td>{article.publishedAt ? getDate(article.publishedAt) : '-'}</td>
             <td style={{ textAlign: 'left' }}>
-              <TableActionIcons postId={index + 1} uuid={article.uuid} />
+              <TableActionIcons id={article.id} />
             </td>
           </tr>
         ))}

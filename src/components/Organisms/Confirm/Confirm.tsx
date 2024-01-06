@@ -2,25 +2,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import ActionButton from '../../Atoms/ActionButton/ActionButton';
 import { PopupWrapper } from '../PopupWrapper/PopupWrapper.styles.ts';
 import {
+  PopupTypes,
   RootState,
   clearSelected,
-  removeArticle,
   switchPopup,
+  useRemoveArticleMutation,
 } from '../../../store/index.ts';
-import { ArticleDataTypes } from '../Table/Table.tsx';
 
 const Confirm = () => {
+  const [removeArticle] = useRemoveArticleMutation();
   const dispach = useDispatch();
-  const selected = useSelector<RootState>((state) => state.selected);
-  const isPopup = useSelector<RootState>((state) => state.popup);
+  const popup = useSelector<RootState>((state) => state.popup);
 
-  const counter = (selected as ArticleDataTypes[]).length;
+  const popupState = popup as PopupTypes;
+
+  const counter = popupState.ids ? popupState.ids.length : 0;
 
   const handleDelete = () => {
-    (selected as ArticleDataTypes[]).forEach((article) =>
-      dispach(removeArticle(article)),
-    );
-
+    if (counter === 1) {
+      removeArticle(popupState.ids[0]);
+    } else {
+      removeArticle(popupState.ids);
+    }
     dispach(switchPopup(false));
     dispach(clearSelected());
   };
@@ -30,17 +33,14 @@ const Confirm = () => {
     dispach(clearSelected());
   };
   return (
-    <PopupWrapper $isVisible={isPopup as boolean}>
+    <PopupWrapper $isVisible={popupState.isOpen}>
+      {/* {console.log(selected)} */}
       <div>
         <p>
           Are you sure you want to delelte {counter > 1 ? counter : null}{' '}
           article
-          {counter > 1 ? (
-            's'
-          ) : (
-            <strong> {(selected as ArticleDataTypes[])[0]?.title}</strong>
-          )}
-          ? This action is permanent
+          {counter > 1 ? 's' : <strong> {popupState.title}</strong>}? This
+          action is permanent
         </p>
         <div>
           <ActionButton handleClick={handleDelete} isDel>

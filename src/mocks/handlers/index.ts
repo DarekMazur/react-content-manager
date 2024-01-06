@@ -22,4 +22,19 @@ export const handlers = [
       return HttpResponse.json(updatedArticle, { status: 201 });
     }
   }),
+  http.delete('/api/articles/:articleId', async ({ params }) => {
+    const { articleId } = params;
+    if (!isNaN(Number(articleId))) {
+      db.article.delete({
+        where: {
+          id: {
+            equals: Number(articleId),
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
 ];

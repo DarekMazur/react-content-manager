@@ -9,8 +9,7 @@ import {
   switchPopup,
   updateArticle,
 } from '../../../store/index.ts';
-import { getDate } from '../../../utils/methods/getDate.ts';
-import { ArticleDataTypes } from '../../Organisms/Table/Table.tsx';
+import { ArticleDataTypes } from '../../../types/dataTypes.ts';
 
 interface MultiActionProps {
   counter: number;
@@ -27,10 +26,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
     (selected as ArticleDataTypes[]).forEach((article) => {
       article = {
         ...article,
-        publishedAt: article.publishedAt
-          ? article.publishedAt
-          : getDate(new Date()),
-        status: true,
+        publishedAt: article.publishedAt ? article.publishedAt : new Date(),
       };
       publication.push(article);
     });
@@ -44,7 +40,6 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       article = {
         ...article,
         publishedAt: null,
-        status: false,
       };
       publication.push(article);
     });
