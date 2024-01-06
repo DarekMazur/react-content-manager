@@ -7,10 +7,12 @@ import {
   clearSelected,
   switchPopup,
   useRemoveArticleMutation,
+  useRemoveArticlesMutation,
 } from '../../../store/index.ts';
 
 const Confirm = () => {
   const [removeArticle] = useRemoveArticleMutation();
+  const [removeArticles] = useRemoveArticlesMutation();
   const dispach = useDispatch();
   const popup = useSelector<RootState>((state) => state.popup);
 
@@ -22,7 +24,7 @@ const Confirm = () => {
     if (counter === 1) {
       removeArticle(popupState.ids[0]);
     } else {
-      removeArticle(popupState.ids);
+      removeArticles(popupState.ids);
     }
     dispach(switchPopup(false));
     dispach(clearSelected());

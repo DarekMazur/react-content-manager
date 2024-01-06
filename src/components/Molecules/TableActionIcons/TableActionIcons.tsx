@@ -29,7 +29,6 @@ const TableActionIcons: FC<TableActionProps> = ({ id }) => {
   );
 
   const handleDelete = (id: number) => {
-    console.log(articles);
     dispatch(clearSelected());
     dispatch(
       switchPopup({

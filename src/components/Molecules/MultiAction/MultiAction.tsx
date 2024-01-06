@@ -17,7 +17,6 @@ interface MultiActionProps {
 
 const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const selected = useSelector<RootState>((state) => state.selected);
-  const isPopup = useSelector<RootState>((state) => state.popup);
 
   const dispach = useDispatch();
 
@@ -48,7 +47,24 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   };
 
   const handleDelete = () => {
-    dispach(switchPopup(!isPopup));
+    const ids: number[] = [];
+    (selected as ArticleDataTypes[]).forEach((article) => {
+      ids.push(article.id);
+    });
+    const singleTitle =
+      ids.length === 1
+        ? (selected as ArticleDataTypes[]).find(
+            (article) => article.id === ids[0],
+          )?.title
+        : undefined;
+
+    dispach(
+      switchPopup({
+        isOpen: true,
+        ids,
+        title: singleTitle,
+      }),
+    );
   };
 
   return (

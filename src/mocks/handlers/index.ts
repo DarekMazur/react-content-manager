@@ -37,4 +37,19 @@ export const handlers = [
 
     return new HttpResponse(null, { status: 404 });
   }),
+  http.delete('/api/articles', async ({ request }) => {
+    const articleIds = await request.json();
+    if (articleIds) {
+      db.article.deleteMany({
+        where: {
+          id: {
+            in: articleIds as number[],
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
 ];
