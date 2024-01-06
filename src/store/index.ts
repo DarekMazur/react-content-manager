@@ -1,30 +1,81 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { mockTempPosts } from '../__mock__/mockTempPosts';
-import { TablePostDataTypes } from '../components/Organisms/Table/Table';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ArticleDataTypes } from '../types/dataTypes';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-const initialArticlesList = mockTempPosts;
-const initialSelectedItems: Array<TablePostDataTypes> = [];
+export interface PopupTypes {
+  isOpen: boolean;
+  ids: number[];
+  title?: string;
+}
+
+const initialArticlesList: Array<ArticleDataTypes> = [];
+const initialSelectedItems: Array<ArticleDataTypes> = [];
 const initialUser = {};
-const initialPopup = false;
+const initialPopup: PopupTypes = {
+  isOpen: false,
+  ids: [],
+  title: undefined,
+};
+
+const articlesApi = createApi({
+  baseQuery: fetchBaseQuery({
+    baseUrl: '/api/',
+  }),
+  tagTypes: ['Articles'],
+  endpoints: (builder) => ({
+    getArticles: builder.query<ArticleDataTypes[], void>({
+      query: () => 'articles',
+      providesTags: ['Articles'],
+    }),
+    updateArticle: builder.mutation({
+      query: (body) => ({
+        url: `articles/${body.id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['Articles'],
+    }),
+    removeArticle: builder.mutation({
+      query: (id) => ({
+        url: `articles/${id}`,
+        method: 'DELETE',
+        credentials: 'include',
+      }),
+      invalidatesTags: ['Articles'],
+    }),
+    removeArticles: builder.mutation({
+      query: (body) => ({
+        url: 'articles',
+        method: 'DELETE',
+        body,
+        credentials: 'include',
+      }),
+      invalidatesTags: ['Articles'],
+    }),
+  }),
+});
+
+export const {
+  useGetArticlesQuery,
+  useUpdateArticleMutation,
+  useRemoveArticleMutation,
+  useRemoveArticlesMutation,
+} = articlesApi;
 
 const articlesSlice = createSlice({
   name: 'articles',
   initialState: initialArticlesList,
   reducers: {
     updateArticle(state, action) {
-      action.payload.forEach((item: TablePostDataTypes) => {
-        const index = state.findIndex((article) => article.id === item.id);
+      action.payload.forEach((item: ArticleDataTypes) => {
+        const index = state.findIndex((article) => article.uuid === item.uuid);
         if (index >= 0) {
           state[index] = item;
         }
       });
-    },
-
-    removeArticle(state, action) {
-      return state.filter((article) => article.id !== action.payload.id);
     },
   },
 });
@@ -67,16 +118,18 @@ const popupSlice = createSlice({
 
 export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
-export const { updateArticle, removeArticle } = articlesSlice.actions;
+export const { updateArticle } = articlesSlice.actions;
 export const { switchPopup } = popupSlice.actions;
 export const { setUser } = userSlice.actions;
 
 export const store = configureStore({
   reducer: {
+    [articlesApi.reducerPath]: articlesApi.reducer,
     articles: articlesSlice.reducer,
     selected: selectedSlice.reducer,
     user: userSlice.reducer,
     popup: popupSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(articlesApi.middleware),
 });

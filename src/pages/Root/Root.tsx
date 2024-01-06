@@ -4,8 +4,8 @@ import { RootState, setUser } from '../../store/index.ts';
 import Authorised from '../../components/Templates/Authorised/Authorised.tsx';
 import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 import FooterWrapper from '../../components/Organisms/Footer/Footer.tsx';
-import { UserTypes, mockUsers } from '../../__mock__/mockUsers.ts';
-import { faker } from '@faker-js/faker';
+import { UserTypes } from '../../__mock__/mockUsers.ts';
+import { db } from '../../mocks/db.ts';
 
 const Root = () => {
   const dispatch = useDispatch();
@@ -18,19 +18,20 @@ const Root = () => {
   );
   const handleMockLogin = (e?: React.ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
-    const users = mockUsers;
-    const getUser = () => {
-      const admins = users.filter((user) => user.role.id === 1);
-      if (admins.length === 0) {
-        return users[0];
-      }
+    const admin = db.user.findFirst({
+      where: {
+        role: {
+          id: {
+            equals: 1 || 2,
+          },
+        },
+      },
+    });
 
-      const randomIndex = faker.number.int({ min: 0, max: admins.length - 1 });
-      return admins[randomIndex];
-    };
-    const logUser = getUser();
-    dispatch(setUser(logUser));
-    setIsAuthorised(true);
+    if (admin) {
+      dispatch(setUser(admin));
+      setIsAuthorised(true);
+    } else alert("You're not authorised");
   };
 
   return (

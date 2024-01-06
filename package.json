@@ -22,7 +22,9 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mswjs/data": "^0.16.1",
     "@reduxjs/toolkit": "^2.0.1",
+    "msw": "^2.0.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.0.4",
@@ -68,5 +70,8 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

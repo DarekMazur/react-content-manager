@@ -7,10 +7,9 @@ import {
   RootState,
   clearSelected,
   switchPopup,
-  updateArticle,
+  useUpdateArticleMutation,
 } from '../../../store/index.ts';
-import { getDate } from '../../../utils/methods/getDate.ts';
-import { TablePostDataTypes } from '../../Organisms/Table/Table.tsx';
+import { ArticleDataTypes } from '../../../types/dataTypes.ts';
 
 interface MultiActionProps {
   counter: number;
@@ -18,42 +17,50 @@ interface MultiActionProps {
 
 const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const selected = useSelector<RootState>((state) => state.selected);
-  const isPopup = useSelector<RootState>((state) => state.popup);
-
   const dispach = useDispatch();
+  const [updateArticle] = useUpdateArticleMutation();
 
   const handlePublish = () => {
-    const publication: TablePostDataTypes[] = [];
-    (selected as TablePostDataTypes[]).forEach((article) => {
+    (selected as ArticleDataTypes[]).forEach((article) => {
       article = {
         ...article,
-        publishedAt: article.publishedAt
-          ? article.publishedAt
-          : getDate(new Date()),
-        status: true,
+        publishedAt: article.publishedAt ? article.publishedAt : new Date(),
       };
-      publication.push(article);
+      updateArticle({ ...article });
     });
     dispach(clearSelected());
-    dispach(updateArticle(publication));
   };
 
   const handleUnpublish = () => {
-    const publication: TablePostDataTypes[] = [];
-    (selected as TablePostDataTypes[]).forEach((article) => {
+    (selected as ArticleDataTypes[]).forEach((article) => {
       article = {
         ...article,
         publishedAt: null,
-        status: false,
       };
-      publication.push(article);
+      updateArticle({ ...article });
     });
     dispach(clearSelected());
-    dispach(updateArticle(publication));
   };
 
   const handleDelete = () => {
-    dispach(switchPopup(!isPopup));
+    const ids: number[] = [];
+    (selected as ArticleDataTypes[]).forEach((article) => {
+      ids.push(article.id);
+    });
+    const singleTitle =
+      ids.length === 1
+        ? (selected as ArticleDataTypes[]).find(
+            (article) => article.id === ids[0],
+          )?.title
+        : undefined;
+
+    dispach(
+      switchPopup({
+        isOpen: true,
+        ids,
+        title: singleTitle,
+      }),
+    );
   };
 
   return (

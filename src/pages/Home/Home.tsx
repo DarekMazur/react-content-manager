@@ -9,12 +9,15 @@ import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import { getLatest } from '../../utils/methods/getLatest.ts';
 import { faker } from '@faker-js/faker';
+// import { useSelector } from 'react-redux';
+// import { RootState } from '../../store/index.ts';
 
 interface HomeProps {
   user: UserTypes;
 }
 
 const Home: FC<HomeProps> = ({ user }) => {
+  // const articles = useSelector<RootState>((state) => state.articles);
   //mock state
   const publishedPosts = mockPosts.filter((post) => post.publishedAt !== null);
   const allComments = mockComments;

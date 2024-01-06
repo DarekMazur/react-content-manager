@@ -1,7 +1,5 @@
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
-import Table, {
-  TablePostDataTypes,
-} from '../../components/Organisms/Table/Table.tsx';
+import Table from '../../components/Organisms/Table/Table.tsx';
 import EntriesNumberPicker from '../../components/Molecules/EntriesNumberPicker/EntriesNumberPicker.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Pagination from '../../components/Molecules/Pagination/Pagination.tsx';
@@ -10,11 +8,13 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/index.ts';
+import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
+import { ArticleDataTypes } from '../../types/dataTypes.ts';
 
 const Articles = () => {
-  const articles = useSelector<RootState>((state) => state.articles);
+  const { data: articles = [] } = useGetArticlesQuery();
+
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,12 +22,10 @@ const Articles = () => {
   const [isExpand, setIsExpand] = useState(false);
   const [perPage, setPerPage] = useState(10);
 
-  const getPagesLength = Math.ceil(
-    (articles as TablePostDataTypes[]).length / perPage,
-  );
+  const getPagesLength = Math.ceil(articles.length / perPage);
   const [pages, setPages] = useState(getPagesLength);
 
-  const postsToDisplay = (articles as TablePostDataTypes[]).slice(
+  const postsToDisplay = articles.slice(
     (Number(searchParams.get('page')) - 1) * perPage,
     perPage * Number(searchParams.get('page')),
   );
@@ -92,9 +90,9 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Articles
       </Heading>
-      {(selectedArticles as TablePostDataTypes[]).length > 0 ? (
+      {(selectedArticles as ArticleDataTypes[]).length > 0 ? (
         <MultiAction
-          counter={(selectedArticles as TablePostDataTypes[]).length}
+          counter={(selectedArticles as ArticleDataTypes[]).length}
         />
       ) : null}
       <Wrapper width="100%" justify="center" align="flex-start">
