@@ -11,6 +11,66 @@ import { useSelector } from 'react-redux';
 import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { ArticleDataTypes } from '../../types/dataTypes.ts';
+import ReactPaginate from 'react-paginate'
+import { StyledPagination } from '../../components/Molecules/Pagination/Pagination.styles.ts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { theme } from '../../utils/themes/theme.ts';
+import styled from 'styled-components';
+
+const StyledReactPaginate = styled.div`
+  .pagination {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    min-width: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .page-nav {
+    font-size: 1.4rem;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .page-item, .page-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.3rem;
+    border-radius: 0.3rem;
+    height: 3rem;
+    width: 3rem;
+    padding: 0 0.5rem;
+    font-weight: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .page-item {
+    transition: 200ms background-color ease-in-out;
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.lightBlue};
+    }
+  }
+
+  .active {
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
+    color: ${({ theme }) => theme.colors.red};
+    cursor: 'auto';
+
+    &:hover {
+      background-color: unset;
+    }
+  }
+
+  .disabled {
+    color: ${({theme}) => theme.colors.darkBlueTransparent};
+    cursor: auto;
+  }
+`
 
 const Articles = () => {
   const { data: articles = [] } = useGetArticlesQuery();
@@ -106,11 +166,41 @@ const Articles = () => {
           handleChoseEntriesNumber={handleChoseEntriesNumber}
           handleClose={handleClose}
         />
-        <Pagination
+        <StyledReactPaginate $current={Number(searchParams.get('page'))}>
+          <ReactPaginate
+            previousLabel={
+              <FontAwesomeIcon
+                icon={['fas', 'chevron-left']}
+              />
+            }
+            nextLabel={
+              <FontAwesomeIcon
+                icon={['fas', 'chevron-right']}
+              />
+            }
+          onPageChange={() => {}}
+          pageRangeDisplayed={1}
+          marginPagesDisplayed={1}
+          pageCount={pages}
+          previousClassName="page-nav"
+          previousLinkClassName="page-link"
+          nextClassName="page-nav"
+          nextLinkClassName="page-link"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+          renderOnZeroPageCount={null}
+          />
+        </StyledReactPaginate>
+        {/* <Pagination
           pages={pages}
           current={Number(searchParams.get('page'))}
           handlePageChoose={handlePageChoose}
-        />
+        /> */}
       </Wrapper>
     </main>
   );
