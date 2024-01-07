@@ -4,7 +4,7 @@ import Home from '../../../pages/Home/Home.tsx';
 import Articles from '../../../pages/Articles/Articles.tsx';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/index.ts';
-import { UserTypes } from '../../../__mock__/mockUsers.ts';
+import { UserTypes } from '../../../types/dataTypes.ts';
 
 const Authorised = () => {
   const user = useSelector<RootState>((state) => state.user);
