@@ -42,7 +42,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
 
   const handleClickSticky = (uuid: string) => {
     const article = data.find((article) => article.uuid === uuid);
-    updateArticle({ id: article?.id, uuid, isSticky: !article?.isSticky });
+    updateArticle({ ...article, isSticky: !article?.isSticky });
   };
 
   return (
