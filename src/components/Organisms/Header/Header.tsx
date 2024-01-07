@@ -1,7 +1,7 @@
 import { StyledHeader } from './Header.styles.ts';
 import Icon from '../../Atoms/Icon/Icon.tsx';
 import MenuList from '../../Molecules/MenuList/MenuList.tsx';
-import { UserTypes } from '../../../__mock__/mockUsers.ts';
+import { UserTypes } from '../../../types/dataTypes.ts';
 
 interface HeaderProps {
   user: UserTypes;

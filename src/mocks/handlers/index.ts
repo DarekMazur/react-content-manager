@@ -3,6 +3,12 @@ import { db } from '../db';
 import { ArticleDataTypes } from '../../types/dataTypes';
 
 export const handlers = [
+  http.get('/api/comments', () => {
+    return HttpResponse.json(db.comment.getAll());
+  }),
+  http.get('/api/users', () => {
+    return HttpResponse.json(db.user.getAll());
+  }),
   http.get('/api/articles', () => {
     return HttpResponse.json(db.article.getAll());
   }),

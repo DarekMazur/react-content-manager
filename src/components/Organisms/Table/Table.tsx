@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
 import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
@@ -25,13 +25,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
     [],
   );
 
-  // const [updateArticle] = useUpdateArticlesMutation();
-
-  const [updateArticle, rest] = useUpdateArticleMutation();
-
-  useEffect(() => {
-    console.log(rest);
-  }, [rest]);
+  const [updateArticle] = useUpdateArticleMutation();
 
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((article) => article.uuid === uuid);

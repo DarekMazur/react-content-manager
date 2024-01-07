@@ -1,6 +1,8 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ArticleDataTypes } from '../types/dataTypes';
+import { articlesApi } from './api/articles.ts';
+import { usersApi } from './api/users.ts';
+import { commentsApi } from './api/comments.ts';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -18,51 +20,6 @@ const initialPopup: PopupTypes = {
   ids: [],
   title: undefined,
 };
-
-const articlesApi = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
-  }),
-  tagTypes: ['Articles'],
-  endpoints: (builder) => ({
-    getArticles: builder.query<ArticleDataTypes[], void>({
-      query: () => 'articles',
-      providesTags: ['Articles'],
-    }),
-    updateArticle: builder.mutation({
-      query: (body) => ({
-        url: `articles/${body.id}`,
-        method: 'PATCH',
-        body,
-      }),
-      invalidatesTags: ['Articles'],
-    }),
-    removeArticle: builder.mutation({
-      query: (id) => ({
-        url: `articles/${id}`,
-        method: 'DELETE',
-        credentials: 'include',
-      }),
-      invalidatesTags: ['Articles'],
-    }),
-    removeArticles: builder.mutation({
-      query: (body) => ({
-        url: 'articles',
-        method: 'DELETE',
-        body,
-        credentials: 'include',
-      }),
-      invalidatesTags: ['Articles'],
-    }),
-  }),
-});
-
-export const {
-  useGetArticlesQuery,
-  useUpdateArticleMutation,
-  useRemoveArticleMutation,
-  useRemoveArticlesMutation,
-} = articlesApi;
 
 const selectedSlice = createSlice({
   name: 'selected',
@@ -105,13 +62,22 @@ export const { addSelected, removeSelected, clearSelected } =
 export const { switchPopup } = popupSlice.actions;
 export const { setUser } = userSlice.actions;
 
+export * from './api/articles.ts';
+export * from './api/users.ts';
+export * from './api/comments.ts';
+
 export const store = configureStore({
   reducer: {
     [articlesApi.reducerPath]: articlesApi.reducer,
+    [usersApi.reducerPath]: usersApi.reducer,
+    [commentsApi.reducerPath]: commentsApi.reducer,
     selected: selectedSlice.reducer,
     user: userSlice.reducer,
     popup: popupSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(articlesApi.middleware),
+    getDefaultMiddleware()
+      .concat(articlesApi.middleware)
+      .concat(usersApi.middleware)
+      .concat(commentsApi.middleware),
 });

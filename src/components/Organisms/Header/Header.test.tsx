@@ -2,18 +2,29 @@ import { screen } from '@testing-library/dom';
 import '@testing-library/jest-dom';
 import { renderWithProviders } from '../../../utils/providers/renderWithProviders.tsx';
 import Header from './Header.tsx';
-import { mockUsers } from '../../../__mock__/mockUsers.ts';
 import { faker } from '@faker-js/faker';
 
 const getUser = () => {
-  const admins = mockUsers.filter((user) => user.role.id === 1);
-  if (admins.length === 0) {
-    admins.push(mockUsers[0]);
-  }
-  const getRandomIndex = faker.number.int({ min: 0, max: admins.length - 1 });
+  const admin = {
+    uuid: faker.string.uuid(),
+    id: faker.number.int(),
+    username: faker.helpers.fake(`{{person.firstName}} {{person.lastName}}`),
+    email: faker.internet.email(),
+    avatar: faker.internet.avatar(),
+    provider: 'local',
+    confirmed: faker.datatype.boolean(0.8),
+    blocked: faker.datatype.boolean(0.15),
+    role: {
+      id: 1,
+      name: 'Administrator',
+      description: 'Page admin',
+      type: 'admin',
+    },
+  };
 
-  return admins[getRandomIndex];
+  return admin;
 };
+
 const user = getUser();
 
 const component = renderWithProviders(<Header user={user} />);

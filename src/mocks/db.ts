@@ -1,14 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { factory, oneOf, primaryKey, nullable } from '@mswjs/data';
+import { RoleTypes } from '../types/dataTypes';
 
 faker.seed(123);
-
-export interface RoleTypes {
-  id: number;
-  name: string;
-  description: string;
-  type: string;
-}
 
 export const roles: Array<RoleTypes> = [
   {
