@@ -83,7 +83,7 @@ const TableWrapper = ({
     <>
       {articles && articles.length > 0 ? (
         <>
-          <Wrapper width="100%" justify="center" align="flex-start">
+          <Wrapper width="100%" justify="center" align="flex-start" padding="0">
             <Table headers={articlesTableHeaders} data={postsToDisplay} />
           </Wrapper>
           <Wrapper justify="space-between" align="center" width="97.5vw">
