@@ -8,15 +8,17 @@ import { ArticleDataTypes } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper.tsx';
 
 const Articles = () => {
-  const { data: articles = [] } = useGetArticlesQuery();
+  const { data } = useGetArticlesQuery();
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
   const [wrapperHeight, setWrapperHeight] = useState(0);
+  const [articles, setArticles] = useState<ArticleDataTypes[] | undefined>([]);
 
   useEffect(() => {
+    setArticles(data);
     setWrapperHeight(getFooterHeight() + 50);
-  }, []);
+  }, [data]);
 
   return (
     <main
