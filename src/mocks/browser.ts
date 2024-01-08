@@ -15,7 +15,7 @@ const createUsers = () => {
   for (let i = 0; i < faker.number.int({ min: 1, max: 50 }); ++i) {
     const user = db.user.create({ id: db.user.count() + 1 });
     if (user.confirmed) {
-      for (let i = 0; i < faker.number.int({ min: 0, max: 10 }); ++i) {
+      for (let i = 0; i < faker.number.int({ min: 0, max: 20 }); ++i) {
         const createdDate = faker.date.past();
         const isPublished = faker.datatype.boolean(0.75);
         const article = db.article.create({

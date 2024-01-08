@@ -2,7 +2,6 @@ import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import Table from '../../components/Organisms/Table/Table.tsx';
 import EntriesNumberPicker from '../../components/Molecules/EntriesNumberPicker/EntriesNumberPicker.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
-import Pagination from '../../components/Molecules/Pagination/Pagination.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -11,10 +10,8 @@ import { useSelector } from 'react-redux';
 import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { ArticleDataTypes } from '../../types/dataTypes.ts';
-import ReactPaginate from 'react-paginate'
-import { StyledPagination } from '../../components/Molecules/Pagination/Pagination.styles.ts';
+import ReactPaginate from 'react-paginate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { theme } from '../../utils/themes/theme.ts';
 import styled from 'styled-components';
 
 const StyledReactPaginate = styled.div`
@@ -34,7 +31,8 @@ const StyledReactPaginate = styled.div`
     cursor: pointer;
   }
 
-  .page-item, .page-link {
+  .page-item,
+  .page-link {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,10 +65,10 @@ const StyledReactPaginate = styled.div`
   }
 
   .disabled {
-    color: ${({theme}) => theme.colors.darkBlueTransparent};
+    color: ${({ theme }) => theme.colors.darkBlueTransparent};
     cursor: auto;
   }
-`
+`;
 
 const Articles = () => {
   const { data: articles = [] } = useGetArticlesQuery();
@@ -133,9 +131,9 @@ const Articles = () => {
     setPerPage(value);
   };
 
-  const handlePageChoose = (id: number) => {
+  const handlePageClick = (e: { selected: number }) => {
     setSearchParams((params) => {
-      params.set('page', String(id));
+      params.set('page', String(e.selected + 1));
       return params;
     });
   };
@@ -166,41 +164,28 @@ const Articles = () => {
           handleChoseEntriesNumber={handleChoseEntriesNumber}
           handleClose={handleClose}
         />
-        <StyledReactPaginate $current={Number(searchParams.get('page'))}>
+        <StyledReactPaginate>
           <ReactPaginate
-            previousLabel={
-              <FontAwesomeIcon
-                icon={['fas', 'chevron-left']}
-              />
-            }
-            nextLabel={
-              <FontAwesomeIcon
-                icon={['fas', 'chevron-right']}
-              />
-            }
-          onPageChange={() => {}}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={1}
-          pageCount={pages}
-          previousClassName="page-nav"
-          previousLinkClassName="page-link"
-          nextClassName="page-nav"
-          nextLinkClassName="page-link"
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          containerClassName="pagination"
-          activeClassName="active"
-          renderOnZeroPageCount={null}
+            previousLabel={<FontAwesomeIcon icon={['fas', 'chevron-left']} />}
+            nextLabel={<FontAwesomeIcon icon={['fas', 'chevron-right']} />}
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={1}
+            pageCount={pages}
+            previousClassName="page-nav"
+            previousLinkClassName="page-link"
+            nextClassName="page-nav"
+            nextLinkClassName="page-link"
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            containerClassName="pagination"
+            activeClassName="active"
+            renderOnZeroPageCount={null}
           />
         </StyledReactPaginate>
-        {/* <Pagination
-          pages={pages}
-          current={Number(searchParams.get('page'))}
-          handlePageChoose={handlePageChoose}
-        /> */}
       </Wrapper>
     </main>
   );
