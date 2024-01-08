@@ -55,8 +55,8 @@ const Table: FC<TableProps> = ({ headers, data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((article, index) => (
-          <tr key={index + 1}>
+        {data.map((article) => (
+          <tr key={article.id}>
             <td
               style={{
                 height: '6rem',
@@ -72,7 +72,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
                 isChecked={checkedArticles.includes(article)}
               />
             </td>
-            <td>{index + 1}</td>
+            <td>{article.id}</td>
             <td
               style={{
                 display: 'flex',
