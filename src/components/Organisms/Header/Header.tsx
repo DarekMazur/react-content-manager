@@ -8,6 +8,17 @@ interface HeaderProps {
   user: UserTypes;
 }
 
+const UserMenu = ({user}: {user: UserTypes}) => {
+  return(
+    <div>  
+      <ul>
+        <li><a href={`/user/${user.uuid}`} target='_blank'>My profile</a></li>
+        <li>Log out</li>
+      </ul>
+    </div>
+  )
+}
+
 const Header: FC<HeaderProps> = (props) => {
   const { user } = props;
   return (
@@ -16,10 +27,7 @@ const Header: FC<HeaderProps> = (props) => {
       <div>
         {user && `Hello, ${user.username}!`}
         <Icon customIcon={user?.avatar} />
-        <ul>
-          <li>My profile</li>
-          <li>Log out</li>
-        </ul>
+        <UserMenu user={user} />
       </div>
     </StyledHeader>
   );
