@@ -1,13 +1,14 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import Checkbox from '../../Molecules/Checkbox/Checkbox.tsx';
 import StatusInfo from '../../Atoms/StatusInfo/StatusInfo.tsx';
 import {
+  RootState,
   addSelected,
   removeSelected,
   useUpdateArticleMutation,
 } from '../../../store/index.ts';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ArticleDataTypes } from '../../../types/dataTypes';
 import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons.tsx';
 import { db } from '../../../mocks/db.ts';
@@ -21,11 +22,16 @@ interface TableProps {
 const Table: FC<TableProps> = ({ headers, data }) => {
   const dispatch = useDispatch();
 
+  const selectedArticles = useSelector<RootState>((state) => state.selected);
+  const [updateArticle] = useUpdateArticleMutation();
+
   const [checkedArticles, setCheckedArticles] = useState<ArticleDataTypes[]>(
-    [],
+    selectedArticles as ArticleDataTypes[],
   );
 
-  const [updateArticle] = useUpdateArticleMutation();
+  useEffect(() => {
+    setCheckedArticles(selectedArticles as ArticleDataTypes[]);
+  }, [selectedArticles]);
 
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((article) => article.uuid === uuid);
@@ -55,8 +61,8 @@ const Table: FC<TableProps> = ({ headers, data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((article) => (
-          <tr key={article.id}>
+        {data.map((article, index) => (
+          <tr key={index + 1}>
             <td
               style={{
                 height: '6rem',
@@ -72,7 +78,7 @@ const Table: FC<TableProps> = ({ headers, data }) => {
                 isChecked={checkedArticles.includes(article)}
               />
             </td>
-            <td>{article.id}</td>
+            <td>{index + 1}</td>
             <td
               style={{
                 display: 'flex',
