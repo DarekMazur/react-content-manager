@@ -9,7 +9,6 @@ const MenuList = () => {
         <MenuListItem target="/articles">Articles</MenuListItem>
         <MenuListItem target="/comments">Comments</MenuListItem>
         <MenuListItem target="/users">Users</MenuListItem>
-        <MenuListItem target="/gallery">Gallery</MenuListItem>
       </StyledMenuList>
     </nav>
   );
