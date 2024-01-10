@@ -10,6 +10,7 @@ export const StyledIcon = styled.div`
   align-items: flex-end;
   overflow: hidden;
   margin-right: 2rem;
+  cursor: pointer;
   z-index: 4;
 
   img {

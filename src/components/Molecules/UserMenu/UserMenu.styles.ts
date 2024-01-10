@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 interface StyledUserMenuTypes {
   $open?: boolean;
+  // ref: MutableRefObject<Node | undefined>;
 }
 
 export const StyledUserMenu = styled.div<StyledUserMenuTypes>`
@@ -27,7 +28,7 @@ export const StyledUserMenu = styled.div<StyledUserMenuTypes>`
     background: ${({ theme }) => theme.colors.darkBlue};
     box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.4);
     opacity: ${({ $open }) => ($open ? '1' : '0')};
-    top: ${({ $open }) => ($open ? '7rem' : '0')};
+    top: ${({ $open }) => ($open ? '7rem' : '-13rem')};
     display: flex;
     flex-direction: column;
     justify-content: space-around;

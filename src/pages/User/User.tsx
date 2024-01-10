@@ -31,25 +31,16 @@ const UserView = () => {
           <label htmlFor="blocked">Blocked: </label>
           <input type="checkbox" id="blocked" checked={user.blocked} />
           <label htmlFor="roles">Role: </label>
-          <select name="roles" id="roles">
+          <select name="roles" id="roles" value={user.role.name}>
             <option
               value="Administrator"
               selected={user.role.name === 'Administrator'}
             >
               Administrator
             </option>
-            <option value="Redactor" selected={user.role.name === 'Redactor'}>
-              Redactor
-            </option>
-            <option value="Creator" selected={user.role.name === 'Creator'}>
-              Creator
-            </option>
-            <option
-              value="Authenticated"
-              selected={user.role.name === 'Authenticated'}
-            >
-              Authenticated
-            </option>
+            <option value="Redactor">Redactor</option>
+            <option value="Creator">Creator</option>
+            <option value="Authenticated">Authenticated</option>
           </select>
         </>
       ) : null}
