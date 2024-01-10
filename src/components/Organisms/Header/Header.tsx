@@ -1,5 +1,4 @@
 import { StyledHeader } from './Header.styles.ts';
-import Icon from '../../Atoms/Icon/Icon.tsx';
 import MenuList from '../../Molecules/MenuList/MenuList.tsx';
 import { UserTypes } from '../../../types/dataTypes.ts';
 import { FC, useState } from 'react';
@@ -21,8 +20,7 @@ const Header: FC<HeaderProps> = ({ user }) => {
       <MenuList />
       <div>
         {user && `Hello, ${user.username}!`}
-        <Icon customIcon={user?.avatar} handleClick={handleClick} />
-        <UserMenu user={user} isOpen={isOpen} />
+        <UserMenu user={user} isOpen={isOpen} handleClick={handleClick} />
       </div>
     </StyledHeader>
   );
