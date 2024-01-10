@@ -39,6 +39,22 @@ const Authorised = () => {
             </div>
           }
         />
+        <Route
+          path="gallery"
+          element={
+            <div>
+              <p>Gallery</p>
+            </div>
+          }
+        />
+        <Route
+          path="user/:uuid"
+          element={
+            <div>
+              <p>User</p>
+            </div>
+          }
+        />
       </Routes>
     </>
   );
