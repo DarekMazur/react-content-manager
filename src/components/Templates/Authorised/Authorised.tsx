@@ -39,14 +39,6 @@ const Authorised = () => {
             </div>
           }
         />
-        <Route
-          path="gallery"
-          element={
-            <div>
-              <p>Gallery</p>
-            </div>
-          }
-        />
       </Routes>
     </>
   );
