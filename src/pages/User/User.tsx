@@ -1,47 +1,66 @@
 import { useParams } from 'react-router-dom';
-import { useGetUsersQuery } from '../../store';
+import {
+  RootState,
+  setUser,
+  useGetUsersQuery,
+  useUpdateUserMutation,
+} from '../../store';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { UserTypes } from '../../types/dataTypes';
 import { roles } from '../../mocks/db';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch, useSelector } from 'react-redux';
 
 const UserView = () => {
   const { uuid } = useParams();
   const { data: users = [] } = useGetUsersQuery();
+  const currentUser = useSelector<RootState>((state) => state.user);
 
-  const [user, setUser] = useState<UserTypes | undefined>(undefined);
+  const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
+  const [updateUser] = useUpdateUserMutation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setUser(users.find((user) => user.uuid === uuid) as UserTypes);
+    setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
   }, [users, uuid]);
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     fieldType: keyof UserTypes,
   ) => {
-    if (user) {
-      const updateUser: UserTypes = { ...user };
+    if (userData) {
+      const updateUser: UserTypes = { ...userData };
       if (fieldType === 'role') {
         const newRole = roles.find((role) => role.name === e.target.value);
-        updateUser[fieldType] = newRole || user?.role;
-        setUser({ ...(updateUser as UserTypes) });
+        updateUser[fieldType] = newRole || userData?.role;
+        setUserData({ ...(updateUser as UserTypes) });
       } else {
         updateUser[fieldType] =
           e.target.type === 'checkbox'
             ? (e.target as HTMLInputElement).checked
             : e.target.value;
-        setUser({ ...(updateUser as UserTypes) });
+        setUserData({ ...(updateUser as UserTypes) });
       }
+    }
+  };
+
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+
+    updateUser({ ...userData });
+    if (userData.uuid === currentUser.uuid) {
+      dispatch(setUser({ ...userData, isAuthorised: true }));
     }
   };
 
   return (
     <>
-      {user ? (
-        <form>
+      {userData ? (
+        <form onSubmit={handleSubmit}>
           <div>
             <img
-              src={user.avatar}
-              alt={`${user.username} avatar`}
+              src={userData.avatar}
+              alt={`${userData.username} avatar`}
               style={{ width: '15rem' }}
             />
           </div>
@@ -49,7 +68,7 @@ const UserView = () => {
             <label htmlFor="username">Name: </label>
             <input
               type="text"
-              value={user.username}
+              value={userData.username}
               id="username"
               onChange={(e) => handleOnChange(e, 'username')}
             />
@@ -58,7 +77,7 @@ const UserView = () => {
             <label htmlFor="email">Email: </label>
             <input
               type="email"
-              value={user.email}
+              value={userData.email}
               id="email"
               onChange={(e) => handleOnChange(e, 'email')}
             />
@@ -68,7 +87,7 @@ const UserView = () => {
             <input
               type="checkbox"
               id="confirmed"
-              checked={user.confirmed}
+              checked={userData.confirmed}
               onChange={(e) => handleOnChange(e, 'confirmed')}
             />
           </div>
@@ -77,7 +96,7 @@ const UserView = () => {
             <input
               type="checkbox"
               id="blocked"
-              checked={user.blocked}
+              checked={userData.blocked}
               onChange={(e) => handleOnChange(e, 'blocked')}
             />
           </div>
@@ -86,7 +105,7 @@ const UserView = () => {
             <select
               name="role"
               id="role"
-              value={user.role.name}
+              value={userData.role.name}
               onChange={(e) => handleOnChange(e, 'role')}
             >
               <option value="Administrator">Administrator</option>
@@ -95,6 +114,9 @@ const UserView = () => {
               <option value="Authenticated">Authenticated</option>
             </select>
           </div>
+          <button type="submit">
+            <FontAwesomeIcon icon={['fas', 'edit']} /> Edit
+          </button>
         </form>
       ) : null}
     </>
