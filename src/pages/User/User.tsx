@@ -29,6 +29,7 @@ const UserView = () => {
           e.target.type === 'checkbox'
             ? (e.target as HTMLInputElement).checked
             : e.target.value;
+        setUser({ ...(updateUser as UserTypes) });
       }
     }
   };
