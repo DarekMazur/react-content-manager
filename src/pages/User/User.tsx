@@ -5,7 +5,7 @@ import {
   useGetUsersQuery,
   useUpdateUserMutation,
 } from '../../store';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { UserTypes } from '../../types/dataTypes';
 import { roles } from '../../mocks/db';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,11 +44,11 @@ const UserView = () => {
     }
   };
 
-  const handleSubmit = (e: Event) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     updateUser({ ...userData });
-    if (userData.uuid === currentUser.uuid) {
+    if (userData && userData.uuid === (currentUser as UserTypes).uuid) {
       dispatch(setUser({ ...userData, isAuthorised: true }));
     }
   };
