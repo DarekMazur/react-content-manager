@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyledUserMenu } from './UserMenu.styles';
 import { setUser } from '../../../store';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { UserTypes } from '../../../types/dataTypes';
 import Icon from '../../Atoms/Icon/Icon';
+import { useEffect, useRef } from 'react';
 
 const UserMenu = ({
   user,
@@ -17,6 +18,25 @@ const UserMenu = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const handleOutsideClick = (e: MouseEvent) => {
+    if (
+      isOpen &&
+      menuRef.current &&
+      !menuRef.current.contains(e.target as Node)
+    ) {
+      handleClick();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const handleMockLogout = () => {
     dispatch(setUser([]));
@@ -30,15 +50,16 @@ const UserMenu = ({
         display: 'flex',
         margin: '0',
       }}
+      ref={menuRef}
     >
       <Icon customIcon={user?.avatar} handleClick={handleClick} />
       <StyledUserMenu $open={isOpen}>
         <ul>
           <li>
-            <a href={`/user/${user.uuid}`}>
+            <Link to={`/user/${user.uuid}`} onClick={handleClick}>
               <FontAwesomeIcon icon={['fas', 'user']} />
               My profile
-            </a>
+            </Link>
           </li>
           <li onClick={handleMockLogout}>
             <FontAwesomeIcon icon={['fas', 'arrow-right-from-bracket']} />

@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { db } from '../db';
-import { ArticleDataTypes } from '../../types/dataTypes';
+import { ArticleDataTypes, UserTypes } from '../../types/dataTypes';
 
 export const handlers = [
   http.get('/api/comments', () => {
@@ -8,6 +8,27 @@ export const handlers = [
   }),
   http.get('/api/users', () => {
     return HttpResponse.json(db.user.getAll());
+  }),
+  http.patch('/api/users/:id', async ({ request }) => {
+    const updatedUser = (await request.json()) as UserTypes;
+    if (updatedUser) {
+      db.user.update({
+        where: {
+          uuid: {
+            equals: updatedUser.uuid,
+          },
+        },
+        data: {
+          avatar: updatedUser.avatar,
+          username: updatedUser.username,
+          email: updatedUser.email,
+          confirmed: updatedUser.confirmed,
+          blocked: updatedUser.blocked,
+          role: updatedUser.role,
+        },
+      });
+      return HttpResponse.json(updatedUser, { status: 201 });
+    }
   }),
   http.get('/api/articles', () => {
     return HttpResponse.json(db.article.getAll());
