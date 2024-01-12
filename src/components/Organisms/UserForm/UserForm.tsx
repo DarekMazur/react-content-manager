@@ -76,7 +76,6 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
 
   return (
     <form onSubmit={handleSubmit} onReset={handleCancel}>
-      {/* <InputCheckbox label='Test' id='test' /> */}
       <div>
         <img
           src={image.length === 0 ? userData.avatar : imageUrl}
