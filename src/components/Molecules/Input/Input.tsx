@@ -4,7 +4,7 @@ interface InputTypes {
   label: string;
   type: string;
   id: string;
-  value: string | boolean;
+  value: string;
   // eslint-disable-next-line no-unused-vars
   handleOnChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -15,8 +15,7 @@ const Input: FC<InputTypes> = ({ label, type, id, value, handleOnChange }) => {
       <label htmlFor="username">{label}</label>
       <input
         type={type}
-        value={typeof value === 'string' ? value : 'undefined'}
-        checked={value as boolean}
+        value={value}
         id={id}
         onChange={(e) => handleOnChange(e)}
       />

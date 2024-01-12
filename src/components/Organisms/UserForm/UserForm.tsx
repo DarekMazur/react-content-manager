@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { UserTypes } from '../../../types/dataTypes';
 import ImageInput from '../../Molecules/ImageInput/ImageInput';
+import InputCheckbox from '../../Molecules/InputCheckbox/InputCheckbox';
 import Input from '../../Molecules/Input/Input';
 import {
   RootState,
@@ -75,6 +76,7 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
 
   return (
     <form onSubmit={handleSubmit} onReset={handleCancel}>
+      {/* <InputCheckbox label='Test' id='test' /> */}
       <div>
         <img
           src={image.length === 0 ? userData.avatar : imageUrl}
@@ -99,16 +101,14 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
         value={userData.email}
         handleOnChange={(e) => handleOnChange(e, 'email')}
       />
-      <Input
+      <InputCheckbox
         label="Confirmed:"
-        type="checkbox"
         id="confirmed"
         value={userData.confirmed}
         handleOnChange={(e) => handleOnChange(e, 'confirmed')}
       />
-      <Input
+      <InputCheckbox
         label="Blocked:"
-        type="checkbox"
         id="blocked"
         value={userData.blocked}
         handleOnChange={(e) => handleOnChange(e, 'blocked')}
