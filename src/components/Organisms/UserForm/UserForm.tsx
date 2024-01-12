@@ -104,7 +104,14 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
           onFilesChange={(selectedFilies) => setImage(selectedFilies)}
         />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.5rem',
+          minWidth: '30rem',
+        }}
+      >
         <Input
           label="Name:"
           type="text"
@@ -136,7 +143,11 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
         >
           <label htmlFor="role">Role: </label>
           <select
-            style={{padding: '1rem', borderRadius: '0.5rem', border: '0.1rem solid'}}
+            style={{
+              padding: '1rem',
+              borderRadius: '0.5rem',
+              border: '0.1rem solid',
+            }}
             name="role"
             id="role"
             value={userData.role.name}
@@ -148,11 +159,35 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
             <option value="Authenticated">Authenticated</option>
           </select>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
-          <button style={{padding: '1rem', backgroundColor: 'lightBlue'}} type="submit">
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '2rem',
+          }}
+        >
+          <button
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: 'lightBlue',
+              width: '10rem',
+              border: '0.1rem solid',
+              borderRadius: '0.5rem',
+            }}
+            type="submit"
+          >
             <FontAwesomeIcon icon={['fas', 'edit']} /> Save
           </button>
-          <button style={{padding: '1rem', backgroundColor: 'red'}} type="reset">
+          <button
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: 'red',
+              width: '10rem',
+              border: '0.1rem solid',
+              borderRadius: '0.5rem',
+            }}
+            type="reset"
+          >
             <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
           </button>
         </div>
