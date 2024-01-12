@@ -1,4 +1,6 @@
 import { ChangeEvent, FC } from 'react';
+import { StyledInput } from './Input.styles.ts';
+import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
 
 interface InputTypes {
   label: string;
@@ -11,16 +13,15 @@ interface InputTypes {
 
 const Input: FC<InputTypes> = ({ label, type, id, value, handleOnChange }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+    <FormWrapper $direction="column" $gap={0.4}>
       <label htmlFor="username">{label}</label>
-      <input
-        style={{padding: '1rem', borderRadius: '0.5rem', border: '0.1rem solid'}}
+      <StyledInput
         type={type}
         value={value}
         id={id}
         onChange={(e) => handleOnChange(e)}
       />
-    </div>
+    </FormWrapper>
   );
 };
 

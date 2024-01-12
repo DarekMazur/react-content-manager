@@ -1,7 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { UserTypes } from '../../../types/dataTypes';
-import ImageInput from '../../Molecules/ImageInput/ImageInput';
+import {
+  FormButton,
+  FormButtonWrapper,
+  FormWrapper,
+  StyledUserForm,
+} from './UserForm.styles';
 import InputCheckbox from '../../Molecules/InputCheckbox/InputCheckbox';
+import InputSelect from '../../Molecules/InputSelect/InputSelect';
 import Input from '../../Molecules/Input/Input';
 import {
   RootState,
@@ -12,6 +18,7 @@ import {
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { roles } from '../../../mocks/db';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import UserImageControler from '../../Molecules/UserImageControler/UserImageControler';
 
 const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
   const { data: users = [] } = useGetUsersQuery();
@@ -75,43 +82,15 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      onReset={handleCancel}
-      style={{
-        display: 'flex',
-        gap: '2rem',
-        margin: '0 3rem',
-        justifyContent: 'center',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <div
-          style={{
-            borderRadius: '50%',
-            overflow: 'hidden',
-            width: '25rem',
-            height: '25rem',
-          }}
-        >
-          <img
-            src={image.length === 0 ? userData.avatar : imageUrl}
-            alt={`${userData.username} avatar`}
-            style={{ width: '25rem' }}
-          />
-        </div>
-        <ImageInput
-          onFilesChange={(selectedFilies) => setImage(selectedFilies)}
-        />
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1.5rem',
-          minWidth: '30rem',
-        }}
-      >
+    <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
+      <UserImageControler
+        image={image}
+        userAvatar={userData.avatar}
+        username={userData.username}
+        imageUrl={imageUrl as string}
+        onFilesChange={(selectedFilies) => setImage(selectedFilies)}
+      />
+      <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
         <Input
           label="Name:"
           type="text"
@@ -138,61 +117,21 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
           value={userData.blocked}
           handleOnChange={(e) => handleOnChange(e, 'blocked')}
         />
-        <div
-          style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}
-        >
-          <label htmlFor="role">Role: </label>
-          <select
-            style={{
-              padding: '1rem',
-              borderRadius: '0.5rem',
-              border: '0.1rem solid',
-            }}
-            name="role"
-            id="role"
-            value={userData.role.name}
-            onChange={(e) => handleOnChange(e, 'role')}
-          >
-            <option value="Administrator">Administrator</option>
-            <option value="Redactor">Redactor</option>
-            <option value="Creator">Creator</option>
-            <option value="Authenticated">Authenticated</option>
-          </select>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '2rem',
-          }}
-        >
-          <button
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: 'lightBlue',
-              width: '10rem',
-              border: '0.1rem solid',
-              borderRadius: '0.5rem',
-            }}
-            type="submit"
-          >
+        <InputSelect
+          value={userData.role.name}
+          handleOnChange={(e) => handleOnChange(e, 'role')}
+          options={['Administrstor', 'Redactor', 'Creator', 'Authenticated']}
+        />
+        <FormButtonWrapper>
+          <FormButton $type="submit" type="submit">
             <FontAwesomeIcon icon={['fas', 'edit']} /> Save
-          </button>
-          <button
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: 'red',
-              width: '10rem',
-              border: '0.1rem solid',
-              borderRadius: '0.5rem',
-            }}
-            type="reset"
-          >
+          </FormButton>
+          <FormButton $type="reset" type="reset">
             <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
-          </button>
-        </div>
-      </div>
-    </form>
+          </FormButton>
+        </FormButtonWrapper>
+      </FormWrapper>
+    </StyledUserForm>
   );
 };
 

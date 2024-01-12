@@ -1,0 +1,35 @@
+import { FC } from 'react';
+import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
+import ImageInput from '../ImageInput/ImageInput';
+import { StyledImageControler } from './UserImageControler.styles'
+
+interface UserImageControlerTypes {
+  image: File[];
+  userAvatar: string;
+  username: string;
+  imageUrl: string;
+  // eslint-disable-next-line no-unused-vars
+  onFilesChange(selectedFilies: File[]): void;
+}
+
+const UserImageControler: FC<UserImageControlerTypes> = ({
+  image,
+  userAvatar,
+  username,
+  imageUrl,
+  onFilesChange,
+}) => {
+  return (
+    <FormWrapper $gap={1.5} $direction="column">
+      <StyledImageControler>
+        <img
+          src={image.length === 0 ? userAvatar : imageUrl}
+          alt={`${username} avatar`}
+        />
+      </StyledImageControler>
+      <ImageInput onFilesChange={onFilesChange} />
+    </FormWrapper>
+  );
+};
+
+export default UserImageControler;

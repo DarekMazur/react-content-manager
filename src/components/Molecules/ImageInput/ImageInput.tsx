@@ -1,4 +1,5 @@
 import { ChangeEvent, FC } from 'react';
+import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
 
 interface ImageTypes {
   // eslint-disable-next-line no-unused-vars
@@ -14,7 +15,7 @@ const ImageInput: FC<ImageTypes> = ({ onFilesChange }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+    <FormWrapper $direction="column" $gap={0.8}>
       <label htmlFor="avatar">Upload your picture:</label>
       <input
         type="file"
@@ -22,7 +23,7 @@ const ImageInput: FC<ImageTypes> = ({ onFilesChange }) => {
         accept="image/*"
         onChange={handleImageChange}
       />
-    </div>
+    </FormWrapper>
   );
 };
 
