@@ -11,9 +11,10 @@ interface InputTypes {
 
 const Input: FC<InputTypes> = ({ label, type, id, value, handleOnChange }) => {
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
       <label htmlFor="username">{label}</label>
       <input
+        style={{padding: '1rem', borderRadius: '0.5rem', border: '0.1rem solid'}}
         type={type}
         value={value}
         id={id}

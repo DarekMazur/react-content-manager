@@ -14,7 +14,7 @@ const ImageInput: FC<ImageTypes> = ({ onFilesChange }) => {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
       <label htmlFor="avatar">Upload your picture:</label>
       <input
         type="file"

@@ -75,63 +75,88 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} onReset={handleCancel}>
-      <div>
-        <img
-          src={image.length === 0 ? userData.avatar : imageUrl}
-          alt={`${userData.username} avatar`}
-          style={{ width: '15rem' }}
+    <form
+      onSubmit={handleSubmit}
+      onReset={handleCancel}
+      style={{
+        display: 'flex',
+        gap: '2rem',
+        margin: '0 3rem',
+        justifyContent: 'center',
+      }}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div
+          style={{
+            borderRadius: '50%',
+            overflow: 'hidden',
+            width: '25rem',
+            height: '25rem',
+          }}
+        >
+          <img
+            src={image.length === 0 ? userData.avatar : imageUrl}
+            alt={`${userData.username} avatar`}
+            style={{ width: '25rem' }}
+          />
+        </div>
+        <ImageInput
+          onFilesChange={(selectedFilies) => setImage(selectedFilies)}
         />
       </div>
-      <ImageInput
-        onFilesChange={(selectedFilies) => setImage(selectedFilies)}
-      />
-      <Input
-        label="Name:"
-        type="text"
-        id="username"
-        value={userData.username}
-        handleOnChange={(e) => handleOnChange(e, 'username')}
-      />
-      <Input
-        label="Email:"
-        type="email"
-        id="email"
-        value={userData.email}
-        handleOnChange={(e) => handleOnChange(e, 'email')}
-      />
-      <InputCheckbox
-        label="Confirmed:"
-        id="confirmed"
-        value={userData.confirmed}
-        handleOnChange={(e) => handleOnChange(e, 'confirmed')}
-      />
-      <InputCheckbox
-        label="Blocked:"
-        id="blocked"
-        value={userData.blocked}
-        handleOnChange={(e) => handleOnChange(e, 'blocked')}
-      />
-      <div>
-        <label htmlFor="role">Role: </label>
-        <select
-          name="role"
-          id="role"
-          value={userData.role.name}
-          onChange={(e) => handleOnChange(e, 'role')}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <Input
+          label="Name:"
+          type="text"
+          id="username"
+          value={userData.username}
+          handleOnChange={(e) => handleOnChange(e, 'username')}
+        />
+        <Input
+          label="Email:"
+          type="email"
+          id="email"
+          value={userData.email}
+          handleOnChange={(e) => handleOnChange(e, 'email')}
+        />
+        <InputCheckbox
+          label="Confirmed:"
+          id="confirmed"
+          value={userData.confirmed}
+          handleOnChange={(e) => handleOnChange(e, 'confirmed')}
+        />
+        <InputCheckbox
+          label="Blocked:"
+          id="blocked"
+          value={userData.blocked}
+          handleOnChange={(e) => handleOnChange(e, 'blocked')}
+        />
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}
         >
-          <option value="Administrator">Administrator</option>
-          <option value="Redactor">Redactor</option>
-          <option value="Creator">Creator</option>
-          <option value="Authenticated">Authenticated</option>
-        </select>
+          <label htmlFor="role">Role: </label>
+          <select
+            style={{padding: '1rem', borderRadius: '0.5rem', border: '0.1rem solid'}}
+            name="role"
+            id="role"
+            value={userData.role.name}
+            onChange={(e) => handleOnChange(e, 'role')}
+          >
+            <option value="Administrator">Administrator</option>
+            <option value="Redactor">Redactor</option>
+            <option value="Creator">Creator</option>
+            <option value="Authenticated">Authenticated</option>
+          </select>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+          <button style={{padding: '1rem', backgroundColor: 'lightBlue'}} type="submit">
+            <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+          </button>
+          <button style={{padding: '1rem', backgroundColor: 'red'}} type="reset">
+            <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+          </button>
+        </div>
       </div>
-      <button type="submit">
-        <FontAwesomeIcon icon={['fas', 'edit']} /> Edit
-      </button>
-      <button type="reset">
-        <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
-      </button>
     </form>
   );
 };
