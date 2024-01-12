@@ -8,7 +8,7 @@ export const CheckboxSetting = styled.label`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75em 1em;
+  padding: 0.75em 0;
 `;
 
 export const CheckboxLabel = styled.span`
