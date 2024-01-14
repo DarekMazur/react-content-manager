@@ -19,7 +19,8 @@ const UserView = () => {
     <>
       {userData && !isLoading ? (
         (currentUser as UserTypes).uuid === uuid ||
-        (currentUser as UserTypes).role.type === 'admin' ? (
+        (currentUser as UserTypes).role.type === 'admin' ||
+        (currentUser as UserTypes).role.type === 'redactor' ? (
           <UserForm user={userData} uuid={uuid as string} />
         ) : (
           "You're not authorised"

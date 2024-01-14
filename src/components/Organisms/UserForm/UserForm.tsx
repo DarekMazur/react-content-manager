@@ -88,6 +88,7 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
         userAvatar={userData.avatar}
         username={userData.username}
         imageUrl={imageUrl as string}
+        uuid={uuid}
         onFilesChange={(selectedFilies) => setImage(selectedFilies)}
       />
       <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
@@ -96,6 +97,7 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
           type="text"
           id="username"
           value={userData.username}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'username')}
         />
         <Input
@@ -103,23 +105,27 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
           type="email"
           id="email"
           value={userData.email}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'email')}
         />
         <InputCheckbox
           label="Confirmed:"
           id="confirmed"
           value={userData.confirmed}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'confirmed')}
         />
         <InputCheckbox
           label="Blocked:"
           id="blocked"
           value={userData.blocked}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'blocked')}
         />
         <InputSelect
           value={userData.role.name}
           handleOnChange={(e) => handleOnChange(e, 'role')}
+          uuid={uuid}
           options={['Administrstor', 'Redactor', 'Creator', 'Authenticated']}
         />
         <FormButtonWrapper>
