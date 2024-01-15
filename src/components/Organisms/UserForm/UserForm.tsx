@@ -20,7 +20,7 @@ import { roles } from '../../../mocks/db';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserImageControler from '../../Molecules/UserImageControler/UserImageControler';
 
-const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
+const UserForm = ({ uuid }: { uuid: string }) => {
   const { data: users = [] } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
   const [updateUser] = useUpdateUserMutation();
@@ -28,7 +28,7 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
 
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
-  const [userData, setUserData] = useState<UserTypes>(user);
+  const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
 
   useEffect(() => {
     image.length > 0 && setImageUrl(URL.createObjectURL(image[0]));
@@ -81,6 +81,8 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
     setImage([]);
   };
 
+  if (!userData) return null;
+
   return (
     <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
       <UserImageControler
@@ -88,6 +90,7 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
         userAvatar={userData.avatar}
         username={userData.username}
         imageUrl={imageUrl as string}
+        uuid={uuid}
         onFilesChange={(selectedFilies) => setImage(selectedFilies)}
       />
       <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
@@ -96,6 +99,7 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
           type="text"
           id="username"
           value={userData.username}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'username')}
         />
         <Input
@@ -103,23 +107,27 @@ const UserForm = ({ user, uuid }: { user: UserTypes; uuid: string }) => {
           type="email"
           id="email"
           value={userData.email}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'email')}
         />
         <InputCheckbox
           label="Confirmed:"
           id="confirmed"
           value={userData.confirmed}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'confirmed')}
         />
         <InputCheckbox
           label="Blocked:"
           id="blocked"
           value={userData.blocked}
+          uuid={uuid}
           handleOnChange={(e) => handleOnChange(e, 'blocked')}
         />
         <InputSelect
-          value={userData.role.name}
+          value={userData.role}
           handleOnChange={(e) => handleOnChange(e, 'role')}
+          uuid={uuid}
           options={['Administrstor', 'Redactor', 'Creator', 'Authenticated']}
         />
         <FormButtonWrapper>

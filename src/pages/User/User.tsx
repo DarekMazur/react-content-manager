@@ -1,20 +1,28 @@
 import { useParams } from 'react-router-dom';
-import { useGetUsersQuery } from '../../store';
-import { useEffect, useState } from 'react';
+import { RootState, useGetUsersQuery } from '../../store';
 import { UserTypes } from '../../types/dataTypes';
 import UserForm from '../../components/Organisms/UserForm/UserForm';
+import { useSelector } from 'react-redux';
 
 const UserView = () => {
   const { uuid } = useParams();
-  const { data: users = [] } = useGetUsersQuery();
-  const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
-
-  useEffect(() => {
-    setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
-  }, [users, uuid]);
+  const { data: users = [], isLoading } = useGetUsersQuery();
+  const currentUser = useSelector<RootState>((state) => state.user);
 
   return (
-    <>{userData ? <UserForm user={userData} uuid={uuid as string} /> : null}</>
+    <>
+      {users.length > 0 && !isLoading ? (
+        (currentUser as UserTypes).uuid === uuid ||
+        (currentUser as UserTypes).role.type === 'admin' ||
+        (currentUser as UserTypes).role.type === 'redactor' ? (
+          <UserForm uuid={uuid as string} />
+        ) : (
+          "You're not authorised"
+        )
+      ) : (
+        'Loading...'
+      )}
+    </>
   );
 };
 

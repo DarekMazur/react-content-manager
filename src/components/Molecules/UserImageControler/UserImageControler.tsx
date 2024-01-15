@@ -1,13 +1,14 @@
 import { FC } from 'react';
 import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
 import ImageInput from '../ImageInput/ImageInput';
-import { StyledImageControler } from './UserImageControler.styles'
+import { StyledImageControler } from './UserImageControler.styles';
 
 interface UserImageControlerTypes {
   image: File[];
   userAvatar: string;
   username: string;
   imageUrl: string;
+  uuid: string;
   // eslint-disable-next-line no-unused-vars
   onFilesChange(selectedFilies: File[]): void;
 }
@@ -17,6 +18,7 @@ const UserImageControler: FC<UserImageControlerTypes> = ({
   userAvatar,
   username,
   imageUrl,
+  uuid,
   onFilesChange,
 }) => {
   return (
@@ -27,7 +29,7 @@ const UserImageControler: FC<UserImageControlerTypes> = ({
           alt={`${username} avatar`}
         />
       </StyledImageControler>
-      <ImageInput onFilesChange={onFilesChange} />
+      <ImageInput uuid={uuid} onFilesChange={onFilesChange} />
     </FormWrapper>
   );
 };
