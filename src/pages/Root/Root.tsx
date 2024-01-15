@@ -17,12 +17,10 @@ const Root = () => {
 
   const handleMockLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
-    const admin = users.find(
-      (user) => user.role.id === 1 || user.role.id === 2,
-    );
+    const authorised = users.find((user) => user.role.id !== 4);
 
-    if (admin) {
-      dispatch(setUser({ ...admin, isAuthorised: true }));
+    if (authorised) {
+      dispatch(setUser({ ...authorised, isAuthorised: true }));
     } else alert("You're not authorised");
   };
 
