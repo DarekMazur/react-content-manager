@@ -17,7 +17,7 @@ const Root = () => {
 
   const handleMockLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
-    const authorised = users.find((user) => user.role.id !== 4);
+    const authorised = users.find((user) => user.role.id === 1);
 
     if (authorised) {
       dispatch(setUser({ ...authorised, isAuthorised: true }));
