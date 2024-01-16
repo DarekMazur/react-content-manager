@@ -56,7 +56,7 @@ const UserMenu = ({
       <StyledUserMenu $open={isOpen}>
         <ul>
           <li>
-            <Link to={`/user/${user.uuid}`} onClick={handleClick}>
+            <Link to={`/users/${user.uuid}`} onClick={handleClick}>
               <FontAwesomeIcon icon={['fas', 'user']} />
               My profile
             </Link>

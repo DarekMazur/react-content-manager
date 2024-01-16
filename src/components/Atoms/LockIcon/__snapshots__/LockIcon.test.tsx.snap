@@ -12,7 +12,6 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
           <p>
             Are you sure you want to delelte 
              
-            article
             <strong>
                
             </strong>
@@ -57,7 +56,6 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
         <p>
           Are you sure you want to delelte 
            
-          article
           <strong>
              
           </strong>

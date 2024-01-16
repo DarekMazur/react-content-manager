@@ -6,6 +6,7 @@ import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { ArticleDataTypes } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper.tsx';
+import { articlesTableHeaders } from '../../utils/data.ts';
 
 const Articles = () => {
   const { data: articles = [] } = useGetArticlesQuery();
@@ -33,7 +34,7 @@ const Articles = () => {
           counter={(selectedArticles as ArticleDataTypes[]).length}
         />
       ) : null}
-      <TableWrapper articles={articles} />
+      <TableWrapper content={articles} headers={articlesTableHeaders} />
     </main>
   );
 };

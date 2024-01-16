@@ -25,3 +25,14 @@ export const articlesTableHeaders = [
   'Published at',
   '',
 ];
+
+export const usersTableHeaders = [
+  '',
+  'ID',
+  'Name',
+  'Email',
+  'Confirmed',
+  'Blocked',
+  'Role',
+  '',
+];

@@ -4,21 +4,27 @@ import Table from '../Table/Table';
 import EntriesNumberPicker from '../../Molecules/EntriesNumberPicker/EntriesNumberPicker';
 import { StyledReactPaginate } from '../../Molecules/ReactPaginate/ReactPaginate.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { articlesTableHeaders } from '../../../utils/data';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { ArticleDataTypes } from '../../../types/dataTypes';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes';
 
-const TableWrapper = ({ articles }: { articles: ArticleDataTypes[] }) => {
+const TableWrapper = ({
+  content,
+  headers,
+}: {
+  content: ArticleDataTypes[] | UserTypes[];
+  headers: string[];
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
   const [isExpand, setIsExpand] = useState(false);
   const [perPage, setPerPage] = useState(10);
 
-  const getPagesLength = Math.ceil(articles.length / perPage);
+  const getPagesLength = Math.ceil(content.length / perPage);
   const [pages, setPages] = useState(getPagesLength);
 
-  const postsToDisplay = articles.slice(
+  const contentToDisplay = content.slice(
     (Number(searchParams.get('page')) - 1) * perPage,
     perPage * Number(searchParams.get('page')),
   );
@@ -34,14 +40,17 @@ const TableWrapper = ({ articles }: { articles: ArticleDataTypes[] }) => {
   }, []);
 
   useEffect(() => {
-    if (postsToDisplay.length === 0 && Number(searchParams.get('page')) !== 1) {
+    if (
+      contentToDisplay.length === 0 &&
+      Number(searchParams.get('page')) !== 1
+    ) {
       setSearchParams((params) => {
         params.set('page', String(Number(searchParams.get('page')) - 1));
         return params;
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postsToDisplay]);
+  }, [contentToDisplay]);
 
   useEffect(() => {
     setPages(getPagesLength);
@@ -70,7 +79,11 @@ const TableWrapper = ({ articles }: { articles: ArticleDataTypes[] }) => {
   return (
     <>
       <Wrapper width="100%" justify="center" align="flex-start" padding="0">
-        <Table headers={articlesTableHeaders} data={postsToDisplay} />
+        <Table
+          headers={headers}
+          data={contentToDisplay}
+          tag={location.pathname.slice(1)}
+        />
       </Wrapper>
       <Wrapper justify="space-between" align="center" width="97.5vw">
         <EntriesNumberPicker

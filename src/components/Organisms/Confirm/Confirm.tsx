@@ -8,13 +8,17 @@ import {
   switchPopup,
   useRemoveArticleMutation,
   useRemoveArticlesMutation,
+  useRemoveUserMutation,
 } from '../../../store/index.ts';
+import { useLocation } from 'react-router';
 
 const Confirm = () => {
   const [removeArticle] = useRemoveArticleMutation();
   const [removeArticles] = useRemoveArticlesMutation();
+  const [removeUser] = useRemoveUserMutation();
   const dispach = useDispatch();
   const popup = useSelector<RootState>((state) => state.popup);
+  const location = useLocation();
 
   const popupState = popup as PopupTypes;
 
@@ -22,7 +26,14 @@ const Confirm = () => {
 
   const handleDelete = () => {
     if (counter === 1) {
-      removeArticle(popupState.ids[0]);
+      switch (location.pathname.slice(1)) {
+        case 'articles':
+          removeArticle(popupState.ids[0]);
+          break;
+        case 'users':
+          removeUser(popupState.ids[0]);
+          break;
+      }
     } else {
       removeArticles(popupState.ids);
     }
@@ -36,11 +47,10 @@ const Confirm = () => {
   };
   return (
     <PopupWrapper $isVisible={popupState.isOpen}>
-      {/* {console.log(selected)} */}
       <div>
         <p>
           Are you sure you want to delelte {counter > 1 ? counter : null}{' '}
-          article
+          {location.pathname.slice(1, -1)}
           {counter > 1 ? 's' : <strong> {popupState.title}</strong>}? This
           action is permanent
         </p>

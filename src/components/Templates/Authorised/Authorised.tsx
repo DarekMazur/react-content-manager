@@ -26,7 +26,7 @@ const Authorised = () => {
           }
         />
         <Route path="users" element={<Users />} />
-        <Route path="user/:uuid" element={<UserView />} />
+        <Route path="users/:uuid" element={<UserView />} />
       </Routes>
     </>
   );
