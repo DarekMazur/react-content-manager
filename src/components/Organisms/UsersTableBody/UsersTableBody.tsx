@@ -51,7 +51,6 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
 
   return (
     <>
-      {console.log(selectedUsers)}
       {data.map((user) => (
         <tr key={user.uuid}>
           <td
