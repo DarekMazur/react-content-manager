@@ -3,6 +3,7 @@ import PickerList from '../PickerList/PickerList.tsx';
 import PickerListItem from '../../Atoms/PickerListItem/PickerListItem';
 import { StyledEntriesPicker } from './EntriesNumberPicker.styles.ts';
 import { FC } from 'react';
+import { useLocation } from 'react-router';
 
 interface EntriesPickerProps {
   isExpand: boolean;
@@ -20,6 +21,8 @@ const EntriesNumberPicker: FC<EntriesPickerProps> = ({
   handleChoseEntriesNumber,
   handleClose,
 }) => {
+  const location = useLocation();
+
   return (
     <StyledEntriesPicker>
       <div style={{ position: 'relative', width: '5rem' }}>
@@ -52,7 +55,7 @@ const EntriesNumberPicker: FC<EntriesPickerProps> = ({
           ))}
         </PickerList>
       </div>
-      <span>articles per page</span>
+      <span>{location.pathname.slice(1)} per page</span>
     </StyledEntriesPicker>
   );
 };
