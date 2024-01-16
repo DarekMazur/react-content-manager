@@ -6,10 +6,12 @@ import {
   clearSelected,
   switchPopup,
   useGetArticlesQuery,
+  useGetUsersQuery,
 } from '../../../store/index.ts';
 import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
-import { ArticleDataTypes } from '../../../types/dataTypes.ts';
+import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes.ts';
+import { useLocation } from 'react-router';
 
 const ActionIcon = styled(StyledInLink)`
   margin: 0 1rem;
@@ -18,38 +20,54 @@ const ActionIcon = styled(StyledInLink)`
 
 interface TableActionProps {
   id: number;
+  uuid?: string;
 }
 
-const TableActionIcons: FC<TableActionProps> = ({ id }) => {
+const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
   const { data: articles = [] } = useGetArticlesQuery();
+  const { data: users = [] } = useGetUsersQuery();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const article = (articles as ArticleDataTypes[]).find(
     (article) => article.id === id,
   );
 
-  const handleDelete = (id: number) => {
+  const user = (users as UserTypes[]).find((user) => user.id === id);
+
+  const handleDelete = (id: number, type: string) => {
     dispatch(clearSelected());
-    dispatch(
-      switchPopup({
-        isOpen: true,
-        ids: [id],
-        title: article ? article.title : undefined,
-      }),
-    );
+    switch (type) {
+      case 'articles':
+        return dispatch(
+          switchPopup({
+            isOpen: true,
+            ids: [id],
+            title: article ? article.title : undefined,
+          }),
+        );
+      case 'users':
+        return dispatch(
+          switchPopup({
+            isOpen: true,
+            ids: [id],
+            title: user ? user.username : undefined,
+          }),
+        );
+    }
   };
 
   return (
     <>
       <InLink
-        target={`/article/id=${id}`}
+        target={`${location.pathname}/${uuid ? uuid : `id=${id}`}`}
         name={
           <FontAwesomeIcon style={{ margin: '0 1rem' }} icon={['fas', 'pen']} />
         }
       />
       <ActionIcon
         as={FontAwesomeIcon}
-        onClick={() => handleDelete(id)}
+        onClick={() => handleDelete(id, location.pathname.slice(1))}
         icon={['fas', 'trash']}
       />
     </>

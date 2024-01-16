@@ -30,6 +30,21 @@ export const handlers = [
       return HttpResponse.json(updatedUser, { status: 201 });
     }
   }),
+  http.delete('/api/users/:userId', async ({ params }) => {
+    const { userId } = params;
+    if (!isNaN(Number(userId))) {
+      db.user.delete({
+        where: {
+          id: {
+            equals: Number(userId),
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
   http.get('/api/articles', () => {
     return HttpResponse.json(db.article.getAll());
   }),
