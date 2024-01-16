@@ -52,8 +52,8 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
   return (
     <>
       {console.log(selectedUsers)}
-      {data.map((user, index) => (
-        <tr key={index + 1}>
+      {data.map((user) => (
+        <tr key={user.uuid}>
           <td
             style={{
               height: '6rem',
@@ -69,7 +69,7 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
               isChecked={checkedUsers.includes(user)}
             />
           </td>
-          <td>{index + 1}</td>
+          <td>{user.id}</td>
           <td style={{ textAlign: 'left' }}>{user.username}</td>
           <td style={{ textAlign: 'left' }}>{user.email}</td>
           <td>

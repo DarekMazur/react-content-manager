@@ -55,8 +55,8 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
   };
   return (
     <>
-      {data.map((article, index) => (
-        <tr key={index + 1}>
+      {data.map((article) => (
+        <tr key={article.uuid}>
           <td
             style={{
               height: '6rem',
@@ -72,7 +72,7 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
               isChecked={checkedArticles.includes(article)}
             />
           </td>
-          <td>{index + 1}</td>
+          <td>{article.id}</td>
           <td
             style={{
               display: 'flex',
