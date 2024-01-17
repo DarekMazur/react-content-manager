@@ -33,7 +33,8 @@ const Article = () => {
       <section>
         <img src={currentArticle.cover} alt="" />
         <p>by {currentArticle.author.username}</p>
-        <p>{currentArticle.categories}</p>
+        <p>category: {currentArticle.categories}</p>
+        <p>tag: {currentArticle.tags.map((tag) => `#${tag} `)}</p>
         <p>
           {currentArticle.publishedAt
             ? `published at ${getDate(currentArticle.publishedAt)}`

@@ -41,6 +41,7 @@ export type ArticleDataTypes = {
   publishedAt: Date | null;
   likes: number;
   categories: string;
+  tags: string[];
   author: {
     uuid: string;
     username: string;
