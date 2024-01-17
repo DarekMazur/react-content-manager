@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
   RootState,
-  addSelected,
-  removeSelected,
+  addUserSelected,
+  removeUserSelected,
   useUpdateUserMutation,
 } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes';
@@ -14,7 +14,7 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
   const [updateUser] = useUpdateUserMutation();
   const dispatch = useDispatch();
 
-  const selectedUsers = useSelector<RootState>((state) => state.selected);
+  const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
   const [checkedUsers, setCheckedUsers] = useState<UserTypes[]>(
     selectedUsers as UserTypes[],
@@ -27,10 +27,10 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((user) => user.uuid === uuid);
     if (checkedElement && checkedUsers.includes(checkedElement as UserTypes)) {
-      dispatch(removeSelected(checkedElement));
+      dispatch(removeUserSelected(checkedElement));
       setCheckedUsers(checkedUsers.filter((user) => user.uuid !== uuid));
     } else if (checkedElement) {
-      dispatch(addSelected(checkedElement));
+      dispatch(addUserSelected(checkedElement));
       setCheckedUsers((prevState) => [
         ...prevState,
         checkedElement as UserTypes,
@@ -51,7 +51,6 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
 
   return (
     <>
-      {console.log(selectedUsers)}
       {data.map((user) => (
         <tr key={user.uuid}>
           <td

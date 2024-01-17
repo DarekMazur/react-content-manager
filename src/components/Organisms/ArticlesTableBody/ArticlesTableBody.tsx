@@ -69,7 +69,9 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
             <Checkbox
               handleClick={handleClickSelect}
               uuid={article.uuid}
-              isChecked={checkedArticles.includes(article)}
+              isChecked={Array.from(
+                checkedArticles as ArticleDataTypes[],
+              ).includes(article)}
             />
           </td>
           <td>{article.id}</td>
