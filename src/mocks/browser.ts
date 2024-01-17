@@ -12,7 +12,7 @@ declare global {
 export const worker = setupWorker(...handlers);
 
 const createUsers = () => {
-  for (let i = 0; i < faker.number.int({ min: 1, max: 50 }); ++i) {
+  for (let i = 0; i < faker.number.int({ min: 10, max: 50 }); ++i) {
     const user = db.user.create({ id: db.user.count() + 1 });
     if (user.confirmed) {
       for (let i = 0; i < faker.number.int({ min: 0, max: 20 }); ++i) {

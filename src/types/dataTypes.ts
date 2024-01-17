@@ -31,6 +31,7 @@ export interface CommentTypes {
 export type ArticleDataTypes = {
   id: number;
   title: string;
+  cover: string;
   isSticky: boolean;
   description: string;
   body: string;
