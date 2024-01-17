@@ -9,6 +9,7 @@ import {
   useRemoveArticleMutation,
   useRemoveArticlesMutation,
   useRemoveUserMutation,
+  useRemoveUsersMutation,
 } from '../../../store/index.ts';
 import { useLocation } from 'react-router';
 
@@ -16,6 +17,7 @@ const Confirm = () => {
   const [removeArticle] = useRemoveArticleMutation();
   const [removeArticles] = useRemoveArticlesMutation();
   const [removeUser] = useRemoveUserMutation();
+  const [removeUsers] = useRemoveUsersMutation();
   const dispach = useDispatch();
   const popup = useSelector<RootState>((state) => state.popup);
   const location = useLocation();
@@ -35,7 +37,13 @@ const Confirm = () => {
           break;
       }
     } else {
-      removeArticles(popupState.ids);
+      switch (location.pathname.slice(1)) {
+        case 'articles':
+          removeArticles(popupState.ids);
+          break;
+        case 'users':
+          removeUsers(popupState.ids);
+      }
     }
     dispach(switchPopup(false));
     dispach(clearSelected());
