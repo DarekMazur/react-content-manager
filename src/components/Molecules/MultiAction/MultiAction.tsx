@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   RootState,
   clearSelected,
+  clearUsersSelected,
   switchPopup,
   useUpdateArticleMutation,
+  useUpdateUserMutation,
 } from '../../../store/index.ts';
 import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
@@ -22,6 +24,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const dispach = useDispatch();
   const location = useLocation();
   const [updateArticle] = useUpdateArticleMutation();
+  const [updateUser] = useUpdateUserMutation();
 
   const handlePublish = () => {
     (selected as ArticleDataTypes[]).forEach((article) => {
@@ -43,6 +46,28 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       updateArticle({ ...article });
     });
     dispach(clearSelected());
+  };
+
+  const handleBlock = () => {
+    (selectedUsers as UserTypes[]).forEach((user) => {
+      user = {
+        ...user,
+        blocked: true,
+      };
+      updateUser({ ...user });
+    });
+    dispach(clearUsersSelected());
+  };
+
+  const handleUnblock = () => {
+    (selectedUsers as UserTypes[]).forEach((user) => {
+      user = {
+        ...user,
+        blocked: false,
+      };
+      updateUser({ ...user });
+    });
+    dispach(clearUsersSelected());
   };
 
   const handleDelete = () => {
@@ -93,6 +118,13 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
           <>
             <ActionButton handleClick={handlePublish}>publish</ActionButton>{' '}
             <ActionButton handleClick={handleUnpublish}>unpublish</ActionButton>{' '}
+          </>
+        );
+      case 'users':
+        return (
+          <>
+            <ActionButton handleClick={handleBlock}>block</ActionButton>{' '}
+            <ActionButton handleClick={handleUnblock}>unblock</ActionButton>{' '}
           </>
         );
     }
