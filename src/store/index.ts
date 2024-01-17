@@ -1,5 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { ArticleDataTypes } from '../types/dataTypes';
+import { ArticleDataTypes, UserTypes } from '../types/dataTypes';
 import { articlesApi } from './api/articles.ts';
 import { usersApi } from './api/users.ts';
 import { commentsApi } from './api/comments.ts';
@@ -13,7 +13,7 @@ export interface PopupTypes {
   title?: string;
 }
 
-const initialSelectedItems: Array<ArticleDataTypes> = [];
+const initialSelectedItems: (ArticleDataTypes | UserTypes)[] = [];
 const initialUser = {};
 const initialPopup: PopupTypes = {
   isOpen: false,
@@ -32,6 +32,22 @@ const selectedSlice = createSlice({
       return state.filter((selected) => selected.id !== action.payload.id);
     },
     clearSelected() {
+      return initialSelectedItems;
+    },
+  },
+});
+
+const selectedUsersSlice = createSlice({
+  name: 'selectedUsers',
+  initialState: initialSelectedItems,
+  reducers: {
+    addUserSelected(state, action) {
+      state.push(action.payload);
+    },
+    removeUserSelected(state, action) {
+      return state.filter((selected) => selected.id !== action.payload.id);
+    },
+    clearUsersSelected() {
       return initialSelectedItems;
     },
   },
@@ -59,6 +75,8 @@ const popupSlice = createSlice({
 
 export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
+export const { addUserSelected, removeUserSelected, clearUsersSelected } =
+  selectedUsersSlice.actions;
 export const { switchPopup } = popupSlice.actions;
 export const { setUser } = userSlice.actions;
 
@@ -72,6 +90,7 @@ export const store = configureStore({
     [usersApi.reducerPath]: usersApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
     selected: selectedSlice.reducer,
+    selectedUsers: selectedUsersSlice.reducer,
     user: userSlice.reducer,
     popup: popupSlice.reducer,
   },
