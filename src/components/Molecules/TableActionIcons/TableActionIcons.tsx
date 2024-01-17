@@ -60,7 +60,7 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
   return (
     <>
       <InLink
-        target={`${location.pathname}/${uuid ? uuid : `id=${id}`}`}
+        target={`${location.pathname}/${uuid ? uuid : id}`}
         name={
           <FontAwesomeIcon style={{ margin: '0 1rem' }} icon={['fas', 'pen']} />
         }
