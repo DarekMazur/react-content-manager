@@ -58,6 +58,7 @@ export const db = factory({
   article: {
     uuid: primaryKey(faker.string.uuid),
     id: () => faker.number.int(),
+    cover: () => faker.image.url(),
     isSticky: () => faker.datatype.boolean(0.3),
     title: () => faker.lorem.sentence({ min: 2, max: 6 }),
     description: () => faker.lorem.words({ min: 0, max: 14 }),
@@ -67,6 +68,11 @@ export const db = factory({
     publishedAt: nullable<Date>(faker.date.past),
     likes: () => faker.number.int({ min: 0, max: 500 }),
     categories: () => faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+    tags: () => [
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+    ],
     author: oneOf('user'),
   },
 });

@@ -31,6 +31,7 @@ export interface CommentTypes {
 export type ArticleDataTypes = {
   id: number;
   title: string;
+  cover: string;
   isSticky: boolean;
   description: string;
   body: string;
@@ -40,6 +41,7 @@ export type ArticleDataTypes = {
   publishedAt: Date | null;
   likes: number;
   categories: string;
+  tags: string[];
   author: {
     uuid: string;
     username: string;
