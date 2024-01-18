@@ -6,11 +6,12 @@ import InLink from '../../Atoms/InLink/InLink';
 import { getDate } from '../../../utils/methods/getDate';
 import { FormButton, FormButtonWrapper } from '../UserForm/UserForm.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Loading } from '../../Atoms/Loading/Loading.styles';
 
 const ArticleForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: articles = [] } = useGetArticlesQuery();
+  const { data: articles = [], isLoading } = useGetArticlesQuery();
   const [updateArticle] = useUpdateArticleMutation();
 
   const [currentArticle, setCurrentArticle] =
@@ -89,6 +90,10 @@ const ArticleForm = () => {
     setCurrentArticle(initialValues ? { ...initialValues } : undefined);
     navigate(-1);
   };
+
+  if (isLoading) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <form

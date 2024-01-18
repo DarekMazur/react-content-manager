@@ -5,6 +5,7 @@ import Button from '../../components/Atoms/Button/Button.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import { LatestTypes, getLatest } from '../../utils/methods/getLatest.ts';
+import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 import {
   ArticleDataTypes,
   CommentTypes,
@@ -20,6 +21,7 @@ const Home: FC<HomeProps> = ({ user }) => {
   const initialArticle = {
     id: 0,
     title: '',
+    cover: '',
     isSticky: false,
     description: '',
     body: '',
@@ -29,6 +31,7 @@ const Home: FC<HomeProps> = ({ user }) => {
     publishedAt: null,
     likes: 0,
     categories: '',
+    tags: [],
     author: {
       uuid: '',
       username: '',
@@ -43,8 +46,10 @@ const Home: FC<HomeProps> = ({ user }) => {
     },
     comments: null,
   };
-  const { data: articles = [] } = useGetArticlesQuery();
-  const { data: comments = [] } = useGetCommentsQuery();
+  const { data: articles = [], isLoading: loadingArticles } =
+    useGetArticlesQuery();
+  const { data: comments = [], isLoading: loadingComments } =
+    useGetCommentsQuery();
 
   const [publishedArticles, setPublishedArticles] = useState<
     ArticleDataTypes[]
@@ -78,6 +83,10 @@ const Home: FC<HomeProps> = ({ user }) => {
       setMostLikedPost(publishedArticles.sort((a, b) => b.likes - a.likes)[0]);
     }
   }, [publishedArticles]);
+
+  if (loadingArticles || loadingComments) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <main>

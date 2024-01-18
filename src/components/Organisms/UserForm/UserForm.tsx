@@ -19,9 +19,10 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { roles } from '../../../mocks/db';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserImageControler from '../../Molecules/UserImageControler/UserImageControler';
+import { Loading } from '../../Atoms/Loading/Loading.styles';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
-  const { data: users = [] } = useGetUsersQuery();
+  const { data: users = [], isLoading } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
   const [updateUser] = useUpdateUserMutation();
   const dispatch = useDispatch();
@@ -82,6 +83,10 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   };
 
   if (!userData) return null;
+
+  if (isLoading) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>

@@ -7,9 +7,10 @@ import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx'
 import { ArticleDataTypes, UserTypes } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
+import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 
 const Articles = () => {
-  const { data: articles = [] } = useGetArticlesQuery();
+  const { data: articles = [], isLoading } = useGetArticlesQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
@@ -34,6 +35,10 @@ const Articles = () => {
   useEffect(() => {
     setWrapperHeight(getFooterHeight() + 50);
   }, []);
+
+  if (isLoading) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <main

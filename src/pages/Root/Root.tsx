@@ -5,6 +5,7 @@ import Authorised from '../../components/Templates/Authorised/Authorised.tsx';
 import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 import FooterWrapper from '../../components/Organisms/Footer/Footer.tsx';
 import { UserTypes } from '../../types/dataTypes.ts';
+import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 
 interface LoggedUser extends UserTypes {
   isAuthorised: boolean;
@@ -13,7 +14,7 @@ interface LoggedUser extends UserTypes {
 const Root = () => {
   const dispatch = useDispatch();
   const user = useSelector<RootState>((state) => state.user);
-  const { data: users = [] } = useGetUsersQuery();
+  const { data: users = [], isLoading } = useGetUsersQuery();
 
   const handleMockLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
@@ -25,6 +26,10 @@ const Root = () => {
       dispatch(setUser({ ...authorised, isAuthorised: true }));
     } else alert("You're not authorised");
   };
+
+  if (isLoading) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <>
