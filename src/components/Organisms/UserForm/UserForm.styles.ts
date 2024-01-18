@@ -40,4 +40,5 @@ export const FormButton = styled.button<FormButtonTypes>`
   width: 10rem;
   border: 0.1rem solid;
   border-radius: 0.5rem;
+  cursor: pointer;
 `;
