@@ -12,6 +12,7 @@ import {
   UserTypes,
 } from '../../types/dataTypes.ts';
 import { useGetArticlesQuery, useGetCommentsQuery } from '../../store/index.ts';
+import { useNavigate } from 'react-router';
 
 interface HomeProps {
   user: UserTypes;
@@ -51,6 +52,8 @@ const Home: FC<HomeProps> = ({ user }) => {
   const { data: comments = [], isLoading: loadingComments } =
     useGetCommentsQuery();
 
+  const navigation = useNavigate();
+
   const [publishedArticles, setPublishedArticles] = useState<
     ArticleDataTypes[]
   >([]);
@@ -85,6 +88,10 @@ const Home: FC<HomeProps> = ({ user }) => {
       );
     }
   }, [publishedArticles]);
+
+  const handleClickEdit = () => {
+    navigation('/articles');
+  };
 
   if (loadingArticles || loadingComments) {
     return <Loading>Loading...</Loading>;
@@ -144,7 +151,7 @@ const Home: FC<HomeProps> = ({ user }) => {
           ) : null}
         </>
         <section style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button>Edit article</Button>
+          <Button handleClick={handleClickEdit}>Edit article</Button>
           <Button>Create article</Button>
         </section>
       </Wrapper>
