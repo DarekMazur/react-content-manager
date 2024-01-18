@@ -6,13 +6,15 @@ import { StyledCheckbox } from './Checkbox.styles.ts';
 interface CheckboxProps {
   isChecked?: boolean;
   // eslint-disable-next-line no-unused-vars
-  handleClick: (id: string, type: string | undefined) => void;
+  handleClick: (id: string, type: string | undefined, isDisabled?: boolean) => void;
   uuid: string;
   type?: string;
+  isDisabled?: boolean
 }
 
 const Checkbox: FC<CheckboxProps> = ({
   isChecked = false,
+  isDisabled = false,
   handleClick,
   uuid,
   type,
@@ -20,7 +22,8 @@ const Checkbox: FC<CheckboxProps> = ({
   return (
     <StyledCheckbox
       $checked={isChecked}
-      onClick={() => handleClick(uuid, type)}
+      $disabled={isDisabled}
+      onClick={() => handleClick(uuid, type, isDisabled)}
     >
       <span>
         {isChecked ? (

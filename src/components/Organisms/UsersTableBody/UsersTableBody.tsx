@@ -13,7 +13,8 @@ import { useEffect, useState } from 'react';
 const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
   const [updateUser] = useUpdateUserMutation();
   const dispatch = useDispatch();
-
+  
+  const currentUser = useSelector<RootState>((state) => state.user);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
   const [checkedUsers, setCheckedUsers] = useState<UserTypes[]>(
@@ -24,23 +25,25 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
     setCheckedUsers(selectedUsers as UserTypes[]);
   }, [selectedUsers]);
 
-  const handleClickSelect = (uuid: string) => {
-    const checkedElement = data.find((user) => user.uuid === uuid);
-    if (checkedElement && checkedUsers.includes(checkedElement as UserTypes)) {
-      dispatch(removeUserSelected(checkedElement));
-      setCheckedUsers(checkedUsers.filter((user) => user.uuid !== uuid));
-    } else if (checkedElement) {
-      dispatch(addUserSelected(checkedElement));
-      setCheckedUsers((prevState) => [
-        ...prevState,
-        checkedElement as UserTypes,
-      ]);
+  const handleClickSelect = (uuid: string, _type: string | undefined, isDisabled: boolean | undefined) => {
+    if (!isDisabled) {
+      const checkedElement = data.find((user) => user.uuid === uuid);
+      if (checkedElement && checkedUsers.includes(checkedElement as UserTypes)) {
+        dispatch(removeUserSelected(checkedElement));
+        setCheckedUsers(checkedUsers.filter((user) => user.uuid !== uuid));
+      } else if (checkedElement) {
+        dispatch(addUserSelected(checkedElement));
+        setCheckedUsers((prevState) => [
+          ...prevState,
+          checkedElement as UserTypes,
+        ]);
+      }
     }
+    
   };
 
   const handleClickSwitch = (uuid: string, type: string | undefined) => {
     const user = data.find((user) => user.uuid === uuid);
-    console.log(user && user[type as keyof UserTypes]);
     if (user && type) {
       const updatedUser = { ...user };
       updatedUser[type as keyof UserTypes] =
@@ -66,6 +69,7 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
               uuid={user.uuid}
               handleClick={handleClickSelect}
               isChecked={checkedUsers.includes(user)}
+              isDisabled={(currentUser as UserTypes).uuid === user.uuid}
             />
           </td>
           <td>{user.id}</td>
