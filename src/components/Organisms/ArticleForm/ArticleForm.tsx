@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useGetArticlesQuery, useUpdateArticleMutation } from '../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { ArticleDataTypes } from '../../../types/dataTypes';
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ArticleForm = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data: articles = [] } = useGetArticlesQuery();
   const [updateArticle] = useUpdateArticleMutation();
 
@@ -86,6 +87,7 @@ const ArticleForm = () => {
   const handleOnCancel = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCurrentArticle(initialValues ? { ...initialValues } : undefined);
+    navigate(-1);
   };
 
   return (
