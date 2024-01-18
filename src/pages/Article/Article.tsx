@@ -7,6 +7,7 @@ import { ArticleDataTypes, UserTypes } from '../../types/dataTypes';
 import ArticleForm from '../../components/Organisms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
 import P from '../../components/Atoms/Paragraph/P';
+import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 
 const Article = () => {
   const { id } = useParams();
@@ -28,11 +29,7 @@ const Article = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <main>
-        <p>Loading...</p>
-      </main>
-    );
+    return <Loading>Loading...</Loading>;
   }
 
   return (

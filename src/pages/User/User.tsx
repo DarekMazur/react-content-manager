@@ -3,15 +3,20 @@ import { RootState, useGetUsersQuery } from '../../store';
 import { UserTypes } from '../../types/dataTypes';
 import UserForm from '../../components/Organisms/UserForm/UserForm';
 import { useSelector } from 'react-redux';
+import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 
 const UserView = () => {
   const { uuid } = useParams();
   const { data: users = [], isLoading } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
 
+  if (isLoading) {
+    return <Loading>Loading...</Loading>;
+  }
+
   return (
     <>
-      {users.length > 0 && !isLoading ? (
+      {users.length > 0 ? (
         (currentUser as UserTypes).uuid === uuid ||
         (currentUser as UserTypes).role.type === 'admin' ||
         (currentUser as UserTypes).role.type === 'redactor' ? (
@@ -19,9 +24,7 @@ const UserView = () => {
         ) : (
           "You're not authorised"
         )
-      ) : (
-        'Loading...'
-      )}
+      ) : null}
     </>
   );
 };

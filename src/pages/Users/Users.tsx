@@ -7,9 +7,10 @@ import { usersTableHeaders } from '../../utils/data';
 import { UserTypes } from '../../types/dataTypes';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 import { useSelector } from 'react-redux';
+import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 
 const Users = () => {
-  const { data: users = [] } = useGetUsersQuery();
+  const { data: users = [], isLoading } = useGetUsersQuery();
   const [wrapperHeight, setWrapperHeight] = useState(0);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
@@ -18,6 +19,10 @@ const Users = () => {
   }, []);
 
   if (users.length === 0) return null;
+
+  if (isLoading) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <main

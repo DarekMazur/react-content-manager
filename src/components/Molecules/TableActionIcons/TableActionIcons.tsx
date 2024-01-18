@@ -15,6 +15,7 @@ import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { Loading } from '../../Atoms/Loading/Loading.styles.ts';
 
 interface ActionIconsTypes {
   $disabled?: boolean;
@@ -38,8 +39,9 @@ interface TableActionProps {
 }
 
 const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
-  const { data: articles = [] } = useGetArticlesQuery();
-  const { data: users = [] } = useGetUsersQuery();
+  const { data: articles = [], isLoading: articlesLoading } =
+    useGetArticlesQuery();
+  const { data: users = [], isLoading: usersLoading } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -73,6 +75,10 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
       }
     }
   };
+
+  if (articlesLoading || usersLoading) {
+    return <Loading>Loading...</Loading>;
+  }
 
   return (
     <>
