@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
 import { theme } from '../../../utils/themes/theme';
 import { StyledCheckbox } from './Checkbox.styles.ts';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css'; 
 
 interface CheckboxProps {
   isChecked?: boolean;
@@ -19,6 +21,29 @@ const Checkbox: FC<CheckboxProps> = ({
   uuid,
   type,
 }) => {
+  if (isDisabled) {
+    return (
+      <Tippy content={<span>You can't select yourself</span>} animation={'fade'} theme={'meterial'} trigger={'click'}>
+        <StyledCheckbox
+          $checked={isChecked}
+          $disabled={isDisabled}
+          onClick={() => handleClick(uuid, type, isDisabled)}
+        >
+          <span>
+            {isChecked ? (
+              <FontAwesomeIcon
+                style={{
+                  color: isChecked ? theme.colors.white : theme.colors.darkBlue,
+                  fontSize: '1.4rem',
+                }}
+                icon={['fas', 'check']}
+              />
+            ) : null}
+          </span>
+        </StyledCheckbox>
+      </Tippy>
+    )
+  }
   return (
     <StyledCheckbox
       $checked={isChecked}
