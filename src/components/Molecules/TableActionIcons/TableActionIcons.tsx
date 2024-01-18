@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import InLink from '../../Atoms/InLink/InLink.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
+  RootState,
   clearSelected,
   switchPopup,
   useGetArticlesQuery,
@@ -12,10 +13,23 @@ import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
 import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
-const ActionIcon = styled(StyledInLink)`
+interface ActionIconsTypes {
+  $disabled: boolean;
+}
+
+const ActionIcon = styled(StyledInLink)<ActionIconsTypes>`
   margin: 0 1rem;
   cursor: pointer;
+  color: ${({ theme, $disabled }) =>
+    $disabled ? theme.colors.grey : 'inherit'};
+
+  &:hover {
+    color: ${({ theme, $disabled }) =>
+      $disabled ? theme.colors.grey : 'inherit'};
+  }
 `;
 
 interface TableActionProps {
@@ -26,6 +40,7 @@ interface TableActionProps {
 const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
   const { data: articles = [] } = useGetArticlesQuery();
   const { data: users = [] } = useGetUsersQuery();
+  const currentUser = useSelector<RootState>((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -36,24 +51,26 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
   const user = (users as UserTypes[]).find((user) => user.id === id);
 
   const handleDelete = (id: number, type: string) => {
-    dispatch(clearSelected());
-    switch (type) {
-      case 'articles':
-        return dispatch(
-          switchPopup({
-            isOpen: true,
-            ids: [id],
-            title: article ? article.title : undefined,
-          }),
-        );
-      case 'users':
-        return dispatch(
-          switchPopup({
-            isOpen: true,
-            ids: [id],
-            title: user ? user.username : undefined,
-          }),
-        );
+    if ((currentUser as UserTypes).id !== id) {
+      dispatch(clearSelected());
+      switch (type) {
+        case 'articles':
+          return dispatch(
+            switchPopup({
+              isOpen: true,
+              ids: [id],
+              title: article ? article.title : undefined,
+            }),
+          );
+        case 'users':
+          return dispatch(
+            switchPopup({
+              isOpen: true,
+              ids: [id],
+              title: user ? user.username : undefined,
+            }),
+          );
+      }
     }
   };
 
@@ -65,11 +82,28 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
           <FontAwesomeIcon style={{ margin: '0 1rem' }} icon={['fas', 'pen']} />
         }
       />
-      <ActionIcon
-        as={FontAwesomeIcon}
-        onClick={() => handleDelete(id, location.pathname.slice(1))}
-        icon={['fas', 'trash']}
-      />
+      {(currentUser as UserTypes).id === id ? (
+        <Tippy
+          content={<span>You can't delete yourself</span>}
+          animation={'fade'}
+          theme={'meterial'}
+          trigger={'click'}
+        >
+          <ActionIcon
+            as={FontAwesomeIcon}
+            onClick={() => handleDelete(id, location.pathname.slice(1))}
+            icon={['fas', 'trash']}
+            $disabled={(currentUser as UserTypes).id === id}
+          />
+        </Tippy>
+      ) : (
+        <ActionIcon
+          as={FontAwesomeIcon}
+          onClick={() => handleDelete(id, location.pathname.slice(1))}
+          icon={['fas', 'trash']}
+          $disabled={(currentUser as UserTypes).id === id}
+        />
+      )}
     </>
   );
 };
