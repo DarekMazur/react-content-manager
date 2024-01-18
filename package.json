@@ -24,6 +24,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mswjs/data": "^0.16.1",
     "@reduxjs/toolkit": "^2.0.1",
+    "@tippyjs/react": "^4.2.6",
     "msw": "^2.0.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

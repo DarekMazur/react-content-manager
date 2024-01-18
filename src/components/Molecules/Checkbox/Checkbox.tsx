@@ -2,25 +2,53 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
 import { theme } from '../../../utils/themes/theme';
 import { StyledCheckbox } from './Checkbox.styles.ts';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css'; 
 
 interface CheckboxProps {
   isChecked?: boolean;
   // eslint-disable-next-line no-unused-vars
-  handleClick: (id: string, type: string | undefined) => void;
+  handleClick: (id: string, type: string | undefined, isDisabled?: boolean) => void;
   uuid: string;
   type?: string;
+  isDisabled?: boolean
 }
 
 const Checkbox: FC<CheckboxProps> = ({
   isChecked = false,
+  isDisabled = false,
   handleClick,
   uuid,
   type,
 }) => {
+  if (isDisabled) {
+    return (
+      <Tippy content={<span>You can't select yourself</span>} animation={'fade'} theme={'meterial'} trigger={'click'}>
+        <StyledCheckbox
+          $checked={isChecked}
+          $disabled={isDisabled}
+          onClick={() => handleClick(uuid, type, isDisabled)}
+        >
+          <span>
+            {isChecked ? (
+              <FontAwesomeIcon
+                style={{
+                  color: isChecked ? theme.colors.white : theme.colors.darkBlue,
+                  fontSize: '1.4rem',
+                }}
+                icon={['fas', 'check']}
+              />
+            ) : null}
+          </span>
+        </StyledCheckbox>
+      </Tippy>
+    )
+  }
   return (
     <StyledCheckbox
       $checked={isChecked}
-      onClick={() => handleClick(uuid, type)}
+      $disabled={isDisabled}
+      onClick={() => handleClick(uuid, type, isDisabled)}
     >
       <span>
         {isChecked ? (
