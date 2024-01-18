@@ -17,7 +17,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 interface ActionIconsTypes {
-  $disabled: boolean;
+  $disabled?: boolean;
 }
 
 const ActionIcon = styled(StyledInLink)<ActionIconsTypes>`
@@ -93,7 +93,10 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
             as={FontAwesomeIcon}
             onClick={() => handleDelete(id, location.pathname.slice(1))}
             icon={['fas', 'trash']}
-            $disabled={(currentUser as UserTypes).id === id}
+            $disabled={
+              (currentUser as UserTypes).id === id &&
+              location.pathname === '/users'
+            }
           />
         </Tippy>
       ) : (
@@ -101,7 +104,6 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
           as={FontAwesomeIcon}
           onClick={() => handleDelete(id, location.pathname.slice(1))}
           icon={['fas', 'trash']}
-          $disabled={(currentUser as UserTypes).id === id}
         />
       )}
     </>
