@@ -4,16 +4,32 @@ import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
 import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
-import { ArticleDataTypes } from '../../types/dataTypes.ts';
+import { ArticleDataTypes, UserTypes } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
 
 const Articles = () => {
   const { data: articles = [] } = useGetArticlesQuery();
+  const currentUser = useSelector<RootState>((state) => state.user);
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
   const [wrapperHeight, setWrapperHeight] = useState(0);
+  const [availableArticles, setAvailableArticles] = useState<
+    ArticleDataTypes[]
+  >([]);
+
+  useEffect(() => {
+    if ((currentUser as UserTypes).role.id === 3) {
+      setAvailableArticles(
+        articles.filter(
+          (article) => article.author.uuid === (currentUser as UserTypes).uuid,
+        ),
+      );
+    } else {
+      setAvailableArticles(articles);
+    }
+  }, [articles, currentUser]);
 
   useEffect(() => {
     setWrapperHeight(getFooterHeight() + 50);
@@ -34,7 +50,10 @@ const Articles = () => {
           counter={(selectedArticles as ArticleDataTypes[]).length}
         />
       ) : null}
-      <TableWrapper content={articles} headers={articlesTableHeaders} />
+      <TableWrapper
+        content={availableArticles}
+        headers={articlesTableHeaders}
+      />
     </main>
   );
 };
