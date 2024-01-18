@@ -60,13 +60,13 @@ const Home: FC<HomeProps> = ({ user }) => {
   const [latestComment, setLatestComment] = useState<LatestTypes>({
     publishedDate: null,
   });
-  const [mostLikedPost, setMostLikedPost] =
+  const [mostLikedArticle, setMostLikedArticle] =
     useState<ArticleDataTypes>(initialArticle);
 
   useEffect(() => {
     if (articles.length > 0) {
       setPublishedArticles(
-        articles.filter((post) => post.publishedAt !== null),
+        articles.filter((article) => article.publishedAt !== null),
       );
     }
   }, [articles]);
@@ -80,7 +80,9 @@ const Home: FC<HomeProps> = ({ user }) => {
   useEffect(() => {
     if (publishedArticles.length > 0) {
       setLatestArticle(getLatest(publishedArticles));
-      setMostLikedPost(publishedArticles.sort((a, b) => b.likes - a.likes)[0]);
+      setMostLikedArticle(
+        publishedArticles.sort((a, b) => b.likes - a.likes)[0],
+      );
     }
   }, [publishedArticles]);
 
@@ -108,7 +110,7 @@ const Home: FC<HomeProps> = ({ user }) => {
               </Heading>
               <P>
                 <InLink
-                  target={`post/id=${latestArticle.latest.id}`}
+                  target={`articles/${latestArticle.latest.id}`}
                   name={(latestArticle.latest as ArticleDataTypes).title}
                 />{' '}
                 by {(latestArticle.latest as ArticleDataTypes).author.username}{' '}
@@ -121,7 +123,7 @@ const Home: FC<HomeProps> = ({ user }) => {
                 {(latestComment.latest as CommentTypes).user?.username}
                 at{' '}
                 <InLink
-                  target={`post/id=${
+                  target={`articles/${
                     (latestComment.latest as CommentTypes).article.id
                   }`}
                   name={(latestComment.latest as CommentTypes).article.title}
@@ -133,17 +135,17 @@ const Home: FC<HomeProps> = ({ user }) => {
               </Heading>
               <P>
                 <InLink
-                  target={`post/id=${mostLikedPost.id}`}
-                  name={mostLikedPost.title}
+                  target={`articles/${mostLikedArticle.id}`}
+                  name={mostLikedArticle.title}
                 />{' '}
-                ({mostLikedPost.likes} likes)
+                ({mostLikedArticle.likes} likes)
               </P>
             </section>
           ) : null}
         </>
         <section style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button>Edit post</Button>
-          <Button>Create post</Button>
+          <Button>Edit article</Button>
+          <Button>Create article</Button>
         </section>
       </Wrapper>
     </main>
