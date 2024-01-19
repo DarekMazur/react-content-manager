@@ -7,6 +7,7 @@ import { getDate } from '../../../utils/methods/getDate';
 import { FormButton, FormButtonWrapper } from '../UserForm/UserForm.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from '../../Atoms/Loading/Loading.styles';
+import InputCheckbox from '../../Molecules/InputCheckbox/InputCheckbox';
 
 const ArticleForm = () => {
   const { id } = useParams();
@@ -24,6 +25,7 @@ const ArticleForm = () => {
   const [articleCategories, setArticleCategories] = useState<string>('');
   const [articleTags, setArticleTags] = useState<string[]>([]);
   const [articlePublished, setArticlePublished] = useState<Date | null>(null);
+  const [articleIsSticky, setArticleIsSticky] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<
     ArticleDataTypes | undefined
   >(currentArticle ? { ...currentArticle } : undefined);
@@ -46,6 +48,7 @@ const ArticleForm = () => {
       setArticleCategories(currentArticle.categories);
       setArticleTags(currentArticle.tags);
       setArticlePublished(currentArticle.publishedAt);
+      setArticleIsSticky(currentArticle.isSticky);
     }
   }, [currentArticle]);
 
@@ -62,6 +65,8 @@ const ArticleForm = () => {
         return setArticleBody(e.target.value);
       case 'cover':
         return setArticleCover(e.target.value);
+      case 'sticky':
+        return setArticleIsSticky((e.target as HTMLInputElement).checked);
     }
   };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -72,6 +77,7 @@ const ArticleForm = () => {
       description: articleDescription,
       body: articleBody,
       cover: articleCover,
+      isSticky: articleIsSticky,
       publishedAt: articlePublished ? articlePublished : new Date(),
     });
   };
@@ -82,6 +88,7 @@ const ArticleForm = () => {
       description: articleDescription,
       body: articleBody,
       cover: articleCover,
+      isSticky: articleIsSticky,
       publishedAt: null,
     });
   };
@@ -129,6 +136,12 @@ const ArticleForm = () => {
             </p>
             <p>category: {articleCategories}</p>
             <p>tag: {articleTags && articleTags.map((tag) => `#${tag} `)}</p>
+            <InputCheckbox
+              label="Sticky"
+              id="sticky"
+              value={articleIsSticky}
+              handleOnChange={(e) => handleOnChange(e, 'sticky')}
+            />
           </aside>
           <div style={{ width: '80vw' }}>
             <input
