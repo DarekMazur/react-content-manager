@@ -20,8 +20,10 @@ import { roles } from '../../../mocks/db';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserImageControler from '../../Molecules/UserImageControler/UserImageControler';
 import { Loading } from '../../Atoms/Loading/Loading.styles';
+import { useNavigate } from 'react-router';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
+  const navigate = useNavigate();
   const { data: users = [], isLoading } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
   const [updateUser] = useUpdateUserMutation();
@@ -80,6 +82,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   const handleCancel = () => {
     setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
     setImage([]);
+    navigate(-1);
   };
 
   if (!userData) return null;
