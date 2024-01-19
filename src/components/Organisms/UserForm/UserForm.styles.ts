@@ -41,4 +41,9 @@ export const FormButton = styled.button<FormButtonTypes>`
   border: 0.1rem solid;
   border-radius: 0.5rem;
   cursor: pointer;
+
+  &:active {
+    box-shadow: ${({ theme }) =>
+      `inset 0.1rem 0.1rem 1rem ${theme.colors.darkBlue}`};
+  }
 `;

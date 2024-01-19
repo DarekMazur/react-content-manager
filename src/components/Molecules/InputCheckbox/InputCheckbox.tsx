@@ -16,7 +16,7 @@ interface CheckboxTypes {
   label: string;
   id: string;
   value?: boolean;
-  uuid: string;
+  uuid?: string;
   // eslint-disable-next-line no-unused-vars
   handleOnChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -44,8 +44,10 @@ const InputCheckbox: FC<CheckboxTypes> = ({
             $isChecked={value || false}
             onChange={(e) => handleOnChange(e)}
             disabled={
-              (currentUser as UserTypes).uuid === uuid ||
-              (currentUser as UserTypes).role.type !== 'admin'
+              uuid
+                ? (currentUser as UserTypes).uuid === uuid ||
+                  (currentUser as UserTypes).role.type !== 'admin'
+                : false
             }
           />
           <CheckboxFill aria-hidden="true">
