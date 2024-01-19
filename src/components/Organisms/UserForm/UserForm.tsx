@@ -21,17 +21,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserImageControler from '../../Molecules/UserImageControler/UserImageControler';
 import { Loading } from '../../Atoms/Loading/Loading.styles';
 import { useNavigate } from 'react-router';
+import Modal from '../Modal/Modal';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
   const navigate = useNavigate();
   const { data: users = [], isLoading } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser, { status, isSuccess, isLoading: loadingUpdate }] =
+    useUpdateUserMutation();
   const dispatch = useDispatch();
 
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     image.length > 0 && setImageUrl(URL.createObjectURL(image[0]));
@@ -49,6 +52,12 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   useEffect(() => {
     setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
   }, [users, uuid]);
+
+  useEffect(() => {
+    if (loadingUpdate) {
+      setModal(true);
+    }
+  }, [loadingUpdate]);
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -85,6 +94,10 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     navigate(-1);
   };
 
+  const handleCloseModal = () => {
+    setModal(false);
+  };
+
   if (!userData) return null;
 
   if (isLoading) {
@@ -92,62 +105,72 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   }
 
   return (
-    <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
-      <UserImageControler
-        image={image}
-        userAvatar={userData.avatar}
-        username={userData.username}
-        imageUrl={imageUrl as string}
-        uuid={uuid}
-        onFilesChange={(selectedFilies) => setImage(selectedFilies)}
-      />
-      <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
-        <Input
-          label="Name:"
-          type="text"
-          id="username"
-          value={userData.username}
-          uuid={uuid}
-          handleOnChange={(e) => handleOnChange(e, 'username')}
+    <>
+      {modal ? (
+        <Modal
+          isSuccess={isSuccess}
+          isError={status === 'rejected'}
+          handleCloseModal={handleCloseModal}
+          dataType="User"
         />
-        <Input
-          label="Email:"
-          type="email"
-          id="email"
-          value={userData.email}
+      ) : null}
+      <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
+        <UserImageControler
+          image={image}
+          userAvatar={userData.avatar}
+          username={userData.username}
+          imageUrl={imageUrl as string}
           uuid={uuid}
-          handleOnChange={(e) => handleOnChange(e, 'email')}
+          onFilesChange={(selectedFilies) => setImage(selectedFilies)}
         />
-        <InputCheckbox
-          label="Confirmed:"
-          id="confirmed"
-          value={userData.confirmed}
-          uuid={uuid}
-          handleOnChange={(e) => handleOnChange(e, 'confirmed')}
-        />
-        <InputCheckbox
-          label="Blocked:"
-          id="blocked"
-          value={userData.blocked}
-          uuid={uuid}
-          handleOnChange={(e) => handleOnChange(e, 'blocked')}
-        />
-        <InputSelect
-          value={userData.role}
-          handleOnChange={(e) => handleOnChange(e, 'role')}
-          uuid={uuid}
-          options={['Administrstor', 'Redactor', 'Creator', 'Authenticated']}
-        />
-        <FormButtonWrapper>
-          <FormButton $type="submit" type="submit">
-            <FontAwesomeIcon icon={['fas', 'edit']} /> Save
-          </FormButton>
-          <FormButton $type="reset" type="reset">
-            <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
-          </FormButton>
-        </FormButtonWrapper>
-      </FormWrapper>
-    </StyledUserForm>
+        <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
+          <Input
+            label="Name:"
+            type="text"
+            id="username"
+            value={userData.username}
+            uuid={uuid}
+            handleOnChange={(e) => handleOnChange(e, 'username')}
+          />
+          <Input
+            label="Email:"
+            type="email"
+            id="email"
+            value={userData.email}
+            uuid={uuid}
+            handleOnChange={(e) => handleOnChange(e, 'email')}
+          />
+          <InputCheckbox
+            label="Confirmed:"
+            id="confirmed"
+            value={userData.confirmed}
+            uuid={uuid}
+            handleOnChange={(e) => handleOnChange(e, 'confirmed')}
+          />
+          <InputCheckbox
+            label="Blocked:"
+            id="blocked"
+            value={userData.blocked}
+            uuid={uuid}
+            handleOnChange={(e) => handleOnChange(e, 'blocked')}
+          />
+          <InputSelect
+            value={userData.role}
+            handleOnChange={(e) => handleOnChange(e, 'role')}
+            uuid={uuid}
+            options={['Administrstor', 'Redactor', 'Creator', 'Authenticated']}
+          />
+          <FormButtonWrapper>
+            <FormButton $type="submit" type="submit">
+              <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+            </FormButton>
+            <FormButton $type="reset" type="reset">
+              <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+            </FormButton>
+          </FormButtonWrapper>
+        </FormWrapper>
+      </StyledUserForm>
+    </>
   );
 };
 
