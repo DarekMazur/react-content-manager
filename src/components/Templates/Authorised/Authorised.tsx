@@ -5,6 +5,7 @@ import Articles from '../../../pages/Articles/Articles.tsx';
 import Article from '../../../pages/Article/Article.tsx';
 import UserView from '../../../pages/User/User.tsx';
 import Users from '../../../pages/Users/Users.tsx';
+import CommentsView from '../../../pages/Comments/Comments.tsx';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/index.ts';
 import { UserTypes } from '../../../types/dataTypes.ts';
@@ -19,16 +20,9 @@ const Authorised = () => {
         <Route path="/" element={<Home user={user as UserTypes} />} />
         <Route path="articles" element={<Articles />} />
         <Route path="articles/:id" element={<Article />} />
-        <Route
-          path="comments"
-          element={
-            <div>
-              <p>Comments</p>
-            </div>
-          }
-        />
         <Route path="users" element={<Users />} />
         <Route path="users/:uuid" element={<UserView />} />
+        <Route path="comments" element={<CommentsView />} />
       </Routes>
     </>
   );
