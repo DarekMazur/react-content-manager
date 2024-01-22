@@ -6,6 +6,36 @@ export const handlers = [
   http.get('/api/comments', () => {
     return HttpResponse.json(db.comment.getAll());
   }),
+  http.delete('/api/comments/:commentId', async ({ params }) => {
+    const { commentId } = params;
+    if (!isNaN(Number(commentId))) {
+      db.comment.delete({
+        where: {
+          id: {
+            equals: Number(commentId),
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
+  http.delete('/api/comments', async ({ request }) => {
+    const CommentsIds = await request.json();
+    if (CommentsIds) {
+      db.comment.deleteMany({
+        where: {
+          id: {
+            in: CommentsIds as number[],
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
   http.get('/api/users', () => {
     return HttpResponse.json(db.user.getAll());
   }),
