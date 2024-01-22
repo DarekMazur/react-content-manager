@@ -26,6 +26,16 @@ export const articlesTableHeaders = [
   '',
 ];
 
+export const commentsTableHeaders = [
+  '',
+  'ID',
+  "Comment's Author",
+  'Article',
+  'Comment',
+  'Published at',
+  '',
+];
+
 export const usersTableHeaders = [
   '',
   'ID',
