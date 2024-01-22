@@ -12,7 +12,9 @@ import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 const CommentsView = () => {
   const { data: comments = [], isLoading } = useGetCommentsQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
-  const selectedComments = useSelector<RootState>((state) => state.selected);
+  const selectedComments = useSelector<RootState>(
+    (state) => state.selectedComments,
+  );
 
   const [wrapperHeight, setWrapperHeight] = useState(0);
   const [availableComments, setAvailableComments] = useState<CommentTypes[]>(
