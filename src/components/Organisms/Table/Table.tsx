@@ -1,12 +1,17 @@
 import { FC } from 'react';
 import { StyledTable } from './Table.styles.ts';
-import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes';
+import {
+  ArticleDataTypes,
+  CommentTypes,
+  UserTypes,
+} from '../../../types/dataTypes';
 import ArticlesTableBody from '../ArticlesTableBody/ArticlesTableBody';
 import UsersTableBody from '../UsersTableBody/UsersTableBody';
+import CommentsTableBody from '../CommentsTableBody/CommentsTableBody';
 
 interface TableProps {
   headers: Array<string>;
-  data: Array<ArticleDataTypes | UserTypes>;
+  data: Array<ArticleDataTypes | UserTypes | CommentTypes>;
   tag: string;
 }
 
@@ -17,6 +22,8 @@ const Table: FC<TableProps> = ({ headers, data, tag }) => {
         return <ArticlesTableBody data={data as ArticleDataTypes[]} />;
       case 'users':
         return <UsersTableBody data={data as UserTypes[]} />;
+      case 'comments':
+        return <CommentsTableBody data={data as CommentTypes[]} />;
       default:
         return null;
     }
