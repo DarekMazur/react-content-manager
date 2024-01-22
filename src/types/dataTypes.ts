@@ -24,7 +24,7 @@ export interface CommentTypes {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date;
-  user: UserTypes;
+  author: UserTypes;
   article: ArticleDataTypes;
 }
 
