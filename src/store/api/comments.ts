@@ -6,11 +6,34 @@ export const commentsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/',
   }),
+  tagTypes: ['Comments'],
   endpoints: (builder) => ({
     getComments: builder.query<CommentTypes[], void>({
       query: () => 'comments',
+      providesTags: ['Comments'],
+    }),
+    removeComment: builder.mutation({
+      query: (id) => ({
+        url: `comments/${id}`,
+        method: 'DELETE',
+        credentials: 'include',
+      }),
+      invalidatesTags: ['Comments'],
+    }),
+    removeComments: builder.mutation({
+      query: (body) => ({
+        url: 'comments',
+        method: 'DELETE',
+        body,
+        credentials: 'include',
+      }),
+      invalidatesTags: ['Comments'],
     }),
   }),
 });
 
-export const { useGetCommentsQuery } = commentsApi;
+export const {
+  useGetCommentsQuery,
+  useRemoveCommentMutation,
+  useRemoveCommentsMutation,
+} = commentsApi;

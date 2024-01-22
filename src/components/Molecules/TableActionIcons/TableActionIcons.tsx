@@ -72,6 +72,14 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
               title: user ? user.username : undefined,
             }),
           );
+        case 'comments':
+          return dispatch(
+            switchPopup({
+              isOpen: true,
+              ids: [id],
+              title: undefined,
+            }),
+          );
       }
     }
   };

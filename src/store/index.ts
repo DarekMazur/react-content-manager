@@ -53,6 +53,22 @@ const selectedUsersSlice = createSlice({
   },
 });
 
+const selectedCommentsSlice = createSlice({
+  name: 'selectedComments',
+  initialState: initialSelectedItems,
+  reducers: {
+    addCommentSelected(state, action) {
+      state.push(action.payload);
+    },
+    removeCommentSelected(state, action) {
+      return state.filter((selected) => selected.id !== action.payload.id);
+    },
+    clearCommentsSelected() {
+      return initialSelectedItems;
+    },
+  },
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: initialUser,
@@ -77,6 +93,11 @@ export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
 export const { addUserSelected, removeUserSelected, clearUsersSelected } =
   selectedUsersSlice.actions;
+export const {
+  addCommentSelected,
+  removeCommentSelected,
+  clearCommentsSelected,
+} = selectedCommentsSlice.actions;
 export const { switchPopup } = popupSlice.actions;
 export const { setUser } = userSlice.actions;
 
@@ -91,6 +112,7 @@ export const store = configureStore({
     [commentsApi.reducerPath]: commentsApi.reducer,
     selected: selectedSlice.reducer,
     selectedUsers: selectedUsersSlice.reducer,
+    selectedComments: selectedCommentsSlice.reducer,
     user: userSlice.reducer,
     popup: popupSlice.reducer,
   },

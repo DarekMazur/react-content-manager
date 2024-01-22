@@ -8,6 +8,8 @@ import {
   switchPopup,
   useRemoveArticleMutation,
   useRemoveArticlesMutation,
+  useRemoveCommentMutation,
+  useRemoveCommentsMutation,
   useRemoveUserMutation,
   useRemoveUsersMutation,
 } from '../../../store/index.ts';
@@ -18,6 +20,8 @@ const Confirm = () => {
   const [removeArticles] = useRemoveArticlesMutation();
   const [removeUser] = useRemoveUserMutation();
   const [removeUsers] = useRemoveUsersMutation();
+  const [removeComment] = useRemoveCommentMutation();
+  const [removeComments] = useRemoveCommentsMutation();
   const dispach = useDispatch();
   const popup = useSelector<RootState>((state) => state.popup);
   const location = useLocation();
@@ -35,6 +39,9 @@ const Confirm = () => {
         case 'users':
           removeUser(popupState.ids[0]);
           break;
+        case 'comments':
+          removeComment(popupState.ids[0]);
+          break;
       }
     } else {
       switch (location.pathname.slice(1)) {
@@ -43,6 +50,10 @@ const Confirm = () => {
           break;
         case 'users':
           removeUsers(popupState.ids);
+          break;
+        case 'comments':
+          removeComments(popupState.ids);
+          break;
       }
     }
     dispach(switchPopup(false));
@@ -59,8 +70,12 @@ const Confirm = () => {
         <p>
           Are you sure you want to delelte {counter > 1 ? counter : null}{' '}
           {location.pathname.slice(1, -1)}
-          {counter > 1 ? 's' : <strong> {popupState.title}</strong>}? This
-          action is permanent
+          {counter > 1 ? (
+            's'
+          ) : (
+            <strong>{popupState.title ? ` ${popupState.title}` : null}</strong>
+          )}
+          ? This action is permanent
         </p>
         <div>
           <ActionButton handleClick={handleDelete} isDel>

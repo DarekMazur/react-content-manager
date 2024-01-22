@@ -6,13 +6,17 @@ import { StyledReactPaginate } from '../../Molecules/ReactPaginate/ReactPaginate
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes';
+import {
+  ArticleDataTypes,
+  CommentTypes,
+  UserTypes,
+} from '../../../types/dataTypes';
 
 const TableWrapper = ({
   content,
   headers,
 }: {
-  content: ArticleDataTypes[] | UserTypes[];
+  content: ArticleDataTypes[] | UserTypes[] | CommentTypes[];
   headers: string[];
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();

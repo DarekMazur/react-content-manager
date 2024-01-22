@@ -11,7 +11,11 @@ import {
   useUpdateArticleMutation,
   useUpdateUserMutation,
 } from '../../../store/index.ts';
-import { ArticleDataTypes, UserTypes } from '../../../types/dataTypes.ts';
+import {
+  ArticleDataTypes,
+  CommentTypes,
+  UserTypes,
+} from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
 
 interface MultiActionProps {
@@ -21,6 +25,9 @@ interface MultiActionProps {
 const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const selected = useSelector<RootState>((state) => state.selected);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
+  const selectedComments = useSelector<RootState>(
+    (state) => state.selectedComments,
+  );
   const dispach = useDispatch();
   const location = useLocation();
   const [updateArticle] = useUpdateArticleMutation();
@@ -98,6 +105,14 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
                   (element) => element.id === ids[0],
                 )?.username
               : undefined;
+        }
+        break;
+      case 'comments':
+        {
+          (selectedComments as CommentTypes[]).forEach((element) => {
+            ids.push(element.id);
+          });
+          singleTitle = undefined;
         }
         break;
     }
