@@ -21,6 +21,7 @@ export interface CommentTypes {
   id: number;
   content: string;
   uuid: string;
+  shadowed: boolean;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date;

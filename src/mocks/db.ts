@@ -49,6 +49,7 @@ export const db = factory({
     id: () => faker.number.int(),
     content: () => faker.lorem.sentence({ min: 1, max: 20 }),
     uuid: primaryKey(faker.string.uuid),
+    shadowed: () => faker.datatype.boolean(0.02),
     createdAt: () => faker.date.past(),
     updatedAt: () => faker.date.past(),
     publishedAt: () => faker.date.past(),
