@@ -40,6 +40,8 @@ const UserMenu = ({
 
   const handleMockLogout = () => {
     dispatch(setUser([]));
+    localStorage.removeItem('id');
+    localStorage.removeItem('username');
     navigate('/');
   };
 
