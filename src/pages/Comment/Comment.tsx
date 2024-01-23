@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import { RootState, useGetCommentsQuery } from '../../store';
+import { RootState, useGetCommentsQuery, useGetUsersQuery } from '../../store';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CommentTypes, UserTypes } from '../../types/dataTypes';
@@ -20,6 +20,7 @@ import { StyledImageControler } from '../../components/Molecules/UserImageContro
 const CommentView = () => {
   const { uuid } = useParams();
   const { data: comments = [], isLoading } = useGetCommentsQuery();
+  const { data: users = [] } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
@@ -33,10 +34,12 @@ const CommentView = () => {
   }, []);
 
   useEffect(() => {
-    if (currentComment) {
-      setUserData(currentComment.author);
+    if (currentComment && users.length > 0) {
+      setUserData(
+        users.find((user) => user.uuid === currentComment.author.uuid),
+      );
     }
-  }, [currentComment]);
+  }, [currentComment, users]);
 
   useEffect(() => {
     if (comments.length > 0) {
@@ -132,16 +135,16 @@ const CommentView = () => {
                 <P>Role: {currentComment?.author.role.name}</P>
                 <P>
                   Status:{' '}
-                  {currentComment.author.blocked ? (
+                  {userData.blocked ? (
                     <span style={{ color: 'red', fontWeight: 'bold' }}>
                       BLOCKED
                     </span>
-                  ) : currentComment.author.confirmed ? (
+                  ) : userData.confirmed ? (
                     <span style={{ color: 'green', fontWeight: 'bold' }}>
                       ACTIVE
                     </span>
                   ) : (
-                    <span style={{ color: 'yellow', fontWeight: 'bold' }}>
+                    <span style={{ color: 'gold', fontWeight: 'bold' }}>
                       NOT ACTIVATED
                     </span>
                   )}
