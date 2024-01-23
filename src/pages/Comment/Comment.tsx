@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import {
   FormButton,
   FormButtonWrapper,
+  FormWrapper,
 } from '../../components/Organisms/UserForm/UserForm.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDate } from '../../utils/methods/getDate';
@@ -16,6 +17,7 @@ import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import Heading from '../../components/Atoms/Heading/Heading';
 import InputCheckbox from '../../components/Molecules/InputCheckbox/InputCheckbox';
 import { StyledImageControler } from '../../components/Molecules/UserImageControler/UserImageControler.styles';
+import { StyledInputSelect } from '../../components/Molecules/InputSelect/InputSelect.styles';
 
 const CommentView = () => {
   const { uuid } = useParams();
@@ -106,18 +108,20 @@ const CommentView = () => {
                   </li>
                 </ul>
                 <p>{currentComment?.content}</p>
-                <label htmlFor="commentAction">Action</label>
-                <select
-                  name="commentAction"
-                  id="commentAction"
-                  defaultValue="default"
-                >
-                  <option value="default" key="default">
-                    --choose action--
-                  </option>
-                  <option value="shadow">shadow</option>
-                  <option value="delete">delete</option>
-                </select>
+                <FormWrapper $direction="column" $gap={0.4} $maxWidth={20}>
+                  <label htmlFor="commentAction">Action</label>
+                  <StyledInputSelect
+                    name="commentAction"
+                    id="commentAction"
+                    defaultValue="default"
+                  >
+                    <option value="default" key="default">
+                      --choose action--
+                    </option>
+                    <option value="shadow">shadow</option>
+                    <option value="delete">delete</option>
+                  </StyledInputSelect>
+                </FormWrapper>
               </div>
               <aside>
                 <P size="lm" weight="bold">
