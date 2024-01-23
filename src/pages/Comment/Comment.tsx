@@ -59,6 +59,21 @@ const CommentView = () => {
     }
   };
 
+  const handleOnSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    const upadtedComment = { ...currentComment };
+    if (e.target.value === 'default') {
+      upadtedComment.shadowed = comments.find(
+        (comment) => comment.uuid === uuid,
+      )?.shadowed;
+    } else {
+      switch (e.target.value) {
+        case 'shadow':
+          upadtedComment.shadowed = true;
+      }
+    }
+    setCurrentComment({ ...(upadtedComment as CommentTypes) });
+  };
+
   if (isLoading) {
     return <Loading>Loading...</Loading>;
   }
@@ -114,6 +129,7 @@ const CommentView = () => {
                     name="commentAction"
                     id="commentAction"
                     defaultValue="default"
+                    onChange={handleOnSelect}
                   >
                     <option value="default" key="default">
                       --choose action--
