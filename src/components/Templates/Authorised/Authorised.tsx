@@ -23,6 +23,7 @@ const Authorised = () => {
         <Route path="users" element={<Users />} />
         <Route path="users/:uuid" element={<UserView />} />
         <Route path="comments" element={<CommentsView />} />
+        <Route path="comments/:uuid" element={<p>Lorem Ipsum</p>} />
       </Routes>
     </>
   );
