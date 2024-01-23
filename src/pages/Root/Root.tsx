@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setUser, useGetUsersQuery } from '../../store/index.ts';
 import Authorised from '../../components/Templates/Authorised/Authorised.tsx';
@@ -16,6 +16,27 @@ const Root = () => {
   const user = useSelector<RootState>((state) => state.user);
   const { data: users = [], isLoading } = useGetUsersQuery();
 
+  useEffect(() => {
+    if (localStorage.getItem('username') && localStorage.getItem('id')) {
+      const authorised = users.find(
+        (user) => user.uuid === localStorage.getItem('id'),
+      );
+
+      if (authorised) {
+        if (!authorised.confirmed) {
+          alert(
+            'You are not confirmed. Please check your email and follow instructions.',
+          );
+        }
+
+        if (authorised.blocked) {
+          alert('Your account is blocked. Please contact administation.');
+        }
+        dispatch(setUser({ ...authorised, isAuthorised: true }));
+      }
+    }
+  }, [dispatch, users]);
+
   const handleMockLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
     const authorised = users.find(
@@ -24,6 +45,8 @@ const Root = () => {
 
     if (authorised) {
       dispatch(setUser({ ...authorised, isAuthorised: true }));
+      localStorage.setItem('username', authorised.username);
+      localStorage.setItem('id', authorised.uuid);
     } else alert("You're not authorised");
   };
 
