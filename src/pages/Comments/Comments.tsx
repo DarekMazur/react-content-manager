@@ -8,6 +8,7 @@ import Heading from '../../components/Atoms/Heading/Heading';
 import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper';
 import { commentsTableHeaders } from '../../utils/data';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
+import { Main } from '../../components/Organisms/Main/Main.styles';
 
 const CommentsView = () => {
   const { data: comments = [], isLoading } = useGetCommentsQuery();
@@ -43,12 +44,7 @@ const CommentsView = () => {
   }
 
   return (
-    <main
-      style={{
-        paddingBottom: '11rem',
-        minHeight: `calc(100vh - ${wrapperHeight}px)`,
-      }}
-    >
+    <Main $minHeight={wrapperHeight}>
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Comments
       </Heading>
@@ -59,7 +55,7 @@ const CommentsView = () => {
         content={availableComments}
         headers={commentsTableHeaders}
       />
-    </main>
+    </Main>
   );
 };
 

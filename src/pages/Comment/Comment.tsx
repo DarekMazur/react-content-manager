@@ -18,6 +18,7 @@ import Heading from '../../components/Atoms/Heading/Heading';
 import InputCheckbox from '../../components/Molecules/InputCheckbox/InputCheckbox';
 import { StyledImageControler } from '../../components/Molecules/UserImageControler/UserImageControler.styles';
 import { StyledInputSelect } from '../../components/Molecules/InputSelect/InputSelect.styles';
+import { Main } from '../../components/Organisms/Main/Main.styles';
 
 const CommentView = () => {
   const { uuid } = useParams();
@@ -79,12 +80,7 @@ const CommentView = () => {
   }
 
   return (
-    <main
-      style={{
-        paddingBottom: '11rem',
-        minHeight: `calc(100vh - ${wrapperHeight}px)`,
-      }}
-    >
+    <Main $minHeight={wrapperHeight}>
       {currentComment && userData ? (
         (currentUser as UserTypes).uuid === uuid ||
         (currentUser as UserTypes).role.type === 'admin' ||
@@ -191,7 +187,7 @@ const CommentView = () => {
           "You're not authorised"
         )
       ) : null}
-    </main>
+    </Main>
   );
 };
 

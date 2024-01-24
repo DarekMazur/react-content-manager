@@ -8,6 +8,7 @@ import { ArticleDataTypes, UserTypes } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
+import { Main } from '../../components/Organisms/Main/Main.styles.ts';
 
 const Articles = () => {
   const { data: articles = [], isLoading } = useGetArticlesQuery();
@@ -41,12 +42,7 @@ const Articles = () => {
   }
 
   return (
-    <main
-      style={{
-        paddingBottom: '11rem',
-        minHeight: `calc(100vh - ${wrapperHeight}px)`,
-      }}
-    >
+    <Main $minHeight={wrapperHeight}>
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Articles
       </Heading>
@@ -59,7 +55,7 @@ const Articles = () => {
         content={availableArticles}
         headers={articlesTableHeaders}
       />
-    </main>
+    </Main>
   );
 };
 
