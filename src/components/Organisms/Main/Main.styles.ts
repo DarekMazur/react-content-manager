@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Main = styled.main<{ $minHeight: number }>`
+interface MainTypes {
+  $minHeight: number;
+}
+
+export const Main = styled.main<MainTypes>`
   padding-bottom: 11rem;
-  min-height: ${({ $minHeight }) => `calc(100vh - ${$minHeight}px`};
+  min-height: ${({ $minHeight }) => `${$minHeight}px`};
 `;

@@ -34,7 +34,7 @@ const Article = () => {
   }
 
   return (
-    <Main $minHeight={wrapperHeight}>
+    <Main $minHeight={window.innerHeight - wrapperHeight}>
       {currentArticle ? (
         <section>
           <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">

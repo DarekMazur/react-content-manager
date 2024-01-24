@@ -26,7 +26,7 @@ const Users = () => {
   }
 
   return (
-    <Main $minHeight={wrapperHeight}>
+    <Main $minHeight={window.innerHeight - wrapperHeight}>
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Users
       </Heading>
