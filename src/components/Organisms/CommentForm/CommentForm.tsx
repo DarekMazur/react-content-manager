@@ -29,12 +29,17 @@ import {
   CommentStatus,
   StyledCommentForm,
 } from './CommentForm.styles.ts';
+import Modal from '../Modal/Modal.tsx';
 
 const CommentForm = () => {
   const { uuid } = useParams();
   const navigate = useNavigate();
-  const [updateUser] = useUpdateUserMutation();
-  const [updateComment] = useUpdateCommentMutation();
+  const [
+    updateUser,
+    { status: userStatus, isSuccess: userIsSuccess, isLoading: loadingUser },
+  ] = useUpdateUserMutation();
+  const [updateComment, { status, isSuccess, isLoading }] =
+    useUpdateCommentMutation();
   const [removeComment] = useRemoveCommentMutation();
   const { data: comments = [] } = useGetCommentsQuery();
   const { data: users = [] } = useGetUsersQuery();
@@ -48,6 +53,10 @@ const CommentForm = () => {
     authorBlocked: false,
     commentShadowed: false,
   });
+  const [modal, setModal] = useState(false);
+  const [updatedElement, setUpadatedElement] = useState<string | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     setInitialData({
@@ -75,6 +84,12 @@ const CommentForm = () => {
       setCurrentComment(comments.find((comment) => comment.uuid === uuid));
     }
   }, [comments, uuid]);
+
+  useEffect(() => {
+    if (isLoading || loadingUser) {
+      setModal(true);
+    }
+  }, [isLoading, loadingUser]);
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -118,8 +133,11 @@ const CommentForm = () => {
       removeComment([currentComment?.id]);
       navigate(-1);
     }
-    console.log('Submit');
-    updateUser(userData);
+    if (userData?.blocked !== initialData.authorBlocked) {
+      setUpadatedElement('User');
+      return updateUser(userData);
+    }
+    setUpadatedElement('Comment');
     updateComment(currentComment);
   };
 
@@ -134,8 +152,20 @@ const CommentForm = () => {
     navigate(-1);
   };
 
+  const handleCloseModal = () => {
+    setModal(false);
+  };
+
   return (
     <>
+      {modal && updatedElement ? (
+        <Modal
+          isSuccess={isSuccess || userIsSuccess}
+          isError={status === 'rejected' || userStatus === 'rejected'}
+          handleCloseModal={handleCloseModal}
+          dataType={updatedElement}
+        />
+      ) : null}
       {currentComment && userData ? (
         <StyledCommentForm
           onSubmit={handleOnSubmit}
