@@ -10,6 +10,7 @@ export const theme = {
     darkBluePopup: '#1d3557ba',
     red: '#E63946',
     green: '#42941B',
+    yellow: '#c9bd16',
   },
 
   fonts: {

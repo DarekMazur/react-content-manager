@@ -21,6 +21,14 @@ import P from '../../Atoms/Paragraph/P';
 import { StyledImageControler } from '../../Molecules/UserImageControler/UserImageControler.styles';
 import InputCheckbox from '../../Molecules/InputCheckbox/InputCheckbox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  CommentContent,
+  CommentDetailList,
+  CommentDetails,
+  CommentFormWrapper,
+  CommentStatus,
+  StyledCommentForm,
+} from './CommentForm.styles.ts';
 
 const CommentForm = () => {
   const { uuid } = useParams();
@@ -129,24 +137,21 @@ const CommentForm = () => {
   return (
     <>
       {currentComment && userData ? (
-        <form onSubmit={handleOnSubmit}>
+        <StyledCommentForm
+          onSubmit={handleOnSubmit}
+          style={{ width: '80vw', margin: 'auto' }}
+        >
           <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
             Comment #{currentComment.id}
           </Heading>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              padding: '4rem',
-            }}
-          >
-            <div style={{ maxWidth: '70vw' }}>
+          <CommentFormWrapper>
+            <CommentDetails>
               <P size="lm" weight="bold">
                 Comment's details
               </P>
-              <ul style={{ listStyle: 'none', padding: '0' }}>
+              <CommentDetailList>
                 <li>
-                  Article:{' '}
+                  Commented article:{' '}
                   <InLink
                     target={`/articles/${currentComment?.article.id}`}
                     name={currentComment?.article.title}
@@ -157,18 +162,20 @@ const CommentForm = () => {
                   {getDate((currentComment as CommentTypes).publishedAt)}
                 </li>
                 <li>
+                  Status:{' '}
                   {initialData.commentShadowed ? (
-                    <span style={{ color: 'red', fontWeight: 'bold' }}>
-                      SHADOW BANNED
-                    </span>
+                    <CommentStatus $isRed>SHADOW BANNED</CommentStatus>
                   ) : (
-                    <span style={{ color: 'green', fontWeight: 'bold' }}>
-                      Visible for everyone
-                    </span>
+                    <CommentStatus>Visible for everyone</CommentStatus>
                   )}
                 </li>
-              </ul>
-              <p>{currentComment?.content}</p>
+              </CommentDetailList>
+              <CommentContent>
+                <FontAwesomeIcon icon={['fas', 'quote-left']} />
+                <P>{currentComment?.content}</P>
+                <FontAwesomeIcon icon={['fas', 'quote-right']} />
+              </CommentContent>
+
               <FormWrapper $direction="column" $gap={0.4} $maxWidth={20}>
                 <label htmlFor="commentAction">Action</label>
                 <StyledInputSelect
@@ -183,12 +190,12 @@ const CommentForm = () => {
                   {initialData.commentShadowed ? (
                     <option value="turnon">turn on</option>
                   ) : (
-                    <option value="shadow">shadow</option>
+                    <option value="shadow">shadow ban</option>
                   )}
                   <option value="delete">delete</option>
                 </StyledInputSelect>
               </FormWrapper>
-            </div>
+            </CommentDetails>
             <aside>
               <P size="lm" weight="bold">
                 Comment's author
@@ -206,17 +213,11 @@ const CommentForm = () => {
               <P>
                 Status:{' '}
                 {initialData.authorBlocked ? (
-                  <span style={{ color: 'red', fontWeight: 'bold' }}>
-                    BLOCKED
-                  </span>
+                  <CommentStatus $isRed>BLOCKED</CommentStatus>
                 ) : userData.confirmed ? (
-                  <span style={{ color: 'green', fontWeight: 'bold' }}>
-                    ACTIVE
-                  </span>
+                  <CommentStatus>ACTIVE</CommentStatus>
                 ) : (
-                  <span style={{ color: 'gold', fontWeight: 'bold' }}>
-                    NOT ACTIVATED
-                  </span>
+                  <CommentStatus $isYellow>NOT ACTIVATED</CommentStatus>
                 )}
               </P>
               <InputCheckbox
@@ -227,7 +228,7 @@ const CommentForm = () => {
                 handleOnChange={(e) => handleOnChange(e)}
               />
             </aside>
-          </div>
+          </CommentFormWrapper>
           <FormButtonWrapper>
             <FormButton $type="submit" type="submit">
               <FontAwesomeIcon icon={['fas', 'edit']} /> Save
@@ -236,7 +237,7 @@ const CommentForm = () => {
               <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
             </FormButton>
           </FormButtonWrapper>
-        </form>
+        </StyledCommentForm>
       ) : null}
     </>
   );
