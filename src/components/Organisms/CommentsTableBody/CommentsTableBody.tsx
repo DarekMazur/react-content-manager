@@ -9,6 +9,7 @@ import {
 import Checkbox from '../../Molecules/Checkbox/Checkbox';
 import { getDate } from '../../../utils/methods/getDate';
 import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons';
+import StatusInfo from '../../Atoms/StatusInfo/StatusInfo';
 
 const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
   const dispatch = useDispatch();
@@ -66,6 +67,16 @@ const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
             />
           </td>
           <td>{comment.id}</td>
+          <td
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 1rem',
+            }}
+          >
+            <StatusInfo status={!comment.shadowed} />
+          </td>
           <td style={{ textAlign: 'left' }}>{comment.author.username}</td>
           <td style={{ textAlign: 'left' }}>{comment.article.title}</td>
           <td style={{ textAlign: 'left' }}>

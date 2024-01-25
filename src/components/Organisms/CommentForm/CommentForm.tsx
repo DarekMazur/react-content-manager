@@ -90,6 +90,10 @@ const CommentForm = () => {
           upadtedComment.shadowed = true;
           setToDelete(false);
           break;
+        case 'turnon':
+          upadtedComment.shadowed = false;
+          setToDelete(false);
+          break;
         case 'delete':
           setToDelete(true);
           break;
@@ -153,9 +157,15 @@ const CommentForm = () => {
                   {getDate((currentComment as CommentTypes).publishedAt)}
                 </li>
                 <li>
-                  {initialData.commentShadowed
-                    ? 'SHADOW BANNED'
-                    : 'Visible for everyone'}
+                  {initialData.commentShadowed ? (
+                    <span style={{ color: 'red', fontWeight: 'bold' }}>
+                      SHADOW BANNED
+                    </span>
+                  ) : (
+                    <span style={{ color: 'green', fontWeight: 'bold' }}>
+                      Visible for everyone
+                    </span>
+                  )}
                 </li>
               </ul>
               <p>{currentComment?.content}</p>
@@ -170,7 +180,11 @@ const CommentForm = () => {
                   <option value="default" key="default">
                     --choose action--
                   </option>
-                  <option value="shadow">shadow</option>
+                  {initialData.commentShadowed ? (
+                    <option value="turnon">turn on</option>
+                  ) : (
+                    <option value="shadow">shadow</option>
+                  )}
                   <option value="delete">delete</option>
                 </StyledInputSelect>
               </FormWrapper>
