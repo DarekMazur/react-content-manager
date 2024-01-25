@@ -1,5 +1,11 @@
 import { useNavigate, useParams } from 'react-router';
-import { useGetCommentsQuery, useGetUsersQuery } from '../../../store';
+import {
+  useGetCommentsQuery,
+  useGetUsersQuery,
+  useRemoveCommentMutation,
+  useUpdateCommentMutation,
+  useUpdateUserMutation,
+} from '../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { CommentTypes, UserTypes } from '../../../types/dataTypes';
 import Heading from '../../Atoms/Heading/Heading';
@@ -19,6 +25,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const CommentForm = () => {
   const { uuid } = useParams();
   const navigate = useNavigate();
+  const [updateUser] = useUpdateUserMutation();
+  const [updateComment] = useUpdateCommentMutation();
+  const [removeComment] = useRemoveCommentMutation();
   const { data: comments = [] } = useGetCommentsQuery();
   const { data: users = [] } = useGetUsersQuery();
 
@@ -26,6 +35,7 @@ const CommentForm = () => {
   const [currentComment, setCurrentComment] = useState<
     CommentTypes | undefined
   >(undefined);
+  const [toDelete, setToDelete] = useState(false);
 
   useEffect(() => {
     if (currentComment && users.length > 0) {
@@ -61,6 +71,13 @@ const CommentForm = () => {
       switch (e.target.value) {
         case 'shadow':
           upadtedComment.shadowed = true;
+          setToDelete(false);
+          break;
+        case 'delete':
+          setToDelete(true);
+          break;
+        default:
+          setToDelete(false);
       }
     }
     setCurrentComment({ ...(upadtedComment as CommentTypes) });
@@ -68,7 +85,13 @@ const CommentForm = () => {
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (toDelete) {
+      removeComment([currentComment?.id]);
+      navigate(-1);
+    }
     console.log('Submit');
+    updateUser(userData);
+    updateComment(currentComment);
   };
 
   const handleOnCancel = () => {

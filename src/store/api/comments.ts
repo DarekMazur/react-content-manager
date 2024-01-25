@@ -12,6 +12,14 @@ export const commentsApi = createApi({
       query: () => 'comments',
       providesTags: ['Comments'],
     }),
+    updateComment: builder.mutation({
+      query: (body) => ({
+        url: `comments/${body.id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['Comments'],
+    }),
     removeComment: builder.mutation({
       query: (id) => ({
         url: `comments/${id}`,
@@ -34,6 +42,7 @@ export const commentsApi = createApi({
 
 export const {
   useGetCommentsQuery,
+  useUpdateCommentMutation,
   useRemoveCommentMutation,
   useRemoveCommentsMutation,
 } = commentsApi;
