@@ -36,11 +36,28 @@ const CommentForm = () => {
     CommentTypes | undefined
   >(undefined);
   const [toDelete, setToDelete] = useState(false);
+  const [initialData, setInitialData] = useState({
+    authorBlocked: false,
+    commentShadowed: false,
+  });
+
+  useEffect(() => {
+    setInitialData({
+      authorBlocked: !!users.find(
+        (user) => user.uuid === currentComment?.author.uuid,
+      )?.blocked,
+      commentShadowed: !!comments.find((comment) => comment.uuid === uuid)
+        ?.shadowed,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users, comments, uuid]);
 
   useEffect(() => {
     if (currentComment && users.length > 0) {
       setUserData(
-        users.find((user) => user.uuid === currentComment.author.uuid),
+        users.find(
+          (user) => (user as UserTypes).uuid === currentComment.author.uuid,
+        ),
       );
     }
   }, [currentComment, users]);
@@ -136,7 +153,7 @@ const CommentForm = () => {
                   {getDate((currentComment as CommentTypes).publishedAt)}
                 </li>
                 <li>
-                  {currentComment.shadowed
+                  {initialData.commentShadowed
                     ? 'SHADOW BANNED'
                     : 'Visible for everyone'}
                 </li>
@@ -174,7 +191,7 @@ const CommentForm = () => {
               <P>Role: {currentComment?.author.role.name}</P>
               <P>
                 Status:{' '}
-                {userData.blocked ? (
+                {initialData.authorBlocked ? (
                   <span style={{ color: 'red', fontWeight: 'bold' }}>
                     BLOCKED
                   </span>
