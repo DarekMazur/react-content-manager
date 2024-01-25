@@ -8,6 +8,7 @@ import ArticleForm from '../../components/Organisms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
 import P from '../../components/Atoms/Paragraph/P';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
+import { Main } from '../../components/Organisms/Main/Main.styles';
 
 const Article = () => {
   const { id } = useParams();
@@ -33,12 +34,7 @@ const Article = () => {
   }
 
   return (
-    <main
-      style={{
-        paddingBottom: '11rem',
-        minHeight: `calc(100vh - ${wrapperHeight}px)`,
-      }}
-    >
+    <Main $minHeight={window.innerHeight - wrapperHeight}>
       {currentArticle ? (
         <section>
           <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
@@ -53,7 +49,7 @@ const Article = () => {
           )}
         </section>
       ) : null}
-    </main>
+    </Main>
   );
 };
 

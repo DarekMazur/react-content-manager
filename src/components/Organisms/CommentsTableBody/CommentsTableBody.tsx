@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { CommentTypes } from '../../../types/dataTypes';
+import { CommentTypes, UserTypes } from '../../../types/dataTypes';
 import { useEffect, useState } from 'react';
 import {
   RootState,
@@ -9,9 +9,11 @@ import {
 import Checkbox from '../../Molecules/Checkbox/Checkbox';
 import { getDate } from '../../../utils/methods/getDate';
 import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons';
+import StatusInfo from '../../Atoms/StatusInfo/StatusInfo';
 
 const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
   const dispatch = useDispatch();
+  const currentUser = useSelector<RootState>((state) => state.user);
 
   const selectedComments = useSelector<RootState>(
     (state) => state.selectedComments,
@@ -66,6 +68,24 @@ const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
             />
           </td>
           <td>{comment.id}</td>
+          <td
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 1rem',
+            }}
+          >
+            <StatusInfo
+              status={
+                (currentUser as UserTypes).role.id === 3 ||
+                ((currentUser as UserTypes).role.id === 2 &&
+                  (currentUser as UserTypes).uuid === comment.author.uuid)
+                  ? true
+                  : !comment.shadowed
+              }
+            />
+          </td>
           <td style={{ textAlign: 'left' }}>{comment.author.username}</td>
           <td style={{ textAlign: 'left' }}>{comment.article.title}</td>
           <td style={{ textAlign: 'left' }}>

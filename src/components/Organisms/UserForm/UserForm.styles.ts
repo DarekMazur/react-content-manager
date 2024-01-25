@@ -4,6 +4,7 @@ interface FormTypes {
   $gap?: number;
   $direction?: string;
   $minWidth?: number;
+  $maxWidth?: number;
 }
 
 interface FormButtonTypes {
@@ -22,6 +23,7 @@ export const FormWrapper = styled.div<FormTypes>`
   flex-direction: ${({ $direction }) => ($direction ? $direction : 'row')};
   gap: ${({ $gap }) => ($gap ? `${$gap}rem` : 'unset')};
   min-width: ${({ $minWidth }) => ($minWidth ? `${$minWidth}rem` : 'unset')};
+  max-width: ${({ $maxWidth }) => ($maxWidth ? `${$maxWidth}rem` : 'unset')};
 `;
 
 export const FormButtonWrapper = styled.div`

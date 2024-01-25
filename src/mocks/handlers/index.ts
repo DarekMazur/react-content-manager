@@ -1,10 +1,30 @@
 import { http, HttpResponse } from 'msw';
 import { db } from '../db';
-import { ArticleDataTypes, UserTypes } from '../../types/dataTypes';
+import {
+  ArticleDataTypes,
+  CommentTypes,
+  UserTypes,
+} from '../../types/dataTypes';
 
 export const handlers = [
   http.get('/api/comments', () => {
     return HttpResponse.json(db.comment.getAll());
+  }),
+  http.patch('/api/comments/:id', async ({ request }) => {
+    const updatedComment = (await request.json()) as CommentTypes;
+    if (updatedComment) {
+      db.comment.update({
+        where: {
+          uuid: {
+            equals: updatedComment.uuid,
+          },
+        },
+        data: {
+          shadowed: updatedComment.shadowed,
+        },
+      });
+      return HttpResponse.json(updatedComment, { status: 201 });
+    }
   }),
   http.delete('/api/comments/:commentId', async ({ params }) => {
     const { commentId } = params;

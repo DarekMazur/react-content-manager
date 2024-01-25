@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 interface StyledStatusProps {
   $status: boolean;
+  $isRed?: boolean;
 }
 
 export const StyledStatus = styled.span<StyledStatusProps>`
@@ -11,7 +12,11 @@ export const StyledStatus = styled.span<StyledStatusProps>`
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 50%;
-  background-color: ${({ $status, theme }) =>
-    $status ? theme.colors.green : theme.colors.brightBlue};
+  background-color: ${({ $status, $isRed, theme }) =>
+    $status
+      ? theme.colors.green
+      : $isRed
+        ? theme.colors.red
+        : theme.colors.brightBlue};
   padding: 0.2rem;
 `;

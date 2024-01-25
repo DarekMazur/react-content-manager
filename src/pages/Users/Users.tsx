@@ -8,6 +8,7 @@ import { UserTypes } from '../../types/dataTypes';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
+import { Main } from '../../components/Organisms/Main/Main.styles';
 
 const Users = () => {
   const { data: users = [], isLoading } = useGetUsersQuery();
@@ -25,12 +26,7 @@ const Users = () => {
   }
 
   return (
-    <main
-      style={{
-        paddingBottom: '11rem',
-        minHeight: `calc(100vh - ${wrapperHeight}px)`,
-      }}
-    >
+    <Main $minHeight={window.innerHeight - wrapperHeight}>
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Users
       </Heading>
@@ -38,7 +34,7 @@ const Users = () => {
         <MultiAction counter={(selectedUsers as UserTypes[]).length} />
       ) : null}
       <TableWrapper content={users} headers={usersTableHeaders} />
-    </main>
+    </Main>
   );
 };
 
