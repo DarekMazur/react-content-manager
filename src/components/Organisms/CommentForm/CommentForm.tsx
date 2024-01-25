@@ -1,6 +1,6 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useGetCommentsQuery, useGetUsersQuery } from '../../../store';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { CommentTypes, UserTypes } from '../../../types/dataTypes';
 import Heading from '../../Atoms/Heading/Heading';
 import InLink from '../../Atoms/InLink/InLink';
@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const CommentForm = () => {
   const { uuid } = useParams();
+  const navigate = useNavigate();
   const { data: comments = [] } = useGetCommentsQuery();
   const { data: users = [] } = useGetUsersQuery();
 
@@ -65,10 +66,26 @@ const CommentForm = () => {
     setCurrentComment({ ...(upadtedComment as CommentTypes) });
   };
 
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Submit');
+  };
+
+  const handleOnCancel = () => {
+    console.log('Cancel');
+    setUserData(
+      users.find(
+        (user) => user.uuid === (currentComment as CommentTypes).author.uuid,
+      ),
+    );
+    setCurrentComment(comments.find((comment) => comment.uuid === uuid));
+    navigate(-1);
+  };
+
   return (
     <>
       {currentComment && userData ? (
-        <>
+        <form onSubmit={handleOnSubmit}>
           <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
             Comment #{currentComment.id}
           </Heading>
@@ -161,11 +178,11 @@ const CommentForm = () => {
             <FormButton $type="submit" type="submit">
               <FontAwesomeIcon icon={['fas', 'edit']} /> Save
             </FormButton>
-            <FormButton $type="reset" type="reset">
+            <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
               <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
             </FormButton>
           </FormButtonWrapper>
-        </>
+        </form>
       ) : null}
     </>
   );
