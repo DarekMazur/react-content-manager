@@ -191,14 +191,16 @@ const CommentForm = () => {
                   Publication date:{' '}
                   {getDate((currentComment as CommentTypes).publishedAt)}
                 </li>
-                <li>
-                  Status:{' '}
-                  {initialData.commentShadowed ? (
-                    <CommentStatus $isRed>SHADOW BANNED</CommentStatus>
-                  ) : (
-                    <CommentStatus>Visible for everyone</CommentStatus>
-                  )}
-                </li>
+                {userData.role.id !== 3 ? (
+                  <li>
+                    Status:{' '}
+                    {initialData.commentShadowed ? (
+                      <CommentStatus $isRed>SHADOW BANNED</CommentStatus>
+                    ) : (
+                      <CommentStatus>Visible for everyone</CommentStatus>
+                    )}
+                  </li>
+                ) : null}
               </CommentDetailList>
               <CommentContent>
                 <FontAwesomeIcon icon={['fas', 'quote-left']} />
@@ -217,11 +219,14 @@ const CommentForm = () => {
                   <option value="default" key="default">
                     --choose action--
                   </option>
-                  {initialData.commentShadowed ? (
-                    <option value="turnon">turn on</option>
-                  ) : (
-                    <option value="shadow">shadow ban</option>
-                  )}
+                  {userData.uuid !== currentComment.author.uuid ||
+                  userData.role.id !== 1 ? (
+                    initialData.commentShadowed ? (
+                      <option value="turnon">turn on</option>
+                    ) : (
+                      <option value="shadow">shadow ban</option>
+                    )
+                  ) : null}
                   <option value="delete">delete</option>
                 </StyledInputSelect>
               </FormWrapper>

@@ -45,7 +45,8 @@ const CommentView = () => {
   return (
     <Main $minHeight={wrapperHeight}>
       {currentComment && userData ? (
-        (currentUser as UserTypes).uuid === uuid ||
+        (currentUser as UserTypes).uuid ===
+          currentComment.article.author.uuid ||
         (currentUser as UserTypes).role.type === 'admin' ||
         (currentUser as UserTypes).role.type === 'redactor' ? (
           <CommentForm />
