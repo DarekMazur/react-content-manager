@@ -76,4 +76,10 @@ export const db = factory({
     ],
     author: oneOf('user'),
   },
+  category: {
+    uuid: primaryKey(faker.string.uuid),
+    id: () => faker.number.int(),
+    title: () => faker.lorem.words({ min: 1, max: 3 }),
+    description: () => faker.lorem.words({ min: 0, max: 14 }),
+  },
 });
