@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState, useGetArticlesQuery } from '../../store/index.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { ArticleDataTypes, UserTypes } from '../../types/dataTypes.ts';
-import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper.tsx';
+import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
 import { articlesTableHeaders } from '../../utils/data.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 import { Main } from '../../components/Organisms/Main/Main.styles.ts';

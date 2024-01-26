@@ -127,6 +127,7 @@ export const handlers = [
           title: updatedArticle.title,
           description: updatedArticle.description,
           body: updatedArticle.body,
+          cover: updatedArticle.cover,
           createdAt: updatedArticle.createdAt,
           updatedAt: updatedArticle.updatedAt,
           publishedAt: updatedArticle.publishedAt,

@@ -1,6 +1,6 @@
 import { ChangeEvent, FC } from 'react';
 import { StyledInput } from './Input.styles.ts';
-import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
+import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/index.ts';
 import { UserTypes } from '../../../types/dataTypes.ts';

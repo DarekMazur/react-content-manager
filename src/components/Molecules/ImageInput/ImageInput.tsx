@@ -1,11 +1,11 @@
 import { ChangeEvent, FC } from 'react';
-import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
+import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes';
 
 interface ImageTypes {
-  uuid: string;
+  uuid?: string;
   // eslint-disable-next-line no-unused-vars
   onFilesChange(file: File[]): void;
 }

@@ -1,17 +1,17 @@
-import { getDate } from '../../../utils/methods/getDate';
-import StatusInfo from '../../Atoms/StatusInfo/StatusInfo';
-import Checkbox from '../../Molecules/Checkbox/Checkbox';
-import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { ArticleDataTypes } from '../../../../../types/dataTypes';
 import {
   RootState,
   addSelected,
   removeSelected,
   useUpdateArticleMutation,
-} from '../../../store';
-import { useEffect, useState } from 'react';
-import { ArticleDataTypes } from '../../../types/dataTypes';
-import { db } from '../../../mocks/db';
+} from '../../../../../store';
+import Checkbox from '../../../../Molecules/Checkbox/Checkbox';
+import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
+import { getDate } from '../../../../../utils/methods/getDate';
+import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
+import { db } from '../../../../../mocks/db';
 
 const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
   const dispatch = useDispatch();

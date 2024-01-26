@@ -4,16 +4,16 @@ import {
   addUserSelected,
   removeUserSelected,
   useUpdateUserMutation,
-} from '../../../store';
-import { UserTypes } from '../../../types/dataTypes';
-import Checkbox from '../../Molecules/Checkbox/Checkbox';
-import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons';
+} from '../../../../../store';
+import { UserTypes } from '../../../../../types/dataTypes';
+import Checkbox from '../../../../Molecules/Checkbox/Checkbox';
+import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import { useEffect, useState } from 'react';
 
 const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
   const [updateUser] = useUpdateUserMutation();
   const dispatch = useDispatch();
-  
+
   const currentUser = useSelector<RootState>((state) => state.user);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
@@ -25,10 +25,17 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
     setCheckedUsers(selectedUsers as UserTypes[]);
   }, [selectedUsers]);
 
-  const handleClickSelect = (uuid: string, _type: string | undefined, isDisabled: boolean | undefined) => {
+  const handleClickSelect = (
+    uuid: string,
+    _type: string | undefined,
+    isDisabled: boolean | undefined,
+  ) => {
     if (!isDisabled) {
       const checkedElement = data.find((user) => user.uuid === uuid);
-      if (checkedElement && checkedUsers.includes(checkedElement as UserTypes)) {
+      if (
+        checkedElement &&
+        checkedUsers.includes(checkedElement as UserTypes)
+      ) {
         dispatch(removeUserSelected(checkedElement));
         setCheckedUsers(checkedUsers.filter((user) => user.uuid !== uuid));
       } else if (checkedElement) {
@@ -39,7 +46,6 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
         ]);
       }
     }
-    
   };
 
   const handleClickSwitch = (uuid: string, type: string | undefined) => {

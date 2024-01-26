@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import Heading from '../../components/Atoms/Heading/Heading';
 import { RootState, useGetUsersQuery } from '../../store';
-import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper';
+import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
 import { usersTableHeaders } from '../../utils/data';
 import { UserTypes } from '../../types/dataTypes';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';

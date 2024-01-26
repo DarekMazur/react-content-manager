@@ -1,8 +1,8 @@
 import ReactPaginate from 'react-paginate';
-import Wrapper from '../Wrapper/Wrapper';
+import Wrapper from '../../Wrapper/Wrapper';
 import Table from '../Table/Table';
-import EntriesNumberPicker from '../../Molecules/EntriesNumberPicker/EntriesNumberPicker';
-import { StyledReactPaginate } from '../../Molecules/ReactPaginate/ReactPaginate.styles';
+import EntriesNumberPicker from '../../../Molecules/EntriesNumberPicker/EntriesNumberPicker';
+import { StyledReactPaginate } from '../../../Molecules/ReactPaginate/ReactPaginate.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
@@ -10,7 +10,7 @@ import {
   ArticleDataTypes,
   CommentTypes,
   UserTypes,
-} from '../../../types/dataTypes';
+} from '../../../../types/dataTypes';
 
 const TableWrapper = ({
   content,

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { CommentTypes, UserTypes } from '../../types/dataTypes';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import Heading from '../../components/Atoms/Heading/Heading';
-import TableWrapper from '../../components/Organisms/TableWrapper/TableWrapper';
+import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
 import { commentsTableHeaders } from '../../utils/data';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 import { Main } from '../../components/Organisms/Main/Main.styles';

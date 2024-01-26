@@ -5,21 +5,21 @@ import {
   useRemoveCommentMutation,
   useUpdateCommentMutation,
   useUpdateUserMutation,
-} from '../../../store';
+} from '../../../../store/index.ts';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { CommentTypes, UserTypes } from '../../../types/dataTypes';
-import Heading from '../../Atoms/Heading/Heading';
-import InLink from '../../Atoms/InLink/InLink';
-import { getDate } from '../../../utils/methods/getDate';
+import { CommentTypes, UserTypes } from '../../../../types/dataTypes.ts';
+import Heading from '../../../Atoms/Heading/Heading.tsx';
+import InLink from '../../../Atoms/InLink/InLink.tsx';
+import { getDate } from '../../../../utils/methods/getDate.ts';
 import {
   FormButton,
   FormButtonWrapper,
   FormWrapper,
 } from '../UserForm/UserForm.styles';
-import { StyledInputSelect } from '../../Molecules/InputSelect/InputSelect.styles';
-import P from '../../Atoms/Paragraph/P';
-import { StyledImageControler } from '../../Molecules/UserImageControler/UserImageControler.styles';
-import InputCheckbox from '../../Molecules/InputCheckbox/InputCheckbox';
+import { StyledInputSelect } from '../../../Molecules/InputSelect/InputSelect.styles.ts';
+import P from '../../../Atoms/Paragraph/P.tsx';
+import { StyledImageControler } from '../../../Molecules/ImageControler/ImageControler.styles.ts';
+import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   CommentContent,
@@ -29,7 +29,7 @@ import {
   CommentStatus,
   StyledCommentForm,
 } from './CommentForm.styles.ts';
-import Modal from '../Modal/Modal.tsx';
+import Modal from '../../Modal/Modal.tsx';
 
 const CommentForm = () => {
   const { uuid } = useParams();

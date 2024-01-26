@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { CommentTypes, UserTypes } from '../../../types/dataTypes';
+import { CommentTypes, UserTypes } from '../../../../../types/dataTypes';
 import { useEffect, useState } from 'react';
 import {
   RootState,
   addCommentSelected,
   removeCommentSelected,
-} from '../../../store';
-import Checkbox from '../../Molecules/Checkbox/Checkbox';
-import { getDate } from '../../../utils/methods/getDate';
-import TableActionIcons from '../../Molecules/TableActionIcons/TableActionIcons';
-import StatusInfo from '../../Atoms/StatusInfo/StatusInfo';
+} from '../../../../../store';
+import Checkbox from '../../../../Molecules/Checkbox/Checkbox';
+import { getDate } from '../../../../../utils/methods/getDate';
+import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
+import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
 
 const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
   const dispatch = useDispatch();
