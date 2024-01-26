@@ -8,6 +8,7 @@ import { ArticleDataTypes } from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
 import { FormButton, FormButtonWrapper } from '../UserForm/UserForm.styles';
+import { StyledArticleForm } from './ArticleForm.styles.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox';
@@ -15,6 +16,8 @@ import Modal from '../../Modal/Modal';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
 import { editorConfiguration } from '../../../../utils/helpers/editorConfig';
+import P from '../../../Atoms/Paragraph/P';
+import ImageControler from '../../../Molecules/ImageControler/ImageControler';
 
 const ArticleForm = () => {
   const { id } = useParams();
@@ -38,6 +41,19 @@ const ArticleForm = () => {
     ArticleDataTypes | undefined
   >(currentArticle ? { ...currentArticle } : undefined);
   const [modal, setModal] = useState(false);
+  const [image, setImage] = useState<File[]>([]);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    image.length > 0 && setImageUrl(URL.createObjectURL(image[0]));
+  }, [image]);
+
+  useEffect(() => {
+    if (imageUrl) {
+      setArticleCover(imageUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageUrl]);
 
   useEffect(() => {
     if (articles && articles.length > 0) {
@@ -83,18 +99,13 @@ const ArticleForm = () => {
     fieldType: string,
   ) => {
     switch (fieldType) {
-      case 'title':
-        return setArticleTitle(e.target.value);
       case 'description':
         return setArticleDescription(e.target.value);
-      case 'body':
-        return setArticleBody(e.target.value);
-      case 'cover':
-        return setArticleCover(e.target.value);
       case 'sticky':
         return setArticleIsSticky((e.target as HTMLInputElement).checked);
     }
   };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateArticle({
@@ -107,6 +118,7 @@ const ArticleForm = () => {
       publishedAt: articlePublished ? articlePublished : new Date(),
     });
   };
+
   const handleDraft = () => {
     updateArticle({
       ...currentArticle,
@@ -118,6 +130,7 @@ const ArticleForm = () => {
       publishedAt: null,
     });
   };
+
   const handleOnCancel = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCurrentArticle(initialValues ? { ...initialValues } : undefined);
@@ -142,39 +155,35 @@ const ArticleForm = () => {
           dataType="Article"
         />
       ) : null}
-      <form
-        style={{
-          display: 'flex',
-          flexDirection: 'row-reverse',
-          gap: '2rem',
-          padding: '2rem',
-        }}
+      <StyledArticleForm
         onSubmit={(e) => handleSubmit(e)}
         onReset={(e) => handleOnCancel(e)}
       >
         {currentArticle ? (
           <>
             <aside>
-              <img src={articleCover} alt="" style={{ maxWidth: '20vw' }} />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleOnChange(e, 'cover')}
+              {/* <img src={articleCover} alt="" style={{ maxWidth: '20vw' }} /> */}
+              <ImageControler
+                image={image}
+                defaultImage={articleCover}
+                altText={`${articleTitle} cover image`}
+                imageUrl={imageUrl as string}
+                onFilesChange={(selectedFilies) => setImage(selectedFilies)}
               />
-              <p>
+              <P>
                 by{' '}
                 <InLink
                   target={`/users/${currentArticle.author.uuid}`}
                   name={currentArticle.author.username}
                 />
-              </p>
-              <p>
+              </P>
+              <P>
                 {articlePublished
                   ? `published at ${getDate(articlePublished)}`
                   : 'Draft'}
-              </p>
-              <p>category: {articleCategories}</p>
-              <p>tag: {articleTags && articleTags.map((tag) => `#${tag} `)}</p>
+              </P>
+              <P>category: {articleCategories}</P>
+              <P>tag: {articleTags && articleTags.map((tag) => `#${tag} `)}</P>
               <InputCheckbox
                 label="Sticky"
                 id="sticky"
@@ -185,31 +194,21 @@ const ArticleForm = () => {
             <div style={{ width: '80vw' }}>
               <CKEditor
                 editor={ClassicEditor}
-                data={`<h1>${articleTitle}</h1>${articleBody}`}
+                data={`<h1>${currentArticle.title}</h1>${articleBody}`}
                 config={editorConfiguration}
                 onChange={(_event, editor) =>
                   handleEditorChange(editor.getData())
                 }
               />
-              {/* <input
-                value={articleTitle}
-                style={{ width: '100%' }}
-                onChange={(e) => handleOnChange(e, 'title')}
-              /> */}
-              <label htmlFor="description">Article description</label>
-              <textarea
-                value={articleDescription}
-                id="description"
-                style={{ width: '100%' }}
-                onChange={(e) => handleOnChange(e, 'description')}
-              />
-              {/* <div>
+              <div style={{ padding: '2rem 0 1rem' }}>
+                <label htmlFor="description">Article description</label>
                 <textarea
-                  value={articleBody}
-                  onChange={(e) => handleOnChange(e, 'body')}
-                  style={{ width: '100%', minHeight: '60rem' }}
+                  value={articleDescription}
+                  id="description"
+                  style={{ width: '100%', margin: '0.5rem 0 0 ' }}
+                  onChange={(e) => handleOnChange(e, 'description')}
                 />
-              </div> */}
+              </div>
               <FormButtonWrapper>
                 <FormButton $type="reset" type="reset">
                   <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
@@ -230,7 +229,7 @@ const ArticleForm = () => {
             </div>
           </>
         ) : null}
-      </form>
+      </StyledArticleForm>
     </>
   );
 };

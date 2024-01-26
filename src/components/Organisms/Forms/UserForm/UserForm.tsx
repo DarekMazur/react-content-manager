@@ -18,7 +18,7 @@ import { UserTypes } from '../../../../types/dataTypes';
 import { roles } from '../../../../mocks/db';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import Modal from '../../Modal/Modal';
-import UserImageControler from '../../../Molecules/UserImageControler/UserImageControler';
+import ImageControler from '../../../Molecules/ImageControler/ImageControler';
 import Input from '../../../Molecules/Input/Input';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox';
 import InputSelect from '../../../Molecules/InputSelect/InputSelect';
@@ -42,6 +42,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   useEffect(() => {
     if (imageUrl && userData) {
+      console.log(imageUrl);
       const updateUser: UserTypes = { ...userData };
       updateUser.avatar = imageUrl;
       setUserData({ ...(updateUser as UserTypes) });
@@ -115,12 +116,13 @@ const UserForm = ({ uuid }: { uuid: string }) => {
         />
       ) : null}
       <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
-        <UserImageControler
+        <ImageControler
           image={image}
-          userAvatar={userData.avatar}
-          username={userData.username}
+          defaultImage={userData.avatar}
+          altText={userData.username}
           imageUrl={imageUrl as string}
           uuid={uuid}
+          isRounded
           onFilesChange={(selectedFilies) => setImage(selectedFilies)}
         />
         <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>

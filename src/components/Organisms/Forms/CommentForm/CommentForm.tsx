@@ -18,7 +18,7 @@ import {
 } from '../UserForm/UserForm.styles';
 import { StyledInputSelect } from '../../../Molecules/InputSelect/InputSelect.styles.ts';
 import P from '../../../Atoms/Paragraph/P.tsx';
-import { StyledImageControler } from '../../../Molecules/UserImageControler/UserImageControler.styles.ts';
+import { StyledImageControler } from '../../../Molecules/ImageControler/ImageControler.styles.ts';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
