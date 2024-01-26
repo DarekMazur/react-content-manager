@@ -12,6 +12,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox';
 import Modal from '../../Modal/Modal';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
+import { editorConfiguration } from '../../../../utils/helpers/editorConfig';
 
 const ArticleForm = () => {
   const { id } = useParams();
@@ -169,7 +172,26 @@ const ArticleForm = () => {
               />
             </aside>
             <div style={{ width: '80vw' }}>
-              <input
+              <CKEditor
+                editor={ClassicEditor}
+                data={`<h1>${articleTitle}</h1>${articleBody}`}
+                config={editorConfiguration}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  console.log('Editor is ready to use!', editor);
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  console.log({ event, editor, data });
+                }}
+                onBlur={(event, editor) => {
+                  console.log('Blur.', editor);
+                }}
+                onFocus={(event, editor) => {
+                  console.log('Focus.', editor);
+                }}
+              />
+              {/* <input
                 value={articleTitle}
                 style={{ width: '100%' }}
                 onChange={(e) => handleOnChange(e, 'title')}
@@ -185,7 +207,7 @@ const ArticleForm = () => {
                   onChange={(e) => handleOnChange(e, 'body')}
                   style={{ width: '100%', minHeight: '60rem' }}
                 />
-              </div>
+              </div> */}
               <FormButtonWrapper>
                 <FormButton $type="reset" type="reset">
                   <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
