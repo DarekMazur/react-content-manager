@@ -67,6 +67,17 @@ const ArticleForm = () => {
     }
   }, [loadingUpdate]);
 
+  const handleEditorChange = (body: string) => {
+    const headerTitle = body.match(/<h1>.*<\/h1>/) || '';
+    if (headerTitle[0].replace(/<\/?h1>/g, '') !== articleTitle) {
+      return setArticleTitle(headerTitle[0].replace(/<\/?h1>/g, ''));
+    }
+
+    if (body.replace(headerTitle[0], '') !== articleBody) {
+      return setArticleBody(body.replace(headerTitle[0], ''));
+    }
+  };
+
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     fieldType: string,
@@ -176,32 +187,23 @@ const ArticleForm = () => {
                 editor={ClassicEditor}
                 data={`<h1>${articleTitle}</h1>${articleBody}`}
                 config={editorConfiguration}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                  console.log('Editor is ready to use!', editor);
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  console.log({ event, editor, data });
-                }}
-                onBlur={(event, editor) => {
-                  console.log('Blur.', editor);
-                }}
-                onFocus={(event, editor) => {
-                  console.log('Focus.', editor);
-                }}
+                onChange={(_event, editor) =>
+                  handleEditorChange(editor.getData())
+                }
               />
               {/* <input
                 value={articleTitle}
                 style={{ width: '100%' }}
                 onChange={(e) => handleOnChange(e, 'title')}
-              />
+              /> */}
+              <label htmlFor="description">Article description</label>
               <textarea
                 value={articleDescription}
+                id="description"
                 style={{ width: '100%' }}
                 onChange={(e) => handleOnChange(e, 'description')}
               />
-              <div>
+              {/* <div>
                 <textarea
                   value={articleBody}
                   onChange={(e) => handleOnChange(e, 'body')}
