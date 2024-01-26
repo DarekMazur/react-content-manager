@@ -6,7 +6,7 @@ import { CommentTypes, UserTypes } from '../../types/dataTypes';
 import { useSelector } from 'react-redux';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import { Main } from '../../components/Organisms/Main/Main.styles';
-import CommentForm from '../../components/Organisms/CommentForm/CommentForm';
+import CommentForm from '../../components/Organisms/Forms/CommentForm/CommentForm';
 
 const CommentView = () => {
   const { uuid } = useParams();

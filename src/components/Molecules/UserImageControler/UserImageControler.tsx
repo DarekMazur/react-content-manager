@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
+import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles';
 import ImageInput from '../ImageInput/ImageInput';
 import { StyledImageControler } from './UserImageControler.styles';
 

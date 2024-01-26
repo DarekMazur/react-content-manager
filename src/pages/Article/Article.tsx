@@ -4,7 +4,7 @@ import { RootState, useGetArticlesQuery } from '../../store';
 import { useEffect, useState } from 'react';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import { ArticleDataTypes, UserTypes } from '../../types/dataTypes';
-import ArticleForm from '../../components/Organisms/ArticleForm/ArticleForm';
+import ArticleForm from '../../components/Organisms/Forms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
 import P from '../../components/Atoms/Paragraph/P';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';

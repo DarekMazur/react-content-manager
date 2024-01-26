@@ -1,14 +1,17 @@
 import { useNavigate, useParams } from 'react-router';
-import { useGetArticlesQuery, useUpdateArticleMutation } from '../../../store';
+import {
+  useGetArticlesQuery,
+  useUpdateArticleMutation,
+} from '../../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { ArticleDataTypes } from '../../../types/dataTypes';
-import InLink from '../../Atoms/InLink/InLink';
-import { getDate } from '../../../utils/methods/getDate';
+import { ArticleDataTypes } from '../../../../types/dataTypes';
+import InLink from '../../../Atoms/InLink/InLink';
+import { getDate } from '../../../../utils/methods/getDate';
 import { FormButton, FormButtonWrapper } from '../UserForm/UserForm.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Loading } from '../../Atoms/Loading/Loading.styles';
-import InputCheckbox from '../../Molecules/InputCheckbox/InputCheckbox';
-import Modal from '../../Organisms/Modal/Modal';
+import { Loading } from '../../../Atoms/Loading/Loading.styles';
+import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox';
+import Modal from '../../Modal/Modal';
 
 const ArticleForm = () => {
   const { id } = useParams();

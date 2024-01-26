@@ -4,10 +4,10 @@ import {
   ArticleDataTypes,
   CommentTypes,
   UserTypes,
-} from '../../../types/dataTypes';
-import ArticlesTableBody from '../ArticlesTableBody/ArticlesTableBody';
-import UsersTableBody from '../UsersTableBody/UsersTableBody';
-import CommentsTableBody from '../CommentsTableBody/CommentsTableBody';
+} from '../../../../types/dataTypes.ts';
+import ArticlesTableBody from '../Body/ArticlesTableBody/ArticlesTableBody';
+import UsersTableBody from '../Body/UsersTableBody/UsersTableBody.tsx';
+import CommentsTableBody from '../Body/CommentsTableBody/CommentsTableBody.tsx';
 
 interface TableProps {
   headers: Array<string>;

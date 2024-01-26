@@ -1,5 +1,5 @@
 import { ChangeEvent, FC } from 'react';
-import { FormWrapper } from '../../Organisms/UserForm/UserForm.styles';
+import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes';

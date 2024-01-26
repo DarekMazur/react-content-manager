@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { RootState, useGetUsersQuery } from '../../store';
 import { UserTypes } from '../../types/dataTypes';
-import UserForm from '../../components/Organisms/UserForm/UserForm';
+import UserForm from '../../components/Organisms/Forms/UserForm/UserForm';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 
