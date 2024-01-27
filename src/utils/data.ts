@@ -47,3 +47,5 @@ export const usersTableHeaders = [
   'Role',
   '',
 ];
+
+export const categoriesTableHeaders = ['', 'ID', 'Name', 'Description', ''];
