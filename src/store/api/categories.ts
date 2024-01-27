@@ -8,7 +8,7 @@ export const categoriesApi = createApi({
   }),
   tagTypes: ['Categories'],
   endpoints: (builder) => ({
-    getCategories: builder.query<CategoriesTypes, void>({
+    getCategories: builder.query<CategoriesTypes[], void>({
       query: () => 'categories',
       providesTags: ['Categories'],
     }),
@@ -50,6 +50,7 @@ export const categoriesApi = createApi({
 
 export const {
   useGetCategoriesQuery,
+  useAddCategoryMutation,
   useUpdateCategoryMutation,
   useRemoveCategoryMutation,
   useRemoveCategoriesMutation,

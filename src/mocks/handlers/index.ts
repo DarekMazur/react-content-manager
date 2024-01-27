@@ -134,7 +134,13 @@ export const handlers = [
           updatedAt: updatedArticle.updatedAt,
           publishedAt: updatedArticle.publishedAt,
           likes: updatedArticle.likes,
-          categories: updatedArticle.categories,
+          categories: db.category.findMany({
+            where: {
+              uuid: {
+                in: updatedArticle.categories.map((category) => category.uuid),
+              },
+            },
+          }),
         },
       });
       return HttpResponse.json(updatedArticle, { status: 201 });

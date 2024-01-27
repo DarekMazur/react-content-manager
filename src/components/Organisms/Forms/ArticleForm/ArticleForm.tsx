@@ -1,6 +1,9 @@
 import { useNavigate, useParams } from 'react-router';
+import CreatableSelect from 'react-select/creatable';
 import {
+  useAddCategoryMutation,
   useGetArticlesQuery,
+  useGetCategoriesQuery,
   useUpdateArticleMutation,
 } from '../../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
@@ -19,12 +22,19 @@ import { editorConfiguration } from '../../../../utils/helpers/editorConfig';
 import P from '../../../Atoms/Paragraph/P';
 import ImageControler from '../../../Molecules/ImageControler/ImageControler';
 
+interface OptionTypes {
+  readonly label: string;
+  readonly value: string;
+}
+
 const ArticleForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const { data: categories = [] } = useGetCategoriesQuery();
   const [updateArticle, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateArticleMutation();
+  const [addCategory] = useAddCategoryMutation();
 
   const [currentArticle, setCurrentArticle] =
     useState<ArticleDataTypes | null>();
@@ -45,6 +55,23 @@ const ArticleForm = () => {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const [options, setOptions] = useState<OptionTypes[]>([]);
+
+  const categoriesOptions: OptionTypes[] = [];
+  const articleInitCategories: OptionTypes[] = [];
+
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      (categories as CategoriesTypes[]).map((category) =>
+        categoriesOptions.push({
+          value: category.title,
+          label: category.title,
+        }),
+      );
+      setOptions(categoriesOptions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories]);
 
   useEffect(() => {
     image.length > 0 && setImageUrl(URL.createObjectURL(image[0]));
@@ -76,7 +103,15 @@ const ArticleForm = () => {
       setArticleTags(currentArticle.tags);
       setArticlePublished(currentArticle.publishedAt);
       setArticleIsSticky(currentArticle.isSticky);
+
+      currentArticle.categories.map((category) =>
+        articleInitCategories.push({
+          value: category.title,
+          label: category.title,
+        }),
+      );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentArticle]);
 
   useEffect(() => {
@@ -84,6 +119,11 @@ const ArticleForm = () => {
       setModal(true);
     }
   }, [loadingUpdate]);
+
+  const createOption = (label: string) => ({
+    label,
+    value: label.toLowerCase().replace(/\W/g, ''),
+  });
 
   const handleEditorChange = (body: string) => {
     const headerTitle = body.match(/<h1>.*<\/h1>/) || '';
@@ -108,12 +148,36 @@ const ArticleForm = () => {
     }
   };
 
+  const handleSelectChange = (value: OptionTypes[]) => {
+    const articleCategories: CategoriesTypes[] = [];
+    for (let i = 0; i < value.length; ++i) {
+      categories.map((category) =>
+        category.title === value[i].value
+          ? articleCategories.push(category)
+          : null,
+      );
+    }
+    setArticleCategories(articleCategories);
+  };
+
+  const handleCreate = (inputValue: string) => {
+    const newOption = createOption(inputValue);
+    setOptions((prev) => [...prev, newOption]);
+    const newCategory = {
+      title: newOption.label,
+      description: '',
+      id: categories.length + 1,
+    };
+    addCategory(newCategory);
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateArticle({
       ...currentArticle,
       title: articleTitle,
       description: articleDescription,
+      categories: articleCategories,
       body: articleBody,
       cover: articleCover,
       isSticky: articleIsSticky,
@@ -126,6 +190,7 @@ const ArticleForm = () => {
       ...currentArticle,
       title: articleTitle,
       description: articleDescription,
+      categories: articleCategories,
       body: articleBody,
       cover: articleCover,
       isSticky: articleIsSticky,
@@ -164,7 +229,6 @@ const ArticleForm = () => {
         {currentArticle ? (
           <>
             <aside>
-              {/* <img src={articleCover} alt="" style={{ maxWidth: '20vw' }} /> */}
               <ImageControler
                 image={image}
                 defaultImage={articleCover}
@@ -184,15 +248,22 @@ const ArticleForm = () => {
                   ? `published at ${getDate(articlePublished)}`
                   : 'Draft'}
               </P>
-              <P>
+              <div style={{ position: 'relative', zIndex: '3' }}>
                 category:{' '}
-                {articleCategories.map((category, index, array) => (
-                  <span>
-                    {category.title}
-                    {index + 1 === array.length ? null : ', '}
-                  </span>
-                ))}
-              </P>
+                <CreatableSelect
+                  noOptionsMessage={() => 'create first category'}
+                  defaultValue={articleInitCategories}
+                  isMulti
+                  isClearable
+                  isSearchable
+                  closeMenuOnSelect={false}
+                  options={options}
+                  onChange={(newValue) =>
+                    handleSelectChange(newValue as OptionTypes[])
+                  }
+                  onCreateOption={handleCreate}
+                />
+              </div>
               <P>tag: {articleTags && articleTags.map((tag) => `#${tag} `)}</P>
               <InputCheckbox
                 label="Sticky"
@@ -201,7 +272,7 @@ const ArticleForm = () => {
                 handleOnChange={(e) => handleOnChange(e, 'sticky')}
               />
             </aside>
-            <div style={{ width: '80vw' }}>
+            <div>
               <CKEditor
                 editor={ClassicEditor}
                 data={`<h1>${currentArticle.title}</h1>${articleBody}`}
