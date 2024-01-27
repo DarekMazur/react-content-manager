@@ -4,7 +4,7 @@ import {
   useUpdateArticleMutation,
 } from '../../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { ArticleDataTypes } from '../../../../types/dataTypes';
+import { ArticleDataTypes, CategoriesTypes } from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
 import { FormButton, FormButtonWrapper } from '../UserForm/UserForm.styles';
@@ -33,7 +33,9 @@ const ArticleForm = () => {
   const [articleDescription, setArticleDescription] = useState<string>('');
   const [articleBody, setArticleBody] = useState<string>('');
   const [articleCover, setArticleCover] = useState<string>('');
-  const [articleCategories, setArticleCategories] = useState<string>('');
+  const [articleCategories, setArticleCategories] = useState<CategoriesTypes[]>(
+    [],
+  );
   const [articleTags, setArticleTags] = useState<string[]>([]);
   const [articlePublished, setArticlePublished] = useState<Date | null>(null);
   const [articleIsSticky, setArticleIsSticky] = useState<boolean>(false);
@@ -182,7 +184,15 @@ const ArticleForm = () => {
                   ? `published at ${getDate(articlePublished)}`
                   : 'Draft'}
               </P>
-              <P>category: {articleCategories}</P>
+              <P>
+                category:{' '}
+                {articleCategories.map((category, index, array) => (
+                  <span>
+                    {category.title}
+                    {index + 1 === array.length ? null : ', '}
+                  </span>
+                ))}
+              </P>
               <P>tag: {articleTags && articleTags.map((tag) => `#${tag} `)}</P>
               <InputCheckbox
                 label="Sticky"

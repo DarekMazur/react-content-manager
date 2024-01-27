@@ -5,6 +5,13 @@ export interface RoleTypes {
   type: string;
 }
 
+export interface CategoriesTypes {
+  id: number;
+  title: string;
+  description: string;
+  uuid: string;
+}
+
 export interface UserTypes {
   id: number;
   username: string;
@@ -41,7 +48,7 @@ export type ArticleDataTypes = {
   updatedAt: Date;
   publishedAt: Date | null;
   likes: number;
-  categories: string;
+  categories: CategoriesTypes[];
   tags: string[];
   author: {
     uuid: string;
