@@ -3,6 +3,7 @@ import { ArticleDataTypes, UserTypes } from '../types/dataTypes';
 import { articlesApi } from './api/articles.ts';
 import { usersApi } from './api/users.ts';
 import { commentsApi } from './api/comments.ts';
+import { categoriesApi } from './api/categories.ts';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -104,12 +105,14 @@ export const { setUser } = userSlice.actions;
 export * from './api/articles.ts';
 export * from './api/users.ts';
 export * from './api/comments.ts';
+export * from './api/categories.ts';
 
 export const store = configureStore({
   reducer: {
     [articlesApi.reducerPath]: articlesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
+    [categoriesApi.reducerPath]: categoriesApi.reducer,
     selected: selectedSlice.reducer,
     selectedUsers: selectedUsersSlice.reducer,
     selectedComments: selectedCommentsSlice.reducer,
@@ -120,5 +123,6 @@ export const store = configureStore({
     getDefaultMiddleware()
       .concat(articlesApi.middleware)
       .concat(usersApi.middleware)
-      .concat(commentsApi.middleware),
+      .concat(commentsApi.middleware)
+      .concat(categoriesApi.middleware),
 });
