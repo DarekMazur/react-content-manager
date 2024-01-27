@@ -9,6 +9,7 @@ import {
 import ArticlesTableBody from '../Body/ArticlesTableBody/ArticlesTableBody';
 import UsersTableBody from '../Body/UsersTableBody/UsersTableBody.tsx';
 import CommentsTableBody from '../Body/CommentsTableBody/CommentsTableBody.tsx';
+import CategoriesTableBody from '../Body/CategoriesTableBody/CategoriesTableBody.tsx';
 
 interface TableProps {
   headers: Array<string>;
@@ -26,7 +27,7 @@ const Table: FC<TableProps> = ({ headers, data, tag }) => {
       case 'comments':
         return <CommentsTableBody data={data as CommentTypes[]} />;
       case 'categories':
-        return <p>Categories</p>;
+        return <CategoriesTableBody data={data as CategoriesTypes[]} />;
       default:
         return null;
     }

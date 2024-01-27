@@ -8,6 +8,7 @@ const MenuList = () => {
         <MenuListItem target="/">Dashboard</MenuListItem>
         <MenuListItem target="/articles">Articles</MenuListItem>
         <MenuListItem target="/comments">Comments</MenuListItem>
+        <MenuListItem target="/categories">Categories</MenuListItem>
         <MenuListItem target="/users">Users</MenuListItem>
       </StyledMenuList>
     </nav>

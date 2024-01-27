@@ -14,7 +14,7 @@ export const worker = setupWorker(...handlers);
 
 const createCategories = () => {
   for (let i = 0; i < 5; ++i) {
-    db.category.create();
+    db.category.create({ id: db.category.count() + 1 });
   }
 };
 
