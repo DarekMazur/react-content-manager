@@ -17,7 +17,7 @@ const Modal: FC<ModalTypes> = ({
 }) => {
   const actionResult = () => {
     if (isSuccess) {
-      return <p>{dataType} updated sucessfully!</p>;
+      return <p>{dataType} updated successfully!</p>;
     }
     if (isError) {
       return <p>Something goes wrong</p>;

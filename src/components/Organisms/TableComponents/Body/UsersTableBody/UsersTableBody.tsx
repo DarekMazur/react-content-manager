@@ -52,6 +52,8 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
     const user = data.find((user) => user.uuid === uuid);
     if (user && type) {
       const updatedUser = { ...user };
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       updatedUser[type as keyof UserTypes] =
         !updatedUser[type as keyof UserTypes];
       updateUser({ ...updatedUser });

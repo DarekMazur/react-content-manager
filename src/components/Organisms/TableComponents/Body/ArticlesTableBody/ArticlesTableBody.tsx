@@ -83,7 +83,7 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
               padding: '0 1rem',
             }}
           >
-            <StatusInfo status={article.publishedAt ? true : false} />
+            <StatusInfo status={!!article.publishedAt} />
           </td>
           <td style={{ textAlign: 'left' }}>{article.title}</td>
           <td style={{ textAlign: 'left' }}>{article.author.username}</td>

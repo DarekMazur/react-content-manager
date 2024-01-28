@@ -234,7 +234,7 @@ const ArticleForm = () => {
                 defaultImage={articleCover}
                 altText={`${articleTitle} cover image`}
                 imageUrl={imageUrl as string}
-                onFilesChange={(selectedFilies) => setImage(selectedFilies)}
+                onFilesChange={(selectedFiles) => setImage(selectedFiles)}
               />
               <P>
                 by{' '}

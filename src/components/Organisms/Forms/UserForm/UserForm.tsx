@@ -124,7 +124,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           imageUrl={imageUrl as string}
           uuid={uuid}
           isRounded
-          onFilesChange={(selectedFilies) => setImage(selectedFilies)}
+          onFilesChange={(selectedFiles) => setImage(selectedFiles)}
         />
         <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
           <Input
@@ -161,7 +161,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             value={userData.role}
             handleOnChange={(e) => handleOnChange(e, 'role')}
             uuid={uuid}
-            options={['Administrstor', 'Redactor', 'Creator', 'Authenticated']}
+            options={['Administrator', 'Redactor', 'Creator', 'Authenticated']}
           />
           <FormButtonWrapper>
             <FormButton $type="submit" type="submit">
