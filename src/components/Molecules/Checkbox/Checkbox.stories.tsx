@@ -16,13 +16,13 @@ export const Unchecked: Story = {
   argTypes: {
     isChecked: {
       control: 'boolean',
-      description: 'Checkbox controler',
-      name: 'Controler',
+      description: 'Checkbox controller',
+      name: 'Controller',
     },
     handleClick: {
       description: 'onClick action',
     },
-    id: {
+    uuid: {
       control: 'string',
       description: 'Set automatically - id of element connected with checkbox',
       table: {
@@ -34,7 +34,7 @@ export const Unchecked: Story = {
   },
   args: {
     isChecked: false,
-    id: faker.string.uuid(),
+    uuid: faker.string.uuid(),
     handleClick: () => {},
   },
 };
@@ -42,7 +42,7 @@ export const Unchecked: Story = {
 export const Checked: Story = {
   args: {
     isChecked: true,
-    id: faker.string.uuid(),
+    uuid: faker.string.uuid(),
     handleClick: () => {},
   },
 };

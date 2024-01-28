@@ -10,12 +10,25 @@ const demoPostsArray: Array<ArticleDataTypes> = [
     isSticky: faker.datatype.boolean(0.3),
     title: faker.lorem.sentence({ min: 2, max: 6 }),
     description: faker.lorem.words({ min: 0, max: 14 }),
+    cover: faker.image.url(),
     body: faker.lorem.paragraphs({ min: 5, max: 29 }),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.past(),
     likes: faker.number.int({ min: 0, max: 500 }),
-    categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+    categories: [
+      {
+        uuid: faker.string.uuid(),
+        id: faker.number.int(),
+        title: faker.lorem.words({ min: 1, max: 2 }),
+        description: faker.lorem.words({ min: 0, max: 14 }),
+      },
+    ],
+    tags: [
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+    ],
     author: {
       uuid: faker.string.uuid(),
       username: faker.person.fullName(),
@@ -36,12 +49,25 @@ const demoPostsArray: Array<ArticleDataTypes> = [
     isSticky: faker.datatype.boolean(0.3),
     title: faker.lorem.sentence({ min: 2, max: 6 }),
     description: faker.lorem.words({ min: 0, max: 14 }),
+    cover: faker.image.url(),
     body: faker.lorem.paragraphs({ min: 5, max: 29 }),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.past(),
     likes: faker.number.int({ min: 0, max: 500 }),
-    categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+    categories: [
+      {
+        uuid: faker.string.uuid(),
+        id: faker.number.int(),
+        title: faker.lorem.words({ min: 1, max: 2 }),
+        description: faker.lorem.words({ min: 0, max: 14 }),
+      },
+    ],
+    tags: [
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+    ],
     author: {
       uuid: faker.string.uuid(),
       username: faker.person.fullName(),
@@ -62,12 +88,25 @@ const demoPostsArray: Array<ArticleDataTypes> = [
     isSticky: faker.datatype.boolean(0.3),
     title: faker.lorem.sentence({ min: 2, max: 6 }),
     description: faker.lorem.words({ min: 0, max: 14 }),
+    cover: faker.image.url(),
     body: faker.lorem.paragraphs({ min: 5, max: 29 }),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.past(),
     likes: faker.number.int({ min: 0, max: 500 }),
-    categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+    categories: [
+      {
+        uuid: faker.string.uuid(),
+        id: faker.number.int(),
+        title: faker.lorem.words({ min: 1, max: 2 }),
+        description: faker.lorem.words({ min: 0, max: 14 }),
+      },
+    ],
+    tags: [
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+    ],
     author: {
       uuid: faker.string.uuid(),
       username: faker.person.fullName(),
@@ -88,12 +127,25 @@ const demoPostsArray: Array<ArticleDataTypes> = [
     isSticky: faker.datatype.boolean(0.3),
     title: 'Latest post',
     description: faker.lorem.words({ min: 0, max: 14 }),
+    cover: faker.image.url(),
     body: faker.lorem.paragraphs({ min: 5, max: 29 }),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.recent(),
     likes: faker.number.int({ min: 0, max: 500 }),
-    categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+    categories: [
+      {
+        uuid: faker.string.uuid(),
+        id: faker.number.int(),
+        title: faker.lorem.words({ min: 1, max: 2 }),
+        description: faker.lorem.words({ min: 0, max: 14 }),
+      },
+    ],
+    tags: [
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+      faker.helpers.fake('{{word.sample}}'),
+    ],
     author: {
       uuid: faker.string.uuid(),
       username: faker.person.fullName(),
@@ -113,12 +165,13 @@ const demoPostsArray: Array<ArticleDataTypes> = [
 const demoCommentsArray: Array<CommentTypes> = [
   {
     id: 1,
+    shadowed: faker.datatype.boolean(0.02),
     content: faker.lorem.sentence({ min: 1, max: 20 }),
     uuid: faker.string.uuid(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.past(),
-    user: {
+    author: {
       id: 1,
       username: faker.person.fullName(),
       email: faker.internet.email(),
@@ -140,12 +193,25 @@ const demoCommentsArray: Array<CommentTypes> = [
       isSticky: faker.datatype.boolean(0.3),
       title: faker.lorem.sentence({ min: 2, max: 6 }),
       description: faker.lorem.words({ min: 0, max: 14 }),
+      cover: faker.image.url(),
       body: faker.lorem.paragraphs({ min: 5, max: 29 }),
       createdAt: faker.date.past(),
       updatedAt: faker.date.past(),
       publishedAt: faker.date.past(),
       likes: faker.number.int({ min: 0, max: 500 }),
-      categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+      categories: [
+        {
+          uuid: faker.string.uuid(),
+          id: faker.number.int(),
+          title: faker.lorem.words({ min: 1, max: 2 }),
+          description: faker.lorem.words({ min: 0, max: 14 }),
+        },
+      ],
+      tags: [
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+      ],
       author: {
         uuid: faker.string.uuid(),
         username: faker.person.fullName(),
@@ -163,12 +229,13 @@ const demoCommentsArray: Array<CommentTypes> = [
   },
   {
     id: 2,
+    shadowed: faker.datatype.boolean(0.02),
     content: faker.lorem.sentence({ min: 1, max: 20 }),
     uuid: faker.string.uuid(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.past(),
-    user: {
+    author: {
       id: 1,
       username: faker.person.fullName(),
       email: faker.internet.email(),
@@ -190,12 +257,25 @@ const demoCommentsArray: Array<CommentTypes> = [
       isSticky: faker.datatype.boolean(0.3),
       title: faker.lorem.sentence({ min: 2, max: 6 }),
       description: faker.lorem.words({ min: 0, max: 14 }),
+      cover: faker.image.url(),
       body: faker.lorem.paragraphs({ min: 5, max: 29 }),
       createdAt: faker.date.past(),
       updatedAt: faker.date.past(),
       publishedAt: faker.date.past(),
       likes: faker.number.int({ min: 0, max: 500 }),
-      categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+      categories: [
+        {
+          uuid: faker.string.uuid(),
+          id: faker.number.int(),
+          title: faker.lorem.words({ min: 1, max: 2 }),
+          description: faker.lorem.words({ min: 0, max: 14 }),
+        },
+      ],
+      tags: [
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+      ],
       author: {
         uuid: faker.string.uuid(),
         username: faker.person.fullName(),
@@ -213,12 +293,13 @@ const demoCommentsArray: Array<CommentTypes> = [
   },
   {
     id: 3,
+    shadowed: faker.datatype.boolean(0.02),
     content: 'Latest comment',
     uuid: faker.string.uuid(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.soon(),
-    user: {
+    author: {
       id: 1,
       username: faker.person.fullName(),
       email: faker.internet.email(),
@@ -240,12 +321,25 @@ const demoCommentsArray: Array<CommentTypes> = [
       isSticky: faker.datatype.boolean(0.3),
       title: faker.lorem.sentence({ min: 2, max: 6 }),
       description: faker.lorem.words({ min: 0, max: 14 }),
+      cover: faker.image.url(),
       body: faker.lorem.paragraphs({ min: 5, max: 29 }),
       createdAt: faker.date.past(),
       updatedAt: faker.date.past(),
       publishedAt: faker.date.past(),
       likes: faker.number.int({ min: 0, max: 500 }),
-      categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+      categories: [
+        {
+          uuid: faker.string.uuid(),
+          id: faker.number.int(),
+          title: faker.lorem.words({ min: 1, max: 2 }),
+          description: faker.lorem.words({ min: 0, max: 14 }),
+        },
+      ],
+      tags: [
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+      ],
       author: {
         uuid: faker.string.uuid(),
         username: faker.person.fullName(),
@@ -263,12 +357,13 @@ const demoCommentsArray: Array<CommentTypes> = [
   },
   {
     id: 4,
+    shadowed: faker.datatype.boolean(0.02),
     content: faker.lorem.sentence({ min: 1, max: 20 }),
     uuid: faker.string.uuid(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.past(),
     publishedAt: faker.date.past(),
-    user: {
+    author: {
       id: 1,
       username: faker.person.fullName(),
       email: faker.internet.email(),
@@ -290,12 +385,25 @@ const demoCommentsArray: Array<CommentTypes> = [
       isSticky: faker.datatype.boolean(0.3),
       title: faker.lorem.sentence({ min: 2, max: 6 }),
       description: faker.lorem.words({ min: 0, max: 14 }),
+      cover: faker.image.url(),
       body: faker.lorem.paragraphs({ min: 5, max: 29 }),
       createdAt: faker.date.past(),
       updatedAt: faker.date.past(),
       publishedAt: faker.date.past(),
       likes: faker.number.int({ min: 0, max: 500 }),
-      categories: faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+      categories: [
+        {
+          uuid: faker.string.uuid(),
+          id: faker.number.int(),
+          title: faker.lorem.words({ min: 1, max: 2 }),
+          description: faker.lorem.words({ min: 0, max: 14 }),
+        },
+      ],
+      tags: [
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+        faker.helpers.fake('{{word.sample}}'),
+      ],
       author: {
         uuid: faker.string.uuid(),
         username: faker.person.fullName(),
