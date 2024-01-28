@@ -5,7 +5,7 @@ import {
   useRemoveCommentMutation,
   useUpdateCommentMutation,
   useUpdateUserMutation,
-} from '../../../../store/index.ts';
+} from '../../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { CommentTypes, UserTypes } from '../../../../types/dataTypes.ts';
 import Heading from '../../../Atoms/Heading/Heading.tsx';
@@ -54,7 +54,7 @@ const CommentForm = () => {
     commentShadowed: false,
   });
   const [modal, setModal] = useState(false);
-  const [updatedElement, setUpadatedElement] = useState<string | undefined>(
+  const [updatedElement, setUpdatedElement] = useState<string | undefined>(
     undefined,
   );
 
@@ -102,19 +102,19 @@ const CommentForm = () => {
   };
 
   const handleOnSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    const upadtedComment = { ...currentComment };
+    const updatedComment = { ...currentComment };
     if (e.target.value === 'default') {
-      upadtedComment.shadowed = comments.find(
+      updatedComment.shadowed = comments.find(
         (comment) => comment.uuid === uuid,
       )?.shadowed;
     } else {
       switch (e.target.value) {
         case 'shadow':
-          upadtedComment.shadowed = true;
+          updatedComment.shadowed = true;
           setToDelete(false);
           break;
         case 'turnon':
-          upadtedComment.shadowed = false;
+          updatedComment.shadowed = false;
           setToDelete(false);
           break;
         case 'delete':
@@ -124,7 +124,7 @@ const CommentForm = () => {
           setToDelete(false);
       }
     }
-    setCurrentComment({ ...(upadtedComment as CommentTypes) });
+    setCurrentComment({ ...(updatedComment as CommentTypes) });
   };
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -134,10 +134,10 @@ const CommentForm = () => {
       navigate(-1);
     }
     if (userData?.blocked !== initialData.authorBlocked) {
-      setUpadatedElement('User');
+      setUpdatedElement('User');
       return updateUser(userData);
     }
-    setUpadatedElement('Comment');
+    setUpdatedElement('Comment');
     updateComment(currentComment);
   };
 
