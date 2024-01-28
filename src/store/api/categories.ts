@@ -22,7 +22,7 @@ export const categoriesApi = createApi({
     }),
     updateCategory: builder.mutation({
       query: (body) => ({
-        url: `categories/${body.id}`,
+        url: `categories/${body.uuid}`,
         method: 'PATCH',
         body,
       }),
