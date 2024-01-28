@@ -15,10 +15,21 @@ type Story = StoryObj<typeof Header>;
 /** View for authorised user with default icon */
 export const AuthorisedNoAvatar: Story = {
   args: {
-    isAuthorised: true,
     user: {
-      userName: faker.person.fullName(),
       uuid: faker.string.uuid(),
+      id: faker.number.int(),
+      username: faker.helpers.fake(`{{person.firstName}} {{person.lastName}}`),
+      email: faker.internet.email(),
+      avatar: '',
+      provider: 'local',
+      confirmed: true,
+      blocked: true,
+      role: {
+        id: 1,
+        name: 'Administrator',
+        description: 'Page admin',
+        type: 'admin',
+      },
     },
   },
 };
@@ -26,11 +37,21 @@ export const AuthorisedNoAvatar: Story = {
 /** View for authorised user with avatar */
 export const AuthorisedWithAvatar: Story = {
   args: {
-    isAuthorised: true,
     user: {
-      userName: faker.person.fullName(),
       uuid: faker.string.uuid(),
+      id: faker.number.int(),
+      username: faker.helpers.fake(`{{person.firstName}} {{person.lastName}}`),
+      email: faker.internet.email(),
       avatar: faker.internet.avatar(),
+      provider: 'local',
+      confirmed: true,
+      blocked: true,
+      role: {
+        id: 1,
+        name: 'Administrator',
+        description: 'Page admin',
+        type: 'admin',
+      },
     },
   },
 };
