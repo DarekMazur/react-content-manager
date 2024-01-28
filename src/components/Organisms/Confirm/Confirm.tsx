@@ -35,7 +35,6 @@ const Confirm = () => {
   const counter = popupState.ids ? popupState.ids.length : 0;
 
   const handleDelete = () => {
-    console.log(location.pathname.slice(1));
     if (counter === 1) {
       switch (location.pathname.slice(1)) {
         case 'articles':

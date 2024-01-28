@@ -42,7 +42,6 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   useEffect(() => {
     if (imageUrl && userData) {
-      console.log(imageUrl);
       const updateUser: UserTypes = { ...userData };
       updateUser.avatar = imageUrl;
       setUserData({ ...(updateUser as UserTypes) });
@@ -71,6 +70,8 @@ const UserForm = ({ uuid }: { uuid: string }) => {
         updateUser[fieldType] = newRole || userData?.role;
         setUserData({ ...(updateUser as UserTypes) });
       } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         updateUser[fieldType] =
           e.target.type === 'checkbox'
             ? (e.target as HTMLInputElement).checked

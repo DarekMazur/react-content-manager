@@ -10,9 +10,10 @@ import {
   switchPopup,
   useUpdateArticleMutation,
   useUpdateUserMutation,
-} from '../../../store/index.ts';
+} from '../../../store';
 import {
   ArticleDataTypes,
+  CategoriesTypes,
   CommentTypes,
   UserTypes,
 } from '../../../types/dataTypes.ts';
@@ -25,10 +26,13 @@ interface MultiActionProps {
 const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const selected = useSelector<RootState>((state) => state.selected);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
+  const selectedCategories = useSelector<RootState>(
+    (state) => state.selectedCategories,
+  );
   const selectedComments = useSelector<RootState>(
     (state) => state.selectedComments,
   );
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
   const location = useLocation();
   const [updateArticle] = useUpdateArticleMutation();
   const [updateUser] = useUpdateUserMutation();
@@ -41,7 +45,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       };
       updateArticle({ ...article });
     });
-    dispach(clearSelected());
+    dispatch(clearSelected());
   };
 
   const handleUnpublish = () => {
@@ -52,7 +56,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       };
       updateArticle({ ...article });
     });
-    dispach(clearSelected());
+    dispatch(clearSelected());
   };
 
   const handleBlock = () => {
@@ -63,7 +67,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       };
       updateUser({ ...user });
     });
-    dispach(clearUsersSelected());
+    dispatch(clearUsersSelected());
   };
 
   const handleUnblock = () => {
@@ -74,7 +78,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       };
       updateUser({ ...user });
     });
-    dispach(clearUsersSelected());
+    dispatch(clearUsersSelected());
   };
 
   const handleDelete = () => {
@@ -115,9 +119,17 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
           singleTitle = undefined;
         }
         break;
+      case 'categories':
+        {
+          (selectedCategories as CategoriesTypes[]).forEach((element) => {
+            ids.push(element.id);
+          });
+          singleTitle = undefined;
+        }
+        break;
     }
 
-    dispach(
+    dispatch(
       switchPopup({
         isOpen: true,
         ids,

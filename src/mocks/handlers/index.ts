@@ -211,7 +211,6 @@ export const handlers = [
   }),
   http.delete('/api/categories', async ({ request }) => {
     const CategoriesIds = await request.json();
-    console.log(CategoriesIds);
     if (CategoriesIds) {
       db.category.deleteMany({
         where: {

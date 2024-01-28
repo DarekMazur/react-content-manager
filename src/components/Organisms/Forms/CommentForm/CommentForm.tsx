@@ -142,7 +142,6 @@ const CommentForm = () => {
   };
 
   const handleOnCancel = () => {
-    console.log('Cancel');
     setUserData(
       users.find(
         (user) => user.uuid === (currentComment as CommentTypes).author.uuid,
