@@ -3,7 +3,7 @@ import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles.ts';
 import ImageInput from '../ImageInput/ImageInput.tsx';
 import { StyledImageControler } from './ImageControler.styles.ts';
 
-interface ImageControlerTypes {
+interface ImageControllerTypes {
   image: File[];
   defaultImage: string;
   altText: string;
@@ -11,10 +11,10 @@ interface ImageControlerTypes {
   uuid?: string;
   isRounded?: boolean;
   // eslint-disable-next-line no-unused-vars
-  onFilesChange(selectedFilies: File[]): void;
+  onFilesChange(selectedFiles: File[]): void;
 }
 
-const ImageControler: FC<ImageControlerTypes> = ({
+const ImageController: FC<ImageControllerTypes> = ({
   isRounded,
   image,
   defaultImage,
@@ -33,4 +33,4 @@ const ImageControler: FC<ImageControlerTypes> = ({
   );
 };
 
-export default ImageControler;
+export default ImageController;

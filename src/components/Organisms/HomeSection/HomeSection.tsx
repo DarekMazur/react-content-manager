@@ -8,34 +8,6 @@ import { LatestTypes, getLatest } from '../../../utils/methods/getLatest';
 import { useGetArticlesQuery, useGetCommentsQuery } from '../../../store';
 
 const HomeSection = () => {
-  const initialArticle = {
-    id: 0,
-    title: '',
-    cover: '',
-    isSticky: false,
-    description: '',
-    body: '',
-    uuid: '',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    publishedAt: null,
-    likes: 0,
-    categories: '',
-    tags: [],
-    author: {
-      uuid: '',
-      username: '',
-      email: '',
-      avatar: '',
-      role: {
-        id: 0,
-        name: '',
-        description: '',
-        type: '',
-      },
-    },
-    comments: null,
-  };
   const { data: articles = [], isLoading: loadingArticles } =
     useGetArticlesQuery();
   const { data: comments = [], isLoading: loadingComments } =
@@ -51,7 +23,7 @@ const HomeSection = () => {
     publishedDate: null,
   });
   const [mostLikedArticle, setMostLikedArticle] =
-    useState<ArticleDataTypes>(initialArticle);
+    useState<ArticleDataTypes | null>();
 
   useEffect(() => {
     if (articles.length > 0) {
@@ -99,7 +71,7 @@ const HomeSection = () => {
             Last comment:
           </Heading>
           <P>
-            {(latestComment.latest as CommentTypes).user?.username}
+            {(latestComment.latest as CommentTypes).author?.username}
             at{' '}
             <InLink
               target={`articles/${
@@ -113,11 +85,15 @@ const HomeSection = () => {
             Most liked article:
           </Heading>
           <P>
-            <InLink
-              target={`articles/${mostLikedArticle.id}`}
-              name={mostLikedArticle.title}
-            />{' '}
-            ({mostLikedArticle.likes} likes)
+            {mostLikedArticle ? (
+              <>
+                <InLink
+                  target={`articles/${mostLikedArticle.id}`}
+                  name={mostLikedArticle.title}
+                />{' '}
+                ({mostLikedArticle.likes} likes)
+              </>
+            ) : null}
           </P>
         </section>
       ) : null}

@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setUser, useGetUsersQuery } from '../../store/index.ts';
+import { RootState, setUser, useGetUsersQuery } from '../../store';
 import Authorised from '../../components/Templates/Authorised/Authorised.tsx';
 import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 import FooterWrapper from '../../components/Organisms/Footer/Footer.tsx';
@@ -30,7 +30,7 @@ const Root = () => {
         }
 
         if (authorised.blocked) {
-          alert('Your account is blocked. Please contact administation.');
+          alert('Your account is blocked. Please contact administration.');
         }
         dispatch(setUser({ ...authorised, isAuthorised: true }));
       }

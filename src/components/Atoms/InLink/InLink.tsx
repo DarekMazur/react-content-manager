@@ -7,7 +7,7 @@ interface InternalLinkProps {
   onClick?: () => void;
 }
 const InLink: FC<InternalLinkProps> = ({ target, name, onClick }) => {
-  const isString = !!(typeof name === 'string');
+  const isString = typeof name === 'string';
 
   return (
     <StyledInLink to={target} onClick={onClick} $string={isString}>

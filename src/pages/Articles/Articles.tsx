@@ -2,7 +2,7 @@ import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import { useEffect, useState } from 'react';
 import { getFooterHeight } from '../../utils/methods/getFooterHeight.ts';
 import { useSelector } from 'react-redux';
-import { RootState, useGetArticlesQuery } from '../../store/index.ts';
+import { RootState, useGetArticlesQuery } from '../../store';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { ArticleDataTypes, UserTypes } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
