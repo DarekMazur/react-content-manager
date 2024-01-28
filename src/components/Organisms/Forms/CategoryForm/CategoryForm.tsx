@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { CategoriesTypes } from '../../../../types/dataTypes.ts';
 import { useGetCategoriesQuery } from '../../../../store';
 import { useParams } from 'react-router';
+import { StyledCategoryForm } from './CategoryForm.styles.ts';
 
 const CategoryForm = () => {
   const { uuid } = useParams();
@@ -23,7 +24,7 @@ const CategoryForm = () => {
     <>
       {currentCategory ? (
         <>
-          <form>
+          <StyledCategoryForm>
             <Input
               label={'Category'}
               type={'text'}
@@ -53,7 +54,7 @@ const CategoryForm = () => {
                 <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
               </FormButton>
             </FormButtonWrapper>
-          </form>
+          </StyledCategoryForm>
         </>
       ) : null}
     </>
