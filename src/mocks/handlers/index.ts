@@ -194,6 +194,23 @@ export const handlers = [
       return new HttpResponse(null, { status: 201 });
     }
   }),
+  http.patch('/api/categories/:id', async ({ request }) => {
+    const updatedCategory = (await request.json()) as CategoriesTypes;
+    if (updatedCategory) {
+      db.category.update({
+        where: {
+          uuid: {
+            equals: updatedCategory.uuid,
+          },
+        },
+        data: {
+          title: updatedCategory.title,
+          description: updatedCategory.description,
+        },
+      });
+      return HttpResponse.json(updatedCategory, { status: 201 });
+    }
+  }),
   http.delete('/api/categories/:categoryId', async ({ params }) => {
     const { categoryId } = params;
     if (!isNaN(Number(categoryId))) {

@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes.ts';
 import CategoriesView from '../../../pages/Categories/Categories.tsx';
+import CategoryView from '../../../pages/Category/Category.tsx';
 
 const Authorised = () => {
   const user = useSelector<RootState>((state) => state.user);
@@ -27,7 +28,7 @@ const Authorised = () => {
         <Route path="comments" element={<CommentsView />} />
         <Route path="comments/:uuid" element={<CommentView />} />
         <Route path="categories" element={<CategoriesView />} />
-        <Route path="categories/:uuid" element={<main>Single category</main>} />
+        <Route path="categories/:uuid" element={<CategoryView />} />
       </Routes>
     </>
   );
