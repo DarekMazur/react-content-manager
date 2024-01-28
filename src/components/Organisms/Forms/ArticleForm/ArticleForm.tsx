@@ -20,7 +20,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
 import { editorConfiguration } from '../../../../utils/helpers/editorConfig';
 import P from '../../../Atoms/Paragraph/P';
-import ImageControler from '../../../Molecules/ImageControler/ImageControler';
+import ImageController from '../../../Molecules/ImageControler/ImageController.tsx';
 
 interface OptionTypes {
   readonly label: string;
@@ -229,7 +229,7 @@ const ArticleForm = () => {
         {currentArticle ? (
           <>
             <aside>
-              <ImageControler
+              <ImageController
                 image={image}
                 defaultImage={articleCover}
                 altText={`${articleTitle} cover image`}

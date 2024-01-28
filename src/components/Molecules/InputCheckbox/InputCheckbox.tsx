@@ -9,7 +9,7 @@ import {
   StyledCheckboxWrapper,
 } from './InputCheckbox.styles.ts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/index.ts';
+import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes.ts';
 
 interface CheckboxTypes {

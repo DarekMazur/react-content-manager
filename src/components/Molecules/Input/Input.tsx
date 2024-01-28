@@ -2,7 +2,7 @@ import { ChangeEvent, FC } from 'react';
 import { StyledInput } from './Input.styles.ts';
 import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles.ts';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/index.ts';
+import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes.ts';
 
 interface InputTypes {

@@ -18,7 +18,7 @@ import { UserTypes } from '../../../../types/dataTypes';
 import { roles } from '../../../../mocks/db';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import Modal from '../../Modal/Modal';
-import ImageControler from '../../../Molecules/ImageControler/ImageControler';
+import ImageController from '../../../Molecules/ImageControler/ImageController.tsx';
 import Input from '../../../Molecules/Input/Input';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox';
 import InputSelect from '../../../Molecules/InputSelect/InputSelect';
@@ -117,7 +117,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
         />
       ) : null}
       <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
-        <ImageControler
+        <ImageController
           image={image}
           defaultImage={userData.avatar}
           altText={userData.username}
