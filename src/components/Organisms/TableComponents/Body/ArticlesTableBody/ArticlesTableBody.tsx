@@ -94,7 +94,14 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
               uuid={article.uuid}
             />
           </td>
-          <td>{article.categories}</td>
+          <td>
+            {article.categories.map((category, index, array) => (
+              <span>
+                {category.title}
+                {index + 1 === array.length ? null : ', '}
+              </span>
+            ))}
+          </td>
           <td>
             {db.comment.count({
               where: {

@@ -2,9 +2,11 @@ import { http, HttpResponse } from 'msw';
 import { db } from '../db';
 import {
   ArticleDataTypes,
+  CategoriesTypes,
   CommentTypes,
   UserTypes,
 } from '../../types/dataTypes';
+import { faker } from '@faker-js/faker';
 
 export const handlers = [
   http.get('/api/comments', () => {
@@ -132,7 +134,13 @@ export const handlers = [
           updatedAt: updatedArticle.updatedAt,
           publishedAt: updatedArticle.publishedAt,
           likes: updatedArticle.likes,
-          categories: updatedArticle.categories,
+          categories: db.category.findMany({
+            where: {
+              uuid: {
+                in: updatedArticle.categories.map((category) => category.uuid),
+              },
+            },
+          }),
         },
       });
       return HttpResponse.json(updatedArticle, { status: 201 });
@@ -160,6 +168,54 @@ export const handlers = [
         where: {
           id: {
             in: articleIds as number[],
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
+  http.get('/api/categories', () => {
+    return HttpResponse.json(db.category.getAll());
+  }),
+  http.post('/api/categories', async ({ request }) => {
+    const categoryBody = await request.json();
+    if (categoryBody as CategoriesTypes) {
+      const newCategory: CategoriesTypes = {
+        uuid: faker.string.uuid(),
+        title: (categoryBody as CategoriesTypes).title,
+        description: (categoryBody as CategoriesTypes).description,
+        id: (categoryBody as CategoriesTypes).id,
+      };
+
+      db.category.create(newCategory);
+
+      return new HttpResponse(null, { status: 201 });
+    }
+  }),
+  http.delete('/api/categories/:categoryId', async ({ params }) => {
+    const { categoryId } = params;
+    if (!isNaN(Number(categoryId))) {
+      db.category.delete({
+        where: {
+          id: {
+            equals: Number(categoryId),
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
+  http.delete('/api/categories', async ({ request }) => {
+    const CategoriesIds = await request.json();
+    if (CategoriesIds) {
+      db.category.deleteMany({
+        where: {
+          id: {
+            in: CategoriesIds as number[],
           },
         },
       });

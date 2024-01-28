@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import {
   ArticleDataTypes,
+  CategoriesTypes,
   CommentTypes,
   UserTypes,
 } from '../../../../types/dataTypes';
@@ -16,7 +17,7 @@ const TableWrapper = ({
   content,
   headers,
 }: {
-  content: ArticleDataTypes[] | UserTypes[] | CommentTypes[];
+  content: (ArticleDataTypes | UserTypes | CommentTypes | CategoriesTypes)[];
   headers: string[];
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();

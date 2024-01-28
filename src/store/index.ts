@@ -1,8 +1,13 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { ArticleDataTypes, UserTypes } from '../types/dataTypes';
+import {
+  ArticleDataTypes,
+  CategoriesTypes,
+  UserTypes,
+} from '../types/dataTypes';
 import { articlesApi } from './api/articles.ts';
 import { usersApi } from './api/users.ts';
 import { commentsApi } from './api/comments.ts';
+import { categoriesApi } from './api/categories.ts';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -13,7 +18,8 @@ export interface PopupTypes {
   title?: string;
 }
 
-const initialSelectedItems: (ArticleDataTypes | UserTypes)[] = [];
+const initialSelectedItems: (ArticleDataTypes | UserTypes | CategoriesTypes)[] =
+  [];
 const initialUser = {};
 const initialPopup: PopupTypes = {
   isOpen: false,
@@ -69,12 +75,28 @@ const selectedCommentsSlice = createSlice({
   },
 });
 
+const selectedCategoriesSlice = createSlice({
+  name: 'selectedCategories',
+  initialState: initialSelectedItems,
+  reducers: {
+    addCategorySelected(state, action) {
+      state.push(action.payload);
+    },
+    removeCategorySelected(state, action) {
+      return state.filter((selected) => selected.id !== action.payload.id);
+    },
+    clearCategoriesSelected() {
+      return initialSelectedItems;
+    },
+  },
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: initialUser,
   reducers: {
-    setUser(state, action) {
-      return (state = action.payload);
+    setUser(_state, action) {
+      return action.payload;
     },
   },
 });
@@ -83,8 +105,8 @@ const popupSlice = createSlice({
   name: 'popup',
   initialState: initialPopup,
   reducers: {
-    switchPopup(state, action) {
-      return (state = action.payload);
+    switchPopup(_state, action) {
+      return action.payload;
     },
   },
 });
@@ -93,6 +115,12 @@ export const { addSelected, removeSelected, clearSelected } =
   selectedSlice.actions;
 export const { addUserSelected, removeUserSelected, clearUsersSelected } =
   selectedUsersSlice.actions;
+
+export const {
+  addCategorySelected,
+  removeCategorySelected,
+  clearCategoriesSelected,
+} = selectedCategoriesSlice.actions;
 export const {
   addCommentSelected,
   removeCommentSelected,
@@ -104,15 +132,18 @@ export const { setUser } = userSlice.actions;
 export * from './api/articles.ts';
 export * from './api/users.ts';
 export * from './api/comments.ts';
+export * from './api/categories.ts';
 
 export const store = configureStore({
   reducer: {
     [articlesApi.reducerPath]: articlesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
+    [categoriesApi.reducerPath]: categoriesApi.reducer,
     selected: selectedSlice.reducer,
     selectedUsers: selectedUsersSlice.reducer,
     selectedComments: selectedCommentsSlice.reducer,
+    selectedCategories: selectedCategoriesSlice.reducer,
     user: userSlice.reducer,
     popup: popupSlice.reducer,
   },
@@ -120,5 +151,6 @@ export const store = configureStore({
     getDefaultMiddleware()
       .concat(articlesApi.middleware)
       .concat(usersApi.middleware)
-      .concat(commentsApi.middleware),
+      .concat(commentsApi.middleware)
+      .concat(categoriesApi.middleware),
 });

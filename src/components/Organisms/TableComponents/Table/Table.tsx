@@ -2,16 +2,18 @@ import { FC } from 'react';
 import { StyledTable } from './Table.styles.ts';
 import {
   ArticleDataTypes,
+  CategoriesTypes,
   CommentTypes,
   UserTypes,
 } from '../../../../types/dataTypes.ts';
 import ArticlesTableBody from '../Body/ArticlesTableBody/ArticlesTableBody';
 import UsersTableBody from '../Body/UsersTableBody/UsersTableBody.tsx';
 import CommentsTableBody from '../Body/CommentsTableBody/CommentsTableBody.tsx';
+import CategoriesTableBody from '../Body/CategoriesTableBody/CategoriesTableBody.tsx';
 
 interface TableProps {
   headers: Array<string>;
-  data: Array<ArticleDataTypes | UserTypes | CommentTypes>;
+  data: Array<ArticleDataTypes | UserTypes | CommentTypes | CategoriesTypes>;
   tag: string;
 }
 
@@ -24,6 +26,8 @@ const Table: FC<TableProps> = ({ headers, data, tag }) => {
         return <UsersTableBody data={data as UserTypes[]} />;
       case 'comments':
         return <CommentsTableBody data={data as CommentTypes[]} />;
+      case 'categories':
+        return <CategoriesTableBody data={data as CategoriesTypes[]} />;
       default:
         return null;
     }

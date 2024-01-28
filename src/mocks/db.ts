@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { factory, oneOf, primaryKey, nullable } from '@mswjs/data';
+import { factory, oneOf, manyOf, primaryKey, nullable } from '@mswjs/data';
 import { RoleTypes } from '../types/dataTypes';
 
 faker.seed(123);
@@ -68,12 +68,18 @@ export const db = factory({
     updatedAt: () => faker.date.past(),
     publishedAt: nullable<Date>(faker.date.past),
     likes: () => faker.number.int({ min: 0, max: 500 }),
-    categories: () => faker.helpers.fake(`{{lorem.word}}, {{lorem.word}}`),
+    categories: manyOf('category'),
     tags: () => [
       faker.helpers.fake('{{word.sample}}'),
       faker.helpers.fake('{{word.sample}}'),
       faker.helpers.fake('{{word.sample}}'),
     ],
     author: oneOf('user'),
+  },
+  category: {
+    uuid: primaryKey(faker.string.uuid),
+    id: () => faker.number.int(),
+    title: () => faker.lorem.words({ min: 1, max: 2 }),
+    description: () => faker.lorem.words({ min: 0, max: 14 }),
   },
 });

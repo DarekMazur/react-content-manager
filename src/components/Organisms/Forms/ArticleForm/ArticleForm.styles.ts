@@ -5,4 +5,9 @@ export const StyledArticleForm = styled.form`
   flex-direction: row-reverse;
   gap: 2rem;
   padding: 2rem;
+
+  aside {
+    width: 20vw;
+    max-width: 20vw;
+  }
 `;
