@@ -10,7 +10,7 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
       >
         <div>
           <p>
-            Are you sure you want to delelte 
+            Are you sure you want to delete 
              
             <strong />
             ? This action is permanent
@@ -52,7 +52,7 @@ exports[`Lock Icon > - rendered component match to snapshot 1`] = `
     >
       <div>
         <p>
-          Are you sure you want to delelte 
+          Are you sure you want to delete 
            
           <strong />
           ? This action is permanent

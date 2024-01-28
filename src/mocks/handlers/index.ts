@@ -194,4 +194,35 @@ export const handlers = [
       return new HttpResponse(null, { status: 201 });
     }
   }),
+  http.delete('/api/categories/:categoryId', async ({ params }) => {
+    const { categoryId } = params;
+    if (!isNaN(Number(categoryId))) {
+      db.category.delete({
+        where: {
+          id: {
+            equals: Number(categoryId),
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
+  http.delete('/api/categories', async ({ request }) => {
+    const CategoriesIds = await request.json();
+    console.log(CategoriesIds);
+    if (CategoriesIds) {
+      db.category.deleteMany({
+        where: {
+          id: {
+            in: CategoriesIds as number[],
+          },
+        },
+      });
+      return HttpResponse.json();
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
 ];

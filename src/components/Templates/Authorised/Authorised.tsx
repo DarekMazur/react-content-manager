@@ -8,7 +8,7 @@ import Users from '../../../pages/Users/Users.tsx';
 import CommentsView from '../../../pages/Comments/Comments.tsx';
 import CommentView from '../../../pages/Comment/Comment.tsx';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/index.ts';
+import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes.ts';
 import CategoriesView from '../../../pages/Categories/Categories.tsx';
 
@@ -27,6 +27,7 @@ const Authorised = () => {
         <Route path="comments" element={<CommentsView />} />
         <Route path="comments/:uuid" element={<CommentView />} />
         <Route path="categories" element={<CategoriesView />} />
+        <Route path="categories/:uuid" element={<main>Single category</main>} />
       </Routes>
     </>
   );

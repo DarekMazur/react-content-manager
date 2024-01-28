@@ -3,15 +3,22 @@ import { FC } from 'react';
 import { theme } from '../../../utils/themes/theme';
 import { StyledCheckbox } from './Checkbox.styles.ts';
 import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css'; 
+import 'tippy.js/dist/tippy.css';
 
 interface CheckboxProps {
   isChecked?: boolean;
   // eslint-disable-next-line no-unused-vars
-  handleClick: (id: string, type: string | undefined, isDisabled?: boolean) => void;
+  handleClick: (
+    // eslint-disable-next-line no-unused-vars
+    id: string,
+    // eslint-disable-next-line no-unused-vars
+    type: string | undefined,
+    // eslint-disable-next-line no-unused-vars
+    isDisabled?: boolean,
+  ) => void;
   uuid: string;
   type?: string;
-  isDisabled?: boolean
+  isDisabled?: boolean;
 }
 
 const Checkbox: FC<CheckboxProps> = ({
@@ -23,7 +30,12 @@ const Checkbox: FC<CheckboxProps> = ({
 }) => {
   if (isDisabled) {
     return (
-      <Tippy content={<span>You can't select yourself</span>} animation={'fade'} theme={'meterial'} trigger={'click'}>
+      <Tippy
+        content={<span>You can't select yourself</span>}
+        animation={'fade'}
+        theme={'material'}
+        trigger={'click'}
+      >
         <StyledCheckbox
           $checked={isChecked}
           $disabled={isDisabled}
@@ -42,7 +54,7 @@ const Checkbox: FC<CheckboxProps> = ({
           </span>
         </StyledCheckbox>
       </Tippy>
-    )
+    );
   }
   return (
     <StyledCheckbox

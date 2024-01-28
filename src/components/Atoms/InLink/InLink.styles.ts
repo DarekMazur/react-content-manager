@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 interface StyleProps {
-  $string: boolean;
+  $string?: boolean;
 }
 
 export const StyledInLink = styled(Link)<StyleProps>`

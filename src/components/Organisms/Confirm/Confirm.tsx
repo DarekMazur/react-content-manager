@@ -12,7 +12,9 @@ import {
   useRemoveCommentsMutation,
   useRemoveUserMutation,
   useRemoveUsersMutation,
-} from '../../../store/index.ts';
+  useRemoveCategoryMutation,
+  useRemoveCategoriesMutation,
+} from '../../../store';
 import { useLocation } from 'react-router';
 
 const Confirm = () => {
@@ -22,7 +24,9 @@ const Confirm = () => {
   const [removeUsers] = useRemoveUsersMutation();
   const [removeComment] = useRemoveCommentMutation();
   const [removeComments] = useRemoveCommentsMutation();
-  const dispach = useDispatch();
+  const [removeCategory] = useRemoveCategoryMutation();
+  const [removeCategories] = useRemoveCategoriesMutation();
+  const dispatch = useDispatch();
   const popup = useSelector<RootState>((state) => state.popup);
   const location = useLocation();
 
@@ -31,6 +35,7 @@ const Confirm = () => {
   const counter = popupState.ids ? popupState.ids.length : 0;
 
   const handleDelete = () => {
+    console.log(location.pathname.slice(1));
     if (counter === 1) {
       switch (location.pathname.slice(1)) {
         case 'articles':
@@ -41,6 +46,9 @@ const Confirm = () => {
           break;
         case 'comments':
           removeComment(popupState.ids[0]);
+          break;
+        case 'categories':
+          removeCategory(popupState.ids);
           break;
       }
     } else {
@@ -54,22 +62,27 @@ const Confirm = () => {
         case 'comments':
           removeComments(popupState.ids);
           break;
+        case 'categories':
+          removeCategories(popupState.ids);
+          break;
       }
     }
-    dispach(switchPopup(false));
-    dispach(clearSelected());
+    dispatch(switchPopup(false));
+    dispatch(clearSelected());
   };
 
   const handleCancel = () => {
-    dispach(switchPopup(false));
-    dispach(clearSelected());
+    dispatch(switchPopup(false));
+    dispatch(clearSelected());
   };
   return (
     <PopupWrapper $isVisible={popupState.isOpen}>
       <div>
         <p>
-          Are you sure you want to delelte {counter > 1 ? counter : null}{' '}
-          {location.pathname.slice(1, -1)}
+          Are you sure you want to delete {counter > 1 ? counter : null}{' '}
+          {location.pathname.slice(1) === 'categories'
+            ? 'category'
+            : location.pathname.slice(1, -1)}
           {counter > 1 ? (
             's'
           ) : (
