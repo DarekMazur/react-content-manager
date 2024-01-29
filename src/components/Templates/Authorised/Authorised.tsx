@@ -12,6 +12,7 @@ import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes.ts';
 import CategoriesView from '../../../pages/Categories/Categories.tsx';
 import CategoryView from '../../../pages/Category/Category.tsx';
+import Page404 from '../../../pages/404/404.tsx';
 
 const Authorised = () => {
   const user = useSelector<RootState>((state) => state.user);
@@ -29,6 +30,8 @@ const Authorised = () => {
         <Route path="comments/:uuid" element={<CommentView />} />
         <Route path="categories" element={<CategoriesView />} />
         <Route path="categories/:uuid" element={<CategoryView />} />
+        <Route path="404" element={<Page404 />} />
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </>
   );
