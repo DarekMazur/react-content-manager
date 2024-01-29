@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import { RootState, useGetCommentsQuery } from '../../store';
 import { useSelector } from 'react-redux';
 import { CommentTypes, UserTypes } from '../../types/dataTypes';
@@ -9,15 +8,15 @@ import TableWrapper from '../../components/Organisms/TableComponents/TableWrappe
 import { commentsTableHeaders } from '../../utils/data';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 import { Main } from '../../components/Organisms/Main/Main.styles';
+import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 
 const CommentsView = () => {
   const { data: comments = [], isLoading } = useGetCommentsQuery();
+  const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
   const selectedComments = useSelector<RootState>(
     (state) => state.selectedComments,
   );
-
-  const [wrapperHeight, setWrapperHeight] = useState(0);
   const [availableComments, setAvailableComments] = useState<CommentTypes[]>(
     [],
   );
@@ -35,16 +34,12 @@ const CommentsView = () => {
     }
   }, [comments, currentUser]);
 
-  useEffect(() => {
-    setWrapperHeight(getFooterHeight() + 50);
-  }, []);
-
   if (isLoading) {
     return <Loading>Loading...</Loading>;
   }
 
   return (
-    <Main $minHeight={window.innerHeight - wrapperHeight}>
+    <Main $minHeight={height}>
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Comments
       </Heading>

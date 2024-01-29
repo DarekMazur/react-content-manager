@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import Heading from '../../components/Atoms/Heading/Heading';
 import { RootState, useGetUsersQuery } from '../../store';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
@@ -9,15 +7,12 @@ import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { Main } from '../../components/Organisms/Main/Main.styles';
+import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 
 const Users = () => {
   const { data: users = [], isLoading } = useGetUsersQuery();
-  const [wrapperHeight, setWrapperHeight] = useState(0);
+  const height = useMinHeight();
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
-
-  useEffect(() => {
-    setWrapperHeight(getFooterHeight() + 50);
-  }, []);
 
   if (users.length === 0) return null;
 
@@ -26,7 +21,7 @@ const Users = () => {
   }
 
   return (
-    <Main $minHeight={window.innerHeight - wrapperHeight}>
+    <Main $minHeight={height}>
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         Users
       </Heading>

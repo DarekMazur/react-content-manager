@@ -4,25 +4,21 @@ import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { useEffect, useState } from 'react';
 import { CommentTypes, UserTypes } from '../../types/dataTypes';
 import { useSelector } from 'react-redux';
-import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import { Main } from '../../components/Organisms/Main/Main.styles';
 import CommentForm from '../../components/Organisms/Forms/CommentForm/CommentForm';
+import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 
 const CommentView = () => {
   const { uuid } = useParams();
+  const height = useMinHeight();
   const { data: comments = [], isLoading } = useGetCommentsQuery();
   const { data: users = [] } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
-  const [wrapperHeight, setWrapperHeight] = useState(0);
   const [currentComment, setCurrentComment] = useState<
     CommentTypes | undefined
   >(undefined);
-
-  useEffect(() => {
-    setWrapperHeight(getFooterHeight() + 50);
-  }, []);
 
   useEffect(() => {
     if (currentComment && users.length > 0) {
@@ -43,7 +39,7 @@ const CommentView = () => {
   }
 
   return (
-    <Main $minHeight={wrapperHeight}>
+    <Main $minHeight={height}>
       {currentComment && userData ? (
         (currentUser as UserTypes).uuid ===
           currentComment.article.author.uuid ||
