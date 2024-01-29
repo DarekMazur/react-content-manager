@@ -6,7 +6,13 @@ import {
   useGetCategoriesQuery,
   useUpdateArticleMutation,
 } from '../../../../store';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  FormEvent,
+  useEffect,
+  useState,
+} from 'react';
 import { ArticleDataTypes, CategoriesTypes } from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
@@ -21,6 +27,8 @@ import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
 import { editorConfiguration } from '../../../../utils/helpers/editorConfig';
 import P from '../../../Atoms/Paragraph/P';
 import ImageController from '../../../Molecules/ImageControler/ImageController.tsx';
+import Input from '../../../Molecules/Input/Input.tsx';
+import { Tag } from '../../../Atoms/Tag/Tag.styles.ts';
 
 interface OptionTypes {
   readonly label: string;
@@ -56,6 +64,7 @@ const ArticleForm = () => {
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [options, setOptions] = useState<OptionTypes[]>([]);
+  const [newTag, setNewTag] = useState<string | null>();
 
   const categoriesOptions: OptionTypes[] = [];
   const articleInitCategories: OptionTypes[] = [];
@@ -160,6 +169,10 @@ const ArticleForm = () => {
     setArticleCategories(articleCategories);
   };
 
+  const handleRemoveTag = (removed: string) => {
+    setArticleTags((prevState) => prevState.filter((tag) => tag !== removed));
+  };
+
   const handleCreate = (inputValue: string) => {
     const newOption = createOption(inputValue);
     setOptions((prev) => [...prev, newOption]);
@@ -181,6 +194,7 @@ const ArticleForm = () => {
       body: articleBody,
       cover: articleCover,
       isSticky: articleIsSticky,
+      tags: articleTags,
       publishedAt: articlePublished ? articlePublished : new Date(),
     });
   };
@@ -194,6 +208,7 @@ const ArticleForm = () => {
       body: articleBody,
       cover: articleCover,
       isSticky: articleIsSticky,
+      tags: articleTags,
       publishedAt: null,
     });
   };
@@ -202,6 +217,20 @@ const ArticleForm = () => {
     e.preventDefault();
     setCurrentArticle(initialValues ? { ...initialValues } : undefined);
     navigate(-1);
+  };
+
+  const handleNewTags = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewTag(e.target.value);
+  };
+
+  const handleOnKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === ',') {
+      setArticleTags((prevState) => [
+        ...prevState,
+        (e.target as HTMLInputElement).value.slice(0, -1),
+      ]);
+      setNewTag(null);
+    }
   };
 
   const handleCloseModal = () => {
@@ -264,7 +293,37 @@ const ArticleForm = () => {
                   onCreateOption={handleCreate}
                 />
               </div>
-              <P>tag: {articleTags && articleTags.map((tag) => `#${tag} `)}</P>
+              <div>
+                <P>tag:</P>
+                <P>
+                  {articleTags && articleTags.length > 0
+                    ? articleTags.map((tag, index) => (
+                        <Tag key={index}>
+                          <FontAwesomeIcon
+                            style={{
+                              fontSize: '1.3rem',
+                              marginRight: '0.5rem',
+                              cursor: 'pointer',
+                            }}
+                            icon={['fas', 'xmark']}
+                            onClick={() => handleRemoveTag(tag)}
+                          />
+                          {tag}
+                        </Tag>
+                      ))
+                    : 'No tags yet'}
+                </P>
+                <Input
+                  label={'Add tags:'}
+                  type={'text'}
+                  id={'tags'}
+                  value={newTag ? newTag : ''}
+                  uuid={''}
+                  placeholder={"separate with coma ','"}
+                  handleOnChange={(e) => handleNewTags(e)}
+                  handleKeyPress={(e) => handleOnKeyPress(e)}
+                />
+              </div>
               <InputCheckbox
                 label="Sticky"
                 id="sticky"
