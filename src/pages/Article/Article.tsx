@@ -2,20 +2,20 @@ import { useParams } from 'react-router';
 import Heading from '../../components/Atoms/Heading/Heading';
 import { RootState, useGetArticlesQuery } from '../../store';
 import { useEffect, useState } from 'react';
-import { getFooterHeight } from '../../utils/methods/getFooterHeight';
 import { ArticleDataTypes, UserTypes } from '../../types/dataTypes';
 import ArticleForm from '../../components/Organisms/Forms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
 import P from '../../components/Atoms/Paragraph/P';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { Main } from '../../components/Organisms/Main/Main.styles';
+import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 
 const Article = () => {
   const { id } = useParams();
   const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
 
-  const [wrapperHeight, setWrapperHeight] = useState(0);
   const [currentArticle, setCurrentArticle] =
     useState<ArticleDataTypes | null>();
 
@@ -25,16 +25,12 @@ const Article = () => {
     }
   }, [articles, id]);
 
-  useEffect(() => {
-    setWrapperHeight(getFooterHeight() + 50);
-  }, []);
-
   if (isLoading) {
     return <Loading>Loading...</Loading>;
   }
 
   return (
-    <Main $minHeight={window.innerHeight - wrapperHeight}>
+    <Main $minHeight={height}>
       {currentArticle ? (
         <section>
           <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
