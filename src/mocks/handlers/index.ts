@@ -134,6 +134,7 @@ export const handlers = [
           updatedAt: updatedArticle.updatedAt,
           publishedAt: updatedArticle.publishedAt,
           likes: updatedArticle.likes,
+          tags: updatedArticle.tags,
           categories: db.category.findMany({
             where: {
               uuid: {
