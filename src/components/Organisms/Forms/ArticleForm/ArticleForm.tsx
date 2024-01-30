@@ -355,14 +355,16 @@ const ArticleForm = () => {
                 </FormButton>
                 <div>
                   <FormButton $type="submit" type="submit">
-                    <FontAwesomeIcon icon={['fas', 'save']} /> Publish
+                    <FontAwesomeIcon icon={['fas', 'save']} />{' '}
+                    {currentArticle.publishedAt ? 'Save' : 'Publish'}
                   </FormButton>
                   <FormButton
                     $type="submit"
                     type="button"
                     onClick={handleDraft}
                   >
-                    <FontAwesomeIcon icon={['fas', 'clipboard']} /> Draft
+                    <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
+                    {currentArticle.publishedAt ? 'Unpublish' : 'Draft'}
                   </FormButton>
                 </div>
               </FormButtonWrapper>

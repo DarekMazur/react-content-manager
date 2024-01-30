@@ -51,7 +51,7 @@ export const FormButton = styled.button<FormButtonTypes>`
       : $type === 'reset'
         ? theme.colors.yellow
         : theme.colors.red};
-  width: 10rem;
+  width: 15rem;
   border: 0.1rem solid;
   border-radius: 0.5rem;
   cursor: pointer;
