@@ -44,7 +44,8 @@ const CategoryForm = () => {
     if (
       currentCategory &&
       categories.filter(
-        (user) => user.uuid === (currentCategory as CategoriesTypes).uuid,
+        (category) =>
+          category.uuid === (currentCategory as CategoriesTypes).uuid,
       ).length === 0
     ) {
       navigate(-1);

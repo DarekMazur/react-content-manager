@@ -66,6 +66,14 @@ const CommentForm = () => {
       commentShadowed: !!comments.find((comment) => comment.uuid === uuid)
         ?.shadowed,
     });
+    if (
+      currentComment &&
+      comments.filter(
+        (comment) => comment.uuid === (currentComment as CommentTypes).uuid,
+      ).length === 0
+    ) {
+      navigate(-1);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, comments, uuid]);
 
