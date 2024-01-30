@@ -10,4 +10,8 @@ export const StyledArticleForm = styled.form`
     width: 20vw;
     max-width: 20vw;
   }
+
+  .ck-content {
+    min-height: 40rem;
+  }
 `;

@@ -17,6 +17,10 @@ const Home: FC<HomeProps> = ({ user }) => {
     navigation('/articles');
   };
 
+  const handleClickCreate = () => {
+    navigation('/articles/create');
+  };
+
   return (
     <main>
       <Heading
@@ -32,7 +36,7 @@ const Home: FC<HomeProps> = ({ user }) => {
         <HomeSection />
         <section style={{ display: 'flex', flexDirection: 'column' }}>
           <Button handleClick={handleClickEdit}>Edit article</Button>
-          <Button>Create article</Button>
+          <Button handleClick={handleClickCreate}>Create article</Button>
         </section>
       </Wrapper>
     </main>

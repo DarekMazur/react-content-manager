@@ -1,8 +1,10 @@
 import { useNavigate, useParams } from 'react-router';
 import CreatableSelect from 'react-select/creatable';
 import {
+  RootState,
   switchPopup,
   useAddCategoryMutation,
+  useCreateArticleMutation,
   useGetArticlesQuery,
   useGetCategoriesQuery,
   useUpdateArticleMutation,
@@ -14,7 +16,11 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { ArticleDataTypes, CategoriesTypes } from '../../../../types/dataTypes';
+import {
+  ArticleDataTypes,
+  CategoriesTypes,
+  UserTypes,
+} from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
 import {
@@ -34,7 +40,8 @@ import P from '../../../Atoms/Paragraph/P';
 import ImageController from '../../../Molecules/ImageControler/ImageController.tsx';
 import Input from '../../../Molecules/Input/Input.tsx';
 import { Tag } from '../../../Atoms/Tag/Tag.styles.ts';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import placeholder from '../../../../assets/placeholder.png';
 
 interface OptionTypes {
   readonly label: string;
@@ -49,7 +56,9 @@ const ArticleForm = () => {
   const { data: categories = [] } = useGetCategoriesQuery();
   const [updateArticle, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateArticleMutation();
+  const [createArticle] = useCreateArticleMutation();
   const [addCategory] = useAddCategoryMutation();
+  const currentUser = useSelector<RootState>((state) => state.user);
 
   const [currentArticle, setCurrentArticle] =
     useState<ArticleDataTypes | null>();
@@ -57,7 +66,7 @@ const ArticleForm = () => {
   const [articleTitle, setArticleTitle] = useState<string>('');
   const [articleDescription, setArticleDescription] = useState<string>('');
   const [articleBody, setArticleBody] = useState<string>('');
-  const [articleCover, setArticleCover] = useState<string>('');
+  const [articleCover, setArticleCover] = useState<string>(placeholder);
   const [articleCategories, setArticleCategories] = useState<CategoriesTypes[]>(
     [],
   );
@@ -202,6 +211,27 @@ const ArticleForm = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (location.pathname.includes('create')) {
+      console.log(currentUser);
+      const newArticle = {
+        ...currentArticle,
+        title: articleTitle,
+        description: articleDescription,
+        categories: articleCategories,
+        body: articleBody,
+        cover: articleCover,
+        isSticky: articleIsSticky,
+        tags: articleTags,
+        author: currentUser,
+        publishedAt: articlePublished ? articlePublished : new Date(),
+      };
+      createArticle({
+        ...newArticle,
+      });
+      navigate('/articles');
+    }
+
     updateArticle({
       ...currentArticle,
       title: articleTitle,
@@ -281,127 +311,131 @@ const ArticleForm = () => {
         onSubmit={(e) => handleSubmit(e)}
         onReset={(e) => handleOnCancel(e)}
       >
-        {currentArticle ? (
-          <>
-            <aside>
-              <ImageController
-                image={image}
-                defaultImage={articleCover}
-                altText={`${articleTitle} cover image`}
-                imageUrl={imageUrl as string}
-                onFilesChange={(selectedFiles) => setImage(selectedFiles)}
-              />
-              <P>
-                by{' '}
-                <InLink
-                  target={`/users/${currentArticle.author.uuid}`}
-                  name={currentArticle.author.username}
-                />
-              </P>
-              <P>
-                {articlePublished
-                  ? `published at ${getDate(articlePublished)}`
-                  : 'Draft'}
-              </P>
-              <div style={{ position: 'relative', zIndex: '3' }}>
-                category:{' '}
-                <CreatableSelect
-                  noOptionsMessage={() => 'create first category'}
-                  defaultValue={articleInitCategories}
-                  isMulti
-                  isClearable
-                  isSearchable
-                  closeMenuOnSelect={false}
-                  options={options}
-                  onChange={(newValue) =>
-                    handleSelectChange(newValue as OptionTypes[])
-                  }
-                  onCreateOption={handleCreate}
-                />
-              </div>
+        <aside>
+          <ImageController
+            image={image}
+            defaultImage={articleCover}
+            altText={`${articleTitle} cover image`}
+            imageUrl={imageUrl as string}
+            onFilesChange={(selectedFiles) => setImage(selectedFiles)}
+          />
+          <P>
+            by{' '}
+            <InLink
+              target={
+                currentArticle
+                  ? `/users/${currentArticle.author.uuid}`
+                  : `/users/${(currentUser as UserTypes).uuid}`
+              }
+              name={
+                currentArticle
+                  ? currentArticle.author.username
+                  : (currentUser as UserTypes).username
+              }
+            />
+          </P>
+          <P>
+            {articlePublished
+              ? `published at ${getDate(articlePublished)}`
+              : 'Draft'}
+          </P>
+          <div style={{ position: 'relative', zIndex: '3' }}>
+            category:{' '}
+            <CreatableSelect
+              noOptionsMessage={() => 'create first category'}
+              defaultValue={articleInitCategories}
+              isMulti
+              isClearable
+              isSearchable
+              closeMenuOnSelect={false}
+              options={options}
+              onChange={(newValue) =>
+                handleSelectChange(newValue as OptionTypes[])
+              }
+              onCreateOption={handleCreate}
+            />
+          </div>
+          <div>
+            <P>tag:</P>
+            <P>
+              {articleTags && articleTags.length > 0
+                ? articleTags.map((tag, index) => (
+                    <Tag key={index}>
+                      <FontAwesomeIcon
+                        style={{
+                          fontSize: '1.3rem',
+                          marginRight: '0.5rem',
+                          cursor: 'pointer',
+                        }}
+                        icon={['fas', 'xmark']}
+                        onClick={() => handleRemoveTag(tag)}
+                      />
+                      {tag}
+                    </Tag>
+                  ))
+                : 'No tags yet'}
+            </P>
+            <Input
+              label={'Add tags:'}
+              type={'text'}
+              id={'tags'}
+              value={newTag ? newTag : ''}
+              uuid={''}
+              placeholder={"separate with coma ','"}
+              handleOnChange={(e) => handleNewTags(e)}
+              handleKeyPress={(e) => handleOnKeyPress(e)}
+            />
+          </div>
+          <InputCheckbox
+            label="Sticky"
+            id="sticky"
+            value={articleIsSticky}
+            handleOnChange={(e) => handleOnChange(e, 'sticky')}
+          />
+        </aside>
+        <div style={{ width: '80vw' }}>
+          <CKEditor
+            editor={ClassicEditor}
+            data={`<h1>${
+              currentArticle ? currentArticle.title : ''
+            }</h1>${articleBody}`}
+            config={editorConfiguration}
+            onChange={(_event, editor) => handleEditorChange(editor.getData())}
+          />
+          <div style={{ padding: '2rem 0 1rem' }}>
+            <label htmlFor="description">Article description</label>
+            <textarea
+              value={articleDescription}
+              id="description"
+              style={{ width: '100%', margin: '0.5rem 0 0 ' }}
+              onChange={(e) => handleOnChange(e, 'description')}
+            />
+          </div>
+          <FormButtonWrapper>
+            <EditButtonsWrapper>
               <div>
-                <P>tag:</P>
-                <P>
-                  {articleTags && articleTags.length > 0
-                    ? articleTags.map((tag, index) => (
-                        <Tag key={index}>
-                          <FontAwesomeIcon
-                            style={{
-                              fontSize: '1.3rem',
-                              marginRight: '0.5rem',
-                              cursor: 'pointer',
-                            }}
-                            icon={['fas', 'xmark']}
-                            onClick={() => handleRemoveTag(tag)}
-                          />
-                          {tag}
-                        </Tag>
-                      ))
-                    : 'No tags yet'}
-                </P>
-                <Input
-                  label={'Add tags:'}
-                  type={'text'}
-                  id={'tags'}
-                  value={newTag ? newTag : ''}
-                  uuid={''}
-                  placeholder={"separate with coma ','"}
-                  handleOnChange={(e) => handleNewTags(e)}
-                  handleKeyPress={(e) => handleOnKeyPress(e)}
-                />
-              </div>
-              <InputCheckbox
-                label="Sticky"
-                id="sticky"
-                value={articleIsSticky}
-                handleOnChange={(e) => handleOnChange(e, 'sticky')}
-              />
-            </aside>
-            <div>
-              <CKEditor
-                editor={ClassicEditor}
-                data={`<h1>${currentArticle.title}</h1>${articleBody}`}
-                config={editorConfiguration}
-                onChange={(_event, editor) =>
-                  handleEditorChange(editor.getData())
-                }
-              />
-              <div style={{ padding: '2rem 0 1rem' }}>
-                <label htmlFor="description">Article description</label>
-                <textarea
-                  value={articleDescription}
-                  id="description"
-                  style={{ width: '100%', margin: '0.5rem 0 0 ' }}
-                  onChange={(e) => handleOnChange(e, 'description')}
-                />
-              </div>
-              <FormButtonWrapper>
-                <EditButtonsWrapper>
-                  <div>
-                    <FormButton $type="submit" type="submit">
-                      <FontAwesomeIcon icon={['fas', 'save']} />{' '}
-                      {currentArticle.publishedAt ? 'Save' : 'Publish'}
-                    </FormButton>
-                    <FormButton
-                      $type="submit"
-                      type="button"
-                      onClick={handleDraft}
-                    >
-                      <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
-                      {currentArticle.publishedAt ? 'Unpublish' : 'Draft'}
-                    </FormButton>
-                  </div>
-                  <FormButton $type="reset" type="reset">
-                    <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
-                  </FormButton>
-                </EditButtonsWrapper>
-                <FormButton $type="delete" type="button" onClick={handleDelete}>
-                  <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+                <FormButton $type="submit" type="submit">
+                  <FontAwesomeIcon icon={['fas', 'save']} />{' '}
+                  {currentArticle && currentArticle.publishedAt
+                    ? 'Save'
+                    : 'Publish'}
                 </FormButton>
-              </FormButtonWrapper>
-            </div>
-          </>
-        ) : null}
+                <FormButton $type="submit" type="button" onClick={handleDraft}>
+                  <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
+                  {currentArticle && currentArticle.publishedAt
+                    ? 'Unpublish'
+                    : 'Draft'}
+                </FormButton>
+              </div>
+              <FormButton $type="reset" type="reset">
+                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+              </FormButton>
+            </EditButtonsWrapper>
+            <FormButton $type="delete" type="button" onClick={handleDelete}>
+              <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+            </FormButton>
+          </FormButtonWrapper>
+        </div>
       </StyledArticleForm>
     </>
   );
