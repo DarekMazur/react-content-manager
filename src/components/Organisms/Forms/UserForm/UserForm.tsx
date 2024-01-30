@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  EditButtonsWrapper,
   FormButton,
   FormButtonWrapper,
   FormWrapper,
@@ -183,21 +184,14 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             options={['Administrator', 'Redactor', 'Creator', 'Authenticated']}
           />
           <FormButtonWrapper>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '2rem',
-                minWidth: '-webkit-fill-available',
-              }}
-            >
+            <EditButtonsWrapper>
               <FormButton $type="submit" type="submit">
                 <FontAwesomeIcon icon={['fas', 'edit']} /> Save
               </FormButton>
               <FormButton $type="reset" type="reset">
                 <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
               </FormButton>
-            </div>
+            </EditButtonsWrapper>
             {(currentUser as UserTypes).uuid !== userData.uuid && (
               <FormButton $type="delete" type="button" onClick={handleDelete}>
                 <FontAwesomeIcon icon={['fas', 'trash']} /> Delete

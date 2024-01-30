@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router';
 import {
+  switchPopup,
   useGetCommentsQuery,
   useGetUsersQuery,
-  useRemoveCommentMutation,
   useUpdateCommentMutation,
   useUpdateUserMutation,
 } from '../../../../store';
@@ -12,11 +12,11 @@ import Heading from '../../../Atoms/Heading/Heading.tsx';
 import InLink from '../../../Atoms/InLink/InLink.tsx';
 import { getDate } from '../../../../utils/methods/getDate.ts';
 import {
+  EditButtonsWrapper,
   FormButton,
   FormButtonWrapper,
   FormWrapper,
 } from '../UserForm/UserForm.styles';
-import { StyledInputSelect } from '../../../Molecules/InputSelect/InputSelect.styles.ts';
 import P from '../../../Atoms/Paragraph/P.tsx';
 import { StyledImageControler } from '../../../Molecules/ImageControler/ImageControler.styles.ts';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox.tsx';
@@ -30,9 +30,11 @@ import {
   StyledCommentForm,
 } from './CommentForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
+import { useDispatch } from 'react-redux';
 
 const CommentForm = () => {
   const { uuid } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [
     updateUser,
@@ -40,7 +42,6 @@ const CommentForm = () => {
   ] = useUpdateUserMutation();
   const [updateComment, { status, isSuccess, isLoading }] =
     useUpdateCommentMutation();
-  const [removeComment] = useRemoveCommentMutation();
   const { data: comments = [] } = useGetCommentsQuery();
   const { data: users = [] } = useGetUsersQuery();
 
@@ -48,7 +49,6 @@ const CommentForm = () => {
   const [currentComment, setCurrentComment] = useState<
     CommentTypes | undefined
   >(undefined);
-  const [toDelete, setToDelete] = useState(false);
   const [initialData, setInitialData] = useState({
     authorBlocked: false,
     commentShadowed: false,
@@ -101,38 +101,28 @@ const CommentForm = () => {
     }
   };
 
-  const handleOnSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    const updatedComment = { ...currentComment };
-    if (e.target.value === 'default') {
-      updatedComment.shadowed = comments.find(
-        (comment) => comment.uuid === uuid,
-      )?.shadowed;
-    } else {
-      switch (e.target.value) {
-        case 'shadow':
-          updatedComment.shadowed = true;
-          setToDelete(false);
-          break;
-        case 'turnon':
-          updatedComment.shadowed = false;
-          setToDelete(false);
-          break;
-        case 'delete':
-          setToDelete(true);
-          break;
-        default:
-          setToDelete(false);
-      }
+  const handleOnShadow = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    if (currentComment) {
+      const updatedComment = { ...currentComment };
+      updatedComment.shadowed = (e.target as HTMLInputElement).checked;
+      setCurrentComment({ ...(updatedComment as CommentTypes) });
     }
-    setCurrentComment({ ...(updatedComment as CommentTypes) });
+  };
+
+  const handleDelete = () => {
+    dispatch(
+      switchPopup({
+        isOpen: true,
+        ids: [(currentComment as CommentTypes).id],
+        title: undefined,
+      }),
+    );
   };
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (toDelete) {
-      removeComment([currentComment?.id]);
-      navigate(-1);
-    }
     if (userData?.blocked !== initialData.authorBlocked) {
       setUpdatedElement('User');
       return updateUser(userData);
@@ -208,26 +198,13 @@ const CommentForm = () => {
               </CommentContent>
 
               <FormWrapper $direction="column" $gap={0.4} $maxWidth={20}>
-                <label htmlFor="commentAction">Action</label>
-                <StyledInputSelect
-                  name="commentAction"
-                  id="commentAction"
-                  defaultValue="default"
-                  onChange={handleOnSelect}
-                >
-                  <option value="default" key="default">
-                    --choose action--
-                  </option>
-                  {userData.uuid !== currentComment.author.uuid ||
-                  userData.role.id !== 1 ? (
-                    initialData.commentShadowed ? (
-                      <option value="turnon">turn on</option>
-                    ) : (
-                      <option value="shadow">shadow ban</option>
-                    )
-                  ) : null}
-                  <option value="delete">delete</option>
-                </StyledInputSelect>
+                <InputCheckbox
+                  label="Shadow ban:"
+                  id="blocked"
+                  value={(currentComment as CommentTypes).shadowed}
+                  uuid={uuid}
+                  handleOnChange={(e) => handleOnShadow(e)}
+                />
               </FormWrapper>
             </CommentDetails>
             <aside>
@@ -264,11 +241,16 @@ const CommentForm = () => {
             </aside>
           </CommentFormWrapper>
           <FormButtonWrapper>
-            <FormButton $type="submit" type="submit">
-              <FontAwesomeIcon icon={['fas', 'edit']} /> Save
-            </FormButton>
-            <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
-              <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+            <EditButtonsWrapper>
+              <FormButton $type="submit" type="submit">
+                <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+              </FormButton>
+              <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
+                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+              </FormButton>
+            </EditButtonsWrapper>
+            <FormButton $type="delete" type="button" onClick={handleDelete}>
+              <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
             </FormButton>
           </FormButtonWrapper>
         </StyledCommentForm>

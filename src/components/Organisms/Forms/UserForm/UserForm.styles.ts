@@ -33,6 +33,13 @@ export const FormButtonWrapper = styled.div`
   margin-top: 2rem;
 `;
 
+export const EditButtonsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  min-width: -webkit-fill-available;
+`;
+
 export const FormButton = styled.button<FormButtonTypes>`
   color: ${({ theme }) => theme.colors.white};
   font-weight: ${({ theme, $type }) =>
