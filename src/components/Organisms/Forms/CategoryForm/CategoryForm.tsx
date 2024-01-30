@@ -1,19 +1,26 @@
 import Input from '../../../Molecules/Input/Input.tsx';
-import { FormButton, FormButtonWrapper } from '../UserForm/UserForm.styles.ts';
+import {
+  EditButtonsWrapper,
+  FormButton,
+  FormButtonWrapper,
+} from '../UserForm/UserForm.styles.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { CategoriesTypes } from '../../../../types/dataTypes.ts';
 import {
+  switchPopup,
   useGetCategoriesQuery,
   useUpdateCategoryMutation,
 } from '../../../../store';
 import { useNavigate, useParams } from 'react-router';
 import { StyledCategoryForm } from './CategoryForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
+import { useDispatch } from 'react-redux';
 
 const CategoryForm = () => {
   const { uuid } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data: categories = [] } = useGetCategoriesQuery();
   const [updateCategory, { status, isSuccess, isLoading }] =
     useUpdateCategoryMutation();
@@ -34,6 +41,16 @@ const CategoryForm = () => {
         ...categories.find((category) => category.uuid === uuid)!,
       });
     }
+    if (
+      currentCategory &&
+      categories.filter(
+        (category) =>
+          category.uuid === (currentCategory as CategoriesTypes).uuid,
+      ).length === 0
+    ) {
+      navigate(-1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categories, uuid]);
 
   useEffect(() => {
@@ -74,6 +91,16 @@ const CategoryForm = () => {
   const handleOnCancel = () => {
     setCurrentCategory(initialValues ? { ...initialValues } : undefined);
     navigate(-1);
+  };
+
+  const handleDelete = () => {
+    dispatch(
+      switchPopup({
+        isOpen: true,
+        ids: [(currentCategory as CategoriesTypes).id],
+        title: (currentCategory as CategoriesTypes).title,
+      }),
+    );
   };
 
   const handleCloseModal = () => {
@@ -127,11 +154,16 @@ const CategoryForm = () => {
               />
             </div>
             <FormButtonWrapper>
-              <FormButton $type="submit" type="submit">
-                <FontAwesomeIcon icon={['fas', 'edit']} /> Save
-              </FormButton>
-              <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
-                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+              <EditButtonsWrapper>
+                <FormButton $type="submit" type="submit">
+                  <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+                </FormButton>
+                <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
+                  <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+                </FormButton>
+              </EditButtonsWrapper>
+              <FormButton $type="delete" type="button" onClick={handleDelete}>
+                <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
               </FormButton>
             </FormButtonWrapper>
           </StyledCategoryForm>

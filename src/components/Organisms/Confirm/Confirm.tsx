@@ -34,9 +34,18 @@ const Confirm = () => {
 
   const counter = popupState.ids ? popupState.ids.length : 0;
 
+  let locationName = location.pathname.slice(1);
+
+  const regex = /[^/]+$/;
+
+  if (locationName.search(regex) > 0) {
+    const slashIndex = locationName.search(regex);
+    locationName = locationName.slice(0, slashIndex - 1);
+  }
+
   const handleDelete = () => {
     if (counter === 1) {
-      switch (location.pathname.slice(1)) {
+      switch (locationName) {
         case 'articles':
           removeArticle(popupState.ids[0]);
           break;
@@ -79,9 +88,9 @@ const Confirm = () => {
       <div>
         <p>
           Are you sure you want to delete {counter > 1 ? counter : null}{' '}
-          {location.pathname.slice(1) === 'categories'
+          {locationName === 'categories'
             ? 'category'
-            : location.pathname.slice(1, -1)}
+            : locationName.slice(0, -1)}
           {counter > 1 ? (
             's'
           ) : (

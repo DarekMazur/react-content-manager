@@ -28,8 +28,16 @@ export const FormWrapper = styled.div<FormTypes>`
 
 export const FormButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-end;
   margin-top: 2rem;
+`;
+
+export const EditButtonsWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  min-width: -webkit-fill-available;
 `;
 
 export const FormButton = styled.button<FormButtonTypes>`
@@ -38,7 +46,11 @@ export const FormButton = styled.button<FormButtonTypes>`
     $type === 'submit' ? theme.fontWeight.bold : theme.fontWeight.regular};
   padding: 0.5rem 1rem;
   background-color: ${({ $type, theme }) =>
-    $type === 'submit' ? theme.colors.blue : theme.colors.red};
+    $type === 'submit'
+      ? theme.colors.blue
+      : $type === 'reset'
+        ? theme.colors.yellow
+        : theme.colors.red};
   width: 10rem;
   border: 0.1rem solid;
   border-radius: 0.5rem;
