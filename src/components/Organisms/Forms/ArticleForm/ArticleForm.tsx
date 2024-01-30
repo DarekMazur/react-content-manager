@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router';
 import CreatableSelect from 'react-select/creatable';
 import {
+  switchPopup,
   useAddCategoryMutation,
   useGetArticlesQuery,
   useGetCategoriesQuery,
@@ -16,7 +17,11 @@ import {
 import { ArticleDataTypes, CategoriesTypes } from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
-import { FormButton, FormButtonWrapper } from '../UserForm/UserForm.styles';
+import {
+  EditButtonsWrapper,
+  FormButton,
+  FormButtonWrapper,
+} from '../UserForm/UserForm.styles';
 import { StyledArticleForm } from './ArticleForm.styles.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
@@ -29,6 +34,7 @@ import P from '../../../Atoms/Paragraph/P';
 import ImageController from '../../../Molecules/ImageControler/ImageController.tsx';
 import Input from '../../../Molecules/Input/Input.tsx';
 import { Tag } from '../../../Atoms/Tag/Tag.styles.ts';
+import { useDispatch } from 'react-redux';
 
 interface OptionTypes {
   readonly label: string;
@@ -38,6 +44,7 @@ interface OptionTypes {
 const ArticleForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data: articles = [], isLoading } = useGetArticlesQuery();
   const { data: categories = [] } = useGetCategoriesQuery();
   const [updateArticle, { status, isSuccess, isLoading: loadingUpdate }] =
@@ -100,6 +107,15 @@ const ArticleForm = () => {
         ...articles.find((article) => article.id === Number(id))!,
       });
     }
+    if (
+      currentArticle &&
+      articles.filter(
+        (article) => article.uuid === (currentArticle as ArticleDataTypes).uuid,
+      ).length === 0
+    ) {
+      navigate(-1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [articles, id]);
 
   useEffect(() => {
@@ -237,6 +253,16 @@ const ArticleForm = () => {
     setModal(false);
   };
 
+  const handleDelete = () => {
+    dispatch(
+      switchPopup({
+        isOpen: true,
+        ids: [(currentArticle as ArticleDataTypes).id],
+        title: (currentArticle as ArticleDataTypes).title,
+      }),
+    );
+  };
+
   if (isLoading) {
     return <Loading>Loading...</Loading>;
   }
@@ -350,23 +376,28 @@ const ArticleForm = () => {
                 />
               </div>
               <FormButtonWrapper>
-                <FormButton $type="reset" type="reset">
-                  <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+                <EditButtonsWrapper>
+                  <div>
+                    <FormButton $type="submit" type="submit">
+                      <FontAwesomeIcon icon={['fas', 'save']} />{' '}
+                      {currentArticle.publishedAt ? 'Save' : 'Publish'}
+                    </FormButton>
+                    <FormButton
+                      $type="submit"
+                      type="button"
+                      onClick={handleDraft}
+                    >
+                      <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
+                      {currentArticle.publishedAt ? 'Unpublish' : 'Draft'}
+                    </FormButton>
+                  </div>
+                  <FormButton $type="reset" type="reset">
+                    <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+                  </FormButton>
+                </EditButtonsWrapper>
+                <FormButton $type="delete" type="button" onClick={handleDelete}>
+                  <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
                 </FormButton>
-                <div>
-                  <FormButton $type="submit" type="submit">
-                    <FontAwesomeIcon icon={['fas', 'save']} />{' '}
-                    {currentArticle.publishedAt ? 'Save' : 'Publish'}
-                  </FormButton>
-                  <FormButton
-                    $type="submit"
-                    type="button"
-                    onClick={handleDraft}
-                  >
-                    <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
-                    {currentArticle.publishedAt ? 'Unpublish' : 'Draft'}
-                  </FormButton>
-                </div>
               </FormButtonWrapper>
             </div>
           </>
