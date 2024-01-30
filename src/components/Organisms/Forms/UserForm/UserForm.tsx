@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import {
   RootState,
   setUser,
+  switchPopup,
   useGetUsersQuery,
   useUpdateUserMutation,
 } from '../../../../store';
@@ -51,6 +52,14 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   useEffect(() => {
     setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
+    if (
+      userData &&
+      users.filter((user) => user.uuid === (userData as UserTypes).uuid)
+        .length === 0
+    ) {
+      navigate(-1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, uuid]);
 
   useEffect(() => {
@@ -94,6 +103,16 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
     setImage([]);
     navigate(-1);
+  };
+
+  const handleDelete = () => {
+    dispatch(
+      switchPopup({
+        isOpen: true,
+        ids: [(userData as UserTypes).id],
+        title: (userData as UserTypes).username,
+      }),
+    );
   };
 
   const handleCloseModal = () => {
@@ -164,12 +183,26 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             options={['Administrator', 'Redactor', 'Creator', 'Authenticated']}
           />
           <FormButtonWrapper>
-            <FormButton $type="submit" type="submit">
-              <FontAwesomeIcon icon={['fas', 'edit']} /> Save
-            </FormButton>
-            <FormButton $type="reset" type="reset">
-              <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
-            </FormButton>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '2rem',
+                minWidth: '-webkit-fill-available',
+              }}
+            >
+              <FormButton $type="submit" type="submit">
+                <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+              </FormButton>
+              <FormButton $type="reset" type="reset">
+                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+              </FormButton>
+            </div>
+            {(currentUser as UserTypes).uuid !== userData.uuid && (
+              <FormButton $type="delete" type="button" onClick={handleDelete}>
+                <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+              </FormButton>
+            )}
           </FormButtonWrapper>
         </FormWrapper>
       </StyledUserForm>
