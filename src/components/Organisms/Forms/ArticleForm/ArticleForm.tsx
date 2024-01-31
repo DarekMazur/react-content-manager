@@ -11,8 +11,9 @@ import {
 } from '../../../../store';
 import {
   ChangeEvent,
-  KeyboardEvent,
   FormEvent,
+  KeyboardEvent,
+  MouseEvent,
   useEffect,
   useState,
 } from 'react';
@@ -42,6 +43,7 @@ import Input from '../../../Molecules/Input/Input.tsx';
 import { Tag } from '../../../Atoms/Tag/Tag.styles.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import placeholder from '../../../../assets/placeholder.png';
+import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage';
 
 interface OptionTypes {
   readonly label: string;
@@ -81,6 +83,7 @@ const ArticleForm = () => {
   const [options, setOptions] = useState<OptionTypes[]>([]);
   const [newTag, setNewTag] = useState<string | null>();
   const [editorBody, setEditorBody] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const categoriesOptions: OptionTypes[] = [];
   const articleInitCategories: OptionTypes[] = [];
@@ -159,6 +162,7 @@ const ArticleForm = () => {
   });
 
   const handleEditorChange = (body: string) => {
+    setErrorMessage(null);
     setEditorBody(body);
   };
 
@@ -201,11 +205,37 @@ const ArticleForm = () => {
     addCategory(newCategory);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+    isDraft?: boolean,
+  ) => {
     e.preventDefault();
+
+    const publishedStatus = () => {
+      if (isDraft) {
+        return null;
+      } else {
+        return articlePublished ? articlePublished : new Date();
+      }
+    };
 
     const CKETitle = editorBody.match(/<h1>.*<\/h1>/) || '';
     const CKEBody = editorBody.replace(CKETitle[0], '');
+
+    if (
+      CKETitle.length === 0 ||
+      CKETitle[0].replace(/<\/?h1>/g, '') === '&nbsp;'
+    ) {
+      return setErrorMessage(
+        !CKEBody
+          ? 'Article title and content are required'
+          : 'Article title is required',
+      );
+    }
+
+    if (!CKEBody || CKEBody.replace(/<\/?p>/g, '') === '&nbsp;') {
+      return setErrorMessage('Article content is required');
+    }
 
     if (location.pathname.includes('create')) {
       const newArticle = {
@@ -218,7 +248,7 @@ const ArticleForm = () => {
         isSticky: articleIsSticky,
         tags: articleTags,
         author: currentUser,
-        publishedAt: articlePublished ? articlePublished : new Date(),
+        publishedAt: publishedStatus(),
       };
       createArticle({
         ...newArticle,
@@ -235,24 +265,7 @@ const ArticleForm = () => {
       cover: articleCover,
       isSticky: articleIsSticky,
       tags: articleTags,
-      publishedAt: articlePublished ? articlePublished : new Date(),
-    });
-  };
-
-  const handleDraft = () => {
-    const CKETitle = editorBody.match(/<h1>.*<\/h1>/) || '';
-    const CKEBody = editorBody.replace(CKETitle[0], '');
-
-    updateArticle({
-      ...currentArticle,
-      title: CKETitle[0].replace(/<\/?h1>/g, ''),
-      description: articleDescription,
-      categories: articleCategories,
-      body: CKEBody,
-      cover: articleCover,
-      isSticky: articleIsSticky,
-      tags: articleTags,
-      publishedAt: null,
+      publishedAt: publishedStatus(),
     });
   };
 
@@ -399,6 +412,7 @@ const ArticleForm = () => {
             config={editorConfiguration}
             onChange={(_event, editor) => handleEditorChange(editor.getData())}
           />
+          <FormErrorMessage message={errorMessage} />
           <div style={{ padding: '2rem 0 1rem' }}>
             <label htmlFor="description">Article description</label>
             <textarea
@@ -417,7 +431,11 @@ const ArticleForm = () => {
                     ? 'Save'
                     : 'Publish'}
                 </FormButton>
-                <FormButton $type="submit" type="button" onClick={handleDraft}>
+                <FormButton
+                  $type="submit"
+                  type="button"
+                  onClick={(e) => handleSubmit(e, true)}
+                >
                   <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
                   {currentArticle && currentArticle.publishedAt
                     ? 'Unpublish'
