@@ -65,7 +65,6 @@ const ArticleForm = () => {
 
   const [articleTitle, setArticleTitle] = useState<string>('');
   const [articleDescription, setArticleDescription] = useState<string>('');
-  const [articleBody, setArticleBody] = useState<string>('');
   const [articleCover, setArticleCover] = useState<string>(placeholder);
   const [articleCategories, setArticleCategories] = useState<CategoriesTypes[]>(
     [],
@@ -81,6 +80,7 @@ const ArticleForm = () => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [options, setOptions] = useState<OptionTypes[]>([]);
   const [newTag, setNewTag] = useState<string | null>();
+  const [editorBody, setEditorBody] = useState<string>('');
 
   const categoriesOptions: OptionTypes[] = [];
   const articleInitCategories: OptionTypes[] = [];
@@ -131,7 +131,6 @@ const ArticleForm = () => {
     if (currentArticle) {
       setArticleTitle(currentArticle.title);
       setArticleDescription(currentArticle.description);
-      setArticleBody(currentArticle.body);
       setArticleCover(currentArticle.cover);
       setArticleCategories(currentArticle.categories);
       setArticleTags(currentArticle.tags);
@@ -160,14 +159,7 @@ const ArticleForm = () => {
   });
 
   const handleEditorChange = (body: string) => {
-    const headerTitle = body.match(/<h1>.*<\/h1>/) || '';
-    if (headerTitle[0].replace(/<\/?h1>/g, '') !== articleTitle) {
-      return setArticleTitle(headerTitle[0].replace(/<\/?h1>/g, ''));
-    }
-
-    if (body.replace(headerTitle[0], '') !== articleBody) {
-      return setArticleBody(body.replace(headerTitle[0], ''));
-    }
+    setEditorBody(body);
   };
 
   const handleOnChange = (
@@ -212,14 +204,16 @@ const ArticleForm = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const CKETitle = editorBody.match(/<h1>.*<\/h1>/) || '';
+    const CKEBody = editorBody.replace(CKETitle[0], '');
+
     if (location.pathname.includes('create')) {
-      console.log(currentUser);
       const newArticle = {
         ...currentArticle,
-        title: articleTitle,
+        title: CKETitle[0].replace(/<\/?h1>/g, ''),
         description: articleDescription,
         categories: articleCategories,
-        body: articleBody,
+        body: CKEBody,
         cover: articleCover,
         isSticky: articleIsSticky,
         tags: articleTags,
@@ -234,10 +228,10 @@ const ArticleForm = () => {
 
     updateArticle({
       ...currentArticle,
-      title: articleTitle,
+      title: CKETitle[0].replace(/<\/?h1>/g, ''),
       description: articleDescription,
       categories: articleCategories,
-      body: articleBody,
+      body: CKEBody,
       cover: articleCover,
       isSticky: articleIsSticky,
       tags: articleTags,
@@ -246,12 +240,15 @@ const ArticleForm = () => {
   };
 
   const handleDraft = () => {
+    const CKETitle = editorBody.match(/<h1>.*<\/h1>/) || '';
+    const CKEBody = editorBody.replace(CKETitle[0], '');
+
     updateArticle({
       ...currentArticle,
-      title: articleTitle,
+      title: CKETitle[0].replace(/<\/?h1>/g, ''),
       description: articleDescription,
       categories: articleCategories,
-      body: articleBody,
+      body: CKEBody,
       cover: articleCover,
       isSticky: articleIsSticky,
       tags: articleTags,
@@ -396,9 +393,9 @@ const ArticleForm = () => {
         <div style={{ width: '80vw' }}>
           <CKEditor
             editor={ClassicEditor}
-            data={`<h1>${
-              currentArticle ? currentArticle.title : ''
-            }</h1>${articleBody}`}
+            data={`<h1>${currentArticle ? currentArticle.title : ''}</h1>${
+              currentArticle ? currentArticle.body : ''
+            }`}
             config={editorConfiguration}
             onChange={(_event, editor) => handleEditorChange(editor.getData())}
           />
