@@ -31,20 +31,19 @@ const Article = () => {
 
   return (
     <Main $minHeight={height}>
-      {currentArticle ? (
-        <section>
-          <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
-            {currentArticle.title}
-          </Heading>
-          {(currentUser as UserTypes).uuid === currentArticle.author.uuid ||
-          (currentUser as UserTypes).role.type === 'admin' ||
-          (currentUser as UserTypes).role.type === 'redactor' ? (
-            <ArticleForm />
-          ) : (
-            <P>You're not authorised</P>
-          )}
-        </section>
-      ) : null}
+      <section>
+        <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
+          {currentArticle ? currentArticle.title : 'New article'}
+        </Heading>
+        {!currentArticle ||
+        (currentUser as UserTypes).uuid === currentArticle.author.uuid ||
+        (currentUser as UserTypes).role.type === 'admin' ||
+        (currentUser as UserTypes).role.type === 'redactor' ? (
+          <ArticleForm />
+        ) : (
+          <P>You're not authorised</P>
+        )}
+      </section>
     </Main>
   );
 };

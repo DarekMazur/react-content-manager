@@ -24,6 +24,7 @@ const Authorised = () => {
         <Route path="/" element={<Home user={user as UserTypes} />} />
         <Route path="articles" element={<Articles />} />
         <Route path="articles/:id" element={<Article />} />
+        <Route path="articles/create" element={<Article />} />
         <Route path="users" element={<Users />} />
         <Route path="users/:uuid" element={<UserView />} />
         <Route path="comments" element={<CommentsView />} />

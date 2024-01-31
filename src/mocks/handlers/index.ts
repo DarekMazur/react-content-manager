@@ -147,6 +147,39 @@ export const handlers = [
       return HttpResponse.json(updatedArticle, { status: 201 });
     }
   }),
+  http.post('/api/articles', async ({ request }) => {
+    const newArticle = (await request.json()) as ArticleDataTypes;
+    const createdTime = new Date(Date.now());
+    db.article.create({
+      uuid: faker.string.uuid(),
+      id: db.article.count() + 1,
+      createdAt: createdTime,
+      updatedAt: createdTime,
+      publishedAt: newArticle.publishedAt ? createdTime : null,
+      likes: 0,
+      isSticky: newArticle.isSticky,
+      title: newArticle.title,
+      description: newArticle.description,
+      body: newArticle.body,
+      cover: newArticle.cover,
+      tags: newArticle.tags,
+      author: db.user.findFirst({
+        where: {
+          uuid: {
+            equals: newArticle.author.uuid,
+          },
+        },
+      })!,
+      categories: db.category.findMany({
+        where: {
+          uuid: {
+            in: newArticle.categories.map((category) => category.uuid),
+          },
+        },
+      }),
+    });
+    return HttpResponse.json(newArticle, { status: 201 });
+  }),
   http.delete('/api/articles/:articleId', async ({ params }) => {
     const { articleId } = params;
     if (!isNaN(Number(articleId))) {

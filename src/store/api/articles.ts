@@ -20,6 +20,14 @@ export const articlesApi = createApi({
       }),
       invalidatesTags: ['Articles'],
     }),
+    createArticle: builder.mutation({
+      query: (body) => ({
+        url: `articles`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Articles'],
+    }),
     removeArticle: builder.mutation({
       query: (id) => ({
         url: `articles/${id}`,
@@ -42,6 +50,7 @@ export const articlesApi = createApi({
 
 export const {
   useGetArticlesQuery,
+  useCreateArticleMutation,
   useUpdateArticleMutation,
   useRemoveArticleMutation,
   useRemoveArticlesMutation,

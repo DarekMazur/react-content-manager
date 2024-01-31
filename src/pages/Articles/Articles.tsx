@@ -9,9 +9,13 @@ import { articlesTableHeaders } from '../../utils/data.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 import { Main } from '../../components/Organisms/Main/Main.styles.ts';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.styles.ts';
+import { useNavigate } from 'react-router';
 
 const Articles = () => {
   const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const navigate = useNavigate();
   const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
 
@@ -47,6 +51,23 @@ const Articles = () => {
           counter={(selectedArticles as ArticleDataTypes[]).length}
         />
       ) : null}
+      <div
+        style={{
+          width: '95vw',
+          margin: '0 auto 0.8rem',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}
+      >
+        <FormButton
+          $type="submit"
+          type="button"
+          onClick={() => navigate('/articles/create')}
+        >
+          <FontAwesomeIcon icon={['fas', 'pen']} /> New article
+        </FormButton>
+      </div>
       <TableWrapper
         content={availableArticles}
         headers={articlesTableHeaders}

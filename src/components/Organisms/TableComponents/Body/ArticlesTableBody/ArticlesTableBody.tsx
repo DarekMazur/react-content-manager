@@ -96,7 +96,7 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
           </td>
           <td>
             {article.categories.map((category, index, array) => (
-              <span>
+              <span key={index}>
                 {category.title}
                 {index + 1 === array.length ? null : ', '}
               </span>
