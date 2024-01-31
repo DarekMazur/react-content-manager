@@ -31,6 +31,7 @@ const Authorised = () => {
         <Route path="comments/:uuid" element={<CommentView />} />
         <Route path="categories" element={<CategoriesView />} />
         <Route path="categories/:uuid" element={<CategoryView />} />
+        <Route path="categories/create" element={<CategoryView />} />
         <Route path="404" element={<Page404 />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
