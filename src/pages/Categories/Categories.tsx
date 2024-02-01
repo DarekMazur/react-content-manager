@@ -8,8 +8,12 @@ import { useSelector } from 'react-redux';
 import { CategoriesTypes } from '../../types/dataTypes.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
+import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.styles.ts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router';
 
 const CategoriesView = () => {
+  const navigate = useNavigate();
   const { data: categories = [], isLoading } = useGetCategoriesQuery();
   const height = useMinHeight();
   const selectedCategories = useSelector<RootState>(
@@ -30,6 +34,23 @@ const CategoriesView = () => {
           counter={(selectedCategories as CategoriesTypes[]).length}
         />
       ) : null}
+      <div
+        style={{
+          width: '95vw',
+          margin: '0 auto 0.8rem',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}
+      >
+        <FormButton
+          $type="submit"
+          type="button"
+          onClick={() => navigate('/categories/create')}
+        >
+          <FontAwesomeIcon icon={['fas', 'pen']} /> New category
+        </FormButton>
+      </div>
       <TableWrapper content={categories} headers={categoriesTableHeaders} />
     </Main>
   );
