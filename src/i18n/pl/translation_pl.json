@@ -1,0 +1,139 @@
+{
+  "navigation" : {
+    "menu": {
+      "home": "Panel",
+      "articles": "Artykuły",
+      "comments": "Komentarze",
+      "categories": "Kategorie",
+      "users": "Urzytkownicy"
+    },
+    "userArea": {
+      "greetings": "Cześć, {{username}}!",
+      "myProfile": "Mój profil",
+      "logout": "Wyloguj"
+    }
+  },
+  "home": {
+    "header": "Jesteś zalogowany jako {{role}}",
+    "lastArticle": "Ostatni artykuł:",
+    "lastArticleDetails": "przez {{username}}",
+    "last Comment": "Ostatni komentarz:",
+    "lastCommentDetails": "{{username}} w artykule",
+    "mostLiked": "Najpopularniejszy artykuł:",
+    "editButton": "Edytuj artykuł",
+    "createButton": "Stwórz artykuł"
+  },
+  "form": {
+    "pagination": "{{type}} na stronę",
+    "saveButton": "Zapisz",
+    "cancelButton": "Anuluj",
+    "deleteButton": "Usuń",
+    "checkbox": {
+      "yes": "TAK",
+      "no": "NIE"
+    },
+    "multiAction": "Czy na pewno chcesz usunąć {{body}}? Ta akcja jest nieodwołalna!"
+  },
+  "modal": {
+    "success": "{{element}} zaktualizowano prawidłowo!",
+    "error": "Coś poszło nie tak..."
+  },
+  "confirmation": {
+    "delete": "Usuń",
+    "cancel": "Anuluj"
+  },
+  "article": {
+    "header": "Artukuły",
+    "newArticle": "Nowy artykuł",
+    "tableHeaders": {
+      "id": "ID",
+      "status": "Status",
+      "author": "Autor",
+      "sticky": "Przypięty",
+      "categories": "Kategorie",
+      "comments": "Komentarza",
+      "likes": "Polubienia",
+      "publishedAt": "Opublikowano"
+    },
+    "form": {
+      "newArticle": "Nowy artykuł",
+      "pictureUpload": "Załaduj swoją grafikę:",
+      "author": "przez {{username}}",
+      "draft": "Szkic",
+      "categoryLabel": "kategoria:",
+      "categoryPlaceholder": "Wybierz...",
+      "tagLabel": "tag:",
+      "noTags": "Jeszcze nie ma tagów",
+      "addTags": "Dodaj tagi:",
+      "tagsPlaceholder": "oddziel przecinkiem ','",
+      "sticky": "Przypięty"
+    }
+  },
+  "user": {
+    "header": "Urzytkownicy",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Nazwa",
+      "email": "Email",
+      "confirmed": "Potwierdzony",
+      "blocked": "Zablokowany",
+      "role": "Funkcja"
+    },
+    "form": {
+      "name": "Nazwa:",
+      "email": "Email:",
+      "confirmed": "Potwierdzony:",
+      "blocked": "Zablokowany:",
+      "role": "Funkcja:",
+      "pictureUpload": "Załaduj swoją grafikę:"
+    }
+  },
+  "comment": {
+    "header": "Komentarze",
+    "tableHeaders": {
+      "id": "ID",
+      "status": "Status",
+      "author": "Autor komentarza",
+      "comment": "Komentarz",
+      "publishedAt": "Opublikowano"
+    },
+    "form": {
+      "header": "Komentarz #{{id}}",
+      "details": {
+        "header": "Szczegóły komentarza:",
+        "article": "Komentaowany artykuł:",
+        "publicationDate": "Data publikacji:",
+        "status": {
+          "title": "Status:",
+          "visible": "Widoczny dla wszystkich",
+          "shadowed": "SHADOW BANNED"
+        },
+        "shadowBan": "Shadow ban:"
+      },
+      "author": {
+        "title": "Autor komentaeza",
+        "role": "Funkcja: ",
+        "status": {
+          "title": "Status:",
+          "active": "AKTYWNY",
+          "blocked": "ZABLOKOWANY"
+        },
+        "blocked": "Zablokowany:"
+      }
+    }
+  },
+  "category": {
+    "header": "Kategorie",
+    "newCategory": "Nowa kategoria",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Nazwa",
+      "description": "Opis"
+    },
+    "form": {
+      "header": "Nowa kategoria",
+      "category": "Kategoria",
+      "description": "Opis"
+    }
+  }
+}
