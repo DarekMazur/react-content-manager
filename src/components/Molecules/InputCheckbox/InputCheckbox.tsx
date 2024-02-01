@@ -11,6 +11,7 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes.ts';
+import { useTranslation } from 'react-i18next';
 
 interface CheckboxTypes {
   label: string;
@@ -28,6 +29,7 @@ const InputCheckbox: FC<CheckboxTypes> = ({
   uuid,
   handleOnChange,
 }) => {
+  const { t } = useTranslation();
   const currentUser = useSelector<RootState>((state) => state.user);
 
   return (
@@ -51,8 +53,12 @@ const InputCheckbox: FC<CheckboxTypes> = ({
             }
           />
           <CheckboxFill aria-hidden="true">
-            <CheckboxText $isChecked={value || false}>YES</CheckboxText>
-            <CheckboxText $isChecked={value || false}>NO</CheckboxText>
+            <CheckboxText $isChecked={value || false}>
+              {t('form.checkbox.yes')}
+            </CheckboxText>
+            <CheckboxText $isChecked={value || false}>
+              {t('form.checkbox.no')}
+            </CheckboxText>
           </CheckboxFill>
         </CheckboxSwitch>
       </CheckboxSetting>

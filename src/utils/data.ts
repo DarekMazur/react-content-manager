@@ -12,20 +12,6 @@ export const data: dataTypes = {
   authorUrl: 'https://nerdistry.pl',
 };
 
-export const articlesTableHeaders = [
-  '',
-  'ID',
-  'Status',
-  'Title',
-  'Author',
-  'Sticky',
-  'Categories',
-  'Comments',
-  'Likes',
-  'Published at',
-  '',
-];
-
 export const commentsTableHeaders = [
   '',
   'ID',

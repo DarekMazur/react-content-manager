@@ -9,8 +9,10 @@ import P from '../../components/Atoms/Paragraph/P';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { Main } from '../../components/Organisms/Main/Main.styles';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
+import { useTranslation } from 'react-i18next';
 
 const Article = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const { data: articles = [], isLoading } = useGetArticlesQuery();
   const height = useMinHeight();
@@ -33,7 +35,7 @@ const Article = () => {
     <Main $minHeight={height}>
       <section>
         <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
-          {currentArticle ? currentArticle.title : 'New article'}
+          {currentArticle ? currentArticle.title : t('article.newArticle')}
         </Heading>
         {!currentArticle ||
         (currentUser as UserTypes).uuid === currentArticle.author.uuid ||

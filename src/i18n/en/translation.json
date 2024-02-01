@@ -24,7 +24,14 @@
     "createButton": "Create article"
   },
   "form": {
-    "pagination": "{{type}} per page",
+    "pagination": {
+      "title": "{{type}} per page",
+      "articles": "articles",
+      "comments": "comments",
+      "categories": "categories",
+      "users": "users"
+    },
+    "pictureUpload": "Upload your picture:",
     "saveButton": "Save",
     "cancelButton": "Cancel",
     "deleteButton": "Delete",
@@ -48,6 +55,7 @@
     "tableHeaders": {
       "id": "ID",
       "status": "Status",
+      "title": "Title",
       "author": "Author",
       "sticky": "Sticky",
       "categories": "Categories",
@@ -57,16 +65,23 @@
     },
     "form": {
       "newArticle": "New article",
-      "pictureUpload": "Upload your picture:",
-      "author": "by {{username}}",
+      "author": "by",
+      "description": "Article description",
       "draft": "Draft",
       "categoryLabel": "category:",
       "categoryPlaceholder": "Select...",
       "tagLabel": "tag:",
       "noTags": "No tags yet",
       "addTags": "Add tags:",
+      "publishedAt": "published at {{date}}",
       "tagsPlaceholder": "separate with coma ','",
-      "sticky": "Sticky"
+      "sticky": "Sticky",
+      "button": {
+        "save": "Save",
+        "publish": "Publish",
+        "unpublish": "Unpublish",
+        "draft": "Draft"
+      }
     }
   },
   "user": {

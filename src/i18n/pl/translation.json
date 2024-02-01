@@ -24,7 +24,14 @@
     "createButton": "Stwórz artykuł"
   },
   "form": {
-    "pagination": "{{type}} na stronę",
+    "pagination": {
+      "title": "{{type}} na stronę",
+      "articles": "artykuły",
+      "comments": "komentarzy",
+      "categories": "kategorii",
+      "users": "użytkowników"
+    },
+    "pictureUpload": "Załaduj swoją grafikę:",
     "saveButton": "Zapisz",
     "cancelButton": "Anuluj",
     "deleteButton": "Usuń",
@@ -48,6 +55,7 @@
     "tableHeaders": {
       "id": "ID",
       "status": "Status",
+      "title": "Tytuł",
       "author": "Autor",
       "sticky": "Przypięty",
       "categories": "Kategorie",
@@ -57,16 +65,23 @@
     },
     "form": {
       "newArticle": "Nowy artykuł",
-      "pictureUpload": "Załaduj swoją grafikę:",
-      "author": "przez {{username}}",
+      "author": "utworzony przez",
+      "description": "Opis artykułu",
       "draft": "Szkic",
       "categoryLabel": "kategoria:",
       "categoryPlaceholder": "Wybierz...",
       "tagLabel": "tag:",
       "noTags": "Jeszcze nie ma tagów",
       "addTags": "Dodaj tagi:",
+      "publishedAt": "opublikowano {{date}}",
       "tagsPlaceholder": "oddziel przecinkiem ','",
-      "sticky": "Przypięty"
+      "sticky": "Przypięty",
+      "button": {
+        "save": "Zapisz",
+        "publish": "Opublikuj",
+        "unpublish": "Cofnij publikację",
+        "draft": "Szkic"
+      }
     }
   },
   "user": {

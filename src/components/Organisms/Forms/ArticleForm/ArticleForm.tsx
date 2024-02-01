@@ -44,6 +44,7 @@ import { Tag } from '../../../Atoms/Tag/Tag.styles.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import placeholder from '../../../../assets/placeholder.png';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 interface OptionTypes {
   readonly label: string;
@@ -51,6 +52,7 @@ interface OptionTypes {
 }
 
 const ArticleForm = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -329,7 +331,7 @@ const ArticleForm = () => {
             onFilesChange={(selectedFiles) => setImage(selectedFiles)}
           />
           <P>
-            by{' '}
+            {t('article.form.author')}{' '}
             <InLink
               target={
                 currentArticle
@@ -344,12 +346,14 @@ const ArticleForm = () => {
             />
           </P>
           <P>
-            {articlePublished
-              ? `published at ${getDate(articlePublished)}`
-              : 'Draft'}
+            {articlePublished ? (
+              t('article.form.publishedAt', { date: getDate(articlePublished) })
+            ) : (
+              <strong>{t('article.form.draft')}</strong>
+            )}
           </P>
           <div style={{ position: 'relative', zIndex: '3' }}>
-            category:{' '}
+            {t('article.form.categoryLabel')}{' '}
             <CreatableSelect
               noOptionsMessage={() => 'create first category'}
               defaultValue={articleInitCategories}
@@ -365,7 +369,7 @@ const ArticleForm = () => {
             />
           </div>
           <div>
-            <P>tag:</P>
+            <P>{t('article.form.tagLabel')}</P>
             <P>
               {articleTags && articleTags.length > 0
                 ? articleTags.map((tag, index) => (
@@ -382,21 +386,21 @@ const ArticleForm = () => {
                       {tag}
                     </Tag>
                   ))
-                : 'No tags yet'}
+                : t('article.form.noTags')}
             </P>
             <Input
-              label={'Add tags:'}
+              label={t('article.form.addTags')}
               type={'text'}
               id={'tags'}
               value={newTag ? newTag : ''}
               uuid={''}
-              placeholder={"separate with coma ','"}
+              placeholder={t('article.form.tagsPlaceholder')}
               handleOnChange={(e) => handleNewTags(e)}
               handleKeyPress={(e) => handleOnKeyPress(e)}
             />
           </div>
           <InputCheckbox
-            label="Sticky"
+            label={t('article.form.sticky')}
             id="sticky"
             value={articleIsSticky}
             handleOnChange={(e) => handleOnChange(e, 'sticky')}
@@ -413,7 +417,7 @@ const ArticleForm = () => {
           />
           <FormErrorMessage message={errorMessage} />
           <div style={{ padding: '2rem 0 1rem' }}>
-            <label htmlFor="description">Article description</label>
+            <label htmlFor="description">{t('article.form.description')}</label>
             <textarea
               value={articleDescription}
               id="description"
@@ -427,8 +431,8 @@ const ArticleForm = () => {
                 <FormButton $type="submit" type="submit">
                   <FontAwesomeIcon icon={['fas', 'save']} />{' '}
                   {currentArticle && currentArticle.publishedAt
-                    ? 'Save'
-                    : 'Publish'}
+                    ? t('article.form.button.save')
+                    : t('article.form.button.publish')}
                 </FormButton>
                 <FormButton
                   $type="submit"
@@ -437,16 +441,18 @@ const ArticleForm = () => {
                 >
                   <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
                   {currentArticle && currentArticle.publishedAt
-                    ? 'Unpublish'
-                    : 'Draft'}
+                    ? t('article.form.button.unpublish')
+                    : t('article.form.button.draft')}
                 </FormButton>
               </div>
               <FormButton $type="reset" type="reset">
-                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+                <FontAwesomeIcon icon={['fas', 'xmark']} />{' '}
+                {t('form.cancelButton')}
               </FormButton>
             </EditButtonsWrapper>
             <FormButton $type="delete" type="button" onClick={handleDelete}>
-              <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+              <FontAwesomeIcon icon={['fas', 'trash']} />{' '}
+              {t('form.deleteButton')}
             </FormButton>
           </FormButtonWrapper>
         </div>

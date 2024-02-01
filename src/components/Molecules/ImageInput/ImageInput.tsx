@@ -3,6 +3,7 @@ import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { UserTypes } from '../../../types/dataTypes';
+import { useTranslation } from 'react-i18next';
 
 interface ImageTypes {
   uuid?: string;
@@ -11,6 +12,7 @@ interface ImageTypes {
 }
 
 const ImageInput: FC<ImageTypes> = ({ uuid, onFilesChange }) => {
+  const { t } = useTranslation();
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +24,7 @@ const ImageInput: FC<ImageTypes> = ({ uuid, onFilesChange }) => {
 
   return (
     <FormWrapper $direction="column" $gap={0.8}>
-      <label htmlFor="avatar">Upload your picture:</label>
+      <label htmlFor="avatar">{t('form.pictureUpload')}</label>
       <input
         type="file"
         id="avatar"
