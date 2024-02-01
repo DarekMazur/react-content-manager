@@ -28,14 +28,14 @@ const CategoryView = () => {
 
   return (
     <>
-      {currentCategory ? (
-        <Main $minHeight={height}>
-          <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
-            Category {currentCategory.title}
-          </Heading>
-          <CategoryForm />
-        </Main>
-      ) : null}
+      <Main $minHeight={height}>
+        <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
+          {currentCategory
+            ? `Category ${currentCategory.title}`
+            : 'New category'}
+        </Heading>
+        <CategoryForm />
+      </Main>
     </>
   );
 };
