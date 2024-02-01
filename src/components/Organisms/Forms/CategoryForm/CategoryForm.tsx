@@ -17,6 +17,7 @@ import { useNavigate, useParams } from 'react-router';
 import { StyledCategoryForm } from './CategoryForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
 import { useDispatch } from 'react-redux';
+import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 
 const CategoryForm = () => {
   const initCategory: CategoriesTypes = {
@@ -41,6 +42,7 @@ const CategoryForm = () => {
     CategoriesTypes | undefined
   >(currentCategory ? { ...currentCategory } : undefined);
   const [modal, setModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (categories && categories.length > 0) {
@@ -91,6 +93,9 @@ const CategoryForm = () => {
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!updatedCategory.title) {
+      return setErrorMessage('Title is required');
+    }
 
     if (location.pathname.includes('create')) {
       navigate('/categories');
@@ -139,6 +144,7 @@ const CategoryForm = () => {
             uuid={updatedCategory.uuid}
             handleOnChange={(e) => handleOnChange(e, 'title')}
           />
+          <FormErrorMessage message={errorMessage} />
           <div style={{ padding: '2rem 0 1rem' }}>
             <label htmlFor="description">Description</label>
             <textarea
