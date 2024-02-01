@@ -9,6 +9,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { CategoriesTypes } from '../../../../types/dataTypes.ts';
 import {
   switchPopup,
+  useAddCategoryMutation,
   useGetCategoriesQuery,
   useUpdateCategoryMutation,
 } from '../../../../store';
@@ -16,23 +17,32 @@ import { useNavigate, useParams } from 'react-router';
 import { StyledCategoryForm } from './CategoryForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
 import { useDispatch } from 'react-redux';
+import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 
 const CategoryForm = () => {
+  const initCategory: CategoriesTypes = {
+    id: 0,
+    uuid: '',
+    title: '',
+    description: '',
+  };
   const { uuid } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data: categories = [] } = useGetCategoriesQuery();
+  const [addCategory] = useAddCategoryMutation();
   const [updateCategory, { status, isSuccess, isLoading }] =
     useUpdateCategoryMutation();
   const [currentCategory, setCurrentCategory] = useState<
     CategoriesTypes | undefined
   >(undefined);
   const [updatedCategory, setUpdatedCategory] =
-    useState<CategoriesTypes | null>();
+    useState<CategoriesTypes>(initCategory);
   const [initialValues, setInitialValues] = useState<
     CategoriesTypes | undefined
   >(currentCategory ? { ...currentCategory } : undefined);
   const [modal, setModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (categories && categories.length > 0) {
@@ -69,22 +79,28 @@ const CategoryForm = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     fieldType: string,
   ) => {
-    if (updatedCategory) {
-      const content = e.target.value;
-      switch (fieldType) {
-        case 'title':
-          return setUpdatedCategory({ ...updatedCategory, title: content });
-        case 'description':
-          return setUpdatedCategory({
-            ...updatedCategory,
-            description: content,
-          });
-      }
+    const content = e.target.value;
+    switch (fieldType) {
+      case 'title':
+        return setUpdatedCategory({ ...updatedCategory, title: content });
+      case 'description':
+        return setUpdatedCategory({
+          ...updatedCategory,
+          description: content,
+        });
     }
   };
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!updatedCategory.title) {
+      return setErrorMessage('Title is required');
+    }
+
+    if (location.pathname.includes('create')) {
+      navigate('/categories');
+      return addCategory(updatedCategory);
+    }
     updateCategory(updatedCategory);
   };
 
@@ -117,58 +133,47 @@ const CategoryForm = () => {
           dataType={'Category'}
         />
       ) : null}
-      {currentCategory ? (
-        <>
-          <StyledCategoryForm onSubmit={handleOnSubmit}>
-            <Input
-              label={'Category'}
-              type={'text'}
-              id={'title'}
-              value={
-                updatedCategory
-                  ? (updatedCategory as CategoriesTypes).title
-                  : currentCategory.title
-              }
-              uuid={
-                updatedCategory
-                  ? (updatedCategory as CategoriesTypes).uuid
-                  : currentCategory.uuid
-              }
-              handleOnChange={(e) => handleOnChange(e, 'title')}
+      {/*{currentCategory ? (*/}
+      <>
+        <StyledCategoryForm onSubmit={handleOnSubmit}>
+          <Input
+            label={'Category'}
+            type={'text'}
+            id={'title'}
+            value={updatedCategory.title}
+            uuid={updatedCategory.uuid}
+            handleOnChange={(e) => handleOnChange(e, 'title')}
+          />
+          <FormErrorMessage message={errorMessage} />
+          <div style={{ padding: '2rem 0 1rem' }}>
+            <label htmlFor="description">Description</label>
+            <textarea
+              value={updatedCategory.description}
+              id="description"
+              style={{
+                width: '100%',
+                margin: '0.5rem 0 0 ',
+                minHeight: '10rem',
+              }}
+              onChange={(e) => handleOnChange(e, 'description')}
             />
-            <div style={{ padding: '2rem 0 1rem' }}>
-              <label htmlFor="description">Description</label>
-              <textarea
-                value={
-                  updatedCategory
-                    ? (updatedCategory as CategoriesTypes).description
-                    : currentCategory.description
-                }
-                id="description"
-                style={{
-                  width: '100%',
-                  margin: '0.5rem 0 0 ',
-                  minHeight: '10rem',
-                }}
-                onChange={(e) => handleOnChange(e, 'description')}
-              />
-            </div>
-            <FormButtonWrapper>
-              <EditButtonsWrapper>
-                <FormButton $type="submit" type="submit">
-                  <FontAwesomeIcon icon={['fas', 'edit']} /> Save
-                </FormButton>
-                <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
-                  <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
-                </FormButton>
-              </EditButtonsWrapper>
-              <FormButton $type="delete" type="button" onClick={handleDelete}>
-                <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+          </div>
+          <FormButtonWrapper>
+            <EditButtonsWrapper>
+              <FormButton $type="submit" type="submit">
+                <FontAwesomeIcon icon={['fas', 'edit']} /> Save
               </FormButton>
-            </FormButtonWrapper>
-          </StyledCategoryForm>
-        </>
-      ) : null}
+              <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
+                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+              </FormButton>
+            </EditButtonsWrapper>
+            <FormButton $type="delete" type="button" onClick={handleDelete}>
+              <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+            </FormButton>
+          </FormButtonWrapper>
+        </StyledCategoryForm>
+      </>
+      {/*) : null}*/}
     </>
   );
 };
