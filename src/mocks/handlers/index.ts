@@ -220,7 +220,7 @@ export const handlers = [
         uuid: faker.string.uuid(),
         title: (categoryBody as CategoriesTypes).title,
         description: (categoryBody as CategoriesTypes).description,
-        id: (categoryBody as CategoriesTypes).id,
+        id: db.category.count() + 1,
       };
 
       db.category.create(newCategory);

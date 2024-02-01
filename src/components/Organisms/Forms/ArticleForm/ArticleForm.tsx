@@ -200,7 +200,6 @@ const ArticleForm = () => {
     const newCategory = {
       title: newOption.label,
       description: '',
-      id: categories.length + 1,
     };
     addCategory(newCategory);
   };

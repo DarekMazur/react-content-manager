@@ -9,6 +9,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { CategoriesTypes } from '../../../../types/dataTypes.ts';
 import {
   switchPopup,
+  useAddCategoryMutation,
   useGetCategoriesQuery,
   useUpdateCategoryMutation,
 } from '../../../../store';
@@ -28,6 +29,7 @@ const CategoryForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data: categories = [] } = useGetCategoriesQuery();
+  const [addCategory] = useAddCategoryMutation();
   const [updateCategory, { status, isSuccess, isLoading }] =
     useUpdateCategoryMutation();
   const [currentCategory, setCurrentCategory] = useState<
@@ -89,6 +91,11 @@ const CategoryForm = () => {
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (location.pathname.includes('create')) {
+      navigate('/categories');
+      return addCategory(updatedCategory);
+    }
     updateCategory(updatedCategory);
   };
 
