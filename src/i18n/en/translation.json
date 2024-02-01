@@ -17,7 +17,7 @@
     "header": "You are logged in as {{role}}",
     "lastArticle": "Last article:",
     "lastArticleDetails": "by {{username}}",
-    "last Comment": "Last comments:",
+    "lastComment": "Last comment:",
     "lastCommentDetails": "{{username}} in article",
     "mostLiked": "Most liked article:",
     "editButton": "Edit article",

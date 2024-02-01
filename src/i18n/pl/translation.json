@@ -5,7 +5,7 @@
       "articles": "Artykuły",
       "comments": "Komentarze",
       "categories": "Kategorie",
-      "users": "Urzytkownicy"
+      "users": "Użytkownicy"
     },
     "userArea": {
       "greetings": "Cześć, {{username}}!",
@@ -111,7 +111,7 @@
         "shadowBan": "Shadow ban:"
       },
       "author": {
-        "title": "Autor komentaeza",
+        "title": "Autor komentarza",
         "role": "Funkcja: ",
         "status": {
           "title": "Status:",

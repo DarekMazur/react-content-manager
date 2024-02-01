@@ -5,12 +5,14 @@ import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import { UserTypes } from '../../types/dataTypes.ts';
 import { useNavigate } from 'react-router';
 import HomeSection from '../../components/Organisms/HomeSection/HomeSection.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface HomeProps {
   user: UserTypes;
 }
 
 const Home: FC<HomeProps> = ({ user }) => {
+  const { t } = useTranslation();
   const navigation = useNavigate();
 
   const handleClickEdit = () => {
@@ -30,13 +32,15 @@ const Home: FC<HomeProps> = ({ user }) => {
         margin="2rem 0"
         padding="1rem 0"
       >
-        You are logged in as {user.role.name}
+        {t('home.header', { role: user.role.name })}
       </Heading>
       <Wrapper justify="space-evenly" align="center">
         <HomeSection />
         <section style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button handleClick={handleClickEdit}>Edit article</Button>
-          <Button handleClick={handleClickCreate}>Create article</Button>
+          <Button handleClick={handleClickEdit}>{t('home.editButton')}</Button>
+          <Button handleClick={handleClickCreate}>
+            {t('home.createButton')}
+          </Button>
         </section>
       </Wrapper>
     </main>

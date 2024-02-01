@@ -6,21 +6,25 @@ import { FC, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
 import Confirm from '../../components/Organisms/Confirm/Confirm.tsx';
+import { I18nextProvider } from 'react-i18next';
+import i18next from 'i18next';
 
 interface ProvidersProps {
   children: ReactNode;
 }
 const AppProviders: FC<ProvidersProps> = ({ children }) => {
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <GlobalStyle />
-          <Confirm />
-          {children}
-        </BrowserRouter>
-      </ThemeProvider>
-    </Provider>
+    <I18nextProvider i18n={i18next}>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <BrowserRouter>
+            <GlobalStyle />
+            <Confirm />
+            {children}
+          </BrowserRouter>
+        </ThemeProvider>
+      </Provider>
+    </I18nextProvider>
   );
 };
 

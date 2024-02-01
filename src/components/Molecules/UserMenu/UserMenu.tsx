@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { UserTypes } from '../../../types/dataTypes';
 import Icon from '../../Atoms/Icon/Icon';
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const UserMenu = ({
   user,
@@ -16,6 +17,7 @@ const UserMenu = ({
   isOpen?: boolean;
   handleClick: () => void;
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -60,12 +62,12 @@ const UserMenu = ({
           <li>
             <Link to={`/users/${user.uuid}`} onClick={handleClick}>
               <FontAwesomeIcon icon={['fas', 'user']} />
-              My profile
+              {t('navigation.userArea.myProfile')}
             </Link>
           </li>
           <li onClick={handleMockLogout}>
             <FontAwesomeIcon icon={['fas', 'arrow-right-from-bracket']} />
-            Log out
+            {t('navigation.userArea.logout')}
           </li>
         </ul>
       </StyledUserMenu>

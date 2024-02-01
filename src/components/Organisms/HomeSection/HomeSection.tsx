@@ -6,8 +6,10 @@ import { Loading } from '../../Atoms/Loading/Loading.styles';
 import P from '../../Atoms/Paragraph/P';
 import { LatestTypes, getLatest } from '../../../utils/methods/getLatest';
 import { useGetArticlesQuery, useGetCommentsQuery } from '../../../store';
+import { useTranslation } from 'react-i18next';
 
 const HomeSection = () => {
+  const { t } = useTranslation();
   const { data: articles = [], isLoading: loadingArticles } =
     useGetArticlesQuery();
   const { data: comments = [], isLoading: loadingComments } =
@@ -57,22 +59,26 @@ const HomeSection = () => {
       {latestArticle.latest && latestComment.latest ? (
         <section>
           <Heading tag="h4" size="lm">
-            Last article:
+            {t('home.lastArticle')}
           </Heading>
           <P>
             <InLink
               target={`articles/${latestArticle.latest.id}`}
               name={(latestArticle.latest as ArticleDataTypes).title}
             />{' '}
-            by {(latestArticle.latest as ArticleDataTypes).author.username} (
-            {latestArticle.publishedDate})
+            {t('home.lastArticleDetails', {
+              username: (latestArticle.latest as ArticleDataTypes).author
+                .username,
+            })}
+            ({latestArticle.publishedDate})
           </P>
           <Heading tag="h4" size="lm">
-            Last comment:
+            {t('home.lastComment')}
           </Heading>
           <P>
-            {(latestComment.latest as CommentTypes).author?.username}
-            at{' '}
+            {t('home.lastCommentDetails', {
+              username: (latestComment.latest as CommentTypes).author?.username,
+            })}{' '}
             <InLink
               target={`articles/${
                 (latestComment.latest as CommentTypes).article.id
@@ -82,7 +88,7 @@ const HomeSection = () => {
             ({latestComment.publishedDate})
           </P>
           <Heading tag="h4" size="lm">
-            Most liked article:
+            {t('home.mostLiked')}
           </Heading>
           <P>
             {mostLikedArticle ? (
