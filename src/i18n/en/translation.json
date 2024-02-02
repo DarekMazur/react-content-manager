@@ -52,8 +52,20 @@
     }
   },
   "confirmation": {
+    "message": "Are you sure you want to delete {{count}} {{element}}? This action is permanent",
     "delete": "Delete",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "element": {
+      "article": "article",
+      "articles": "articles",
+      "comment": "comment",
+      "comments": "comments",
+      "category": "category",
+      "categories": "categories",
+      "categoriesMany": "categories",
+      "user": "user",
+      "users": "users"
+    }
   },
   "article": {
     "header": "Articles",

@@ -52,8 +52,20 @@
     }
   },
   "confirmation": {
+    "message": "Czy na pewno chcesz usunąć {{count}} {{element}}? Ta akcja jest nieodwołalna!",
     "delete": "Usuń",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "element": {
+      "article": "artykuł",
+      "articles": "artykuły",
+      "comment": "komentarz",
+      "comments": "komentarze",
+      "category": "kategorię",
+      "categories": "kategorie",
+      "categoriesMany": "kategorii",
+      "user": "użytkownika",
+      "users": "użytkowników"
+    }
   },
   "article": {
     "header": "Artykuły",
