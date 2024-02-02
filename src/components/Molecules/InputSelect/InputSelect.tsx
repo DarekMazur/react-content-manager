@@ -7,6 +7,7 @@ import { RoleTypes, UserTypes } from '../../../types/dataTypes';
 
 interface SelectTypes {
   value: RoleTypes;
+  label: string;
   options: string[];
   uuid: string;
   // eslint-disable-next-line no-unused-vars
@@ -15,6 +16,7 @@ interface SelectTypes {
 
 const InputSelect: FC<SelectTypes> = ({
   value,
+  label,
   uuid,
   handleOnChange,
   options,
@@ -25,7 +27,7 @@ const InputSelect: FC<SelectTypes> = ({
     <FormWrapper $direction="column" $gap={0.4}>
       {value ? (
         <>
-          <label htmlFor="role">Role:</label>
+          <label htmlFor="role">{label}</label>
           <StyledInputSelect
             name="role"
             id="role"
