@@ -315,7 +315,7 @@ const ArticleForm = () => {
           isSuccess={isSuccess}
           isError={status === 'rejected'}
           handleCloseModal={handleCloseModal}
-          dataType="Article"
+          dataType={t('modal.element.article')}
         />
       ) : null}
       <StyledArticleForm

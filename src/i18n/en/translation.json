@@ -43,7 +43,13 @@
   },
   "modal": {
     "success": "{{element}} updated successfully!",
-    "error": "Something goes wrong"
+    "error": "Something goes wrong",
+    "element": {
+      "article": "Article",
+      "comment": "Comment",
+      "category": "Category",
+      "user": "User"
+    }
   },
   "confirmation": {
     "delete": "Delete",

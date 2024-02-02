@@ -42,8 +42,14 @@
     "multiAction": "Czy na pewno chcesz usunąć {{body}}? Ta akcja jest nieodwołalna!"
   },
   "modal": {
-    "success": "{{element}} zaktualizowano prawidłowo!",
-    "error": "Coś poszło nie tak..."
+    "success": "{{element}} - zaktualizowano prawidłowo!",
+    "error": "Coś poszło nie tak...",
+    "element": {
+      "article": "Artykuł",
+      "comment": "Komentarz",
+      "category": "Kategoria",
+      "user": "Użytkownik"
+    }
   },
   "confirmation": {
     "delete": "Usuń",

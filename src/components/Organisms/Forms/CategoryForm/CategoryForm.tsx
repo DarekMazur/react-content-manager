@@ -132,7 +132,7 @@ const CategoryForm = () => {
           isSuccess={isSuccess}
           isError={status === 'rejected'}
           handleCloseModal={handleCloseModal}
-          dataType={'Category'}
+          dataType={t('modal.element.category')}
         />
       ) : null}
       <>

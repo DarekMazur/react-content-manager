@@ -134,10 +134,10 @@ const CommentForm = () => {
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (userData?.blocked !== initialData.authorBlocked) {
-      setUpdatedElement('User');
+      setUpdatedElement(t('modal.element.user'));
       return updateUser(userData);
     }
-    setUpdatedElement('Comment');
+    setUpdatedElement(t('modal.element.comment'));
     updateComment(currentComment);
   };
 

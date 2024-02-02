@@ -135,7 +135,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           isSuccess={isSuccess}
           isError={status === 'rejected'}
           handleCloseModal={handleCloseModal}
-          dataType="User"
+          dataType={t('modal.element.user')}
         />
       ) : null}
       <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
