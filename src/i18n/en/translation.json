@@ -141,6 +141,7 @@
   },
   "category": {
     "header": "Categories",
+    "headerSingular": "Category {{title}}",
     "newCategory": "New category",
     "tableHeaders": {
       "id": "ID",
