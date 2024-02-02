@@ -39,7 +39,29 @@
       "yes": "YES",
       "no": "NO"
     },
-    "multiAction": "Are you sure you want to delete {{body}}? This action is permanent"
+    "multiAction": {
+      "selected": "{{count}} {{element}} selected",
+      "element": {
+        "article": "article",
+        "articles": "articles",
+        "articlesMany": "articles",
+        "comment": "comment",
+        "comments": "comments",
+        "commentsMany": "comments",
+        "category": "category",
+        "categories": "categories",
+        "categoriesMany": "categories",
+        "user": "user",
+        "users": "users"
+      },
+      "button": {
+        "block": "block",
+        "unblock": "unblock",
+        "publish": "publish",
+        "unpublish": "unpublish",
+        "delete": "delete"
+      }
+    }
   },
   "modal": {
     "success": "{{element}} updated successfully!",

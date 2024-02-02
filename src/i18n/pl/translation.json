@@ -39,7 +39,29 @@
       "yes": "TAK",
       "no": "NIE"
     },
-    "multiAction": "Czy na pewno chcesz usunąć {{body}}? Ta akcja jest nieodwołalna!"
+    "multiAction": {
+      "selected": "zaznaczono {{count}} {{element}}",
+      "element": {
+        "article": "artykuł",
+        "articles": "artykuły",
+        "articlesMany": "artykułów",
+        "comment": "komentarz",
+        "comments": "komentarze",
+        "commentsMany": "komentarzy",
+        "category": "kotegorię",
+        "categories": "kategorie",
+        "categoriesMany": "kategorii",
+        "user": "użytkownika",
+        "users": "użytkowników"
+      },
+      "button": {
+        "block": "zablokuj",
+        "unblock": "odblokuj",
+        "publish": "opublikuj",
+        "unpublish": "cofnij publikację",
+        "delete": "usuń"
+      }
+    }
   },
   "modal": {
     "success": "{{element}} - zaktualizowano prawidłowo!",

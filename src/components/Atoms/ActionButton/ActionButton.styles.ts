@@ -8,8 +8,8 @@ interface StyledActionButtonProps {
 export const StyledActionButton = styled(StyledButton)<StyledActionButtonProps>`
   background-color: ${({ theme, $delete }) =>
     $delete ? theme.colors.red : theme.colors.darkBlue};
-  width: 9rem;
-  height: 3rem;
+  width: 10rem;
+  height: 4rem;
   font-size: ${({ theme }) => theme.fontSize.m};
   padding: 0;
   margin: 0;
