@@ -80,8 +80,10 @@
     "element": {
       "article": "article",
       "articles": "articles",
+      "articlesMany": "articles",
       "comment": "comment",
       "comments": "comments",
+      "commentsMany": "comments",
       "category": "category",
       "categories": "categories",
       "categoriesMany": "categories",

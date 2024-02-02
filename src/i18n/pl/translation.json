@@ -80,9 +80,11 @@
     "element": {
       "article": "artykuł",
       "articles": "artykuły",
+      "articlesMany": "artykułów",
       "comment": "komentarz",
       "comments": "komentarze",
-      "category": "kategorię",
+      "commentsMany": "komentarzy",
+      "category": "kotegorię",
       "categories": "kategorie",
       "categoriesMany": "kategorii",
       "user": "użytkownika",

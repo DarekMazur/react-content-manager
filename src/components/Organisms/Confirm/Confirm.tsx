@@ -49,14 +49,28 @@ const Confirm = () => {
         }</strong>`;
       case 'articles':
         if (counter > 1) {
-          return t('confirmation.element.articles');
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('confirmation.element.articles');
+          }
+          return t('confirmation.element.articlesMany');
         }
         return `${t('confirmation.element.article')} <strong>${
           popupState.title ? popupState.title : null
         }</strong>`;
       case 'comments':
         if (counter > 1) {
-          return t('confirmation.element.comments');
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('confirmation.element.comments');
+          }
+          return t('confirmation.element.commentsMany');
         }
         return `${t('confirmation.element.comment')} <strong>${
           popupState.title ? popupState.title : null
