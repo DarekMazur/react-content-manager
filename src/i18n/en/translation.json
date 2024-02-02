@@ -1,0 +1,199 @@
+{
+  "navigation" : {
+    "menu": {
+      "home": "Dashboard",
+      "articles": "Articles",
+      "comments": "Comments",
+      "categories": "Categories",
+      "users": "Users"
+    },
+    "userArea": {
+      "greetings": "Hello, {{username}}!",
+      "myProfile": "My profile",
+      "logout": "Log out"
+    }
+  },
+  "home": {
+    "header": "You are logged in as {{role}}",
+    "lastArticle": "Last article:",
+    "lastArticleDetails": "by {{username}}",
+    "lastComment": "Last comment:",
+    "lastCommentDetails": "{{username}} in article",
+    "mostLiked": "Most liked article:",
+    "editButton": "Edit article",
+    "createButton": "Create article"
+  },
+  "form": {
+    "pagination": {
+      "title": "{{type}} per page",
+      "articles": "articles",
+      "comments": "comments",
+      "categories": "categories",
+      "users": "users"
+    },
+    "pictureUpload": "Upload your picture:",
+    "saveButton": "Save",
+    "cancelButton": "Cancel",
+    "deleteButton": "Delete",
+    "checkbox": {
+      "yes": "YES",
+      "no": "NO"
+    },
+    "multiAction": {
+      "selected": "{{count}} {{element}} selected",
+      "element": {
+        "article": "article",
+        "articles": "articles",
+        "articlesMany": "articles",
+        "comment": "comment",
+        "comments": "comments",
+        "commentsMany": "comments",
+        "category": "category",
+        "categories": "categories",
+        "categoriesMany": "categories",
+        "user": "user",
+        "users": "users"
+      },
+      "button": {
+        "block": "block",
+        "unblock": "unblock",
+        "publish": "publish",
+        "unpublish": "unpublish",
+        "delete": "delete"
+      }
+    }
+  },
+  "modal": {
+    "success": "{{element}} updated successfully!",
+    "error": "Something goes wrong",
+    "element": {
+      "article": "Article",
+      "comment": "Comment",
+      "category": "Category",
+      "user": "User"
+    }
+  },
+  "confirmation": {
+    "message": "Are you sure you want to delete {{count}} {{element}}? This action is permanent",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "element": {
+      "article": "article",
+      "articles": "articles",
+      "articlesMany": "articles",
+      "comment": "comment",
+      "comments": "comments",
+      "commentsMany": "comments",
+      "category": "category",
+      "categories": "categories",
+      "categoriesMany": "categories",
+      "user": "user",
+      "users": "users"
+    }
+  },
+  "article": {
+    "header": "Articles",
+    "newArticle": "New article",
+    "tableHeaders": {
+      "id": "ID",
+      "status": "Status",
+      "title": "Title",
+      "author": "Author",
+      "sticky": "Sticky",
+      "categories": "Categories",
+      "comments": "Comments",
+      "likes": "Likes",
+      "publishedAt": "Published at"
+    },
+    "form": {
+      "newArticle": "New article",
+      "author": "by",
+      "description": "Article description",
+      "draft": "Draft",
+      "categoryLabel": "category:",
+      "categoryPlaceholder": "Select...",
+      "tagLabel": "tag:",
+      "noTags": "No tags yet",
+      "addTags": "Add tags:",
+      "publishedAt": "published at {{date}}",
+      "tagsPlaceholder": "separate with coma ','",
+      "sticky": "Sticky",
+      "button": {
+        "save": "Save",
+        "publish": "Publish",
+        "unpublish": "Unpublish",
+        "draft": "Draft"
+      }
+    }
+  },
+  "user": {
+    "header": "Users",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Name",
+      "email": "Email",
+      "confirmed": "Confirmed",
+      "blocked": "Blocked",
+      "role": "Role"
+    },
+    "form": {
+      "name": "Name:",
+      "email": "Email:",
+      "confirmed": "Confirmed:",
+      "blocked": "Blocked:",
+      "role": "Role:",
+      "pictureUpload": "Upload your picture:"
+    }
+  },
+  "comment": {
+    "header": "Comments",
+    "tableHeaders": {
+      "id": "ID",
+      "status": "Status",
+      "article": "Article",
+      "author": "Comment's Author",
+      "comment": "Comment",
+      "publishedAt": "Published at"
+    },
+    "form": {
+      "header": "Comment #{{id}}",
+      "details": {
+        "header": "Comment's details:",
+        "article": "Commented article:",
+        "publicationDate": "Publication date:",
+        "status": {
+          "title": "Status:",
+          "visible": "Visible for everyone",
+          "shadowed": "SHADOW BANNED"
+        },
+        "shadowBan": "Shadow ban:"
+      },
+      "author": {
+        "title": "Comment's author",
+        "role": "Role: ",
+        "status": {
+          "title": "Status:",
+          "active": "ACTIVE",
+          "blocked": "BLOCKED",
+          "notActive": "NOT ACTIVATED"
+        },
+        "blocked": "Blocked:"
+      }
+    }
+  },
+  "category": {
+    "header": "Categories",
+    "headerSingular": "Category {{title}}",
+    "newCategory": "New category",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Name",
+      "description": "Description"
+    },
+    "form": {
+      "header": "New category",
+      "category": "Category",
+      "description": "Description"
+    }
+  }
+}

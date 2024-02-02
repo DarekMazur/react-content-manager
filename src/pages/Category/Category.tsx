@@ -7,8 +7,10 @@ import { Main } from '../../components/Organisms/Main/Main.styles.ts';
 import CategoryForm from '../../components/Organisms/Forms/CategoryForm/CategoryForm.tsx';
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
+import { useTranslation } from 'react-i18next';
 
 const CategoryView = () => {
+  const { t } = useTranslation();
   const { uuid } = useParams();
   const { data: categories = [], isLoading } = useGetCategoriesQuery();
   const height = useMinHeight();
@@ -31,8 +33,8 @@ const CategoryView = () => {
       <Main $minHeight={height}>
         <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
           {currentCategory
-            ? `Category ${currentCategory.title}`
-            : 'New category'}
+            ? t('category.headerSingular', { title: currentCategory.title })
+            : t('category.newCategory')}
         </Heading>
         <CategoryForm />
       </Main>

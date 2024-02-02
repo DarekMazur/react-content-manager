@@ -24,8 +24,10 @@ import ImageController from '../../../Molecules/ImageControler/ImageController.t
 import Input from '../../../Molecules/Input/Input';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox';
 import InputSelect from '../../../Molecules/InputSelect/InputSelect';
+import { useTranslation } from 'react-i18next';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: users = [], isLoading } = useGetUsersQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
@@ -133,7 +135,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           isSuccess={isSuccess}
           isError={status === 'rejected'}
           handleCloseModal={handleCloseModal}
-          dataType="User"
+          dataType={t('modal.element.user')}
         />
       ) : null}
       <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
@@ -148,7 +150,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
         />
         <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
           <Input
-            label="Name:"
+            label={t('user.form.name')}
             type="text"
             id="username"
             value={userData.username}
@@ -156,7 +158,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             handleOnChange={(e) => handleOnChange(e, 'username')}
           />
           <Input
-            label="Email:"
+            label={t('user.form.email')}
             type="email"
             id="email"
             value={userData.email}
@@ -164,14 +166,14 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             handleOnChange={(e) => handleOnChange(e, 'email')}
           />
           <InputCheckbox
-            label="Confirmed:"
+            label={t('user.form.confirmed')}
             id="confirmed"
             value={userData.confirmed}
             uuid={uuid}
             handleOnChange={(e) => handleOnChange(e, 'confirmed')}
           />
           <InputCheckbox
-            label="Blocked:"
+            label={t('user.form.blocked')}
             id="blocked"
             value={userData.blocked}
             uuid={uuid}
@@ -179,6 +181,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           />
           <InputSelect
             value={userData.role}
+            label={t('user.form.role')}
             handleOnChange={(e) => handleOnChange(e, 'role')}
             uuid={uuid}
             options={['Administrator', 'Redactor', 'Creator', 'Authenticated']}
@@ -186,15 +189,18 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <FormButton $type="submit" type="submit">
-                <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+                <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
+                {t('form.saveButton')}
               </FormButton>
               <FormButton $type="reset" type="reset">
-                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+                <FontAwesomeIcon icon={['fas', 'xmark']} />{' '}
+                {t('form.cancelButton')}
               </FormButton>
             </EditButtonsWrapper>
             {(currentUser as UserTypes).uuid !== userData.uuid && (
               <FormButton $type="delete" type="button" onClick={handleDelete}>
-                <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+                <FontAwesomeIcon icon={['fas', 'trash']} />{' '}
+                {t('form.deleteButton')}
               </FormButton>
             )}
           </FormButtonWrapper>

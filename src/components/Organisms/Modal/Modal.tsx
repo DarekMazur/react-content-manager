@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
 import { StyledModal } from './Modal.styles.ts';
+import { useTranslation } from 'react-i18next';
 
 interface ModalTypes {
   handleCloseModal: () => void;
@@ -15,12 +16,14 @@ const Modal: FC<ModalTypes> = ({
   isError,
   dataType,
 }) => {
+  const { t } = useTranslation();
+
   const actionResult = () => {
     if (isSuccess) {
-      return <p>{dataType} updated successfully!</p>;
+      return <p>{t('modal.success', { element: dataType })}</p>;
     }
     if (isError) {
-      return <p>Something goes wrong</p>;
+      return <p>{t('modal.error')}</p>;
     }
   };
 

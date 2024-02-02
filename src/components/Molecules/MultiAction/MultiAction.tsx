@@ -18,12 +18,14 @@ import {
   UserTypes,
 } from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 interface MultiActionProps {
   counter: number;
 }
 
 const MultiAction: FC<MultiActionProps> = ({ counter }) => {
+  const { t } = useTranslation();
   const selected = useSelector<RootState>((state) => state.selected);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
   const selectedCategories = useSelector<RootState>(
@@ -143,17 +145,71 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       case 'articles':
         return (
           <>
-            <ActionButton handleClick={handlePublish}>publish</ActionButton>{' '}
-            <ActionButton handleClick={handleUnpublish}>unpublish</ActionButton>{' '}
+            <ActionButton handleClick={handlePublish}>
+              {t('form.multiAction.button.publish')}
+            </ActionButton>{' '}
+            <ActionButton handleClick={handleUnpublish}>
+              {t('form.multiAction.button.unpublish')}
+            </ActionButton>{' '}
           </>
         );
       case 'users':
         return (
           <>
-            <ActionButton handleClick={handleBlock}>block</ActionButton>{' '}
-            <ActionButton handleClick={handleUnblock}>unblock</ActionButton>{' '}
+            <ActionButton handleClick={handleBlock}>
+              {t('form.multiAction.button.block')}
+            </ActionButton>{' '}
+            <ActionButton handleClick={handleUnblock}>
+              {t('form.multiAction.button.unblock')}
+            </ActionButton>{' '}
           </>
         );
+    }
+  };
+
+  const locationValue = () => {
+    switch (location.pathname.slice(1)) {
+      case 'users':
+        if (counter > 1) {
+          return t('form.multiAction.element.users');
+        }
+        return t('form.multiAction.element.user');
+      case 'articles':
+        if (counter > 1) {
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('form.multiAction.element.articles');
+          }
+          return t('form.multiAction.element.articlesMany');
+        }
+        return t('form.multiAction.element.article');
+      case 'comments':
+        if (counter > 1) {
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('form.multiAction.element.comments');
+          }
+          return t('form.multiAction.element.commentsMany');
+        }
+        return t('form.multiAction.element.comment');
+      case 'categories':
+        if (counter > 1) {
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('form.multiAction.element.categories');
+          }
+          return t('form.multiAction.element.categoriesMany');
+        }
+        return t('form.multiAction.element.category');
     }
   };
 
@@ -165,12 +221,14 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
       padding="2rem 2.4vw"
     >
       <P weight="bold">
-        {counter} {location.pathname.slice(1, -1)}
-        {counter > 1 ? 's' : null} selected{' '}
+        {t('form.multiAction.selected', {
+          count: counter,
+          element: locationValue(),
+        })}
       </P>
       {getButtons()}
       <ActionButton handleClick={handleDelete} isDel>
-        delete
+        {t('form.multiAction.button.delete')}
       </ActionButton>
     </Wrapper>
   );

@@ -18,6 +18,7 @@ import { StyledCategoryForm } from './CategoryForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
 import { useDispatch } from 'react-redux';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
+import { useTranslation } from 'react-i18next';
 
 const CategoryForm = () => {
   const initCategory: CategoriesTypes = {
@@ -26,6 +27,7 @@ const CategoryForm = () => {
     title: '',
     description: '',
   };
+  const { t } = useTranslation();
   const { uuid } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -130,14 +132,13 @@ const CategoryForm = () => {
           isSuccess={isSuccess}
           isError={status === 'rejected'}
           handleCloseModal={handleCloseModal}
-          dataType={'Category'}
+          dataType={t('modal.element.category')}
         />
       ) : null}
-      {/*{currentCategory ? (*/}
       <>
         <StyledCategoryForm onSubmit={handleOnSubmit}>
           <Input
-            label={'Category'}
+            label={t('category.form.category')}
             type={'text'}
             id={'title'}
             value={updatedCategory.title}
@@ -146,7 +147,9 @@ const CategoryForm = () => {
           />
           <FormErrorMessage message={errorMessage} />
           <div style={{ padding: '2rem 0 1rem' }}>
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">
+              {t('category.form.description')}
+            </label>
             <textarea
               value={updatedCategory.description}
               id="description"
@@ -161,19 +164,21 @@ const CategoryForm = () => {
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <FormButton $type="submit" type="submit">
-                <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+                <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
+                {t('form.saveButton')}
               </FormButton>
               <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
-                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+                <FontAwesomeIcon icon={['fas', 'xmark']} />{' '}
+                {t('form.cancelButton')}
               </FormButton>
             </EditButtonsWrapper>
             <FormButton $type="delete" type="button" onClick={handleDelete}>
-              <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+              <FontAwesomeIcon icon={['fas', 'trash']} />{' '}
+              {t('form.deleteButton')}
             </FormButton>
           </FormButtonWrapper>
         </StyledCategoryForm>
       </>
-      {/*) : null}*/}
     </>
   );
 };

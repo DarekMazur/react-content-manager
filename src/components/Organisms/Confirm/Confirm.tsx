@@ -16,8 +16,10 @@ import {
   useRemoveCategoriesMutation,
 } from '../../../store';
 import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 const Confirm = () => {
+  const { t } = useTranslation();
   const [removeArticle] = useRemoveArticleMutation();
   const [removeArticles] = useRemoveArticlesMutation();
   const [removeUser] = useRemoveUserMutation();
@@ -35,6 +37,62 @@ const Confirm = () => {
   const counter = popupState.ids ? popupState.ids.length : 0;
 
   let locationName = location.pathname.slice(1);
+
+  const locationValue = () => {
+    switch (location.pathname.slice(1)) {
+      case 'users':
+        if (counter > 1) {
+          return t('confirmation.element.users');
+        }
+        return `${t('confirmation.element.user')} <strong>${
+          popupState.title ? popupState.title : null
+        }</strong>`;
+      case 'articles':
+        if (counter > 1) {
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('confirmation.element.articles');
+          }
+          return t('confirmation.element.articlesMany');
+        }
+        return `${t('confirmation.element.article')} <strong>${
+          popupState.title ? popupState.title : null
+        }</strong>`;
+      case 'comments':
+        if (counter > 1) {
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('confirmation.element.comments');
+          }
+          return t('confirmation.element.commentsMany');
+        }
+        return `${t('confirmation.element.comment')} <strong>${
+          popupState.title ? popupState.title : null
+        }</strong>`;
+      case 'categories':
+        if (counter > 1) {
+          if (
+            Math.floor(counter % 10) === 2 ||
+            Math.floor(counter % 10) === 3 ||
+            Math.floor(counter % 10) === 4
+          ) {
+            return t('confirmation.element.categories');
+          }
+          return t('confirmation.element.categoriesMany');
+        }
+        return `${t('confirmation.element.category')} <strong>${
+          popupState.title ? popupState.title : null
+        }</strong>`;
+    }
+  };
+
+  const messageDetailsCount = counter > 1 ? counter : undefined;
 
   const regex = /[^/]+$/;
 
@@ -83,21 +141,18 @@ const Confirm = () => {
     dispatch(switchPopup(false));
     dispatch(clearSelected());
   };
+
   return (
     <PopupWrapper $isVisible={popupState.isOpen}>
       <div>
-        <p>
-          Are you sure you want to delete {counter > 1 ? counter : null}{' '}
-          {locationName === 'categories'
-            ? 'category'
-            : locationName.slice(0, -1)}
-          {counter > 1 ? (
-            's'
-          ) : (
-            <strong>{popupState.title ? ` ${popupState.title}` : null}</strong>
-          )}
-          ? This action is permanent
-        </p>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: t('confirmation.message', {
+              count: messageDetailsCount,
+              element: locationValue(),
+            }),
+          }}
+        />
         <div>
           <ActionButton handleClick={handleDelete} isDel>
             delete

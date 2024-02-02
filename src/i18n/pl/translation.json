@@ -1,0 +1,199 @@
+{
+  "navigation" : {
+    "menu": {
+      "home": "Panel",
+      "articles": "Artykuły",
+      "comments": "Komentarze",
+      "categories": "Kategorie",
+      "users": "Użytkownicy"
+    },
+    "userArea": {
+      "greetings": "Cześć, {{username}}!",
+      "myProfile": "Mój profil",
+      "logout": "Wyloguj"
+    }
+  },
+  "home": {
+    "header": "Jesteś zalogowany jako {{role}}",
+    "lastArticle": "Ostatni artykuł:",
+    "lastArticleDetails": "przez {{username}}",
+    "last Comment": "Ostatni komentarz:",
+    "lastCommentDetails": "{{username}} w artykule",
+    "mostLiked": "Najpopularniejszy artykuł:",
+    "editButton": "Edytuj artykuł",
+    "createButton": "Stwórz artykuł"
+  },
+  "form": {
+    "pagination": {
+      "title": "{{type}} na stronę",
+      "articles": "artykuły",
+      "comments": "komentarzy",
+      "categories": "kategorii",
+      "users": "użytkowników"
+    },
+    "pictureUpload": "Załaduj swoją grafikę:",
+    "saveButton": "Zapisz",
+    "cancelButton": "Anuluj",
+    "deleteButton": "Usuń",
+    "checkbox": {
+      "yes": "TAK",
+      "no": "NIE"
+    },
+    "multiAction": {
+      "selected": "zaznaczono {{count}} {{element}}",
+      "element": {
+        "article": "artykuł",
+        "articles": "artykuły",
+        "articlesMany": "artykułów",
+        "comment": "komentarz",
+        "comments": "komentarze",
+        "commentsMany": "komentarzy",
+        "category": "kotegorię",
+        "categories": "kategorie",
+        "categoriesMany": "kategorii",
+        "user": "użytkownika",
+        "users": "użytkowników"
+      },
+      "button": {
+        "block": "zablokuj",
+        "unblock": "odblokuj",
+        "publish": "opublikuj",
+        "unpublish": "cofnij publikację",
+        "delete": "usuń"
+      }
+    }
+  },
+  "modal": {
+    "success": "{{element}} - zaktualizowano prawidłowo!",
+    "error": "Coś poszło nie tak...",
+    "element": {
+      "article": "Artykuł",
+      "comment": "Komentarz",
+      "category": "Kategoria",
+      "user": "Użytkownik"
+    }
+  },
+  "confirmation": {
+    "message": "Czy na pewno chcesz usunąć {{count}} {{element}}? Ta akcja jest nieodwołalna!",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "element": {
+      "article": "artykuł",
+      "articles": "artykuły",
+      "articlesMany": "artykułów",
+      "comment": "komentarz",
+      "comments": "komentarze",
+      "commentsMany": "komentarzy",
+      "category": "kotegorię",
+      "categories": "kategorie",
+      "categoriesMany": "kategorii",
+      "user": "użytkownika",
+      "users": "użytkowników"
+    }
+  },
+  "article": {
+    "header": "Artykuły",
+    "newArticle": "Nowy artykuł",
+    "tableHeaders": {
+      "id": "ID",
+      "status": "Status",
+      "title": "Tytuł",
+      "author": "Autor",
+      "sticky": "Przypięty",
+      "categories": "Kategorie",
+      "comments": "Komentarza",
+      "likes": "Polubienia",
+      "publishedAt": "Opublikowano"
+    },
+    "form": {
+      "newArticle": "Nowy artykuł",
+      "author": "utworzony przez",
+      "description": "Opis artykułu",
+      "draft": "Szkic",
+      "categoryLabel": "kategoria:",
+      "categoryPlaceholder": "Wybierz...",
+      "tagLabel": "tag:",
+      "noTags": "Jeszcze nie ma tagów",
+      "addTags": "Dodaj tagi:",
+      "publishedAt": "opublikowano {{date}}",
+      "tagsPlaceholder": "oddziel przecinkiem ','",
+      "sticky": "Przypięty",
+      "button": {
+        "save": "Zapisz",
+        "publish": "Opublikuj",
+        "unpublish": "Cofnij publikację",
+        "draft": "Szkic"
+      }
+    }
+  },
+  "user": {
+    "header": "Użytkownicy",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Nazwa",
+      "email": "Email",
+      "confirmed": "Potwierdzony",
+      "blocked": "Zablokowany",
+      "role": "Funkcja"
+    },
+    "form": {
+      "name": "Nazwa:",
+      "email": "Email:",
+      "confirmed": "Potwierdzony:",
+      "blocked": "Zablokowany:",
+      "role": "Funkcja:",
+      "pictureUpload": "Załaduj swoją grafikę:"
+    }
+  },
+  "comment": {
+    "header": "Komentarze",
+    "tableHeaders": {
+      "id": "ID",
+      "status": "Status",
+      "article": "Artykuł",
+      "author": "Autor komentarza",
+      "comment": "Komentarz",
+      "publishedAt": "Opublikowano"
+    },
+    "form": {
+      "header": "Komentarz #{{id}}",
+      "details": {
+        "header": "Szczegóły komentarza:",
+        "article": "Komentowany artykuł:",
+        "publicationDate": "Data publikacji:",
+        "status": {
+          "title": "Status:",
+          "visible": "Widoczny dla wszystkich",
+          "shadowed": "SHADOW BAN"
+        },
+        "shadowBan": "Shadow ban:"
+      },
+      "author": {
+        "title": "Autor komentarza",
+        "role": "Funkcja: ",
+        "status": {
+          "title": "Status:",
+          "active": "AKTYWNY",
+          "blocked": "ZABLOKOWANY",
+          "notActive": "NIEAKTYWNY"
+        },
+        "blocked": "Zablokowany:"
+      }
+    }
+  },
+  "category": {
+    "header": "Kategorie",
+    "headerSingular": "Kategoria {{title}}",
+    "newCategory": "Nowa kategoria",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Nazwa",
+      "description": "Opis"
+    },
+    "form": {
+      "header": "Nowa kategoria",
+      "category": "Kategoria",
+      "description": "Opis"
+    }
+  }
+}

@@ -4,6 +4,7 @@ import PickerListItem from '../../Atoms/PickerListItem/PickerListItem';
 import { StyledEntriesPicker } from './EntriesNumberPicker.styles.ts';
 import { FC } from 'react';
 import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 interface EntriesPickerProps {
   isExpand: boolean;
@@ -21,7 +22,21 @@ const EntriesNumberPicker: FC<EntriesPickerProps> = ({
   handleChoseEntriesNumber,
   handleClose,
 }) => {
+  const { t } = useTranslation();
   const location = useLocation();
+
+  const type = () => {
+    switch (location.pathname.slice(1)) {
+      case 'articles':
+        return t('form.pagination.articles');
+      case 'comments':
+        return t('form.pagination.comments');
+      case 'categories':
+        return t('form.pagination.categories');
+      case 'users':
+        return t('form.pagination.users');
+    }
+  };
 
   return (
     <StyledEntriesPicker>
@@ -55,7 +70,7 @@ const EntriesNumberPicker: FC<EntriesPickerProps> = ({
           ))}
         </PickerList>
       </div>
-      <span>{location.pathname.slice(1)} per page</span>
+      <span>{t('form.pagination.title', { type: type() })}</span>
     </StyledEntriesPicker>
   );
 };

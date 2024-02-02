@@ -31,8 +31,10 @@ import {
 } from './CommentForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 const CommentForm = () => {
+  const { t } = useTranslation();
   const { uuid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -132,10 +134,10 @@ const CommentForm = () => {
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (userData?.blocked !== initialData.authorBlocked) {
-      setUpdatedElement('User');
+      setUpdatedElement(t('modal.element.user'));
       return updateUser(userData);
     }
-    setUpdatedElement('Comment');
+    setUpdatedElement(t('modal.element.comment'));
     updateComment(currentComment);
   };
 
@@ -169,32 +171,36 @@ const CommentForm = () => {
           style={{ width: '80vw', margin: 'auto' }}
         >
           <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
-            Comment #{currentComment.id}
+            {t('comment.form.header', { id: currentComment.id })}
           </Heading>
           <CommentFormWrapper>
             <CommentDetails>
               <P size="lm" weight="bold">
-                Comment's details
+                {t('comment.form.details.header')}
               </P>
               <CommentDetailList>
                 <li>
-                  Commented article:{' '}
+                  {t('comment.form.details.article')}{' '}
                   <InLink
                     target={`/articles/${currentComment?.article.id}`}
                     name={currentComment?.article.title}
                   ></InLink>
                 </li>
                 <li>
-                  Publication date:{' '}
+                  {t('comment.form.details.publicationDate')}{' '}
                   {getDate((currentComment as CommentTypes).publishedAt)}
                 </li>
                 {userData.role.id !== 3 ? (
                   <li>
-                    Status:{' '}
+                    {t('comment.form.details.status.title')}{' '}
                     {initialData.commentShadowed ? (
-                      <CommentStatus $isRed>SHADOW BANNED</CommentStatus>
+                      <CommentStatus $isRed>
+                        {t('comment.form.details.status.shadowed')}
+                      </CommentStatus>
                     ) : (
-                      <CommentStatus>Visible for everyone</CommentStatus>
+                      <CommentStatus>
+                        {t('comment.form.details.status.visible')}
+                      </CommentStatus>
                     )}
                   </li>
                 ) : null}
@@ -207,7 +213,7 @@ const CommentForm = () => {
 
               <FormWrapper $direction="column" $gap={0.4} $maxWidth={20}>
                 <InputCheckbox
-                  label="Shadow ban:"
+                  label={t('comment.form.details.shadowBan')}
                   id="blocked"
                   value={(currentComment as CommentTypes).shadowed}
                   uuid={uuid}
@@ -217,7 +223,7 @@ const CommentForm = () => {
             </CommentDetails>
             <aside>
               <P size="lm" weight="bold">
-                Comment's author
+                {t('comment.form.author.title')}
               </P>
               <StyledImageControler>
                 <img src={currentComment?.author.avatar} alt="" />
@@ -228,19 +234,28 @@ const CommentForm = () => {
                   name={currentComment?.author.username}
                 ></InLink>
               </P>
-              <P>Role: {currentComment?.author.role.name}</P>
               <P>
-                Status:{' '}
+                {t('comment.form.author.role')}{' '}
+                {currentComment?.author.role.name}
+              </P>
+              <P>
+                {t('comment.form.author.status.title')}{' '}
                 {initialData.authorBlocked ? (
-                  <CommentStatus $isRed>BLOCKED</CommentStatus>
+                  <CommentStatus $isRed>
+                    {t('comment.form.author.status.blocked')}
+                  </CommentStatus>
                 ) : userData.confirmed ? (
-                  <CommentStatus>ACTIVE</CommentStatus>
+                  <CommentStatus>
+                    {t('comment.form.author.status.active')}
+                  </CommentStatus>
                 ) : (
-                  <CommentStatus $isYellow>NOT ACTIVATED</CommentStatus>
+                  <CommentStatus $isYellow>
+                    {t('comment.form.author.status.notActive')}
+                  </CommentStatus>
                 )}
               </P>
               <InputCheckbox
-                label="Blocked:"
+                label={t('comment.form.author.blocked')}
                 id="blocked"
                 value={(userData as UserTypes).blocked}
                 uuid={uuid}
@@ -251,14 +266,17 @@ const CommentForm = () => {
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <FormButton $type="submit" type="submit">
-                <FontAwesomeIcon icon={['fas', 'edit']} /> Save
+                <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
+                {t('form.saveButton')}
               </FormButton>
               <FormButton $type="reset" type="reset" onClick={handleOnCancel}>
-                <FontAwesomeIcon icon={['fas', 'xmark']} /> Cancel
+                <FontAwesomeIcon icon={['fas', 'xmark']} />{' '}
+                {t('form.cancelButton')}
               </FormButton>
             </EditButtonsWrapper>
             <FormButton $type="delete" type="button" onClick={handleDelete}>
-              <FontAwesomeIcon icon={['fas', 'trash']} /> Delete
+              <FontAwesomeIcon icon={['fas', 'trash']} />{' '}
+              {t('form.deleteButton')}
             </FormButton>
           </FormButtonWrapper>
         </StyledCommentForm>
