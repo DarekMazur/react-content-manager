@@ -108,6 +108,7 @@
     "tableHeaders": {
       "id": "ID",
       "status": "Status",
+      "article": "Article",
       "author": "Comment's Author",
       "comment": "Comment",
       "publishedAt": "Published at"
@@ -131,7 +132,8 @@
         "status": {
           "title": "Status:",
           "active": "ACTIVE",
-          "blocked": "BLOCKED"
+          "blocked": "BLOCKED",
+          "notActive": "NOT ACTIVATED"
         },
         "blocked": "Blocked:"
       }

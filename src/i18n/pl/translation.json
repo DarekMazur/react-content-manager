@@ -50,7 +50,7 @@
     "cancel": "Anuluj"
   },
   "article": {
-    "header": "Artukuły",
+    "header": "Artykuły",
     "newArticle": "Nowy artykuł",
     "tableHeaders": {
       "id": "ID",
@@ -85,7 +85,7 @@
     }
   },
   "user": {
-    "header": "Urzytkownicy",
+    "header": "Użytkownicy",
     "tableHeaders": {
       "id": "ID",
       "name": "Nazwa",
@@ -108,6 +108,7 @@
     "tableHeaders": {
       "id": "ID",
       "status": "Status",
+      "article": "Artykuł",
       "author": "Autor komentarza",
       "comment": "Komentarz",
       "publishedAt": "Opublikowano"
@@ -116,12 +117,12 @@
       "header": "Komentarz #{{id}}",
       "details": {
         "header": "Szczegóły komentarza:",
-        "article": "Komentaowany artykuł:",
+        "article": "Komentowany artykuł:",
         "publicationDate": "Data publikacji:",
         "status": {
           "title": "Status:",
           "visible": "Widoczny dla wszystkich",
-          "shadowed": "SHADOW BANNED"
+          "shadowed": "SHADOW BAN"
         },
         "shadowBan": "Shadow ban:"
       },
@@ -131,7 +132,8 @@
         "status": {
           "title": "Status:",
           "active": "AKTYWNY",
-          "blocked": "ZABLOKOWANY"
+          "blocked": "ZABLOKOWANY",
+          "notActive": "NIEAKTYWNY"
         },
         "blocked": "Zablokowany:"
       }
