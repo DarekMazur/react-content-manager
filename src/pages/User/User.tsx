@@ -4,6 +4,7 @@ import { UserTypes } from '../../types/dataTypes';
 import UserForm from '../../components/Organisms/Forms/UserForm/UserForm';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
+import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 
 const UserView = () => {
   const { uuid } = useParams();
@@ -22,7 +23,7 @@ const UserView = () => {
         (currentUser as UserTypes).role.type === 'redactor' ? (
           <UserForm uuid={uuid as string} />
         ) : (
-          "You're not authorised"
+          <Unauthorised />
         )
       ) : null}
     </>

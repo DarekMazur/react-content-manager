@@ -3,12 +3,10 @@ import P from '../../components/Atoms/Paragraph/P.tsx';
 
 const UnauthorisedView = () => {
   return (
-    <main>
-      <div>
-        <Heading tag={'h2'}>You are not authorised</Heading>
-        <P>You can't view this page</P>
-      </div>
-    </main>
+    <div>
+      <Heading tag={'h3'}>You are not authorised</Heading>
+      <P>You can't view this page</P>
+    </div>
   );
 };
 
