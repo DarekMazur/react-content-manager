@@ -13,6 +13,10 @@
       "logout": "Wyloguj"
     }
   },
+  "unauthorised": {
+  "header": "Nie jesteś uprawniony",
+  "message": "Z przykrością informujemy, że obecne uprawnienia użytkownika nie pozwalają na dostępu do tej konkretnej sekcji aplikacji. Jeśli uważasz, że że jest to błąd lub potrzebujesz dalszej pomocy, skontaktuj się z administratorem."
+},
   "home": {
     "header": "Jesteś zalogowany jako {{role}}",
     "lastArticle": "Ostatni artykuł:",

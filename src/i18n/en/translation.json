@@ -13,6 +13,10 @@
       "logout": "Log out"
     }
   },
+  "unauthorised": {
+    "header": "You are not authorised",
+    "message": "We regret to inform you that your current user permissions do not allow access to this particular section of the application. If you believe this is in error or require further assistance, please contact your system administrator."
+  },
   "home": {
     "header": "You are logged in as {{role}}",
     "lastArticle": "Last article:",
