@@ -8,6 +8,7 @@ import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { Main } from '../../components/Organisms/Main/Main.styles';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { useTranslation } from 'react-i18next';
+import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 
 const Users = () => {
   const { t } = useTranslation();
@@ -34,6 +35,7 @@ const Users = () => {
 
   return (
     <Main $minHeight={height}>
+      <FilterMenu />
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('user.header')}
       </Heading>
