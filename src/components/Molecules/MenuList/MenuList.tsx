@@ -1,9 +1,14 @@
 import { StyledMenuList } from './MenuList.styles.ts';
 import MenuListItem from '../../Atoms/MenuListItem/MenuListItem.tsx';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { UserTypes } from '../../../types/dataTypes.ts';
 
 const MenuList = () => {
   const { t } = useTranslation();
+  const currentUser = useSelector<RootState>((state) => state.user);
+
   return (
     <nav>
       <StyledMenuList>
@@ -17,9 +22,12 @@ const MenuList = () => {
         <MenuListItem target="/categories">
           {t('navigation.menu.categories')}
         </MenuListItem>
-        <MenuListItem target="/users">
-          {t('navigation.menu.users')}
-        </MenuListItem>
+        {(currentUser as UserTypes).role.type === 'admin' ||
+        (currentUser as UserTypes).role.type === 'redactor' ? (
+          <MenuListItem target="/users">
+            {t('navigation.menu.users')}
+          </MenuListItem>
+        ) : null}
       </StyledMenuList>
     </nav>
   );
