@@ -1,6 +1,11 @@
 import P from '../../Atoms/Paragraph/P.tsx';
+import { useState } from 'react';
 
 const FilterMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOnClick = () => {
+    setIsOpen((prevState) => !prevState);
+  };
   return (
     <aside
       style={{
@@ -12,8 +17,8 @@ const FilterMenu = () => {
         position: 'fixed',
         zIndex: '3',
         left: '-25rem',
-        transform: 'translateX(0)',
-        transition: 'translate 300ms ease-in-out',
+        transform: isOpen ? 'translateX(25rem)' : 'translateX(0)',
+        transition: 'transform 300ms ease-in-out',
         boxShadow: '0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.15)',
       }}
     >
@@ -31,6 +36,7 @@ const FilterMenu = () => {
           boxShadow: '-0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.15)',
           cursor: 'pointer',
         }}
+        onClick={handleOnClick}
       >
         <P weight={'bold'}>Filters</P>
       </div>
