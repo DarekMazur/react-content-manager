@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { Main } from '../../components/Organisms/Main/Main.styles';
 import CommentForm from '../../components/Organisms/Forms/CommentForm/CommentForm';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
+import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 
 const CommentView = () => {
   const { uuid } = useParams();
@@ -47,7 +48,7 @@ const CommentView = () => {
         (currentUser as UserTypes).role.type === 'redactor' ? (
           <CommentForm />
         ) : (
-          "You're not authorised"
+          <Unauthorised />
         )
       ) : null}
     </Main>

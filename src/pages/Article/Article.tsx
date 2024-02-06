@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import { ArticleDataTypes, UserTypes } from '../../types/dataTypes';
 import ArticleForm from '../../components/Organisms/Forms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
-import P from '../../components/Atoms/Paragraph/P';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { Main } from '../../components/Organisms/Main/Main.styles';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { useTranslation } from 'react-i18next';
+import UnauthorisedView from '../UnauthorisedView/UnauthorisedView.tsx';
 
 const Article = () => {
   const { t } = useTranslation();
@@ -43,7 +43,7 @@ const Article = () => {
         (currentUser as UserTypes).role.type === 'redactor' ? (
           <ArticleForm />
         ) : (
-          <P>You're not authorised</P>
+          <UnauthorisedView />
         )}
       </section>
     </Main>
