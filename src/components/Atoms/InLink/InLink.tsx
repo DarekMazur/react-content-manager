@@ -3,7 +3,7 @@ import { StyledInLink } from './InLink.styles.ts';
 
 interface InternalLinkProps {
   target: string;
-  name: string | ReactNode;
+  name?: string | ReactNode;
   onClick?: () => void;
 }
 const InLink: FC<InternalLinkProps> = ({ target, name, onClick }) => {

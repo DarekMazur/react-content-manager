@@ -6,12 +6,14 @@ import { getFooterHeight } from '../../../utils/methods/getFooterHeight.ts';
 import InLink from '../../Atoms/InLink/InLink.tsx';
 import LockIcon from '../../Atoms/LockIcon/LockIcon.tsx';
 import P from '../../Atoms/Paragraph/P.tsx';
+import { Trans, useTranslation } from 'react-i18next';
 
 interface AuthProps {
   handleMockLogin?: () => void;
 }
 
 const Unauthorised: FC<AuthProps> = ({ handleMockLogin }) => {
+  const { t } = useTranslation();
   const [wrapperHeight, setWrapperHeight] = useState(0);
 
   useEffect(() => {
@@ -22,12 +24,21 @@ const Unauthorised: FC<AuthProps> = ({ handleMockLogin }) => {
     <StyledUnauthorised $height={wrapperHeight}>
       <LockIcon />
       <P size="xl">
-        You need to{' '}
-        <InLink target="/" name="log in" onClick={handleMockLogin} /> first
+        <Trans
+          i18nKey="unauthorised.global.message"
+          components={{
+            link: <InLink target="/" onClick={handleMockLogin} />,
+          }}
+        />
       </P>
-      <P>or</P>
+      <P>{t('unauthorised.global.or')}</P>
       <P>
-        go back to <ExtLink url={data.blogUrl} name="blog" />
+        <Trans
+          i18nKey="unauthorised.global.goBack"
+          components={{
+            link: <ExtLink url={data.blogUrl} />,
+          }}
+        />
       </P>
     </StyledUnauthorised>
   );

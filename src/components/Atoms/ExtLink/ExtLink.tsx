@@ -2,7 +2,7 @@ import { StyledLink } from './ExtLink.styles.ts';
 
 interface LinkProps {
   url: string;
-  name: string;
+  name?: string;
   size?: string;
 }
 

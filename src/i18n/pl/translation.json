@@ -14,6 +14,13 @@
     }
   },
   "unauthorised": {
+    "global": {
+      "message": "Musisz się najpierw <link name='zalogować'>",
+      "first": null,
+      "login": "zalogować",
+      "or": "lub",
+      "goBack": "wróć do <link name='bloga'>"
+    },
   "header": "Nie jesteś uprawniony",
   "message": "Z przykrością informujemy, że obecne uprawnienia użytkownika nie pozwalają na dostępu do tej konkretnej sekcji aplikacji. Jeśli uważasz, że że jest to błąd lub potrzebujesz dalszej pomocy, skontaktuj się z administratorem."
 },
