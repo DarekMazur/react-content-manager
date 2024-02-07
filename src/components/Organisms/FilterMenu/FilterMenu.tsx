@@ -1,102 +1,103 @@
 import P from '../../Atoms/Paragraph/P.tsx';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { roles } from '../../../mocks/db.ts';
+import { FiltersLabel, StyledFilterMenu } from './FilterMenu.styles.ts';
+
+interface IFilterTypes {
+  type: string;
+  value: string[];
+}
 
 const FilterMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [filters, setFilters] = useState<IFilterTypes[]>([]);
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
   const handleOnClick = () => {
     setIsOpen((prevState) => !prevState);
   };
+
+  const handleCheckFilters = (
+    e: ChangeEvent<HTMLInputElement>,
+    type: string,
+  ) => {
+    if (e.target.checked) {
+      if (filters.filter((filter) => filter.type === type).length > 0) {
+        setFilters(
+          filters.map((filter) =>
+            filter.type === type
+              ? (filter = { type, value: [...filter.value, e.target.id] })
+              : filter,
+          ),
+        );
+      } else {
+        setFilters([...filters, { type, value: [e.target.id] }]);
+      }
+    } else {
+      setFilters(
+        filters.map((filter) =>
+          filter.type === type
+            ? (filter = {
+                type,
+                value: filter.value.filter((value) => value !== e.target.id),
+              })
+            : filter,
+        ),
+      );
+    }
+  };
+
   return (
-    <aside
-      style={{
-        width: '25rem',
-        backgroundColor: 'lightBlue',
-        padding: '1rem',
-        margin: '0',
-        borderRadius: '0 0.5rem 0.5rem 0',
-        position: 'fixed',
-        zIndex: '3',
-        left: '-25rem',
-        transform: isOpen ? 'translateX(25rem)' : 'translateX(0)',
-        transition: 'transform 300ms ease-in-out',
-        boxShadow: '0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.15)',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          top: '2rem',
-          left: '25rem',
-          backgroundColor: 'lightblue',
-          borderRadius: '0 0 0.5rem 0.5rem',
-          margin: '0',
-          padding: '0.2rem 2rem 0.5rem',
-          transformOrigin: '0 0',
-          transform: 'rotate(-90deg) translateX(-100%)',
-          boxShadow: '-0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.15)',
-          cursor: 'pointer',
-        }}
-        onClick={handleOnClick}
-      >
+    <StyledFilterMenu $open={isOpen}>
+      <FiltersLabel onClick={handleOnClick}>
         <P weight={'bold'}>Filters</P>
-      </div>
+      </FiltersLabel>
       <div>
-        <P weight={'bold'}>Label1</P>
-        <ul style={{ listStyle: 'none' }}>
-          <li>
-            <input type={'checkbox'} /> Element 1
+        <P weight={'bold'}>Role</P>
+        <ul style={{ listStyle: 'none', padding: '0' }}>
+          {roles.map((role) => (
+            <li key={role.id} style={{ padding: '0.5rem 0' }}>
+              <input
+                type={'checkbox'}
+                id={role.type}
+                onChange={(e) => handleCheckFilters(e, 'role')}
+              />{' '}
+              {role.name}
+            </li>
+          ))}
+        </ul>
+        <P weight={'bold'}>User status</P>
+        <ul style={{ listStyle: 'none', padding: '0' }}>
+          <li style={{ padding: '0.5rem 0' }}>
+            <input
+              type={'checkbox'}
+              id={'active'}
+              onChange={(e) => handleCheckFilters(e, 'blocked')}
+            />{' '}
+            Active
           </li>
-          <li>
-            <input type={'checkbox'} /> Element 2
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 3
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 4
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 5
+          <li style={{ padding: '0.5rem 0' }}>
+            <input type={'checkbox'} id={'blocked'} /> Blocked
           </li>
         </ul>
-        <P weight={'bold'}>Label2</P>
-        <ul style={{ listStyle: 'none' }}>
-          <li>
-            <input type={'checkbox'} /> Element 1
+        <P weight={'bold'}>Confirm status</P>
+        <ul style={{ listStyle: 'none', padding: '0' }}>
+          <li style={{ padding: '0.5rem 0' }}>
+            <input
+              type={'checkbox'}
+              id={'confirmed'}
+              onChange={(e) => handleCheckFilters(e, 'confirmed')}
+            />{' '}
+            Confirmed
           </li>
-          <li>
-            <input type={'checkbox'} /> Element 2
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 3
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 4
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 5
-          </li>
-        </ul>
-        <P weight={'bold'}>Label3</P>
-        <ul style={{ listStyle: 'none' }}>
-          <li>
-            <input type={'checkbox'} /> Element 1
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 2
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 3
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 4
-          </li>
-          <li>
-            <input type={'checkbox'} /> Element 5
+          <li style={{ padding: '0.5rem 0' }}>
+            <input type={'checkbox'} id={'notConfirmed'} /> Not confirmed
           </li>
         </ul>
       </div>
-    </aside>
+    </StyledFilterMenu>
   );
 };
 
