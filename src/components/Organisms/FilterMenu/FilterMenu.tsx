@@ -2,19 +2,20 @@ import P from '../../Atoms/Paragraph/P.tsx';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { roles } from '../../../mocks/db.ts';
 import { FiltersLabel, StyledFilterMenu } from './FilterMenu.styles.ts';
-
-interface IFilterTypes {
-  type: string;
-  value: string[];
-}
+import { clearFilters, modifyFilter, RootState } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { IFilterTypes } from '../../../types/dataTypes.ts';
 
 const FilterMenu = () => {
+  const dispatch = useDispatch();
+  const filters = useSelector<RootState>((state) => state.filters);
   const [isOpen, setIsOpen] = useState(false);
-  const [filters, setFilters] = useState<IFilterTypes[]>([]);
 
   useEffect(() => {
-    console.log(filters);
-  }, [filters]);
+    dispatch(clearFilters());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleOnClick = () => {
     setIsOpen((prevState) => !prevState);
   };
@@ -24,26 +25,40 @@ const FilterMenu = () => {
     type: string,
   ) => {
     if (e.target.checked) {
-      if (filters.filter((filter) => filter.type === type).length > 0) {
-        setFilters(
-          filters.map((filter) =>
-            filter.type === type
-              ? (filter = { type, value: [...filter.value, e.target.id] })
-              : filter,
+      if (
+        (filters as IFilterTypes[]).filter((filter) => filter.type === type)
+          .length > 0
+      ) {
+        console.log('catch!');
+        dispatch(
+          modifyFilter(
+            (filters as IFilterTypes[]).map((filter) =>
+              filter.type === type
+                ? (filter = { type, value: [...filter.value, e.target.id] })
+                : filter,
+            ),
           ),
         );
       } else {
-        setFilters([...filters, { type, value: [e.target.id] }]);
+        console.log('catch!');
+        dispatch(
+          modifyFilter([
+            ...(filters as IFilterTypes[]),
+            { type, value: [e.target.id] },
+          ]),
+        );
       }
     } else {
-      setFilters(
-        filters.map((filter) =>
-          filter.type === type
-            ? (filter = {
-                type,
-                value: filter.value.filter((value) => value !== e.target.id),
-              })
-            : filter,
+      dispatch(
+        modifyFilter(
+          (filters as IFilterTypes[]).map((filter) =>
+            filter.type === type
+              ? (filter = {
+                  type,
+                  value: filter.value.filter((value) => value !== e.target.id),
+                })
+              : filter,
+          ),
         ),
       );
     }
