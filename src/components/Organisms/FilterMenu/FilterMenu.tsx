@@ -29,18 +29,19 @@ const FilterMenu = () => {
         (filters as IFilterTypes[]).filter((filter) => filter.type === type)
           .length > 0
       ) {
-        console.log('catch!');
         dispatch(
           modifyFilter(
             (filters as IFilterTypes[]).map((filter) =>
               filter.type === type
-                ? (filter = { type, value: [...filter.value, e.target.id] })
+                ? (filter = {
+                    type,
+                    value: [...filter.value, e.target.id],
+                  })
                 : filter,
             ),
           ),
         );
       } else {
-        console.log('catch!');
         dispatch(
           modifyFilter([
             ...(filters as IFilterTypes[]),
@@ -94,7 +95,12 @@ const FilterMenu = () => {
             Active
           </li>
           <li style={{ padding: '0.5rem 0' }}>
-            <input type={'checkbox'} id={'blocked'} /> Blocked
+            <input
+              type={'checkbox'}
+              id={'blocked'}
+              onChange={(e) => handleCheckFilters(e, 'blocked')}
+            />{' '}
+            Blocked
           </li>
         </ul>
         <P weight={'bold'}>Confirm status</P>
@@ -108,7 +114,12 @@ const FilterMenu = () => {
             Confirmed
           </li>
           <li style={{ padding: '0.5rem 0' }}>
-            <input type={'checkbox'} id={'notConfirmed'} /> Not confirmed
+            <input
+              type={'checkbox'}
+              id={'notConfirmed'}
+              onChange={(e) => handleCheckFilters(e, 'confirmed')}
+            />{' '}
+            Not confirmed
           </li>
         </ul>
       </div>

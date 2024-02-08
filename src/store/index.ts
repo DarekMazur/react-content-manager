@@ -35,11 +35,9 @@ const filtersSlice = createSlice({
   initialState: initialFilters,
   reducers: {
     modifyFilter(_state, action) {
-      console.log(action.payload);
       return action.payload;
     },
     clearFilters() {
-      console.log('clear state!');
       return initialFilters;
     },
   },

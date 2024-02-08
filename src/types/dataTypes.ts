@@ -62,5 +62,5 @@ export type ArticleDataTypes = {
 
 export interface IFilterTypes {
   type: string;
-  value: string[];
+  value: (string | boolean)[];
 }
