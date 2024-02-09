@@ -6,8 +6,10 @@ import { clearFilters, modifyFilter, RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { IFilterTypes } from '../../../types/dataTypes.ts';
 import { FormButton } from '../Forms/UserForm/UserForm.styles.ts';
+import { useTranslation } from 'react-i18next';
 
 const FilterMenu = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const filters = useSelector<RootState>((state) => state.filters);
   const [isOpen, setIsOpen] = useState(false);
@@ -73,10 +75,10 @@ const FilterMenu = () => {
   return (
     <StyledFilterMenu $open={isOpen}>
       <FiltersLabel onClick={handleOnClick}>
-        <P weight={'bold'}>Filters</P>
+        <P weight={'bold'}>{t('filters.filters')}</P>
       </FiltersLabel>
       <form>
-        <P weight={'bold'}>Role</P>
+        <P weight={'bold'}>{t('filters.users.role')}</P>
         <ul style={{ listStyle: 'none', padding: '0' }}>
           {roles.map((role) => (
             <li key={role.id} style={{ padding: '0.5rem 0' }}>
@@ -89,7 +91,7 @@ const FilterMenu = () => {
             </li>
           ))}
         </ul>
-        <P weight={'bold'}>User status</P>
+        <P weight={'bold'}>{t('filters.users.status')}</P>
         <ul style={{ listStyle: 'none', padding: '0' }}>
           <li style={{ padding: '0.5rem 0' }}>
             <input
@@ -97,7 +99,7 @@ const FilterMenu = () => {
               id={'active'}
               onChange={(e) => handleCheckFilters(e, 'blocked')}
             />{' '}
-            Active
+            {t('filters.users.active')}
           </li>
           <li style={{ padding: '0.5rem 0' }}>
             <input
@@ -105,10 +107,10 @@ const FilterMenu = () => {
               id={'blocked'}
               onChange={(e) => handleCheckFilters(e, 'blocked')}
             />{' '}
-            Blocked
+            {t('filters.users.blocked')}
           </li>
         </ul>
-        <P weight={'bold'}>Confirm status</P>
+        <P weight={'bold'}>{t('filters.users.confirmStatus')}</P>
         <ul style={{ listStyle: 'none', padding: '0' }}>
           <li style={{ padding: '0.5rem 0' }}>
             <input
@@ -116,7 +118,7 @@ const FilterMenu = () => {
               id={'confirmed'}
               onChange={(e) => handleCheckFilters(e, 'confirmed')}
             />{' '}
-            Confirmed
+            {t('filters.users.confirmed')}
           </li>
           <li style={{ padding: '0.5rem 0' }}>
             <input
@@ -124,11 +126,11 @@ const FilterMenu = () => {
               id={'notConfirmed'}
               onChange={(e) => handleCheckFilters(e, 'confirmed')}
             />{' '}
-            Not confirmed
+            {t('filters.users.notConfirmed')}
           </li>
         </ul>
         <FormButton $type="submit" type="reset" onClick={handleClear}>
-          Clear filters
+          {t('filters.users.clear')}
         </FormButton>
       </form>
     </StyledFilterMenu>

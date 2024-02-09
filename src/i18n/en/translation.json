@@ -204,5 +204,18 @@
       "category": "Category",
       "description": "Description"
     }
+  },
+  "filters": {
+    "filters": "Filters",
+    "users": {
+      "role": "Role",
+      "status": "User status",
+      "confirmStatus": "Confirm status",
+      "active": "Active",
+      "blocked": "Blocked",
+      "confirmed": "Confirmed",
+      "notConfirmed": "Not confirmed",
+      "clear": "Clear filters"
+    }
   }
 }

@@ -206,5 +206,18 @@
       "category": "Kategoria",
       "description": "Opis"
     }
+  },
+  "filters": {
+    "filters": "Filtry",
+    "users": {
+      "role": "Funkcja",
+      "status": "Status użytkownika",
+      "confirmStatus": "Status potwierdzenia",
+      "active": "Aktywny",
+      "blocked": "Zablokowany",
+      "confirmed": "Potwierdzony",
+      "notConfirmed": "Nie potwierdzony",
+      "clear": "Wyczyść filtry"
+    }
   }
 }
