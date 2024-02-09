@@ -1,14 +1,20 @@
 import P from '../../Atoms/Paragraph/P.tsx';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { roles } from '../../../mocks/db.ts';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { FiltersLabel, StyledFilterMenu } from './FilterMenu.styles.ts';
 import { clearFilters, modifyFilter, RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { IFilterTypes } from '../../../types/dataTypes.ts';
+import {
+  IFilterElementsTypes,
+  IFilterTypes,
+} from '../../../types/dataTypes.ts';
 import { FormButton } from '../Forms/UserForm/UserForm.styles.ts';
 import { useTranslation } from 'react-i18next';
 
-const FilterMenu = () => {
+interface IFilterMenuTypes {
+  menuItems: IFilterElementsTypes[];
+}
+
+const FilterMenu: FC<IFilterMenuTypes> = ({ menuItems }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const filters = useSelector<RootState>((state) => state.filters);
@@ -16,6 +22,7 @@ const FilterMenu = () => {
 
   useEffect(() => {
     dispatch(clearFilters());
+    console.log(menuItems);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -78,57 +85,23 @@ const FilterMenu = () => {
         <P weight={'bold'}>{t('filters.filters')}</P>
       </FiltersLabel>
       <form>
-        <P weight={'bold'}>{t('filters.users.role')}</P>
-        <ul style={{ listStyle: 'none', padding: '0' }}>
-          {roles.map((role) => (
-            <li key={role.id} style={{ padding: '0.5rem 0' }}>
-              <input
-                type={'checkbox'}
-                id={role.type}
-                onChange={(e) => handleCheckFilters(e, 'role')}
-              />{' '}
-              {role.name}
-            </li>
-          ))}
-        </ul>
-        <P weight={'bold'}>{t('filters.users.status')}</P>
-        <ul style={{ listStyle: 'none', padding: '0' }}>
-          <li style={{ padding: '0.5rem 0' }}>
-            <input
-              type={'checkbox'}
-              id={'active'}
-              onChange={(e) => handleCheckFilters(e, 'blocked')}
-            />{' '}
-            {t('filters.users.active')}
-          </li>
-          <li style={{ padding: '0.5rem 0' }}>
-            <input
-              type={'checkbox'}
-              id={'blocked'}
-              onChange={(e) => handleCheckFilters(e, 'blocked')}
-            />{' '}
-            {t('filters.users.blocked')}
-          </li>
-        </ul>
-        <P weight={'bold'}>{t('filters.users.confirmStatus')}</P>
-        <ul style={{ listStyle: 'none', padding: '0' }}>
-          <li style={{ padding: '0.5rem 0' }}>
-            <input
-              type={'checkbox'}
-              id={'confirmed'}
-              onChange={(e) => handleCheckFilters(e, 'confirmed')}
-            />{' '}
-            {t('filters.users.confirmed')}
-          </li>
-          <li style={{ padding: '0.5rem 0' }}>
-            <input
-              type={'checkbox'}
-              id={'notConfirmed'}
-              onChange={(e) => handleCheckFilters(e, 'confirmed')}
-            />{' '}
-            {t('filters.users.notConfirmed')}
-          </li>
-        </ul>
+        {menuItems.map((menuItem) => (
+          <React.Fragment key={menuItem.label}>
+            <P weight={'bold'}>{menuItem.label}</P>
+            <ul style={{ listStyle: 'none', padding: '0' }}>
+              {menuItem.elements.map((element) => (
+                <li key={element.id} style={{ padding: '0.5rem 0' }}>
+                  <input
+                    type={'checkbox'}
+                    id={element.id}
+                    onChange={(e) => handleCheckFilters(e, menuItem.type)}
+                  />{' '}
+                  {element.label}
+                </li>
+              ))}
+            </ul>
+          </React.Fragment>
+        ))}
         <FormButton $type="submit" type="reset" onClick={handleClear}>
           {t('filters.users.clear')}
         </FormButton>

@@ -1,7 +1,11 @@
 import Heading from '../../components/Atoms/Heading/Heading';
 import { RootState, useGetUsersQuery } from '../../store';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
-import { IFilterTypes, UserTypes } from '../../types/dataTypes';
+import {
+  IFilterElementsTypes,
+  IFilterTypes,
+  UserTypes,
+} from '../../types/dataTypes';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
@@ -10,6 +14,7 @@ import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 import { useEffect, useState } from 'react';
+import { roles } from '../../mocks/db.ts';
 
 const Users = () => {
   const { t } = useTranslation();
@@ -19,6 +24,45 @@ const Users = () => {
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
   const [filteredUsers, setFilteredUsers] = useState<UserTypes[]>(users);
+
+  const usersFilters: IFilterElementsTypes[] = [
+    {
+      label: t('filters.users.role'),
+      type: 'role',
+      elements: roles.map((role) => ({
+        label: role.name,
+        id: role.type,
+      })),
+    },
+    {
+      label: t('filters.users.status'),
+      type: 'blocked',
+      elements: [
+        {
+          label: t('filters.users.active'),
+          id: 'active',
+        },
+        {
+          label: t('filters.users.blocked'),
+          id: 'blocked',
+        },
+      ],
+    },
+    {
+      label: t('filters.users.confirmStatus'),
+      type: 'confirmed',
+      elements: [
+        {
+          label: t('filters.users.confirmed'),
+          id: 'confirmed',
+        },
+        {
+          label: t('filters.users.notConfirmed'),
+          id: 'notConfirmed',
+        },
+      ],
+    },
+  ];
 
   useEffect(() => {
     if (
@@ -92,7 +136,7 @@ const Users = () => {
 
   return (
     <Main $minHeight={height}>
-      <FilterMenu />
+      <FilterMenu menuItems={usersFilters} />
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('user.header')}
       </Heading>
