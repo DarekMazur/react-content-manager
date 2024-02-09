@@ -216,6 +216,11 @@
       "confirmed": "Confirmed",
       "notConfirmed": "Not confirmed",
       "clear": "Clear filters"
+    },
+    "comments": {
+      "status": "Comments status",
+      "visible": "Visible",
+      "hidden": "Hidden"
     }
   }
 }

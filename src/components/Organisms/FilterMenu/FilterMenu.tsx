@@ -22,7 +22,6 @@ const FilterMenu: FC<IFilterMenuTypes> = ({ menuItems }) => {
 
   useEffect(() => {
     dispatch(clearFilters());
-    console.log(menuItems);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
