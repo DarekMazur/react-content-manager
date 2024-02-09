@@ -2,6 +2,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import {
   ArticleDataTypes,
   CategoriesTypes,
+  IFilterTypes,
   UserTypes,
 } from '../types/dataTypes';
 import { articlesApi } from './api/articles.ts';
@@ -26,6 +27,21 @@ const initialPopup: PopupTypes = {
   ids: [],
   title: undefined,
 };
+
+const initialFilters: IFilterTypes[] = [];
+
+const filtersSlice = createSlice({
+  name: 'filters',
+  initialState: initialFilters,
+  reducers: {
+    modifyFilter(_state, action) {
+      return action.payload;
+    },
+    clearFilters() {
+      return initialFilters;
+    },
+  },
+});
 
 const selectedSlice = createSlice({
   name: 'selected',
@@ -129,6 +145,8 @@ export const {
 export const { switchPopup } = popupSlice.actions;
 export const { setUser } = userSlice.actions;
 
+export const { modifyFilter, clearFilters } = filtersSlice.actions;
+
 export * from './api/articles.ts';
 export * from './api/users.ts';
 export * from './api/comments.ts';
@@ -140,6 +158,7 @@ export const store = configureStore({
     [usersApi.reducerPath]: usersApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
+    filters: filtersSlice.reducer,
     selected: selectedSlice.reducer,
     selectedUsers: selectedUsersSlice.reducer,
     selectedComments: selectedCommentsSlice.reducer,

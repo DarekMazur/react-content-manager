@@ -59,3 +59,8 @@ export type ArticleDataTypes = {
   };
   comments: Array<CommentTypes> | null;
 };
+
+export interface IFilterTypes {
+  type: string;
+  value: (string | boolean)[];
+}

@@ -40,7 +40,7 @@ const Root = () => {
   const handleMockLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
     const authorised = users.find(
-      (user) => user.role.id === 3 && user.confirmed && !user.blocked,
+      (user) => user.role.id === 1 && user.confirmed && !user.blocked,
     );
 
     if (authorised) {
