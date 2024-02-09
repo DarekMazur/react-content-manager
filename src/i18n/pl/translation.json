@@ -218,6 +218,11 @@
       "confirmed": "Potwierdzony",
       "notConfirmed": "Nie potwierdzony",
       "clear": "Wyczyść filtry"
+    },
+    "comments": {
+      "status": "Status komentarza",
+      "visible": "Widoczny",
+      "hidden": "Ukryty"
     }
   }
 }
