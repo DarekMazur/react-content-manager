@@ -68,15 +68,6 @@ const Users = () => {
       }
 
       setFilteredUsers(filtered);
-
-      // const filteredUsersList = (filters as IFilterTypes[]).map((filter) =>
-      //   filter.type === 'blocked' || filter.type === 'confirmed' ? (
-      //     users.filter(user => )
-      //   ) : (
-      //     users.filter((user) => filter.value.includes(user[filter.type].type))
-      //   )
-      // );
-      // setFilteredUsers(...filteredUsersList);
     } else {
       setFilteredUsers(users);
     }

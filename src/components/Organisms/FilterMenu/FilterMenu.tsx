@@ -5,6 +5,7 @@ import { FiltersLabel, StyledFilterMenu } from './FilterMenu.styles.ts';
 import { clearFilters, modifyFilter, RootState } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { IFilterTypes } from '../../../types/dataTypes.ts';
+import { FormButton } from '../Forms/UserForm/UserForm.styles.ts';
 
 const FilterMenu = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,10 @@ const FilterMenu = () => {
 
   const handleOnClick = () => {
     setIsOpen((prevState) => !prevState);
+  };
+
+  const handleClear = () => {
+    dispatch(clearFilters());
   };
 
   const handleCheckFilters = (
@@ -70,7 +75,7 @@ const FilterMenu = () => {
       <FiltersLabel onClick={handleOnClick}>
         <P weight={'bold'}>Filters</P>
       </FiltersLabel>
-      <div>
+      <form>
         <P weight={'bold'}>Role</P>
         <ul style={{ listStyle: 'none', padding: '0' }}>
           {roles.map((role) => (
@@ -122,7 +127,10 @@ const FilterMenu = () => {
             Not confirmed
           </li>
         </ul>
-      </div>
+        <FormButton $type="submit" type="reset" onClick={handleClear}>
+          Clear filters
+        </FormButton>
+      </form>
     </StyledFilterMenu>
   );
 };
