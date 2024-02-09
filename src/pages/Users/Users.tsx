@@ -21,15 +21,62 @@ const Users = () => {
   const [filteredUsers, setFilteredUsers] = useState<UserTypes[]>(users);
 
   useEffect(() => {
-    console.log(filters);
     if (
       (filters as IFilterTypes[]).filter((filter) => filter.value.length > 0)
         .length > 0
     ) {
-      const filteredUsersList = (filters as IFilterTypes[]).map((filter) =>
-        users.filter((user) => filter.value.includes(user[filter.type].type)),
+      const filteredRoles = (filters as IFilterTypes[]).filter(
+        (filter) => filter.type === 'role',
       );
-      setFilteredUsers(...filteredUsersList);
+      const filteredStatus = (filters as IFilterTypes[]).filter(
+        (filter) => filter.type === 'blocked',
+      );
+      const filteredConfirmed = (filters as IFilterTypes[]).filter(
+        (filter) => filter.type === 'confirmed',
+      );
+
+      let filtered: UserTypes[] = [];
+
+      if (filteredRoles[0] && filteredRoles[0].value.length > 0) {
+        filtered.push(
+          ...users.filter((user) =>
+            filteredRoles[0].value.includes(user.role.type),
+          ),
+        );
+      } else {
+        filtered.push(...users);
+      }
+
+      if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
+        filtered = filtered.filter((user) =>
+          filteredStatus[0].value.includes('active')
+            ? filteredStatus[0].value.includes('blocked')
+              ? user
+              : !user.blocked
+            : user.blocked,
+        );
+      }
+
+      if (filteredConfirmed[0] && filteredConfirmed[0].value.length > 0) {
+        filtered = filtered.filter((user) =>
+          filteredConfirmed[0].value.includes('notConfirmed')
+            ? filteredConfirmed[0].value.includes('confirmed')
+              ? user
+              : !user.confirmed
+            : user.confirmed,
+        );
+      }
+
+      setFilteredUsers(filtered);
+
+      // const filteredUsersList = (filters as IFilterTypes[]).map((filter) =>
+      //   filter.type === 'blocked' || filter.type === 'confirmed' ? (
+      //     users.filter(user => )
+      //   ) : (
+      //     users.filter((user) => filter.value.includes(user[filter.type].type))
+      //   )
+      // );
+      // setFilteredUsers(...filteredUsersList);
     } else {
       setFilteredUsers(users);
     }
