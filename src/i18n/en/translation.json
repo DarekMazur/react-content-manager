@@ -221,6 +221,15 @@
       "status": "Comments status",
       "visible": "Visible",
       "hidden": "Hidden"
+    },
+    "articles": {
+      "status": "Status",
+      "published": "Published",
+      "draft": "Draft",
+      "pinned": "Pinned",
+      "yes": "Yes",
+      "no": "No",
+      "author": "Author"
     }
   }
 }

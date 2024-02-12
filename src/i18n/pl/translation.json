@@ -223,6 +223,15 @@
       "status": "Status komentarza",
       "visible": "Widoczny",
       "hidden": "Ukryty"
+    },
+    "articles": {
+      "status": "Status",
+      "published": "Opublikowany",
+      "draft": "Szkic",
+      "pinned": "Przypięty",
+      "yes": "Tak",
+      "no": "Nie",
+      "author": "Autor"
     }
   }
 }

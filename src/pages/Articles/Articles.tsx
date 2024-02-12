@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useGetArticlesQuery } from '../../store';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
-import { ArticleDataTypes, UserTypes } from '../../types/dataTypes.ts';
+import {
+  ArticleDataTypes,
+  IFilterElementsTypes,
+  UserTypes,
+} from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
 // import { articlesTableHeaders } from '../../utils/data.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
@@ -13,6 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.styles.ts';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 
 const Articles = () => {
   const { t } = useTranslation();
@@ -41,6 +46,51 @@ const Articles = () => {
     '',
   ];
 
+  const authorsList = articles.map((article) => ({
+    label: article.author.username,
+    id: article.author.uuid,
+  }));
+
+  const articleFilters: IFilterElementsTypes[] = [
+    {
+      label: t('filters.articles.status'),
+      type: 'publishedAt',
+      elements: [
+        {
+          label: t('filters.articles.published'),
+          id: 'published',
+        },
+        {
+          label: t('filters.articles.draft'),
+          id: 'draft',
+        },
+      ],
+    },
+    {
+      label: t('filters.articles.pinned'),
+      type: 'isSticky',
+      elements: [
+        {
+          label: t('filters.articles.yes'),
+          id: 'sticky',
+        },
+        {
+          label: t('filters.articles.no'),
+          id: 'normal',
+        },
+      ],
+    },
+    {
+      label: t('filters.articles.author'),
+      type: 'author',
+      elements: authorsList.filter(
+        (author, index) =>
+          index ===
+          authorsList.findIndex((element) => element.id === author.id),
+      ),
+    },
+  ];
+
   useEffect(() => {
     if ((currentUser as UserTypes).role.id === 3) {
       setAvailableArticles(
@@ -59,6 +109,7 @@ const Articles = () => {
 
   return (
     <Main $minHeight={height}>
+      <FilterMenu menuItems={articleFilters} />
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('article.header')}
       </Heading>
