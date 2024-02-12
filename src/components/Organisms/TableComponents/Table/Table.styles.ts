@@ -23,6 +23,12 @@ export const StyledTable = styled.table`
       &:last-of-type {
         border-radius: 0 0.7rem 0 0;
       }
+
+      div {
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+      }
     }
   }
 
