@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { factory, oneOf, manyOf, primaryKey, nullable } from '@mswjs/data';
-import { RoleTypes } from '../types/dataTypes';
+import { IRoleTypes } from '../types/dataTypes';
 
 faker.seed(123);
 
-export const roles: Array<RoleTypes> = [
+export const roles: Array<IRoleTypes> = [
   {
     id: 1,
     name: 'Administrator',

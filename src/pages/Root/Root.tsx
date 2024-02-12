@@ -4,10 +4,10 @@ import { RootState, setUser, useGetUsersQuery } from '../../store';
 import Authorised from '../../components/Templates/Authorised/Authorised.tsx';
 import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 import FooterWrapper from '../../components/Organisms/Footer/Footer.tsx';
-import { UserTypes } from '../../types/dataTypes.ts';
+import { IUserTypes } from '../../types/dataTypes.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 
-interface LoggedUser extends UserTypes {
+interface ILoggedUser extends IUserTypes {
   isAuthorised: boolean;
 }
 
@@ -56,7 +56,7 @@ const Root = () => {
 
   return (
     <>
-      {(user as LoggedUser).isAuthorised ? (
+      {(user as ILoggedUser).isAuthorised ? (
         <Authorised />
       ) : (
         <Unauthorised handleMockLogin={handleMockLogin} />

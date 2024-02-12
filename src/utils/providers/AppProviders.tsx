@@ -9,10 +9,10 @@ import Confirm from '../../components/Organisms/Confirm/Confirm.tsx';
 import { I18nextProvider } from 'react-i18next';
 import i18next from 'i18next';
 
-interface ProvidersProps {
+interface IProvidersProps {
   children: ReactNode;
 }
-const AppProviders: FC<ProvidersProps> = ({ children }) => {
+const AppProviders: FC<IProvidersProps> = ({ children }) => {
   return (
     <I18nextProvider i18n={i18next}>
       <Provider store={store}>

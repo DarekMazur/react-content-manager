@@ -7,7 +7,7 @@ import {
   useUpdateUserMutation,
 } from '../../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { CommentTypes, UserTypes } from '../../../../types/dataTypes.ts';
+import { ICommentTypes, IUserTypes } from '../../../../types/dataTypes.ts';
 import Heading from '../../../Atoms/Heading/Heading.tsx';
 import InLink from '../../../Atoms/InLink/InLink.tsx';
 import { getDate } from '../../../../utils/methods/getDate.ts';
@@ -47,9 +47,9 @@ const CommentForm = () => {
   const { data: comments = [] } = useGetCommentsQuery();
   const { data: users = [] } = useGetUsersQuery();
 
-  const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
+  const [userData, setUserData] = useState<IUserTypes | undefined>(undefined);
   const [currentComment, setCurrentComment] = useState<
-    CommentTypes | undefined
+    ICommentTypes | undefined
   >(undefined);
   const [initialData, setInitialData] = useState({
     authorBlocked: false,
@@ -71,7 +71,7 @@ const CommentForm = () => {
     if (
       currentComment &&
       comments.filter(
-        (comment) => comment.uuid === (currentComment as CommentTypes).uuid,
+        (comment) => comment.uuid === (currentComment as ICommentTypes).uuid,
       ).length === 0
     ) {
       navigate(-1);
@@ -83,7 +83,7 @@ const CommentForm = () => {
     if (currentComment && users.length > 0) {
       setUserData(
         users.find(
-          (user) => (user as UserTypes).uuid === currentComment.author.uuid,
+          (user) => (user as IUserTypes).uuid === currentComment.author.uuid,
         ),
       );
     }
@@ -105,9 +105,9 @@ const CommentForm = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     if (currentComment) {
-      const updateUser: UserTypes = { ...currentComment.author };
+      const updateUser: IUserTypes = { ...currentComment.author };
       updateUser.blocked = (e.target as HTMLInputElement).checked;
-      setUserData({ ...(updateUser as UserTypes) });
+      setUserData({ ...(updateUser as IUserTypes) });
     }
   };
 
@@ -117,7 +117,7 @@ const CommentForm = () => {
     if (currentComment) {
       const updatedComment = { ...currentComment };
       updatedComment.shadowed = (e.target as HTMLInputElement).checked;
-      setCurrentComment({ ...(updatedComment as CommentTypes) });
+      setCurrentComment({ ...(updatedComment as ICommentTypes) });
     }
   };
 
@@ -125,7 +125,7 @@ const CommentForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentComment as CommentTypes).id],
+        ids: [(currentComment as ICommentTypes).id],
         title: undefined,
       }),
     );
@@ -144,7 +144,7 @@ const CommentForm = () => {
   const handleOnCancel = () => {
     setUserData(
       users.find(
-        (user) => user.uuid === (currentComment as CommentTypes).author.uuid,
+        (user) => user.uuid === (currentComment as ICommentTypes).author.uuid,
       ),
     );
     setCurrentComment(comments.find((comment) => comment.uuid === uuid));
@@ -188,7 +188,7 @@ const CommentForm = () => {
                 </li>
                 <li>
                   {t('comment.form.details.publicationDate')}{' '}
-                  {getDate((currentComment as CommentTypes).publishedAt)}
+                  {getDate((currentComment as ICommentTypes).publishedAt)}
                 </li>
                 {userData.role.id !== 3 ? (
                   <li>
@@ -215,7 +215,7 @@ const CommentForm = () => {
                 <InputCheckbox
                   label={t('comment.form.details.shadowBan')}
                   id="blocked"
-                  value={(currentComment as CommentTypes).shadowed}
+                  value={(currentComment as ICommentTypes).shadowed}
                   uuid={uuid}
                   handleOnChange={(e) => handleOnShadow(e)}
                 />
@@ -257,7 +257,7 @@ const CommentForm = () => {
               <InputCheckbox
                 label={t('comment.form.author.blocked')}
                 id="blocked"
-                value={(userData as UserTypes).blocked}
+                value={(userData as IUserTypes).blocked}
                 uuid={uuid}
                 handleOnChange={(e) => handleOnChange(e)}
               />

@@ -22,6 +22,11 @@
     "header": "You are not authorised",
     "message": "We regret to inform you that your current user permissions do not allow access to this particular section of the application. If you believe this is in error or require further assistance, please contact your system administrator."
   },
+  "404": {
+    "header": "Look like you're lost",
+    "description": "the page you are looking for not available!",
+    "cta": "Go to Home"
+  },
   "home": {
     "header": "You are logged in as {{role}}",
     "lastArticle": "Last article:",

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArticleDataTypes, CommentTypes } from '../../../types/dataTypes';
+import { IArticleDataTypes, ICommentTypes } from '../../../types/dataTypes';
 import Heading from '../../Atoms/Heading/Heading';
 import InLink from '../../Atoms/InLink/InLink';
 import { Loading } from '../../Atoms/Loading/Loading.styles';
@@ -16,7 +16,7 @@ const HomeSection = () => {
     useGetCommentsQuery();
 
   const [publishedArticles, setPublishedArticles] = useState<
-    ArticleDataTypes[]
+    IArticleDataTypes[]
   >([]);
   const [latestArticle, setLatestArticle] = useState<LatestTypes>({
     publishedDate: null,
@@ -25,7 +25,7 @@ const HomeSection = () => {
     publishedDate: null,
   });
   const [mostLikedArticle, setMostLikedArticle] =
-    useState<ArticleDataTypes | null>();
+    useState<IArticleDataTypes | null>();
 
   useEffect(() => {
     if (articles.length > 0) {
@@ -64,10 +64,10 @@ const HomeSection = () => {
           <P>
             <InLink
               target={`articles/${latestArticle.latest.id}`}
-              name={(latestArticle.latest as ArticleDataTypes).title}
+              name={(latestArticle.latest as IArticleDataTypes).title}
             />{' '}
             {t('home.lastArticleDetails', {
-              username: (latestArticle.latest as ArticleDataTypes).author
+              username: (latestArticle.latest as IArticleDataTypes).author
                 .username,
             })}
             ({latestArticle.publishedDate})
@@ -77,13 +77,14 @@ const HomeSection = () => {
           </Heading>
           <P>
             {t('home.lastCommentDetails', {
-              username: (latestComment.latest as CommentTypes).author?.username,
+              username: (latestComment.latest as ICommentTypes).author
+                ?.username,
             })}{' '}
             <InLink
               target={`articles/${
-                (latestComment.latest as CommentTypes).article.id
+                (latestComment.latest as ICommentTypes).article.id
               }`}
-              name={(latestComment.latest as CommentTypes).article.title}
+              name={(latestComment.latest as ICommentTypes).article.title}
             />{' '}
             ({latestComment.publishedDate})
           </P>

@@ -1,7 +1,7 @@
 import { ElementType, FC, HTMLAttributes, ReactNode } from 'react';
 import { StyledHeading } from './Heading.styles.ts';
 
-interface HeadingProps extends HTMLAttributes<Element> {
+interface IHeadingProps extends HTMLAttributes<Element> {
   tag: ElementType;
   children: ReactNode;
   align?: string;
@@ -10,7 +10,7 @@ interface HeadingProps extends HTMLAttributes<Element> {
   margin?: string;
 }
 
-const Heading: FC<HeadingProps> = ({
+const Heading: FC<IHeadingProps> = ({
   children,
   tag,
   align,

@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-interface StyledProps {
+interface IStyledProps {
   $justify?: string;
   $align?: string;
   $width?: string;
   $padding?: string;
 }
-export const StyledWrapper = styled.div<StyledProps>`
+export const StyledWrapper = styled.div<IStyledProps>`
   display: flex;
   justify-content: ${({ $justify }) => ($justify ? $justify : `unset`)};
   align-items: ${({ $align }) => ($align ? $align : `unset`)};

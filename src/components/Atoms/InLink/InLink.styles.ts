@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-interface StyleProps {
+interface IStyleProps {
   $string?: boolean;
 }
 
-export const StyledInLink = styled(Link)<StyleProps>`
+export const StyledInLink = styled(Link)<IStyleProps>`
   color: ${({ theme, $string }) => ($string ? theme.colors.blue : 'inherit')};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   text-decoration: none;

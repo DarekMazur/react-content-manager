@@ -1,12 +1,12 @@
 import { StyledLink } from './ExtLink.styles.ts';
 
-interface LinkProps {
+interface ILinkProps {
   url: string;
   name?: string;
   size?: string;
 }
 
-const ExtLink = (props: LinkProps) => {
+const ExtLink = (props: ILinkProps) => {
   const { url, name, size } = props;
   return (
     <StyledLink href={url} size={size} target="_blank">

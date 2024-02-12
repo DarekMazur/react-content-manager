@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-interface MainTypes {
+interface IMainTypes {
   $minHeight: number;
 }
 
-export const Main = styled.main<MainTypes>`
+export const Main = styled.main<IMainTypes>`
   padding-bottom: 11rem;
   min-height: ${({ $minHeight }) => `${$minHeight}px`};
 `;

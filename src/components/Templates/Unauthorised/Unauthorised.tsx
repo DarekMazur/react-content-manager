@@ -8,11 +8,11 @@ import LockIcon from '../../Atoms/LockIcon/LockIcon.tsx';
 import P from '../../Atoms/Paragraph/P.tsx';
 import { Trans, useTranslation } from 'react-i18next';
 
-interface AuthProps {
+interface IAuthProps {
   handleMockLogin?: () => void;
 }
 
-const Unauthorised: FC<AuthProps> = ({ handleMockLogin }) => {
+const Unauthorised: FC<IAuthProps> = ({ handleMockLogin }) => {
   const { t } = useTranslation();
   const [wrapperHeight, setWrapperHeight] = useState(0);
 

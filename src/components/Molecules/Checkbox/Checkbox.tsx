@@ -5,7 +5,7 @@ import { StyledCheckbox } from './Checkbox.styles.ts';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-interface CheckboxProps {
+interface ICheckboxProps {
   isChecked?: boolean;
   // eslint-disable-next-line no-unused-vars
   handleClick: (
@@ -21,7 +21,7 @@ interface CheckboxProps {
   isDisabled?: boolean;
 }
 
-const Checkbox: FC<CheckboxProps> = ({
+const Checkbox: FC<ICheckboxProps> = ({
   isChecked = false,
   isDisabled = false,
   handleClick,

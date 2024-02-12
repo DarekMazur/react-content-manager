@@ -6,7 +6,7 @@ import {
 } from '../UserForm/UserForm.styles.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { CategoriesTypes } from '../../../../types/dataTypes.ts';
+import { ICategoriesTypes } from '../../../../types/dataTypes.ts';
 import {
   switchPopup,
   useAddCategoryMutation,
@@ -21,7 +21,7 @@ import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.t
 import { useTranslation } from 'react-i18next';
 
 const CategoryForm = () => {
-  const initCategory: CategoriesTypes = {
+  const initCategory: ICategoriesTypes = {
     id: 0,
     uuid: '',
     title: '',
@@ -36,12 +36,12 @@ const CategoryForm = () => {
   const [updateCategory, { status, isSuccess, isLoading }] =
     useUpdateCategoryMutation();
   const [currentCategory, setCurrentCategory] = useState<
-    CategoriesTypes | undefined
+    ICategoriesTypes | undefined
   >(undefined);
   const [updatedCategory, setUpdatedCategory] =
-    useState<CategoriesTypes>(initCategory);
+    useState<ICategoriesTypes>(initCategory);
   const [initialValues, setInitialValues] = useState<
-    CategoriesTypes | undefined
+    ICategoriesTypes | undefined
   >(currentCategory ? { ...currentCategory } : undefined);
   const [modal, setModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -57,7 +57,7 @@ const CategoryForm = () => {
       currentCategory &&
       categories.filter(
         (category) =>
-          category.uuid === (currentCategory as CategoriesTypes).uuid,
+          category.uuid === (currentCategory as ICategoriesTypes).uuid,
       ).length === 0
     ) {
       navigate(-1);
@@ -115,8 +115,8 @@ const CategoryForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentCategory as CategoriesTypes).id],
-        title: (currentCategory as CategoriesTypes).title,
+        ids: [(currentCategory as ICategoriesTypes).id],
+        title: (currentCategory as ICategoriesTypes).title,
       }),
     );
   };

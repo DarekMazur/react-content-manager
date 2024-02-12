@@ -13,20 +13,20 @@ import {
 import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
 import {
-  ArticleDataTypes,
-  CategoriesTypes,
-  UserTypes,
+  IArticleDataTypes,
+  ICategoriesTypes,
+  IUserTypes,
 } from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Loading } from '../../Atoms/Loading/Loading.styles.ts';
 
-interface ActionIconsTypes {
+interface IActionIconsTypes {
   $disabled?: boolean;
 }
 
-const ActionIcon = styled(StyledInLink)<ActionIconsTypes>`
+const ActionIcon = styled(StyledInLink)<IActionIconsTypes>`
   margin: 0 1rem;
   cursor: pointer;
   color: ${({ theme, $disabled }) =>
@@ -38,12 +38,12 @@ const ActionIcon = styled(StyledInLink)<ActionIconsTypes>`
   }
 `;
 
-interface TableActionProps {
+interface ITableActionProps {
   id: number;
   uuid?: string;
 }
 
-const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
+const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
   const { data: articles = [], isLoading: articlesLoading } =
     useGetArticlesQuery();
   const { data: users = [], isLoading: usersLoading } = useGetUsersQuery();
@@ -53,19 +53,19 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const article = (articles as ArticleDataTypes[]).find(
+  const article = (articles as IArticleDataTypes[]).find(
     (article) => article.id === id,
   );
 
-  const user = (users as UserTypes[]).find((user) => user.id === id);
+  const user = (users as IUserTypes[]).find((user) => user.id === id);
 
-  const category = (categories as CategoriesTypes[]).find(
+  const category = (categories as ICategoriesTypes[]).find(
     (category) => category.id === id,
   );
 
   const handleDelete = (id: number, type: string) => {
     if (
-      (currentUser as UserTypes).id !== id ||
+      (currentUser as IUserTypes).id !== id ||
       location.pathname !== '/users'
     ) {
       dispatch(clearSelected());
@@ -118,7 +118,7 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
           <FontAwesomeIcon style={{ margin: '0 1rem' }} icon={['fas', 'pen']} />
         }
       />
-      {(currentUser as UserTypes).id === id &&
+      {(currentUser as IUserTypes).id === id &&
       location.pathname === '/users' ? (
         <Tippy
           content={<span>You can't delete yourself</span>}
@@ -130,7 +130,7 @@ const TableActionIcons: FC<TableActionProps> = ({ id, uuid }) => {
             as={FontAwesomeIcon}
             onClick={() => handleDelete(id, location.pathname.slice(1))}
             icon={['fas', 'trash']}
-            $disabled={(currentUser as UserTypes).id === id}
+            $disabled={(currentUser as IUserTypes).id === id}
           />
         </Tippy>
       ) : (

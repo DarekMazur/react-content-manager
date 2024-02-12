@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import { RootState, useGetArticlesQuery } from '../../store';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import {
-  ArticleDataTypes,
+  IArticleDataTypes,
   IFilterElementsTypes,
   IFilterTypes,
-  UserTypes,
+  IUserTypes,
 } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
@@ -30,11 +30,11 @@ const Articles = () => {
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
   const [availableArticles, setAvailableArticles] = useState<
-    ArticleDataTypes[]
+    IArticleDataTypes[]
   >([]);
 
   const [filteredArticles, setFilteredArticles] =
-    useState<ArticleDataTypes[]>(articles);
+    useState<IArticleDataTypes[]>(articles);
 
   const articlesTableHeaders = [
     '',
@@ -110,7 +110,7 @@ const Articles = () => {
         (filter) => filter.type === 'author',
       );
 
-      let filtered: ArticleDataTypes[] = [];
+      let filtered: IArticleDataTypes[] = [];
 
       if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
         filtered.push(
@@ -149,10 +149,10 @@ const Articles = () => {
   }, [filters, availableArticles]);
 
   useEffect(() => {
-    if ((currentUser as UserTypes).role.id === 3) {
+    if ((currentUser as IUserTypes).role.id === 3) {
       setAvailableArticles(
         articles.filter(
-          (article) => article.author.uuid === (currentUser as UserTypes).uuid,
+          (article) => article.author.uuid === (currentUser as IUserTypes).uuid,
         ),
       );
     } else {
@@ -170,9 +170,9 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('article.header')}
       </Heading>
-      {(selectedArticles as ArticleDataTypes[]).length > 0 ? (
+      {(selectedArticles as IArticleDataTypes[]).length > 0 ? (
         <MultiAction
-          counter={(selectedArticles as ArticleDataTypes[]).length}
+          counter={(selectedArticles as IArticleDataTypes[]).length}
         />
       ) : null}
       <div

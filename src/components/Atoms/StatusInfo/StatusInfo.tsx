@@ -2,11 +2,11 @@ import { FC } from 'react';
 import { StyledStatus } from './StatusInfo.styles.ts';
 import { useLocation } from 'react-router';
 
-interface StatusProps {
+interface IStatusProps {
   status: boolean;
 }
 
-const StatusInfo: FC<StatusProps> = ({ status }) => {
+const StatusInfo: FC<IStatusProps> = ({ status }) => {
   const location = useLocation();
 
   return (

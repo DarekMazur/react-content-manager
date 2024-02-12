@@ -5,24 +5,24 @@ import {
   removeUserSelected,
   useUpdateUserMutation,
 } from '../../../../../store';
-import { UserTypes } from '../../../../../types/dataTypes';
+import { IUserTypes } from '../../../../../types/dataTypes';
 import Checkbox from '../../../../Molecules/Checkbox/Checkbox';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import { useEffect, useState } from 'react';
 
-const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
+const UsersTableBody = ({ data }: { data: IUserTypes[] }) => {
   const [updateUser] = useUpdateUserMutation();
   const dispatch = useDispatch();
 
   const currentUser = useSelector<RootState>((state) => state.user);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
-  const [checkedUsers, setCheckedUsers] = useState<UserTypes[]>(
-    selectedUsers as UserTypes[],
+  const [checkedUsers, setCheckedUsers] = useState<IUserTypes[]>(
+    selectedUsers as IUserTypes[],
   );
 
   useEffect(() => {
-    setCheckedUsers(selectedUsers as UserTypes[]);
+    setCheckedUsers(selectedUsers as IUserTypes[]);
   }, [selectedUsers]);
 
   const handleClickSelect = (
@@ -34,7 +34,7 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
       const checkedElement = data.find((user) => user.uuid === uuid);
       if (
         checkedElement &&
-        checkedUsers.includes(checkedElement as UserTypes)
+        checkedUsers.includes(checkedElement as IUserTypes)
       ) {
         dispatch(removeUserSelected(checkedElement));
         setCheckedUsers(checkedUsers.filter((user) => user.uuid !== uuid));
@@ -42,7 +42,7 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
         dispatch(addUserSelected(checkedElement));
         setCheckedUsers((prevState) => [
           ...prevState,
-          checkedElement as UserTypes,
+          checkedElement as IUserTypes,
         ]);
       }
     }
@@ -54,8 +54,8 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
       const updatedUser = { ...user };
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      updatedUser[type as keyof UserTypes] =
-        !updatedUser[type as keyof UserTypes];
+      updatedUser[type as keyof IUserTypes] =
+        !updatedUser[type as keyof IUserTypes];
       updateUser({ ...updatedUser });
     }
   };
@@ -77,7 +77,7 @@ const UsersTableBody = ({ data }: { data: UserTypes[] }) => {
               uuid={user.uuid}
               handleClick={handleClickSelect}
               isChecked={checkedUsers.includes(user)}
-              isDisabled={(currentUser as UserTypes).uuid === user.uuid}
+              isDisabled={(currentUser as IUserTypes).uuid === user.uuid}
             />
           </td>
           <td>{user.id}</td>

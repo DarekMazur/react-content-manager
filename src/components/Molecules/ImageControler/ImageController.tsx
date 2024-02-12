@@ -3,7 +3,7 @@ import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles.ts';
 import ImageInput from '../ImageInput/ImageInput.tsx';
 import { StyledImageControler } from './ImageControler.styles.ts';
 
-interface ImageControllerTypes {
+interface IImageControllerTypes {
   image: File[];
   defaultImage: string;
   altText: string;
@@ -14,7 +14,7 @@ interface ImageControllerTypes {
   onFilesChange(selectedFiles: File[]): void;
 }
 
-const ImageController: FC<ImageControllerTypes> = ({
+const ImageController: FC<IImageControllerTypes> = ({
   isRounded,
   image,
   defaultImage,

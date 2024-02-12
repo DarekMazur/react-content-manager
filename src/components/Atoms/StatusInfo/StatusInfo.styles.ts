@@ -1,11 +1,11 @@
 import { styled } from 'styled-components';
 
-interface StyledStatusProps {
+interface IStyledStatusProps {
   $status: boolean;
   $isRed?: boolean;
 }
 
-export const StyledStatus = styled.span<StyledStatusProps>`
+export const StyledStatus = styled.span<IStyledStatusProps>`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom';
 import { faker } from '@faker-js/faker';
 import { getLatest } from './getLatest.ts';
-import { ArticleDataTypes, CommentTypes } from '../../types/dataTypes.ts';
+import { IArticleDataTypes, ICommentTypes } from '../../types/dataTypes.ts';
 
-const demoPostsArray: Array<ArticleDataTypes> = [
+const demoPostsArray: Array<IArticleDataTypes> = [
   {
     uuid: faker.string.uuid(),
     id: faker.number.int(),
@@ -162,7 +162,7 @@ const demoPostsArray: Array<ArticleDataTypes> = [
   },
 ];
 
-const demoCommentsArray: Array<CommentTypes> = [
+const demoCommentsArray: Array<ICommentTypes> = [
   {
     id: 1,
     shadowed: faker.datatype.boolean(0.02),
@@ -423,12 +423,12 @@ const demoCommentsArray: Array<CommentTypes> = [
 
 describe('getLatest method', () => {
   it('- should find latest post from array', () => {
-    expect((getLatest(demoPostsArray).latest as ArticleDataTypes).title).toBe(
+    expect((getLatest(demoPostsArray).latest as IArticleDataTypes).title).toBe(
       'Latest post',
     );
   });
   it('- should find latest comment from array', () => {
-    expect((getLatest(demoCommentsArray).latest as CommentTypes).content).toBe(
+    expect((getLatest(demoCommentsArray).latest as ICommentTypes).content).toBe(
       'Latest comment',
     );
   });

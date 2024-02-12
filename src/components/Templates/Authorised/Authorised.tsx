@@ -9,7 +9,7 @@ import CommentsView from '../../../pages/Comments/Comments.tsx';
 import CommentView from '../../../pages/Comment/Comment.tsx';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { UserTypes } from '../../../types/dataTypes.ts';
+import { IUserTypes } from '../../../types/dataTypes.ts';
 import CategoriesView from '../../../pages/Categories/Categories.tsx';
 import CategoryView from '../../../pages/Category/Category.tsx';
 import Page404 from '../../../pages/404/404.tsx';
@@ -19,9 +19,9 @@ const Authorised = () => {
 
   return (
     <>
-      <Header user={user as UserTypes} />
+      <Header user={user as IUserTypes} />
       <Routes>
-        <Route path="/" element={<Home user={user as UserTypes} />} />
+        <Route path="/" element={<Home user={user as IUserTypes} />} />
         <Route path="articles" element={<Articles />} />
         <Route path="articles/:id" element={<Article />} />
         <Route path="articles/create" element={<Article />} />

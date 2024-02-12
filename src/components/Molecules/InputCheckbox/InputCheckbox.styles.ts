@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-interface CheckboxTypes {
+interface ICheckboxTypes {
   $isChecked: boolean;
 }
 
@@ -59,7 +59,7 @@ export const CheckboxFill = styled.span`
   z-index: 1;
 `;
 
-export const CheckboxInput = styled.input<CheckboxTypes>`
+export const CheckboxInput = styled.input<ICheckboxTypes>`
   border-radius: 1em;
   box-shadow: 0 0 0 0.125em hsla(225, 90%, 50%, 0);
   cursor: pointer;
@@ -106,7 +106,7 @@ export const CheckboxInput = styled.input<CheckboxTypes>`
   }
 `;
 
-export const CheckboxText = styled.span<CheckboxTypes>`
+export const CheckboxText = styled.span<ICheckboxTypes>`
   background-color: hsl(103, 90%, 50%, 0.5);
   color: hsl(103, 90%, 10%);
   display: block;

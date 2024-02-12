@@ -1,15 +1,15 @@
 import { StyledHeader } from './Header.styles.ts';
 import MenuList from '../../Molecules/MenuList/MenuList.tsx';
-import { UserTypes } from '../../../types/dataTypes.ts';
+import { IUserTypes } from '../../../types/dataTypes.ts';
 import { FC, useState } from 'react';
 import UserMenu from '../../Molecules/UserMenu/UserMenu.tsx';
 import { useTranslation } from 'react-i18next';
 
-interface HeaderProps {
-  user: UserTypes;
+interface IHeaderProps {
+  user: IUserTypes;
 }
 
-const Header: FC<HeaderProps> = ({ user }) => {
+const Header: FC<IHeaderProps> = ({ user }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 

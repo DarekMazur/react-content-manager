@@ -1,11 +1,11 @@
 import { styled } from 'styled-components';
 
-interface StyledUserMenuTypes {
+interface IStyledUserMenuTypes {
   $open?: boolean;
   // ref: MutableRefObject<Node | undefined>;
 }
 
-export const StyledUserMenu = styled.div<StyledUserMenuTypes>`
+export const StyledUserMenu = styled.div<IStyledUserMenuTypes>`
   width: 14rem;
   height: 5rem;
   position: absolute;

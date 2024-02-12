@@ -3,9 +3,9 @@ import { StyledInput } from './Input.styles.ts';
 import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { UserTypes } from '../../../types/dataTypes.ts';
+import { IUserTypes } from '../../../types/dataTypes.ts';
 
-interface InputTypes {
+interface IInputTypes {
   label: string;
   type: string;
   id: string;
@@ -18,7 +18,7 @@ interface InputTypes {
   handleKeyPress?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const Input: FC<InputTypes> = ({
+const Input: FC<IInputTypes> = ({
   label,
   type,
   id,
@@ -41,8 +41,8 @@ const Input: FC<InputTypes> = ({
         onChange={(e) => handleOnChange(e)}
         onKeyUp={(e) => (handleKeyPress ? handleKeyPress(e) : {})}
         disabled={
-          (currentUser as UserTypes).uuid !== uuid &&
-          (currentUser as UserTypes).role.type !== 'admin'
+          (currentUser as IUserTypes).uuid !== uuid &&
+          (currentUser as IUserTypes).role.type !== 'admin'
         }
       />
     </FormWrapper>

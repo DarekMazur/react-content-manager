@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 import { db } from '../db';
 import {
-  ArticleDataTypes,
-  CategoriesTypes,
-  CommentTypes,
-  UserTypes,
+  IArticleDataTypes,
+  ICategoriesTypes,
+  ICommentTypes,
+  IUserTypes,
 } from '../../types/dataTypes';
 import { faker } from '@faker-js/faker';
 
@@ -13,7 +13,7 @@ export const handlers = [
     return HttpResponse.json(db.comment.getAll());
   }),
   http.patch('/api/comments/:id', async ({ request }) => {
-    const updatedComment = (await request.json()) as CommentTypes;
+    const updatedComment = (await request.json()) as ICommentTypes;
     if (updatedComment) {
       db.comment.update({
         where: {
@@ -62,7 +62,7 @@ export const handlers = [
     return HttpResponse.json(db.user.getAll());
   }),
   http.patch('/api/users/:id', async ({ request }) => {
-    const updatedUser = (await request.json()) as UserTypes;
+    const updatedUser = (await request.json()) as IUserTypes;
     if (updatedUser) {
       db.user.update({
         where: {
@@ -116,7 +116,7 @@ export const handlers = [
     return HttpResponse.json(db.article.getAll());
   }),
   http.patch('/api/articles/:id', async ({ request }) => {
-    const updatedArticle = (await request.json()) as ArticleDataTypes;
+    const updatedArticle = (await request.json()) as IArticleDataTypes;
     if (updatedArticle) {
       db.article.update({
         where: {
@@ -148,7 +148,7 @@ export const handlers = [
     }
   }),
   http.post('/api/articles', async ({ request }) => {
-    const newArticle = (await request.json()) as ArticleDataTypes;
+    const newArticle = (await request.json()) as IArticleDataTypes;
     const createdTime = new Date(Date.now());
     db.article.create({
       uuid: faker.string.uuid(),
@@ -215,11 +215,11 @@ export const handlers = [
   }),
   http.post('/api/categories', async ({ request }) => {
     const categoryBody = await request.json();
-    if (categoryBody as CategoriesTypes) {
-      const newCategory: CategoriesTypes = {
+    if (categoryBody as ICategoriesTypes) {
+      const newCategory: ICategoriesTypes = {
         uuid: faker.string.uuid(),
-        title: (categoryBody as CategoriesTypes).title,
-        description: (categoryBody as CategoriesTypes).description,
+        title: (categoryBody as ICategoriesTypes).title,
+        description: (categoryBody as ICategoriesTypes).description,
         id: db.category.count() + 1,
       };
 
@@ -229,7 +229,7 @@ export const handlers = [
     }
   }),
   http.patch('/api/categories/:id', async ({ request }) => {
-    const updatedCategory = (await request.json()) as CategoriesTypes;
+    const updatedCategory = (await request.json()) as ICategoriesTypes;
     if (updatedCategory) {
       db.category.update({
         where: {

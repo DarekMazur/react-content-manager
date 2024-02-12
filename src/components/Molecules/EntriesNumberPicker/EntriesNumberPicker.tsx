@@ -6,7 +6,7 @@ import { FC } from 'react';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-interface EntriesPickerProps {
+interface IEntriesPickerProps {
   isExpand: boolean;
   perPage: number;
   handleExpand: () => void;
@@ -15,7 +15,7 @@ interface EntriesPickerProps {
   handleClose: () => void;
 }
 
-const EntriesNumberPicker: FC<EntriesPickerProps> = ({
+const EntriesNumberPicker: FC<IEntriesPickerProps> = ({
   isExpand,
   perPage,
   handleExpand,

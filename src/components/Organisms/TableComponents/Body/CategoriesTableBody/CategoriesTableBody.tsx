@@ -1,6 +1,6 @@
 import {
-  ArticleDataTypes,
-  CategoriesTypes,
+  IArticleDataTypes,
+  ICategoriesTypes,
 } from '../../../../../types/dataTypes.ts';
 import Checkbox from '../../../../Molecules/Checkbox/Checkbox.tsx';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons.tsx';
@@ -12,20 +12,20 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 
-const CategoriesTableBody = ({ data }: { data: CategoriesTypes[] }) => {
+const CategoriesTableBody = ({ data }: { data: ICategoriesTypes[] }) => {
   const dispatch = useDispatch();
   const selectedCategories = useSelector<RootState>(
     (state) => state.selectedCategories,
   );
 
-  const [checkedCategories, setCheckedCategories] = useState<CategoriesTypes[]>(
-    selectedCategories as CategoriesTypes[],
-  );
+  const [checkedCategories, setCheckedCategories] = useState<
+    ICategoriesTypes[]
+  >(selectedCategories as ICategoriesTypes[]);
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((category) => category.uuid === uuid);
     if (
       checkedElement &&
-      checkedCategories.includes(checkedElement as ArticleDataTypes)
+      checkedCategories.includes(checkedElement as IArticleDataTypes)
     ) {
       dispatch(removeCategorySelected(checkedElement));
       setCheckedCategories(
@@ -35,7 +35,7 @@ const CategoriesTableBody = ({ data }: { data: CategoriesTypes[] }) => {
       dispatch(addCategorySelected(checkedElement));
       setCheckedCategories((prevState) => [
         ...prevState,
-        checkedElement as ArticleDataTypes,
+        checkedElement as IArticleDataTypes,
       ]);
     }
   };
@@ -57,7 +57,7 @@ const CategoriesTableBody = ({ data }: { data: CategoriesTypes[] }) => {
               handleClick={handleClickSelect}
               uuid={category.uuid}
               isChecked={Array.from(
-                checkedCategories as CategoriesTypes[],
+                checkedCategories as ICategoriesTypes[],
               ).includes(category)}
             />
           </td>

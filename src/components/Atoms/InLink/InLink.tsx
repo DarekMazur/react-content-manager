@@ -1,12 +1,12 @@
 import { FC, ReactNode } from 'react';
 import { StyledInLink } from './InLink.styles.ts';
 
-interface InternalLinkProps {
+interface IInternalLinkProps {
   target: string;
   name?: string | ReactNode;
   onClick?: () => void;
 }
-const InLink: FC<InternalLinkProps> = ({ target, name, onClick }) => {
+const InLink: FC<IInternalLinkProps> = ({ target, name, onClick }) => {
   const isString = typeof name === 'string';
 
   return (

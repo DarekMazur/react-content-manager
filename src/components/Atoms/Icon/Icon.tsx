@@ -2,12 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyledIcon } from './Icon.styles.ts';
 import { FC } from 'react';
 
-interface IconProps {
+interface IIconProps {
   customIcon?: string;
   handleClick?: () => void;
 }
 
-const Icon: FC<IconProps> = ({ customIcon, handleClick }) => {
+const Icon: FC<IIconProps> = ({ customIcon, handleClick }) => {
   const imageUrlRegex = /\.(jpeg|jpg|gif|png|svg)$/i;
 
   return (

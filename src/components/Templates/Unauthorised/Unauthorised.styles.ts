@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-interface StyleProps {
+interface IStyleProps {
   $height: number;
 }
 
-export const StyledUnauthorised = styled.main<StyleProps>`
+export const StyledUnauthorised = styled.main<IStyleProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;

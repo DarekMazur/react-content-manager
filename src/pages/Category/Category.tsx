@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import { useGetCategoriesQuery } from '../../store';
 import { useEffect, useState } from 'react';
-import { CategoriesTypes } from '../../types/dataTypes.ts';
+import { ICategoriesTypes } from '../../types/dataTypes.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 import { Main } from '../../components/Organisms/Main/Main.styles.ts';
 import CategoryForm from '../../components/Organisms/Forms/CategoryForm/CategoryForm.tsx';
@@ -15,7 +15,7 @@ const CategoryView = () => {
   const { data: categories = [], isLoading } = useGetCategoriesQuery();
   const height = useMinHeight();
   const [currentCategory, setCurrentCategory] = useState<
-    CategoriesTypes | undefined
+    ICategoriesTypes | undefined
   >(undefined);
 
   useEffect(() => {
