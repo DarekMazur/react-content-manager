@@ -52,7 +52,7 @@ const Articles = () => {
 
   const authorsList = articles.map((article) => ({
     label: article.author.username,
-    id: article.author.uuid,
+    id: article.author.id,
   }));
 
   const articleFilters: IFilterElementsTypes[] = [
@@ -113,9 +113,10 @@ const Articles = () => {
       let filtered: ArticleDataTypes[] = [];
 
       if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
+        console.log(filteredAuthor[0].value);
         filtered.push(
           ...availableArticles.filter((article) =>
-            filteredAuthor[0].value.includes(article.author.uuid),
+            filteredAuthor[0].value.includes(String(article.author.id)),
           ),
         );
       } else {
