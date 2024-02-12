@@ -4,6 +4,7 @@ import {
   IArticleDataTypes,
   ICategoriesTypes,
   ICommentTypes,
+  ITableHeaders,
   IUserTypes,
 } from '../../../../types/dataTypes.ts';
 import ArticlesTableBody from '../Body/ArticlesTableBody/ArticlesTableBody';
@@ -13,7 +14,7 @@ import CategoriesTableBody from '../Body/CategoriesTableBody/CategoriesTableBody
 import TableSorting from '../../../Molecules/TableSorting/TableSorting.tsx';
 
 interface ITableProps {
-  headers: Array<string>;
+  headers: ITableHeaders[];
   data: Array<
     IArticleDataTypes | IUserTypes | ICommentTypes | ICategoriesTypes
   >;
@@ -43,8 +44,10 @@ const Table: FC<ITableProps> = ({ headers, data, tag }) => {
           {headers.map((header, index) => (
             <th key={index}>
               <div>
-                {header}
-                {header ? <TableSorting /> : null}
+                {header.value}
+                {header.value && header.value !== 'Categories' ? (
+                  <TableSorting sortValue={header.sortingKey} />
+                ) : null}
               </div>
             </th>
           ))}

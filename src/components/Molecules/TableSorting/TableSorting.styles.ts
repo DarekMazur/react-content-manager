@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const StyledTableSorting = styled.div`
+interface IStyledSortingTypes {
+  $color?: boolean;
+  $order?: string;
+}
+export const StyledTableSorting = styled.div<IStyledSortingTypes>`
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
@@ -8,5 +12,19 @@ export const StyledTableSorting = styled.div`
 
   svg {
     cursor: pointer;
+
+    &:first-of-type {
+      color: ${({ $color, $order, theme }) =>
+        $color && $order === 'asc'
+          ? theme.colors.white
+          : theme.colors.darkGrey};
+    }
+
+    &:last-of-type {
+      color: ${({ $color, $order, theme }) =>
+        $color && $order === 'desc'
+          ? theme.colors.white
+          : theme.colors.darkGrey};
+    }
   }
 `;

@@ -10,6 +10,7 @@ import {
   IArticleDataTypes,
   ICategoriesTypes,
   ICommentTypes,
+  ITableHeaders,
   IUserTypes,
 } from '../../../../types/dataTypes';
 
@@ -23,7 +24,7 @@ const TableWrapper = ({
     | ICommentTypes
     | ICategoriesTypes
   )[];
-  headers: string[];
+  headers: ITableHeaders[];
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();

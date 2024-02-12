@@ -67,3 +67,8 @@ export interface IFilterElementsTypes {
     id: string | number;
   }[];
 }
+
+export interface ITableHeaders {
+  value: string;
+  sortingKey: string | null;
+}
