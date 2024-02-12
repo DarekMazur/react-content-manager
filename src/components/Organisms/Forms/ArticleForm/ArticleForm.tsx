@@ -18,9 +18,9 @@ import {
   useState,
 } from 'react';
 import {
-  ArticleDataTypes,
-  CategoriesTypes,
-  UserTypes,
+  IArticleDataTypes,
+  ICategoriesTypes,
+  IUserTypes,
 } from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
@@ -46,7 +46,7 @@ import placeholder from '../../../../assets/placeholder.png';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage';
 import { useTranslation } from 'react-i18next';
 
-interface OptionTypes {
+interface IOptionTypes {
   readonly label: string;
   readonly value: string;
 }
@@ -65,34 +65,34 @@ const ArticleForm = () => {
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [currentArticle, setCurrentArticle] =
-    useState<ArticleDataTypes | null>();
+    useState<IArticleDataTypes | null>();
 
   const [articleTitle, setArticleTitle] = useState<string>('');
   const [articleDescription, setArticleDescription] = useState<string>('');
   const [articleCover, setArticleCover] = useState<string>(placeholder);
-  const [articleCategories, setArticleCategories] = useState<CategoriesTypes[]>(
-    [],
-  );
+  const [articleCategories, setArticleCategories] = useState<
+    ICategoriesTypes[]
+  >([]);
   const [articleTags, setArticleTags] = useState<string[]>([]);
   const [articlePublished, setArticlePublished] = useState<Date | null>(null);
   const [articleIsSticky, setArticleIsSticky] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<
-    ArticleDataTypes | undefined
+    IArticleDataTypes | undefined
   >(currentArticle ? { ...currentArticle } : undefined);
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
-  const [options, setOptions] = useState<OptionTypes[]>([]);
+  const [options, setOptions] = useState<IOptionTypes[]>([]);
   const [newTag, setNewTag] = useState<string | null>();
   const [editorBody, setEditorBody] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const categoriesOptions: OptionTypes[] = [];
-  const articleInitCategories: OptionTypes[] = [];
+  const categoriesOptions: IOptionTypes[] = [];
+  const articleInitCategories: IOptionTypes[] = [];
 
   useEffect(() => {
     if (categories && categories.length > 0) {
-      (categories as CategoriesTypes[]).map((category) =>
+      (categories as ICategoriesTypes[]).map((category) =>
         categoriesOptions.push({
           value: category.title,
           label: category.title,
@@ -124,7 +124,8 @@ const ArticleForm = () => {
     if (
       currentArticle &&
       articles.filter(
-        (article) => article.uuid === (currentArticle as ArticleDataTypes).uuid,
+        (article) =>
+          article.uuid === (currentArticle as IArticleDataTypes).uuid,
       ).length === 0
     ) {
       navigate(-1);
@@ -180,8 +181,8 @@ const ArticleForm = () => {
     }
   };
 
-  const handleSelectChange = (value: OptionTypes[]) => {
-    const articleCategories: CategoriesTypes[] = [];
+  const handleSelectChange = (value: IOptionTypes[]) => {
+    const articleCategories: ICategoriesTypes[] = [];
     for (let i = 0; i < value.length; ++i) {
       categories.map((category) =>
         category.title === value[i].value
@@ -298,8 +299,8 @@ const ArticleForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentArticle as ArticleDataTypes).id],
-        title: (currentArticle as ArticleDataTypes).title,
+        ids: [(currentArticle as IArticleDataTypes).id],
+        title: (currentArticle as IArticleDataTypes).title,
       }),
     );
   };
@@ -336,12 +337,12 @@ const ArticleForm = () => {
               target={
                 currentArticle
                   ? `/users/${currentArticle.author.uuid}`
-                  : `/users/${(currentUser as UserTypes).uuid}`
+                  : `/users/${(currentUser as IUserTypes).uuid}`
               }
               name={
                 currentArticle
                   ? currentArticle.author.username
-                  : (currentUser as UserTypes).username
+                  : (currentUser as IUserTypes).username
               }
             />
           </P>
@@ -363,7 +364,7 @@ const ArticleForm = () => {
               closeMenuOnSelect={false}
               options={options}
               onChange={(newValue) =>
-                handleSelectChange(newValue as OptionTypes[])
+                handleSelectChange(newValue as IOptionTypes[])
               }
               onCreateOption={handleCreate}
             />

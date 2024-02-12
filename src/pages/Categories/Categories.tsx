@@ -4,7 +4,7 @@ import { RootState, useGetCategoriesQuery } from '../../store';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { useSelector } from 'react-redux';
-import { CategoriesTypes } from '../../types/dataTypes.ts';
+import { ICategoriesTypes } from '../../types/dataTypes.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.styles.ts';
@@ -38,9 +38,9 @@ const CategoriesView = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('category.header')}
       </Heading>
-      {(selectedCategories as CategoriesTypes[]).length > 0 ? (
+      {(selectedCategories as ICategoriesTypes[]).length > 0 ? (
         <MultiAction
-          counter={(selectedCategories as CategoriesTypes[]).length}
+          counter={(selectedCategories as ICategoriesTypes[]).length}
         />
       ) : null}
       <div

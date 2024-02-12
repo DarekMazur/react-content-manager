@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-interface ParagraphStyleProps {
+interface IParagraphStyleProps {
   $fontSize?: string;
   $color?: string;
   $weight?: string;
@@ -9,7 +9,7 @@ interface ParagraphStyleProps {
   $margin?: string;
 }
 
-export const StyledParagraph = styled.p<ParagraphStyleProps>`
+export const StyledParagraph = styled.p<IParagraphStyleProps>`
   font-size: ${({ $fontSize, theme }) =>
     $fontSize ? theme.fontSize[$fontSize] : 'inherit'};
   color: ${({ $color, theme }) => ($color ? theme.colors[$color] : 'inherit')};

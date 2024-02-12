@@ -3,7 +3,7 @@ import MenuListItem from '../../Atoms/MenuListItem/MenuListItem.tsx';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { UserTypes } from '../../../types/dataTypes.ts';
+import { IUserTypes } from '../../../types/dataTypes.ts';
 
 const MenuList = () => {
   const { t } = useTranslation();
@@ -22,8 +22,8 @@ const MenuList = () => {
         <MenuListItem target="/categories">
           {t('navigation.menu.categories')}
         </MenuListItem>
-        {(currentUser as UserTypes).role.type === 'admin' ||
-        (currentUser as UserTypes).role.type === 'redactor' ? (
+        {(currentUser as IUserTypes).role.type === 'admin' ||
+        (currentUser as IUserTypes).role.type === 'redactor' ? (
           <MenuListItem target="/users">
             {t('navigation.menu.users')}
           </MenuListItem>

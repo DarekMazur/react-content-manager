@@ -16,7 +16,7 @@ import {
   useGetUsersQuery,
   useUpdateUserMutation,
 } from '../../../../store';
-import { UserTypes } from '../../../../types/dataTypes';
+import { IUserTypes } from '../../../../types/dataTypes';
 import { roles } from '../../../../mocks/db';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import Modal from '../../Modal/Modal';
@@ -37,7 +37,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
-  const [userData, setUserData] = useState<UserTypes | undefined>(undefined);
+  const [userData, setUserData] = useState<IUserTypes | undefined>(undefined);
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
@@ -46,18 +46,18 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   useEffect(() => {
     if (imageUrl && userData) {
-      const updateUser: UserTypes = { ...userData };
+      const updateUser: IUserTypes = { ...userData };
       updateUser.avatar = imageUrl;
-      setUserData({ ...(updateUser as UserTypes) });
+      setUserData({ ...(updateUser as IUserTypes) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
 
   useEffect(() => {
-    setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
+    setUserData(users.find((user) => user.uuid === uuid) as IUserTypes);
     if (
       userData &&
-      users.filter((user) => user.uuid === (userData as UserTypes).uuid)
+      users.filter((user) => user.uuid === (userData as IUserTypes).uuid)
         .length === 0
     ) {
       navigate(-1);
@@ -73,14 +73,14 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    fieldType: keyof UserTypes,
+    fieldType: keyof IUserTypes,
   ) => {
     if (userData) {
-      const updateUser: UserTypes = { ...userData };
+      const updateUser: IUserTypes = { ...userData };
       if (fieldType === 'role') {
         const newRole = roles.find((role) => role.name === e.target.value);
         updateUser[fieldType] = newRole || userData?.role;
-        setUserData({ ...(updateUser as UserTypes) });
+        setUserData({ ...(updateUser as IUserTypes) });
       } else {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -88,7 +88,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           e.target.type === 'checkbox'
             ? (e.target as HTMLInputElement).checked
             : e.target.value;
-        setUserData({ ...(updateUser as UserTypes) });
+        setUserData({ ...(updateUser as IUserTypes) });
       }
     }
   };
@@ -97,13 +97,13 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     e.preventDefault();
 
     updateUser({ ...userData });
-    if (userData && userData.uuid === (currentUser as UserTypes).uuid) {
+    if (userData && userData.uuid === (currentUser as IUserTypes).uuid) {
       dispatch(setUser({ ...userData, isAuthorised: true }));
     }
   };
 
   const handleCancel = () => {
-    setUserData(users.find((user) => user.uuid === uuid) as UserTypes);
+    setUserData(users.find((user) => user.uuid === uuid) as IUserTypes);
     setImage([]);
     navigate(-1);
   };
@@ -112,8 +112,8 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(userData as UserTypes).id],
-        title: (userData as UserTypes).username,
+        ids: [(userData as IUserTypes).id],
+        title: (userData as IUserTypes).username,
       }),
     );
   };
@@ -197,7 +197,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
                 {t('form.cancelButton')}
               </FormButton>
             </EditButtonsWrapper>
-            {(currentUser as UserTypes).uuid !== userData.uuid && (
+            {(currentUser as IUserTypes).uuid !== userData.uuid && (
               <FormButton $type="delete" type="button" onClick={handleDelete}>
                 <FontAwesomeIcon icon={['fas', 'trash']} />{' '}
                 {t('form.deleteButton')}

@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { StyledWrapper } from './Wrapper.styles.ts';
 
-interface WrapperProps {
+interface IWrapperProps {
   children: ReactNode;
   align?: string;
   justify?: string;
@@ -10,7 +10,7 @@ interface WrapperProps {
   padding?: string;
 }
 
-const Wrapper: FC<WrapperProps> = ({
+const Wrapper: FC<IWrapperProps> = ({
   children,
   justify,
   align,

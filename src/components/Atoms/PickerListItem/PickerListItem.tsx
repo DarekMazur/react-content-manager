@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { StyledPickerListItem } from './PickerListItem.styles.ts';
 
-interface PickerItemProps {
+interface IPickerItemProps {
   value: number;
   perPage: number;
   onClick: () => void;
 }
 
-const PickerListItem: FC<PickerItemProps> = ({ value, perPage, onClick }) => {
+const PickerListItem: FC<IPickerItemProps> = ({ value, perPage, onClick }) => {
   return (
     <StyledPickerListItem
       key={value}

@@ -3,7 +3,7 @@ import { StyledUserMenu } from './UserMenu.styles';
 import { setUser } from '../../../store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { UserTypes } from '../../../types/dataTypes';
+import { IUserTypes } from '../../../types/dataTypes';
 import Icon from '../../Atoms/Icon/Icon';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ const UserMenu = ({
   isOpen,
   handleClick,
 }: {
-  user: UserTypes;
+  user: IUserTypes;
   isOpen?: boolean;
   handleClick: () => void;
 }) => {

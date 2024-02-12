@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { CommentTypes } from '../../types/dataTypes';
+import { ICommentTypes } from '../../types/dataTypes';
 
 export const commentsApi = createApi({
   reducerPath: 'commentsApi',
@@ -8,7 +8,7 @@ export const commentsApi = createApi({
   }),
   tagTypes: ['Comments'],
   endpoints: (builder) => ({
-    getComments: builder.query<CommentTypes[], void>({
+    getComments: builder.query<ICommentTypes[], void>({
       query: () => 'comments',
       providesTags: ['Comments'],
     }),

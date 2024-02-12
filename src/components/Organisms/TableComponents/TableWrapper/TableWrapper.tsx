@@ -7,17 +7,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import {
-  ArticleDataTypes,
-  CategoriesTypes,
-  CommentTypes,
-  UserTypes,
+  IArticleDataTypes,
+  ICategoriesTypes,
+  ICommentTypes,
+  IUserTypes,
 } from '../../../../types/dataTypes';
 
 const TableWrapper = ({
   content,
   headers,
 }: {
-  content: (ArticleDataTypes | UserTypes | CommentTypes | CategoriesTypes)[];
+  content: (
+    | IArticleDataTypes
+    | IUserTypes
+    | ICommentTypes
+    | ICategoriesTypes
+  )[];
   headers: string[];
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();

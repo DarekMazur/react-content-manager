@@ -1,9 +1,9 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import {
-  ArticleDataTypes,
-  CategoriesTypes,
+  IArticleDataTypes,
+  ICategoriesTypes,
   IFilterTypes,
-  UserTypes,
+  IUserTypes,
 } from '../types/dataTypes';
 import { articlesApi } from './api/articles.ts';
 import { usersApi } from './api/users.ts';
@@ -13,16 +13,19 @@ import { categoriesApi } from './api/categories.ts';
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export interface PopupTypes {
+export interface IPopupTypes {
   isOpen: boolean;
   ids: number[];
   title?: string;
 }
 
-const initialSelectedItems: (ArticleDataTypes | UserTypes | CategoriesTypes)[] =
-  [];
+const initialSelectedItems: (
+  | IArticleDataTypes
+  | IUserTypes
+  | ICategoriesTypes
+)[] = [];
 const initialUser = {};
-const initialPopup: PopupTypes = {
+const initialPopup: IPopupTypes = {
   isOpen: false,
   ids: [],
   title: undefined,

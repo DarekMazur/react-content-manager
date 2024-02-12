@@ -1,13 +1,13 @@
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { StyledPickerList } from './PickerList.styles.ts';
 
-interface PickerProps {
+interface IPickerProps {
   children: ReactNode;
   isExpand: boolean;
   onClickOutside: () => void;
 }
 
-const PickerList: FC<PickerProps> = ({
+const PickerList: FC<IPickerProps> = ({
   children,
   isExpand,
   onClickOutside,

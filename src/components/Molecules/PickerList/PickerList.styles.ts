@@ -1,10 +1,10 @@
 import { styled } from 'styled-components';
 
-interface StyledPickerProps {
+interface IStyledPickerProps {
   $expand: boolean;
 }
 
-export const StyledPickerList = styled.ul<StyledPickerProps>`
+export const StyledPickerList = styled.ul<IStyledPickerProps>`
   list-style: none;
   display: ${({ $expand }) => ($expand ? 'block' : 'none')};
   position: absolute;

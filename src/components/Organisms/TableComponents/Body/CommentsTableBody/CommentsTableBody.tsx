@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { CommentTypes, UserTypes } from '../../../../../types/dataTypes';
+import { ICommentTypes, IUserTypes } from '../../../../../types/dataTypes';
 import { useEffect, useState } from 'react';
 import {
   RootState,
@@ -11,7 +11,7 @@ import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
 
-const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
+const CommentsTableBody = ({ data }: { data: ICommentTypes[] }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector<RootState>((state) => state.user);
 
@@ -19,19 +19,19 @@ const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
     (state) => state.selectedComments,
   );
 
-  const [checkedComments, setCheckedComments] = useState<CommentTypes[]>(
-    selectedComments as CommentTypes[],
+  const [checkedComments, setCheckedComments] = useState<ICommentTypes[]>(
+    selectedComments as ICommentTypes[],
   );
 
   useEffect(() => {
-    setCheckedComments(selectedComments as CommentTypes[]);
+    setCheckedComments(selectedComments as ICommentTypes[]);
   }, [selectedComments]);
 
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((comment) => comment.uuid === uuid);
     if (
       checkedElement &&
-      checkedComments.includes(checkedElement as CommentTypes)
+      checkedComments.includes(checkedElement as ICommentTypes)
     ) {
       dispatch(removeCommentSelected(checkedElement));
       setCheckedComments(
@@ -41,7 +41,7 @@ const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
       dispatch(addCommentSelected(checkedElement));
       setCheckedComments((prevState) => [
         ...prevState,
-        checkedElement as CommentTypes,
+        checkedElement as ICommentTypes,
       ]);
     }
   };
@@ -62,9 +62,9 @@ const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
             <Checkbox
               handleClick={handleClickSelect}
               uuid={comment.uuid}
-              isChecked={Array.from(checkedComments as CommentTypes[]).includes(
-                comment,
-              )}
+              isChecked={Array.from(
+                checkedComments as ICommentTypes[],
+              ).includes(comment)}
             />
           </td>
           <td>{comment.id}</td>
@@ -78,9 +78,9 @@ const CommentsTableBody = ({ data }: { data: CommentTypes[] }) => {
           >
             <StatusInfo
               status={
-                (currentUser as UserTypes).role.id === 3 ||
-                ((currentUser as UserTypes).role.id === 2 &&
-                  (currentUser as UserTypes).uuid === comment.author.uuid)
+                (currentUser as IUserTypes).role.id === 3 ||
+                ((currentUser as IUserTypes).role.id === 2 &&
+                  (currentUser as IUserTypes).uuid === comment.author.uuid)
                   ? true
                   : !comment.shadowed
               }

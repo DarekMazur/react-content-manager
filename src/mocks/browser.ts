@@ -2,7 +2,7 @@ import { setupWorker } from 'msw/browser';
 import { handlers } from './handlers';
 import { faker } from '@faker-js/faker';
 import { db } from './db.ts';
-import { CategoriesTypes } from '../types/dataTypes.ts';
+import { ICategoriesTypes } from '../types/dataTypes.ts';
 
 declare global {
   interface Window {
@@ -25,7 +25,7 @@ const createUsers = () => {
       for (let i = 0; i < faker.number.int({ min: 0, max: 20 }); ++i) {
         const createdDate = faker.date.past();
         const isPublished = faker.datatype.boolean(0.75);
-        const categoriesList: CategoriesTypes[] = [];
+        const categoriesList: ICategoriesTypes[] = [];
         for (
           let i = 0;
           i < faker.number.int({ min: 1, max: db.category.count() });

@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { StyledButton } from '../Button/Button.styles.ts';
 
-interface StyledActionButtonProps {
+interface IStyledActionButtonProps {
   $delete?: boolean;
 }
 
-export const StyledActionButton = styled(StyledButton)<StyledActionButtonProps>`
+export const StyledActionButton = styled(
+  StyledButton,
+)<IStyledActionButtonProps>`
   background-color: ${({ theme, $delete }) =>
     $delete ? theme.colors.red : theme.colors.darkBlue};
   width: 10rem;

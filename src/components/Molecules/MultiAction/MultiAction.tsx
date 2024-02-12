@@ -12,19 +12,19 @@ import {
   useUpdateUserMutation,
 } from '../../../store';
 import {
-  ArticleDataTypes,
-  CategoriesTypes,
-  CommentTypes,
-  UserTypes,
+  IArticleDataTypes,
+  ICategoriesTypes,
+  ICommentTypes,
+  IUserTypes,
 } from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-interface MultiActionProps {
+interface IMultiActionProps {
   counter: number;
 }
 
-const MultiAction: FC<MultiActionProps> = ({ counter }) => {
+const MultiAction: FC<IMultiActionProps> = ({ counter }) => {
   const { t } = useTranslation();
   const selected = useSelector<RootState>((state) => state.selected);
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
@@ -40,7 +40,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   const [updateUser] = useUpdateUserMutation();
 
   const handlePublish = () => {
-    (selected as ArticleDataTypes[]).forEach((article) => {
+    (selected as IArticleDataTypes[]).forEach((article) => {
       article = {
         ...article,
         publishedAt: article.publishedAt ? article.publishedAt : new Date(),
@@ -51,7 +51,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   };
 
   const handleUnpublish = () => {
-    (selected as ArticleDataTypes[]).forEach((article) => {
+    (selected as IArticleDataTypes[]).forEach((article) => {
       article = {
         ...article,
         publishedAt: null,
@@ -62,7 +62,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   };
 
   const handleBlock = () => {
-    (selectedUsers as UserTypes[]).forEach((user) => {
+    (selectedUsers as IUserTypes[]).forEach((user) => {
       user = {
         ...user,
         blocked: true,
@@ -73,7 +73,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
   };
 
   const handleUnblock = () => {
-    (selectedUsers as UserTypes[]).forEach((user) => {
+    (selectedUsers as IUserTypes[]).forEach((user) => {
       user = {
         ...user,
         blocked: false,
@@ -89,12 +89,12 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
     switch (location.pathname.slice(1)) {
       case 'articles':
         {
-          (selected as ArticleDataTypes[]).forEach((element) => {
+          (selected as IArticleDataTypes[]).forEach((element) => {
             ids.push(element.id);
           });
           singleTitle =
             ids.length === 1
-              ? (selected as ArticleDataTypes[]).find(
+              ? (selected as IArticleDataTypes[]).find(
                   (element) => element.id === ids[0],
                 )?.title
               : undefined;
@@ -102,12 +102,12 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
         break;
       case 'users':
         {
-          (selectedUsers as UserTypes[]).forEach((element) => {
+          (selectedUsers as IUserTypes[]).forEach((element) => {
             ids.push(element.id);
           });
           singleTitle =
             ids.length === 1
-              ? (selectedUsers as UserTypes[]).find(
+              ? (selectedUsers as IUserTypes[]).find(
                   (element) => element.id === ids[0],
                 )?.username
               : undefined;
@@ -115,7 +115,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
         break;
       case 'comments':
         {
-          (selectedComments as CommentTypes[]).forEach((element) => {
+          (selectedComments as ICommentTypes[]).forEach((element) => {
             ids.push(element.id);
           });
           singleTitle = undefined;
@@ -123,7 +123,7 @@ const MultiAction: FC<MultiActionProps> = ({ counter }) => {
         break;
       case 'categories':
         {
-          (selectedCategories as CategoriesTypes[]).forEach((element) => {
+          (selectedCategories as ICategoriesTypes[]).forEach((element) => {
             ids.push(element.id);
           });
           singleTitle = undefined;

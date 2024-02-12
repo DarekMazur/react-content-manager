@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { UserTypes } from '../../types/dataTypes';
+import { IUserTypes } from '../../types/dataTypes';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -8,7 +8,7 @@ export const usersApi = createApi({
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
-    getUsers: builder.query<UserTypes[], void>({
+    getUsers: builder.query<IUserTypes[], void>({
       query: () => 'users',
       providesTags: ['Users'],
     }),

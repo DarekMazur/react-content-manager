@@ -1,12 +1,12 @@
 import { FC, ReactNode } from 'react';
 import { StyledButton } from './Button.styles.ts';
 
-interface ButtonProps {
+interface IButtonProps {
   children: ReactNode;
   handleClick?: () => void;
 }
 
-const Button: FC<ButtonProps> = ({ children, handleClick }) => {
+const Button: FC<IButtonProps> = ({ children, handleClick }) => {
   return <StyledButton onClick={handleClick}>{children}</StyledButton>;
 };
 

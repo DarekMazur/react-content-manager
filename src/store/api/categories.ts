@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { CategoriesTypes } from '../../types/dataTypes';
+import { ICategoriesTypes } from '../../types/dataTypes';
 
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
@@ -8,7 +8,7 @@ export const categoriesApi = createApi({
   }),
   tagTypes: ['Categories'],
   endpoints: (builder) => ({
-    getCategories: builder.query<CategoriesTypes[], void>({
+    getCategories: builder.query<ICategoriesTypes[], void>({
       query: () => 'categories',
       providesTags: ['Categories'],
     }),

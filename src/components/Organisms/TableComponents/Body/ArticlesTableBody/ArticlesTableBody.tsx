@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { ArticleDataTypes } from '../../../../../types/dataTypes';
+import { IArticleDataTypes } from '../../../../../types/dataTypes';
 import {
   RootState,
   addSelected,
@@ -13,25 +13,25 @@ import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import { db } from '../../../../../mocks/db';
 
-const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
+const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
   const dispatch = useDispatch();
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
   const [updateArticle] = useUpdateArticleMutation();
 
-  const [checkedArticles, setCheckedArticles] = useState<ArticleDataTypes[]>(
-    selectedArticles as ArticleDataTypes[],
+  const [checkedArticles, setCheckedArticles] = useState<IArticleDataTypes[]>(
+    selectedArticles as IArticleDataTypes[],
   );
 
   useEffect(() => {
-    setCheckedArticles(selectedArticles as ArticleDataTypes[]);
+    setCheckedArticles(selectedArticles as IArticleDataTypes[]);
   }, [selectedArticles]);
 
   const handleClickSelect = (uuid: string) => {
     const checkedElement = data.find((article) => article.uuid === uuid);
     if (
       checkedElement &&
-      checkedArticles.includes(checkedElement as ArticleDataTypes)
+      checkedArticles.includes(checkedElement as IArticleDataTypes)
     ) {
       dispatch(removeSelected(checkedElement));
       setCheckedArticles(
@@ -41,7 +41,7 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
       dispatch(addSelected(checkedElement));
       setCheckedArticles((prevState) => [
         ...prevState,
-        checkedElement as ArticleDataTypes,
+        checkedElement as IArticleDataTypes,
       ]);
     }
   };
@@ -50,7 +50,7 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
     const article = data.find((article) => article.uuid === uuid);
     updateArticle({
       ...article,
-      isSticky: !(article as ArticleDataTypes)?.isSticky,
+      isSticky: !(article as IArticleDataTypes)?.isSticky,
     });
   };
   return (
@@ -70,7 +70,7 @@ const ArticlesTableBody = ({ data }: { data: ArticleDataTypes[] }) => {
               handleClick={handleClickSelect}
               uuid={article.uuid}
               isChecked={Array.from(
-                checkedArticles as ArticleDataTypes[],
+                checkedArticles as IArticleDataTypes[],
               ).includes(article)}
             />
           </td>

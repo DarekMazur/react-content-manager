@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-interface FormTypes {
+interface IFormTypes {
   $gap?: number;
   $direction?: string;
   $minWidth?: number;
   $maxWidth?: number;
 }
 
-interface FormButtonTypes {
+interface IFormButtonTypes {
   $type: string;
 }
 
@@ -18,7 +18,7 @@ export const StyledUserForm = styled.form`
   justify-content: center;
 `;
 
-export const FormWrapper = styled.div<FormTypes>`
+export const FormWrapper = styled.div<IFormTypes>`
   display: flex;
   flex-direction: ${({ $direction }) => ($direction ? $direction : 'row')};
   gap: ${({ $gap }) => ($gap ? `${$gap}rem` : 'unset')};
@@ -40,7 +40,7 @@ export const EditButtonsWrapper = styled.div`
   min-width: -webkit-fill-available;
 `;
 
-export const FormButton = styled.button<FormButtonTypes>`
+export const FormButton = styled.button<IFormButtonTypes>`
   color: ${({ theme }) => theme.colors.white};
   font-weight: ${({ theme, $type }) =>
     $type === 'submit' ? theme.fontWeight.bold : theme.fontWeight.regular};

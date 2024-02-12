@@ -1,18 +1,18 @@
-export interface RoleTypes {
+export interface IRoleTypes {
   id: number;
   name: string;
   description: string;
   type: string;
 }
 
-export interface CategoriesTypes {
+export interface ICategoriesTypes {
   id: number;
   title: string;
   description: string;
   uuid: string;
 }
 
-export interface UserTypes {
+export interface IUserTypes {
   id: number;
   username: string;
   email: string;
@@ -21,10 +21,10 @@ export interface UserTypes {
   confirmed: boolean;
   blocked: boolean;
   uuid: string;
-  role: RoleTypes;
+  role: IRoleTypes;
 }
 
-export interface CommentTypes {
+export interface ICommentTypes {
   id: number;
   content: string;
   uuid: string;
@@ -32,11 +32,11 @@ export interface CommentTypes {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date;
-  author: UserTypes;
-  article: ArticleDataTypes;
+  author: IUserTypes;
+  article: IArticleDataTypes;
 }
 
-export type ArticleDataTypes = {
+export interface IArticleDataTypes {
   id: number;
   title: string;
   cover: string;
@@ -48,11 +48,11 @@ export type ArticleDataTypes = {
   updatedAt: Date;
   publishedAt: Date | null;
   likes: number;
-  categories: CategoriesTypes[];
+  categories: ICategoriesTypes[];
   tags: string[];
-  author: UserTypes;
-  comments: Array<CommentTypes> | null;
-};
+  author: IUserTypes;
+  comments: Array<ICommentTypes> | null;
+}
 
 export interface IFilterTypes {
   type: string;

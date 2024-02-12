@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-interface PopupProps {
+interface IPopupProps {
   $isVisible: boolean;
 }
 
-export const PopupWrapper = styled.div<PopupProps>`
+export const PopupWrapper = styled.div<IPopupProps>`
   position: fixed;
   justify-content: center;
   align-items: center;

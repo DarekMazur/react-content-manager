@@ -3,14 +3,14 @@ import { FC } from 'react';
 import { StyledModal } from './Modal.styles.ts';
 import { useTranslation } from 'react-i18next';
 
-interface ModalTypes {
+interface IModalTypes {
   handleCloseModal: () => void;
   isSuccess: boolean;
   isError: boolean;
   dataType: string;
 }
 
-const Modal: FC<ModalTypes> = ({
+const Modal: FC<IModalTypes> = ({
   handleCloseModal,
   isSuccess,
   isError,

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { RootState, useGetCommentsQuery } from '../../store';
 import { useSelector } from 'react-redux';
 import {
-  CommentTypes,
+  ICommentTypes,
   IFilterElementsTypes,
   IFilterTypes,
-  UserTypes,
+  IUserTypes,
 } from '../../types/dataTypes';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import Heading from '../../components/Atoms/Heading/Heading';
@@ -25,12 +25,12 @@ const CommentsView = () => {
   const selectedComments = useSelector<RootState>(
     (state) => state.selectedComments,
   );
-  const [availableComments, setAvailableComments] = useState<CommentTypes[]>(
+  const [availableComments, setAvailableComments] = useState<ICommentTypes[]>(
     [],
   );
 
   const [filteredComments, setFilteredComments] =
-    useState<CommentTypes[]>(comments);
+    useState<ICommentTypes[]>(comments);
 
   const commentsTableHeaders = [
     '',
@@ -69,7 +69,7 @@ const CommentsView = () => {
         (filter) => filter.type === 'shadowed',
       );
 
-      let filtered: CommentTypes[] = [];
+      let filtered: ICommentTypes[] = [];
 
       if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
         filtered = comments.filter((comment) =>
@@ -87,11 +87,11 @@ const CommentsView = () => {
   }, [filters, comments]);
 
   useEffect(() => {
-    if ((currentUser as UserTypes).role.id === 3) {
+    if ((currentUser as IUserTypes).role.id === 3) {
       setAvailableComments(
         filteredComments.filter(
           (comment) =>
-            comment.article.author.uuid === (currentUser as UserTypes).uuid,
+            comment.article.author.uuid === (currentUser as IUserTypes).uuid,
         ),
       );
     } else {
@@ -109,8 +109,8 @@ const CommentsView = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('comment.header')}
       </Heading>
-      {(selectedComments as CommentTypes[]).length > 0 ? (
-        <MultiAction counter={(selectedComments as CommentTypes[]).length} />
+      {(selectedComments as ICommentTypes[]).length > 0 ? (
+        <MultiAction counter={(selectedComments as ICommentTypes[]).length} />
       ) : null}
       <TableWrapper
         content={availableComments}
