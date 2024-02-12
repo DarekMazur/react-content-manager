@@ -50,13 +50,7 @@ export type ArticleDataTypes = {
   likes: number;
   categories: CategoriesTypes[];
   tags: string[];
-  author: {
-    uuid: string;
-    username: string;
-    email: string;
-    avatar: string;
-    role: RoleTypes;
-  };
+  author: UserTypes;
   comments: Array<CommentTypes> | null;
 };
 
@@ -70,6 +64,6 @@ export interface IFilterElementsTypes {
   type: string;
   elements: {
     label: string;
-    id: string;
+    id: string | number;
   }[];
 }
