@@ -4,7 +4,7 @@ import TableWrapper from '../../components/Organisms/TableComponents/TableWrappe
 import {
   IFilterElementsTypes,
   IFilterTypes,
-  IIUserTypes,
+  IUserTypes,
 } from '../../types/dataTypes';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const Users = () => {
   const height = useMinHeight();
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
-  const [filteredUsers, setFilteredUsers] = useState<IIUserTypes[]>(users);
+  const [filteredUsers, setFilteredUsers] = useState<IUserTypes[]>(users);
 
   const usersFilters: IFilterElementsTypes[] = [
     {
@@ -79,7 +79,7 @@ const Users = () => {
         (filter) => filter.type === 'confirmed',
       );
 
-      let filtered: IIUserTypes[] = [];
+      let filtered: IUserTypes[] = [];
 
       if (filteredRoles[0] && filteredRoles[0].value.length > 0) {
         filtered.push(
@@ -140,8 +140,8 @@ const Users = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('user.header')}
       </Heading>
-      {(selectedUsers as IIUserTypes[]).length > 0 ? (
-        <MultiAction counter={(selectedUsers as IIUserTypes[]).length} />
+      {(selectedUsers as IUserTypes[]).length > 0 ? (
+        <MultiAction counter={(selectedUsers as IUserTypes[]).length} />
       ) : null}
       <TableWrapper content={filteredUsers} headers={usersTableHeaders} />
     </Main>
