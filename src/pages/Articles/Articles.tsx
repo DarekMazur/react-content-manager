@@ -6,10 +6,10 @@ import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx'
 import {
   ArticleDataTypes,
   IFilterElementsTypes,
+  IFilterTypes,
   UserTypes,
 } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
-// import { articlesTableHeaders } from '../../utils/data.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
 import { Main } from '../../components/Organisms/Main/Main.styles.ts';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
@@ -22,6 +22,7 @@ import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 const Articles = () => {
   const { t } = useTranslation();
   const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const filters = useSelector<RootState>((state) => state.filters);
   const navigate = useNavigate();
   const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
@@ -31,6 +32,9 @@ const Articles = () => {
   const [availableArticles, setAvailableArticles] = useState<
     ArticleDataTypes[]
   >([]);
+
+  const [filteredArticles, setFilteredArticles] =
+    useState<ArticleDataTypes[]>(articles);
 
   const articlesTableHeaders = [
     '',
@@ -92,6 +96,59 @@ const Articles = () => {
   ];
 
   useEffect(() => {
+    if (
+      (filters as IFilterTypes[]).filter((filter) => filter.value.length > 0)
+        .length > 0
+    ) {
+      const filteredStatus = (filters as IFilterTypes[]).filter(
+        (filter) => filter.type === 'publishedAt',
+      );
+      const filteredPinned = (filters as IFilterTypes[]).filter(
+        (filter) => filter.type === 'isSticky',
+      );
+      const filteredAuthor = (filters as IFilterTypes[]).filter(
+        (filter) => filter.type === 'author',
+      );
+
+      let filtered: ArticleDataTypes[] = [];
+
+      if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
+        filtered.push(
+          ...availableArticles.filter((article) =>
+            filteredAuthor[0].value.includes(article.author.uuid),
+          ),
+        );
+      } else {
+        filtered.push(...articles);
+      }
+
+      if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
+        filtered = availableArticles.filter((article) =>
+          filteredStatus[0].value.includes('draft')
+            ? filteredStatus[0].value.includes('published')
+              ? article
+              : article.publishedAt === null
+            : article.publishedAt !== null,
+        );
+      }
+
+      if (filteredPinned[0] && filteredPinned[0].value.length > 0) {
+        filtered = availableArticles.filter((article) =>
+          filteredPinned[0].value.includes('sticky')
+            ? filteredPinned[0].value.includes('normal')
+              ? article
+              : article.isSticky
+            : !article.isSticky,
+        );
+      }
+
+      setFilteredArticles(filtered);
+    } else {
+      setFilteredArticles(availableArticles);
+    }
+  }, [filters, availableArticles]);
+
+  useEffect(() => {
     if ((currentUser as UserTypes).role.id === 3) {
       setAvailableArticles(
         articles.filter(
@@ -135,10 +192,7 @@ const Articles = () => {
           <FontAwesomeIcon icon={['fas', 'pen']} /> {t('article.newArticle')}
         </FormButton>
       </div>
-      <TableWrapper
-        content={availableArticles}
-        headers={articlesTableHeaders}
-      />
+      <TableWrapper content={filteredArticles} headers={articlesTableHeaders} />
     </Main>
   );
 };
