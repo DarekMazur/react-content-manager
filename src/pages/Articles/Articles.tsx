@@ -113,7 +113,6 @@ const Articles = () => {
       let filtered: ArticleDataTypes[] = [];
 
       if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
-        console.log(filteredAuthor[0].value);
         filtered.push(
           ...availableArticles.filter((article) =>
             filteredAuthor[0].value.includes(String(article.author.id)),
@@ -124,7 +123,7 @@ const Articles = () => {
       }
 
       if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
-        filtered = availableArticles.filter((article) =>
+        filtered = filtered.filter((article) =>
           filteredStatus[0].value.includes('draft')
             ? filteredStatus[0].value.includes('published')
               ? article
@@ -134,7 +133,7 @@ const Articles = () => {
       }
 
       if (filteredPinned[0] && filteredPinned[0].value.length > 0) {
-        filtered = availableArticles.filter((article) =>
+        filtered = filtered.filter((article) =>
           filteredPinned[0].value.includes('sticky')
             ? filteredPinned[0].value.includes('normal')
               ? article
