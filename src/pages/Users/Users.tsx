@@ -1,13 +1,19 @@
 import Heading from '../../components/Atoms/Heading/Heading';
-import { RootState, useGetUsersQuery } from '../../store';
+import {
+  createSort,
+  ISortTypes,
+  RootState,
+  useGetUsersQuery,
+} from '../../store';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
 import {
   IFilterElementsTypes,
   IFilterTypes,
-  IIUserTypes,
+  ITableHeaders,
+  IUserTypes,
 } from '../../types/dataTypes';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { Main } from '../../components/Organisms/Main/Main.styles';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
@@ -18,12 +24,14 @@ import { roles } from '../../mocks/db.ts';
 
 const Users = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const { data: users = [], isLoading } = useGetUsersQuery();
   const filters = useSelector<RootState>((state) => state.filters);
+  const sort = useSelector<RootState>((state) => state.sort);
   const height = useMinHeight();
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
 
-  const [filteredUsers, setFilteredUsers] = useState<IIUserTypes[]>(users);
+  const [filteredUsers, setFilteredUsers] = useState<IUserTypes[]>(users);
 
   const usersFilters: IFilterElementsTypes[] = [
     {
@@ -65,6 +73,55 @@ const Users = () => {
   ];
 
   useEffect(() => {
+    dispatch(createSort({ sortBy: 'id', order: 'asc' }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (
+      filteredUsers[0][(sort as ISortTypes).sortBy as keyof IUserTypes] !==
+      'undefined'
+    ) {
+      const sortedUsers = [...filteredUsers];
+
+      sortedUsers.sort((a, b) => {
+        if ((sort as ISortTypes).sortBy === 'role') {
+          if (a.role.type < b.role.type) {
+            return -1;
+          }
+          if (a.role.type > b.role.type) {
+            return 1;
+          }
+
+          return 0;
+        } else {
+          if (
+            a[(sort as ISortTypes).sortBy as keyof IUserTypes] <
+            b[(sort as ISortTypes).sortBy as keyof IUserTypes]
+          ) {
+            return -1;
+          }
+          if (
+            a[(sort as ISortTypes).sortBy as keyof IUserTypes] >
+            b[(sort as ISortTypes).sortBy as keyof IUserTypes]
+          ) {
+            return 1;
+          }
+
+          return 0;
+        }
+      });
+
+      if ((sort as ISortTypes).order === 'asc') {
+        setFilteredUsers(sortedUsers);
+      } else {
+        setFilteredUsers(sortedUsers.reverse());
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort]);
+
+  useEffect(() => {
     if (
       (filters as IFilterTypes[]).filter((filter) => filter.value.length > 0)
         .length > 0
@@ -79,7 +136,7 @@ const Users = () => {
         (filter) => filter.type === 'confirmed',
       );
 
-      let filtered: IIUserTypes[] = [];
+      let filtered: IUserTypes[] = [];
 
       if (filteredRoles[0] && filteredRoles[0].value.length > 0) {
         filtered.push(
@@ -117,15 +174,39 @@ const Users = () => {
     }
   }, [filters, users]);
 
-  const usersTableHeaders = [
-    '',
-    t('user.tableHeaders.id'),
-    t('user.tableHeaders.name'),
-    t('user.tableHeaders.email'),
-    t('user.tableHeaders.confirmed'),
-    t('user.tableHeaders.blocked'),
-    t('user.tableHeaders.role'),
-    '',
+  const usersTableHeaders: ITableHeaders[] = [
+    {
+      value: '',
+      sortingKey: null,
+    },
+    {
+      value: t('user.tableHeaders.id'),
+      sortingKey: 'id',
+    },
+    {
+      value: t('user.tableHeaders.name'),
+      sortingKey: 'username',
+    },
+    {
+      value: t('user.tableHeaders.email'),
+      sortingKey: 'email',
+    },
+    {
+      value: t('user.tableHeaders.confirmed'),
+      sortingKey: 'confirmed',
+    },
+    {
+      value: t('user.tableHeaders.blocked'),
+      sortingKey: 'blocked',
+    },
+    {
+      value: t('user.tableHeaders.role'),
+      sortingKey: 'role',
+    },
+    {
+      value: '',
+      sortingKey: null,
+    },
   ];
 
   if (users.length === 0) return null;
@@ -140,8 +221,8 @@ const Users = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('user.header')}
       </Heading>
-      {(selectedUsers as IIUserTypes[]).length > 0 ? (
-        <MultiAction counter={(selectedUsers as IIUserTypes[]).length} />
+      {(selectedUsers as IUserTypes[]).length > 0 ? (
+        <MultiAction counter={(selectedUsers as IUserTypes[]).length} />
       ) : null}
       <TableWrapper content={filteredUsers} headers={usersTableHeaders} />
     </Main>

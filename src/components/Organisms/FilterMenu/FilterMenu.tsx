@@ -92,7 +92,7 @@ const FilterMenu: FC<IFilterMenuTypes> = ({ menuItems }) => {
                 <li key={element.id} style={{ padding: '0.5rem 0' }}>
                   <input
                     type={'checkbox'}
-                    id={element.id}
+                    id={String(element.id)}
                     onChange={(e) => handleCheckFilters(e, menuItem.type)}
                   />{' '}
                   {element.label}

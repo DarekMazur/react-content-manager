@@ -4,15 +4,17 @@ import {
   IArticleDataTypes,
   ICategoriesTypes,
   ICommentTypes,
+  ITableHeaders,
   IUserTypes,
 } from '../../../../types/dataTypes.ts';
 import ArticlesTableBody from '../Body/ArticlesTableBody/ArticlesTableBody';
 import UsersTableBody from '../Body/UsersTableBody/UsersTableBody.tsx';
 import CommentsTableBody from '../Body/CommentsTableBody/CommentsTableBody.tsx';
 import CategoriesTableBody from '../Body/CategoriesTableBody/CategoriesTableBody.tsx';
+import TableSorting from '../../../Molecules/TableSorting/TableSorting.tsx';
 
 interface ITableProps {
-  headers: Array<string>;
+  headers: ITableHeaders[];
   data: Array<
     IArticleDataTypes | IUserTypes | ICommentTypes | ICategoriesTypes
   >;
@@ -40,7 +42,14 @@ const Table: FC<ITableProps> = ({ headers, data, tag }) => {
       <thead>
         <tr>
           {headers.map((header, index) => (
-            <th key={index}>{header}</th>
+            <th key={index}>
+              <div>
+                {header.value}
+                {header.value && header.value !== 'Categories' ? (
+                  <TableSorting sortValue={header.sortingKey} />
+                ) : null}
+              </div>
+            </th>
           ))}
         </tr>
       </thead>

@@ -19,6 +19,11 @@ export interface IPopupTypes {
   title?: string;
 }
 
+export interface ISortTypes {
+  sortBy: string;
+  order: string;
+}
+
 const initialSelectedItems: (
   | IArticleDataTypes
   | IUserTypes
@@ -33,6 +38,11 @@ const initialPopup: IPopupTypes = {
 
 const initialFilters: IFilterTypes[] = [];
 
+const initialSorting = {
+  sortBy: 'publishedAt',
+  order: 'desc',
+};
+
 const filtersSlice = createSlice({
   name: 'filters',
   initialState: initialFilters,
@@ -42,6 +52,19 @@ const filtersSlice = createSlice({
     },
     clearFilters() {
       return initialFilters;
+    },
+  },
+});
+
+const sortSlice = createSlice({
+  name: 'sort',
+  initialState: initialSorting,
+  reducers: {
+    createSort: (_state, action) => {
+      return action.payload;
+    },
+    clearSort: () => {
+      return initialSorting;
     },
   },
 });
@@ -135,6 +158,8 @@ export const { addSelected, removeSelected, clearSelected } =
 export const { addUserSelected, removeUserSelected, clearUsersSelected } =
   selectedUsersSlice.actions;
 
+export const { createSort, clearSort } = sortSlice.actions;
+
 export const {
   addCategorySelected,
   removeCategorySelected,
@@ -162,6 +187,7 @@ export const store = configureStore({
     [commentsApi.reducerPath]: commentsApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     filters: filtersSlice.reducer,
+    sort: sortSlice.reducer,
     selected: selectedSlice.reducer,
     selectedUsers: selectedUsersSlice.reducer,
     selectedComments: selectedCommentsSlice.reducer,
