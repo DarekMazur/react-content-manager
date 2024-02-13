@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
-import { RootState, useGetCommentsQuery } from '../../store';
-import { useSelector } from 'react-redux';
+import {
+  clearSort,
+  ISortTypes,
+  RootState,
+  useGetCommentsQuery,
+} from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   ICommentTypes,
   IFilterElementsTypes,
   IFilterTypes,
+  ITableHeaders,
   IUserTypes,
 } from '../../types/dataTypes';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
@@ -18,7 +24,9 @@ import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 
 const CommentsView = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const { data: comments = [], isLoading } = useGetCommentsQuery();
+  const sort = useSelector<RootState>((state) => state.sort);
   const filters = useSelector<RootState>((state) => state.filters);
   const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
@@ -32,15 +40,39 @@ const CommentsView = () => {
   const [filteredComments, setFilteredComments] =
     useState<ICommentTypes[]>(comments);
 
-  const commentsTableHeaders = [
-    '',
-    t('comment.tableHeaders.id'),
-    t('comment.tableHeaders.status'),
-    t('comment.tableHeaders.author'),
-    t('comment.tableHeaders.article'),
-    t('comment.tableHeaders.comment'),
-    t('comment.tableHeaders.publishedAt'),
-    '',
+  const commentsTableHeaders: ITableHeaders[] = [
+    {
+      value: '',
+      sortingKey: null,
+    },
+    {
+      value: t('comment.tableHeaders.id'),
+      sortingKey: 'id',
+    },
+    {
+      value: t('comment.tableHeaders.status'),
+      sortingKey: 'shadowed',
+    },
+    {
+      value: t('comment.tableHeaders.author'),
+      sortingKey: 'author',
+    },
+    {
+      value: t('comment.tableHeaders.article'),
+      sortingKey: 'article',
+    },
+    {
+      value: t('comment.tableHeaders.comment'),
+      sortingKey: 'content',
+    },
+    {
+      value: t('comment.tableHeaders.publishedAt'),
+      sortingKey: 'publishedAt',
+    },
+    {
+      value: '',
+      sortingKey: null,
+    },
   ];
 
   const commentsFilters: IFilterElementsTypes[] = [
@@ -59,6 +91,66 @@ const CommentsView = () => {
       ],
     },
   ];
+
+  useEffect(() => {
+    dispatch(clearSort());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const sortedComments = [...comments];
+
+    sortedComments.sort((a, b) => {
+      if ((sort as ISortTypes).sortBy === 'author') {
+        if (a.author.username < b.author.username) {
+          return -1;
+        }
+        if (a.author.username > b.author.username) {
+          return 1;
+        }
+
+        return 0;
+      } else if ((sort as ISortTypes).sortBy === 'article') {
+        if (a.article.title < b.article.title) {
+          return -1;
+        }
+        if (a.article.title > b.article.title) {
+          return 1;
+        }
+
+        return 0;
+      } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
+        return (
+          new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
+        );
+      } else {
+        if (
+          a[(sort as ISortTypes).sortBy as keyof ICommentTypes] <
+          b[(sort as ISortTypes).sortBy as keyof ICommentTypes]
+        ) {
+          return -1;
+        }
+        if (
+          a[(sort as ISortTypes).sortBy as keyof ICommentTypes] >
+          b[(sort as ISortTypes).sortBy as keyof ICommentTypes]
+        ) {
+          return 1;
+        }
+
+        return 0;
+      }
+    });
+
+    if ((sort as ISortTypes).order === 'asc') {
+      setFilteredComments(sortedComments);
+    } else {
+      setFilteredComments(sortedComments.reverse());
+    }
+
+    setFilteredComments(sortedComments);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort]);
 
   useEffect(() => {
     if (
