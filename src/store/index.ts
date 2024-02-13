@@ -39,8 +39,8 @@ const initialPopup: IPopupTypes = {
 const initialFilters: IFilterTypes[] = [];
 
 const initialSorting = {
-  sortBy: 'publishedAt',
-  order: 'desc',
+  sortBy: 'id',
+  order: 'asc',
 };
 
 const filtersSlice = createSlice({

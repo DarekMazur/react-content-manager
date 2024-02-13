@@ -1,6 +1,6 @@
 import Heading from '../../components/Atoms/Heading/Heading';
 import {
-  createSort,
+  clearSort,
   ISortTypes,
   RootState,
   useGetUsersQuery,
@@ -73,7 +73,7 @@ const Users = () => {
   ];
 
   useEffect(() => {
-    dispatch(createSort({ sortBy: 'id', order: 'asc' }));
+    dispatch(clearSort());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
