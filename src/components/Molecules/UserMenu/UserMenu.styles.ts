@@ -59,6 +59,10 @@ export const StyledUserMenu = styled.div<IStyledUserMenuTypes>`
         transition: 0.2s;
         opacity: 1;
       }
+
+      &:last-of-type {
+        opacity: 1;
+      }
     }
   }
 `;
