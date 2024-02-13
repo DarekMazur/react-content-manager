@@ -99,7 +99,6 @@ const Users = () => {
             a[(sort as ISortTypes).sortBy as keyof IUserTypes] <
             b[(sort as ISortTypes).sortBy as keyof IUserTypes]
           ) {
-            console.log(sort.order);
             return -1;
           }
           if (
