@@ -201,7 +201,7 @@
     "newCategory": "New category",
     "tableHeaders": {
       "id": "ID",
-      "name": "Name",
+      "title": "Title",
       "description": "Description"
     },
     "form": {

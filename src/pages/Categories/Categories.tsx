@@ -4,7 +4,7 @@ import { RootState, useGetCategoriesQuery } from '../../store';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { useSelector } from 'react-redux';
-import { ICategoriesTypes } from '../../types/dataTypes.ts';
+import { ICategoriesTypes, ITableHeaders } from '../../types/dataTypes.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.styles.ts';
@@ -21,12 +21,27 @@ const CategoriesView = () => {
     (state) => state.selectedCategories,
   );
 
-  const categoriesTableHeaders = [
-    '',
-    t('category.tableHeaders.id'),
-    t('category.tableHeaders.name'),
-    t('category.tableHeaders.description'),
-    '',
+  const categoriesTableHeaders: ITableHeaders[] = [
+    {
+      value: '',
+      sortingKey: null,
+    },
+    {
+      value: t('category.tableHeaders.id'),
+      sortingKey: 'id',
+    },
+    {
+      value: t('category.tableHeaders.title'),
+      sortingKey: 'title',
+    },
+    {
+      value: t('category.tableHeaders.description'),
+      sortingKey: 'description',
+    },
+    {
+      value: '',
+      sortingKey: null,
+    },
   ];
 
   if (isLoading) {
