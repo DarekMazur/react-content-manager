@@ -73,12 +73,15 @@ const Users = () => {
   ];
 
   useEffect(() => {
-    dispatch(createSort({ sortBy: 'id', sortDirection: 'desc' }));
+    dispatch(createSort({ sortBy: 'id', order: 'asc' }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (filteredUsers[0][(sort as ISortTypes).sortBy as keyof IUserTypes]) {
+    if (
+      filteredUsers[0][(sort as ISortTypes).sortBy as keyof IUserTypes] !==
+      'undefined'
+    ) {
       const sortedUsers = [...filteredUsers];
 
       sortedUsers.sort((a, b) => {
@@ -96,6 +99,7 @@ const Users = () => {
             a[(sort as ISortTypes).sortBy as keyof IUserTypes] <
             b[(sort as ISortTypes).sortBy as keyof IUserTypes]
           ) {
+            console.log(sort.order);
             return -1;
           }
           if (
@@ -109,7 +113,7 @@ const Users = () => {
         }
       });
 
-      if ((sort as ISortTypes).order === 'desc') {
+      if ((sort as ISortTypes).order === 'asc') {
         setFilteredUsers(sortedUsers);
       } else {
         setFilteredUsers(sortedUsers.reverse());
