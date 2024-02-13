@@ -7,6 +7,7 @@ import {
   IArticleDataTypes,
   IFilterElementsTypes,
   IFilterTypes,
+  ITableHeaders,
   IUserTypes,
 } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
@@ -36,18 +37,52 @@ const Articles = () => {
   const [filteredArticles, setFilteredArticles] =
     useState<IArticleDataTypes[]>(articles);
 
-  const articlesTableHeaders = [
-    '',
-    t('article.tableHeaders.id'),
-    t('article.tableHeaders.status'),
-    t('article.tableHeaders.title'),
-    t('article.tableHeaders.author'),
-    t('article.tableHeaders.sticky'),
-    t('article.tableHeaders.categories'),
-    t('article.tableHeaders.comments'),
-    t('article.tableHeaders.likes'),
-    t('article.tableHeaders.publishedAt'),
-    '',
+  const articlesTableHeaders: ITableHeaders[] = [
+    {
+      value: '',
+      sortingKey: null,
+    },
+    {
+      value: t('article.tableHeaders.id'),
+      sortingKey: 'id',
+    },
+    {
+      value: t('article.tableHeaders.status'),
+      sortingKey: 'status',
+    },
+    {
+      value: t('article.tableHeaders.title'),
+      sortingKey: 'title',
+    },
+    {
+      value: t('article.tableHeaders.author'),
+      sortingKey: 'author',
+    },
+    {
+      value: t('article.tableHeaders.sticky'),
+      sortingKey: 'isSticky',
+    },
+    {
+      value: t('article.tableHeaders.categories'),
+      sortingKey: 'categories',
+    },
+
+    {
+      value: t('article.tableHeaders.comments'),
+      sortingKey: 'comments',
+    },
+    {
+      value: t('article.tableHeaders.likes'),
+      sortingKey: 'likes',
+    },
+    {
+      value: t('article.tableHeaders.publishedAt'),
+      sortingKey: 'publishedAt',
+    },
+    {
+      value: '',
+      sortingKey: null,
+    },
   ];
 
   const authorsList = articles.map((article) => ({
