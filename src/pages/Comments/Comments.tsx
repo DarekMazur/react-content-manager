@@ -5,6 +5,7 @@ import {
   ICommentTypes,
   IFilterElementsTypes,
   IFilterTypes,
+  ITableHeaders,
   IUserTypes,
 } from '../../types/dataTypes';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
@@ -32,15 +33,39 @@ const CommentsView = () => {
   const [filteredComments, setFilteredComments] =
     useState<ICommentTypes[]>(comments);
 
-  const commentsTableHeaders = [
-    '',
-    t('comment.tableHeaders.id'),
-    t('comment.tableHeaders.status'),
-    t('comment.tableHeaders.author'),
-    t('comment.tableHeaders.article'),
-    t('comment.tableHeaders.comment'),
-    t('comment.tableHeaders.publishedAt'),
-    '',
+  const commentsTableHeaders: ITableHeaders[] = [
+    {
+      value: '',
+      sortingKey: null,
+    },
+    {
+      value: t('comment.tableHeaders.id'),
+      sortingKey: 'id',
+    },
+    {
+      value: t('comment.tableHeaders.status'),
+      sortingKey: 'status',
+    },
+    {
+      value: t('comment.tableHeaders.author'),
+      sortingKey: 'author',
+    },
+    {
+      value: t('comment.tableHeaders.article'),
+      sortingKey: 'article',
+    },
+    {
+      value: t('comment.tableHeaders.comment'),
+      sortingKey: 'content',
+    },
+    {
+      value: t('comment.tableHeaders.publishedAt'),
+      sortingKey: 'publishedAt',
+    },
+    {
+      value: '',
+      sortingKey: null,
+    },
   ];
 
   const commentsFilters: IFilterElementsTypes[] = [
