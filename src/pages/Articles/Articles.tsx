@@ -1,12 +1,18 @@
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState, useGetArticlesQuery } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  clearSort,
+  ISortTypes,
+  RootState,
+  useGetArticlesQuery,
+} from '../../store';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import {
   IArticleDataTypes,
   IFilterElementsTypes,
   IFilterTypes,
+  ITableHeaders,
   IUserTypes,
 } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
@@ -21,7 +27,9 @@ import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 
 const Articles = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const sort = useSelector<RootState>((state) => state.sort);
   const filters = useSelector<RootState>((state) => state.filters);
   const navigate = useNavigate();
   const height = useMinHeight();
@@ -36,18 +44,52 @@ const Articles = () => {
   const [filteredArticles, setFilteredArticles] =
     useState<IArticleDataTypes[]>(articles);
 
-  const articlesTableHeaders = [
-    '',
-    t('article.tableHeaders.id'),
-    t('article.tableHeaders.status'),
-    t('article.tableHeaders.title'),
-    t('article.tableHeaders.author'),
-    t('article.tableHeaders.sticky'),
-    t('article.tableHeaders.categories'),
-    t('article.tableHeaders.comments'),
-    t('article.tableHeaders.likes'),
-    t('article.tableHeaders.publishedAt'),
-    '',
+  const articlesTableHeaders: ITableHeaders[] = [
+    {
+      value: '',
+      sortingKey: null,
+    },
+    {
+      value: t('article.tableHeaders.id'),
+      sortingKey: 'id',
+    },
+    {
+      value: t('article.tableHeaders.status'),
+      sortingKey: 'status',
+    },
+    {
+      value: t('article.tableHeaders.title'),
+      sortingKey: 'title',
+    },
+    {
+      value: t('article.tableHeaders.author'),
+      sortingKey: 'author',
+    },
+    {
+      value: t('article.tableHeaders.sticky'),
+      sortingKey: 'isSticky',
+    },
+    {
+      value: t('article.tableHeaders.categories'),
+      sortingKey: 'categories',
+    },
+
+    {
+      value: t('article.tableHeaders.comments'),
+      sortingKey: 'comments',
+    },
+    {
+      value: t('article.tableHeaders.likes'),
+      sortingKey: 'likes',
+    },
+    {
+      value: t('article.tableHeaders.publishedAt'),
+      sortingKey: 'publishedAt',
+    },
+    {
+      value: '',
+      sortingKey: null,
+    },
   ];
 
   const authorsList = articles.map((article) => ({
@@ -94,6 +136,68 @@ const Articles = () => {
       ),
     },
   ];
+
+  useEffect(() => {
+    dispatch(clearSort());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const sortedArticles = [...filteredArticles];
+
+    sortedArticles.sort((a, b) => {
+      if ((sort as ISortTypes).sortBy === 'status') {
+        const statusA = Number(a.publishedAt !== null);
+        const statusB = Number(b.publishedAt !== null);
+        return statusA - statusB;
+      } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
+        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        return dateA - dateB;
+      } else if ((sort as ISortTypes).sortBy === 'author') {
+        if (a.author.username < b.author.username) {
+          return -1;
+        }
+        if (a.author.username > b.author.username) {
+          return 1;
+        }
+
+        return 0;
+      } else if ((sort as ISortTypes).sortBy === 'comments') {
+        const commentsA = a.comments ? a.comments.length : 0;
+        const commentsB = b.comments ? b.comments.length : 0;
+        return commentsA - commentsB;
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const sortingElementA =
+          a[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
+        const sortingElementB =
+          b[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
+        if (
+          (sortingElementA ? sortingElementA : 0) <
+          (sortingElementB ? sortingElementB : 0)
+        ) {
+          return -1;
+        }
+        if (
+          (sortingElementA ? sortingElementA : 0) >
+          (sortingElementB ? sortingElementB : 0)
+        ) {
+          return 1;
+        }
+
+        return 0;
+      }
+    });
+
+    if ((sort as ISortTypes).order === 'asc') {
+      setFilteredArticles(sortedArticles);
+    } else {
+      setFilteredArticles(sortedArticles.reverse());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort]);
 
   useEffect(() => {
     if (
@@ -146,6 +250,7 @@ const Articles = () => {
     } else {
       setFilteredArticles(availableArticles);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, availableArticles]);
 
   useEffect(() => {

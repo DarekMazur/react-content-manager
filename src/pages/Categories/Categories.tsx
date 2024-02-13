@@ -62,7 +62,6 @@ const CategoriesView = () => {
   }, []);
 
   useEffect(() => {
-    console.log('cate');
     setSortedCategories(categories);
   }, [categories]);
 
