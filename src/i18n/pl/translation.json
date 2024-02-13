@@ -203,7 +203,7 @@
     "newCategory": "Nowa kategoria",
     "tableHeaders": {
       "id": "ID",
-      "name": "Nazwa",
+      "title": "Nazwa",
       "description": "Opis"
     },
     "form": {
