@@ -7,6 +7,9 @@ import { IUserTypes } from '../../../types/dataTypes';
 import Icon from '../../Atoms/Icon/Icon';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import flagGb from '../../../assets/icons/gb.svg';
+import flagPl from '../../../assets/icons/pl.svg';
+import LanguageButton from '../../Atoms/LanguageButton/LanguageButton.tsx';
 
 const UserMenu = ({
   user,
@@ -21,6 +24,11 @@ const UserMenu = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const langs = {
+    en: { nativeFlag: flagGb, nativeName: 'English' },
+    pl: { nativeFlag: flagPl, nativeName: 'Polish' },
+  };
 
   const handleOutsideClick = (e: MouseEvent) => {
     if (
@@ -68,6 +76,16 @@ const UserMenu = ({
           <li onClick={handleMockLogout}>
             <FontAwesomeIcon icon={['fas', 'arrow-right-from-bracket']} />
             {t('navigation.userArea.logout')}
+          </li>
+          <li>
+            {Object.keys(langs).map((lng) => (
+              <LanguageButton
+                key={lng}
+                lang={lng}
+                src={langs[lng as keyof typeof langs].nativeFlag}
+                alt={langs[lng as keyof typeof langs].nativeName}
+              />
+            ))}
           </li>
         </ul>
       </StyledUserMenu>
