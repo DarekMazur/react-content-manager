@@ -1,9 +1,14 @@
 import { Main } from '../../components/Organisms/Main/Main.styles';
 import Heading from '../../components/Atoms/Heading/Heading';
-import { RootState, useGetCategoriesQuery } from '../../store';
+import {
+  clearSort,
+  ISortTypes,
+  RootState,
+  useGetCategoriesQuery,
+} from '../../store';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ICategoriesTypes, ITableHeaders } from '../../types/dataTypes.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
@@ -11,14 +16,21 @@ import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 
 const CategoriesView = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const sort = useSelector<RootState>((state) => state.sort);
   const { data: categories = [], isLoading } = useGetCategoriesQuery();
   const height = useMinHeight();
   const selectedCategories = useSelector<RootState>(
     (state) => state.selectedCategories,
+  );
+
+  const [sortedCategories, setSortedCategories] = useState<ICategoriesTypes[]>(
+    [],
   );
 
   const categoriesTableHeaders: ITableHeaders[] = [
@@ -43,6 +55,44 @@ const CategoriesView = () => {
       sortingKey: null,
     },
   ];
+
+  useEffect(() => {
+    dispatch(clearSort());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    console.log('cate');
+    setSortedCategories(categories);
+  }, [categories]);
+
+  useEffect(() => {
+    const sorted = [...sortedCategories];
+    sorted.sort((a, b) => {
+      if (
+        a[(sort as ISortTypes).sortBy as keyof ICategoriesTypes] <
+        b[(sort as ISortTypes).sortBy as keyof ICategoriesTypes]
+      ) {
+        return -1;
+      }
+      if (
+        a[(sort as ISortTypes).sortBy as keyof ICategoriesTypes] >
+        b[(sort as ISortTypes).sortBy as keyof ICategoriesTypes]
+      ) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    if ((sort as ISortTypes).order === 'asc') {
+      setSortedCategories(sorted);
+    } else {
+      setSortedCategories(sorted.reverse());
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort]);
 
   if (isLoading) {
     return <Loading>Loading...</Loading>;
@@ -75,7 +125,10 @@ const CategoriesView = () => {
           <FontAwesomeIcon icon={['fas', 'pen']} /> {t('category.newCategory')}
         </FormButton>
       </div>
-      <TableWrapper content={categories} headers={categoriesTableHeaders} />
+      <TableWrapper
+        content={sortedCategories}
+        headers={categoriesTableHeaders}
+      />
     </Main>
   );
 };
