@@ -2,7 +2,6 @@ import { styled } from 'styled-components';
 
 interface IStyledUserMenuTypes {
   $open?: boolean;
-  // ref: MutableRefObject<Node | undefined>;
 }
 
 export const StyledUserMenu = styled.div<IStyledUserMenuTypes>`
