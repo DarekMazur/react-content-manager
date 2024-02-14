@@ -9,13 +9,21 @@ export const articlesApi = createApi({
   tagTypes: ['Articles'],
   endpoints: (builder) => ({
     getArticles: builder.query<IArticleDataTypes[], void>({
-      query: () => 'articles',
+      query: () => ({
+        url: 'articles',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
+      }),
       providesTags: ['Articles'],
     }),
     updateArticle: builder.mutation({
       query: (body) => ({
         url: `articles/${body.id}`,
         method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         body,
       }),
       invalidatesTags: ['Articles'],
@@ -24,6 +32,9 @@ export const articlesApi = createApi({
       query: (body) => ({
         url: `articles`,
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         body,
       }),
       invalidatesTags: ['Articles'],
@@ -32,6 +43,9 @@ export const articlesApi = createApi({
       query: (id) => ({
         url: `articles/${id}`,
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         credentials: 'include',
       }),
       invalidatesTags: ['Articles'],
@@ -40,6 +54,9 @@ export const articlesApi = createApi({
       query: (body) => ({
         url: 'articles',
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         body,
         credentials: 'include',
       }),
