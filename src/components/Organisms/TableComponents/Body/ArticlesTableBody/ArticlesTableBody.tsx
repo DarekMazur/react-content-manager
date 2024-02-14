@@ -24,6 +24,10 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
   );
 
   useEffect(() => {
+    console.log(data);
+  }, []);
+
+  useEffect(() => {
     setCheckedArticles(selectedArticles as IArticleDataTypes[]);
   }, [selectedArticles]);
 
@@ -56,7 +60,7 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
   return (
     <>
       {data.map((article) => (
-        <tr key={article.uuid}>
+        <tr key={article.attributes.uuid}>
           <td
             style={{
               height: '6rem',
@@ -68,13 +72,13 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
           >
             <Checkbox
               handleClick={handleClickSelect}
-              uuid={article.uuid}
+              uuid={article.attributes.uuid}
               isChecked={Array.from(
                 checkedArticles as IArticleDataTypes[],
               ).includes(article)}
             />
           </td>
-          <td>{article.id}</td>
+          <td>{article.attributes.id}</td>
           <td
             style={{
               display: 'flex',
@@ -83,24 +87,28 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
               padding: '0 1rem',
             }}
           >
-            <StatusInfo status={!!article.publishedAt} />
+            <StatusInfo status={!!article.attributes.publishedAt} />
           </td>
-          <td style={{ textAlign: 'left' }}>{article.title}</td>
-          <td style={{ textAlign: 'left' }}>{article.author.username}</td>
+          <td style={{ textAlign: 'left' }}>{article.attributes.title}</td>
+          <td style={{ textAlign: 'left' }}>
+            {article.attributes.author.data.attributes.username}
+          </td>
           <td>
             <Checkbox
-              isChecked={article.isSticky}
+              isChecked={article.attributes.isSticky}
               handleClick={handleClickSticky}
-              uuid={article.uuid}
+              uuid={article.attributes.uuid}
             />
           </td>
           <td>
-            {article.categories.map((category, index, array) => (
-              <span key={index}>
-                {category.title}
-                {index + 1 === array.length ? null : ', '}
-              </span>
-            ))}
+            {article.attributes.categories.data.map(
+              (category, index, array) => (
+                <span key={index}>
+                  {category.attributes.title}
+                  {index + 1 === array.length ? null : ', '}
+                </span>
+              ),
+            )}
           </td>
           <td>
             {db.comment.count({
@@ -113,8 +121,12 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
               },
             })}
           </td>
-          <td>{article.likes}</td>
-          <td>{article.publishedAt ? getDate(article.publishedAt) : '-'}</td>
+          <td>{article.attributes.likes}</td>
+          <td>
+            {article.attributes.publishedAt
+              ? getDate(article.attributes.publishedAt)
+              : '-'}
+          </td>
           <td style={{ textAlign: 'left' }}>
             <TableActionIcons id={article.id} />
           </td>

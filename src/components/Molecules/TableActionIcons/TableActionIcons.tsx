@@ -53,7 +53,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const article = (articles as IArticleDataTypes[]).find(
+  const article = (articles as IArticleDataTypes[]).data.attributes?.find(
     (article) => article.id === id,
   );
 

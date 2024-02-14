@@ -28,7 +28,7 @@ import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 const Articles = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const { data: articles = {}, isLoading } = useGetArticlesQuery();
   const sort = useSelector<RootState>((state) => state.sort);
   const filters = useSelector<RootState>((state) => state.filters);
   const navigate = useNavigate();
@@ -41,8 +41,11 @@ const Articles = () => {
     IArticleDataTypes[]
   >([]);
 
-  const [filteredArticles, setFilteredArticles] =
-    useState<IArticleDataTypes[]>(articles);
+  const [filteredArticles, setFilteredArticles] = useState<IArticleDataTypes[]>(
+    articles?.data || [],
+  );
+
+  const [authorsList, setAuthorsList] = useState([]);
 
   const articlesTableHeaders: ITableHeaders[] = [
     {
@@ -92,10 +95,16 @@ const Articles = () => {
     },
   ];
 
-  const authorsList = articles.map((article) => ({
-    label: article.author.username,
-    id: article.author.id,
-  }));
+  useEffect(() => {
+    articles.data
+      ? setAuthorsList(
+          articles.data.map((article) => ({
+            label: article?.attributes.author.data.attributes.username,
+            id: article?.attributes.author.data.id,
+          })),
+        )
+      : null;
+  }, [articles]);
 
   const articleFilters: IFilterElementsTypes[] = [
     {
@@ -147,33 +156,46 @@ const Articles = () => {
 
     sortedArticles.sort((a, b) => {
       if ((sort as ISortTypes).sortBy === 'status') {
-        const statusA = Number(a.publishedAt !== null);
-        const statusB = Number(b.publishedAt !== null);
+        const statusA = Number(a.attributes.publishedAt !== null);
+        const statusB = Number(b.attributes.publishedAt !== null);
         return statusA - statusB;
       } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
-        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        const dateA = a.attributes.publishedAt
+          ? new Date(a.attributes.publishedAt).getTime()
+          : 0;
+        const dateB = b.attributes.publishedAt
+          ? new Date(b.attributes.publishedAt).getTime()
+          : 0;
         return dateA - dateB;
       } else if ((sort as ISortTypes).sortBy === 'author') {
-        if (a.author.username < b.author.username) {
+        if (
+          a.attributes.author.data.attributes.username <
+          b.attributes.author.data.attributes.username
+        ) {
           return -1;
         }
-        if (a.author.username > b.author.username) {
+        if (
+          a.author.data.attributes.username > b.author.data.attributes.username
+        ) {
           return 1;
         }
 
         return 0;
       } else if ((sort as ISortTypes).sortBy === 'comments') {
-        const commentsA = a.comments ? a.comments.length : 0;
-        const commentsB = b.comments ? b.comments.length : 0;
+        const commentsA = a.attributes.comments
+          ? a.attributes.comments.length
+          : 0;
+        const commentsB = b.attributes.comments
+          ? b.attributes.comments.length
+          : 0;
         return commentsA - commentsB;
       } else {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const sortingElementA =
-          a[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
+          a.attributes[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
         const sortingElementB =
-          b[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
+          b.attributes[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
         if (
           (sortingElementA ? sortingElementA : 0) <
           (sortingElementB ? sortingElementB : 0)
@@ -256,12 +278,12 @@ const Articles = () => {
   useEffect(() => {
     if ((currentUser as IUserTypes).role.id === 3) {
       setAvailableArticles(
-        articles.filter(
+        articles.data.filter(
           (article) => article.author.uuid === (currentUser as IUserTypes).uuid,
         ),
       );
     } else {
-      setAvailableArticles(articles);
+      setAvailableArticles(articles.data);
     }
   }, [articles, currentUser]);
 
@@ -297,7 +319,12 @@ const Articles = () => {
           <FontAwesomeIcon icon={['fas', 'pen']} /> {t('article.newArticle')}
         </FormButton>
       </div>
-      <TableWrapper content={filteredArticles} headers={articlesTableHeaders} />
+      {filteredArticles ? (
+        <TableWrapper
+          content={filteredArticles}
+          headers={articlesTableHeaders}
+        />
+      ) : null}
     </Main>
   );
 };

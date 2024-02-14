@@ -4,13 +4,13 @@ import { IArticleDataTypes } from '../../types/dataTypes';
 export const articlesApi = createApi({
   reducerPath: 'articlesApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ['Articles'],
   endpoints: (builder) => ({
     getArticles: builder.query<IArticleDataTypes[], void>({
       query: () => ({
-        url: 'articles',
+        url: 'articles?publicationState=preview&populate=*',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
