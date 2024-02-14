@@ -23,15 +23,18 @@ const CategoriesView = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const sort = useSelector<RootState>((state) => state.sort);
-  const { data: categories = [], isLoading } = useGetCategoriesQuery();
+  const {
+    data: categories = [],
+    isLoading,
+    isSuccess,
+  } = useGetCategoriesQuery();
   const height = useMinHeight();
   const selectedCategories = useSelector<RootState>(
     (state) => state.selectedCategories,
   );
 
-  const [sortedCategories, setSortedCategories] = useState<ICategoriesTypes[]>(
-    [],
-  );
+  const [sortedCategories, setSortedCategories] =
+    useState<ICategoriesTypes[]>(categories);
 
   const categoriesTableHeaders: ITableHeaders[] = [
     {
@@ -62,8 +65,10 @@ const CategoriesView = () => {
   }, []);
 
   useEffect(() => {
-    setSortedCategories(categories);
-  }, [categories]);
+    if (isSuccess) {
+      setSortedCategories(categories);
+    }
+  }, [categories, isSuccess]);
 
   useEffect(() => {
     const sorted = [...sortedCategories];
