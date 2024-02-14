@@ -9,13 +9,21 @@ export const commentsApi = createApi({
   tagTypes: ['Comments'],
   endpoints: (builder) => ({
     getComments: builder.query<ICommentTypes[], void>({
-      query: () => 'comments',
+      query: () => ({
+        url: 'comments',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
+      }),
       providesTags: ['Comments'],
     }),
     updateComment: builder.mutation({
       query: (body) => ({
         url: `comments/${body.id}`,
         method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         body,
       }),
       invalidatesTags: ['Comments'],
@@ -24,6 +32,9 @@ export const commentsApi = createApi({
       query: (id) => ({
         url: `comments/${id}`,
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         credentials: 'include',
       }),
       invalidatesTags: ['Comments'],
@@ -32,6 +43,9 @@ export const commentsApi = createApi({
       query: (body) => ({
         url: 'comments',
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         body,
         credentials: 'include',
       }),

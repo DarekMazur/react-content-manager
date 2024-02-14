@@ -9,13 +9,21 @@ export const usersApi = createApi({
   tagTypes: ['Users'],
   endpoints: (builder) => ({
     getUsers: builder.query<IUserTypes[], void>({
-      query: () => 'users',
+      query: () => ({
+        url: 'users',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
+      }),
       providesTags: ['Users'],
     }),
     updateUser: builder.mutation({
       query: (body) => ({
         url: `users/${body.uuid}`,
         method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         body,
       }),
       invalidatesTags: ['Users'],
@@ -24,6 +32,9 @@ export const usersApi = createApi({
       query: (id) => ({
         url: `users/${id}`,
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         credentials: 'include',
       }),
       invalidatesTags: ['Users'],
@@ -32,6 +43,9 @@ export const usersApi = createApi({
       query: (body) => ({
         url: 'users',
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
         body,
         credentials: 'include',
       }),
