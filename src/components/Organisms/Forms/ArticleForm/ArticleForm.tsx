@@ -20,6 +20,8 @@ import {
 import {
   IArticleDataTypes,
   ICategoriesTypes,
+  IStrapiArticleData,
+  IStrapiFileTypes,
   IUserTypes,
 } from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
@@ -56,7 +58,7 @@ const ArticleForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const { data: articles, isLoading } = useGetArticlesQuery();
   const { data: categories = [] } = useGetCategoriesQuery();
   const [updateArticle, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateArticleMutation();
@@ -65,19 +67,21 @@ const ArticleForm = () => {
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [currentArticle, setCurrentArticle] =
-    useState<IArticleDataTypes | null>();
+    useState<IStrapiArticleData | null>();
 
   const [articleTitle, setArticleTitle] = useState<string>('');
   const [articleDescription, setArticleDescription] = useState<string>('');
-  const [articleCover, setArticleCover] = useState<string>(placeholder);
+  const [articleCover, setArticleCover] = useState<
+    IStrapiFileTypes | string | null
+  >(placeholder);
   const [articleCategories, setArticleCategories] = useState<
     ICategoriesTypes[]
   >([]);
-  const [articleTags, setArticleTags] = useState<string[]>([]);
+  const [articleTags, setArticleTags] = useState<string>('');
   const [articlePublished, setArticlePublished] = useState<Date | null>(null);
   const [articleIsSticky, setArticleIsSticky] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<
-    IArticleDataTypes | undefined
+    IStrapiArticleData | undefined
   >(currentArticle ? { ...currentArticle } : undefined);
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState<File[]>([]);
@@ -115,17 +119,23 @@ const ArticleForm = () => {
   }, [imageUrl]);
 
   useEffect(() => {
-    if (articles && articles.length > 0) {
-      setCurrentArticle(articles.find((article) => article.id === Number(id)));
-      setInitialValues({
-        ...articles.find((article) => article.id === Number(id))!,
-      });
+    if (articles && (articles as IArticleDataTypes).data.length > 0) {
+      articles &&
+        setCurrentArticle(
+          articles.data.find((article) => article.id === Number(id)),
+        );
+      articles &&
+        setInitialValues({
+          ...articles.data.find((article) => article.id === Number(id))!,
+        });
     }
     if (
+      articles &&
       currentArticle &&
-      articles.filter(
+      articles.data.filter(
         (article) =>
-          article.uuid === (currentArticle as IArticleDataTypes).uuid,
+          article.attributes.uuid ===
+          (currentArticle as IStrapiArticleData).attributes.uuid,
       ).length === 0
     ) {
       navigate(-1);
@@ -135,18 +145,18 @@ const ArticleForm = () => {
 
   useEffect(() => {
     if (currentArticle) {
-      setArticleTitle(currentArticle.title);
-      setArticleDescription(currentArticle.description);
-      setArticleCover(currentArticle.cover);
-      setArticleCategories(currentArticle.categories);
-      setArticleTags(currentArticle.tags);
-      setArticlePublished(currentArticle.publishedAt);
-      setArticleIsSticky(currentArticle.isSticky);
+      setArticleTitle(currentArticle.attributes.title);
+      setArticleDescription(currentArticle.attributes.description);
+      setArticleCover(currentArticle.attributes.cover);
+      setArticleCategories(currentArticle.attributes.categories);
+      setArticleTags(currentArticle.attributes.tags);
+      setArticlePublished(currentArticle.attributes.publishedAt);
+      setArticleIsSticky(currentArticle.attributes.isSticky);
 
-      currentArticle.categories.map((category) =>
+      currentArticle.attributes.categories.data.map((category) =>
         articleInitCategories.push({
-          value: category.title,
-          label: category.title,
+          value: category.attributes.title,
+          label: category.attributes.title,
         }),
       );
     }
@@ -299,8 +309,8 @@ const ArticleForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentArticle as IArticleDataTypes).id],
-        title: (currentArticle as IArticleDataTypes).title,
+        ids: [(currentArticle as IStrapiArticleData).id],
+        title: (currentArticle as IStrapiArticleData).attributes.title,
       }),
     );
   };
@@ -336,13 +346,13 @@ const ArticleForm = () => {
             <InLink
               target={
                 currentArticle
-                  ? `/users/${currentArticle.author.uuid}`
-                  : `/users/${(currentUser as IUserTypes).uuid}`
+                  ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
+                  : `/users/${(currentUser as IUserTypes).data.attributes.uuid}`
               }
               name={
                 currentArticle
-                  ? currentArticle.author.username
-                  : (currentUser as IUserTypes).username
+                  ? currentArticle.attributes.author.data.attributes.username
+                  : (currentUser as IUserTypes).data.attributes.username
               }
             />
           </P>
@@ -410,9 +420,9 @@ const ArticleForm = () => {
         <div style={{ width: '80vw' }}>
           <CKEditor
             editor={ClassicEditor}
-            data={`<h1>${currentArticle ? currentArticle.title : ''}</h1>${
-              currentArticle ? currentArticle.body : ''
-            }`}
+            data={`<h1>${
+              currentArticle ? currentArticle.attributes.title : ''
+            }</h1>${currentArticle ? currentArticle.attributes.body : ''}`}
             config={editorConfiguration}
             onChange={(_event, editor) => handleEditorChange(editor.getData())}
           />
@@ -431,7 +441,7 @@ const ArticleForm = () => {
               <div>
                 <FormButton $type="submit" type="submit">
                   <FontAwesomeIcon icon={['fas', 'save']} />{' '}
-                  {currentArticle && currentArticle.publishedAt
+                  {currentArticle && currentArticle.attributes.publishedAt
                     ? t('article.form.button.save')
                     : t('article.form.button.publish')}
                 </FormButton>
@@ -441,7 +451,7 @@ const ArticleForm = () => {
                   onClick={(e) => handleSubmit(e, true)}
                 >
                   <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
-                  {currentArticle && currentArticle.publishedAt
+                  {currentArticle && currentArticle.attributes.publishedAt
                     ? t('article.form.button.unpublish')
                     : t('article.form.button.draft')}
                 </FormButton>

@@ -10,7 +10,7 @@ export const articlesApi = createApi({
   endpoints: (builder) => ({
     getArticles: builder.query<IArticleDataTypes, void>({
       query: () => ({
-        url: 'articles?publicationState=preview&populate=*&pagination[pageSize]=-1',
+        url: 'articles?publicationState=preview&populate=*&pagination[pageSize]=9999',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },

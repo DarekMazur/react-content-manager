@@ -23,7 +23,7 @@ interface IStrapiImageFormat {
   };
 }
 
-interface IStrapiFileTypes {
+export interface IStrapiFileTypes {
   data: {
     id: number;
     attributes: {

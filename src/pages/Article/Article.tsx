@@ -2,7 +2,11 @@ import { useParams } from 'react-router';
 import Heading from '../../components/Atoms/Heading/Heading';
 import { RootState, useGetArticlesQuery } from '../../store';
 import { useEffect, useState } from 'react';
-import { IArticleDataTypes, IUserTypes } from '../../types/dataTypes';
+import {
+  IArticleDataTypes,
+  IStrapiArticleData,
+  IUserTypes,
+} from '../../types/dataTypes';
 import ArticleForm from '../../components/Organisms/Forms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
@@ -19,11 +23,15 @@ const Article = () => {
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [currentArticle, setCurrentArticle] =
-    useState<IArticleDataTypes | null>();
+    useState<IStrapiArticleData | null>();
 
   useEffect(() => {
-    if (articles && articles.length > 0) {
-      setCurrentArticle(articles.find((article) => article.id === Number(id)));
+    if (articles && (articles as IArticleDataTypes).data.length > 0) {
+      setCurrentArticle(
+        (articles as IArticleDataTypes).data.find(
+          (article) => article.id === Number(id),
+        ),
+      );
     }
   }, [articles, id]);
 
@@ -35,10 +43,13 @@ const Article = () => {
     <Main $minHeight={height}>
       <section>
         <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
-          {currentArticle ? currentArticle.title : t('article.newArticle')}
+          {currentArticle
+            ? currentArticle.attributes.title
+            : t('article.newArticle')}
         </Heading>
         {!currentArticle ||
-        (currentUser as IUserTypes).uuid === currentArticle.author.uuid ||
+        (currentUser as IUserTypes).uuid ===
+          currentArticle.attributes.author.data.attributes.uuid ||
         (currentUser as IUserTypes).role.type === 'admin' ||
         (currentUser as IUserTypes).role.type === 'redactor' ? (
           <ArticleForm />

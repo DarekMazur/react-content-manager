@@ -310,6 +310,7 @@ const Articles = () => {
 
   return (
     <Main $minHeight={height}>
+      {console.log(articles)}
       <FilterMenu menuItems={articleFilters} />
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('article.header')}
