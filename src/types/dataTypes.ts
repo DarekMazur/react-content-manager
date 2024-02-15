@@ -79,11 +79,23 @@ export interface IStrapiArticlesAttributes {
   localizations: string[];
 }
 
-export interface IRoleTypes {
+export interface IStrapiRoles {
   id: number;
   name: string;
   description: string;
   type: string;
+  createdAt: Date;
+  updatedAt: Date;
+  nb_users: number;
+}
+
+export interface IArticleDataTypes {
+  data: IStrapiArticleData[];
+  meta: IStrapiMeta;
+}
+
+export interface IRoleTypes {
+  roles: IStrapiRoles[];
 }
 
 export interface ICategoriesTypes {
@@ -115,11 +127,6 @@ export interface ICommentTypes {
   publishedAt: Date;
   author: IUserTypes;
   article: IArticleDataTypes;
-}
-
-export interface IArticleDataTypes {
-  data: IStrapiArticleData[];
-  meta: IStrapiMeta;
 }
 
 export interface IFilterTypes {
