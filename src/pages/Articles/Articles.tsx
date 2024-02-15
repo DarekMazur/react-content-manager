@@ -12,6 +12,8 @@ import {
   IArticleDataTypes,
   IFilterElementsTypes,
   IFilterTypes,
+  IStrapiArticleData,
+  IStrapiArticlesAttributes,
   ITableHeaders,
   IUserTypes,
 } from '../../types/dataTypes.ts';
@@ -25,10 +27,15 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 
+interface IAuthorsList {
+  label: string;
+  id: number;
+}
+
 const Articles = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { data: articles = {}, isLoading } = useGetArticlesQuery();
+  const { data: articles, isLoading } = useGetArticlesQuery();
   const sort = useSelector<RootState>((state) => state.sort);
   const filters = useSelector<RootState>((state) => state.filters);
   const navigate = useNavigate();
@@ -38,14 +45,14 @@ const Articles = () => {
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
   const [availableArticles, setAvailableArticles] = useState<
-    IArticleDataTypes[]
+    IStrapiArticleData[]
   >([]);
 
-  const [filteredArticles, setFilteredArticles] = useState<IArticleDataTypes[]>(
-    articles?.data || [],
-  );
+  const [filteredArticles, setFilteredArticles] = useState<
+    IStrapiArticleData[]
+  >([]);
 
-  const [authorsList, setAuthorsList] = useState([]);
+  const [authorsList, setAuthorsList] = useState<IAuthorsList[]>([]);
 
   const articlesTableHeaders: ITableHeaders[] = [
     {
@@ -96,9 +103,9 @@ const Articles = () => {
   ];
 
   useEffect(() => {
-    articles.data
+    (articles as IArticleDataTypes).data
       ? setAuthorsList(
-          articles.data.map((article) => ({
+          (articles as IArticleDataTypes).data.map((article) => ({
             label: article?.attributes.author.data.attributes.username,
             id: article?.attributes.author.data.id,
           })),
@@ -175,7 +182,8 @@ const Articles = () => {
           return -1;
         }
         if (
-          a.author.data.attributes.username > b.author.data.attributes.username
+          a.attributes.author.data.attributes.username >
+          b.attributes.author.data.attributes.username
         ) {
           return 1;
         }
@@ -193,9 +201,13 @@ const Articles = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const sortingElementA =
-          a.attributes[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
+          a.attributes[
+            (sort as ISortTypes).sortBy as keyof IStrapiArticlesAttributes
+          ];
         const sortingElementB =
-          b.attributes[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
+          b.attributes[
+            (sort as ISortTypes).sortBy as keyof IStrapiArticlesAttributes
+          ];
         if (
           (sortingElementA ? sortingElementA : 0) <
           (sortingElementB ? sortingElementB : 0)
@@ -236,16 +248,18 @@ const Articles = () => {
         (filter) => filter.type === 'author',
       );
 
-      let filtered: IArticleDataTypes[] = [];
+      let filtered: IStrapiArticleData[] = [];
 
       if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
         filtered.push(
           ...availableArticles.filter((article) =>
-            filteredAuthor[0].value.includes(String(article.author.id)),
+            filteredAuthor[0].value.includes(
+              String(article.attributes.author.id),
+            ),
           ),
         );
       } else {
-        filtered.push(...articles);
+        articles && filtered.push(...articles.data);
       }
 
       if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
@@ -253,8 +267,8 @@ const Articles = () => {
           filteredStatus[0].value.includes('draft')
             ? filteredStatus[0].value.includes('published')
               ? article
-              : article.publishedAt === null
-            : article.publishedAt !== null,
+              : article.attributes.publishedAt === null
+            : article.attributes.publishedAt !== null,
         );
       }
 
@@ -263,8 +277,8 @@ const Articles = () => {
           filteredPinned[0].value.includes('sticky')
             ? filteredPinned[0].value.includes('normal')
               ? article
-              : article.isSticky
-            : !article.isSticky,
+              : article.attributes.isSticky
+            : !article.attributes.isSticky,
         );
       }
 
@@ -277,13 +291,16 @@ const Articles = () => {
 
   useEffect(() => {
     if ((currentUser as IUserTypes).role.id === 3) {
-      setAvailableArticles(
-        articles.data.filter(
-          (article) => article.author.uuid === (currentUser as IUserTypes).uuid,
-        ),
-      );
+      articles &&
+        setAvailableArticles(
+          articles.data.filter(
+            (article) =>
+              article.attributes.author.uuid ===
+              (currentUser as IUserTypes).uuid,
+          ),
+        );
     } else {
-      setAvailableArticles(articles.data);
+      setAvailableArticles(articles?.data || []);
     }
   }, [articles, currentUser]);
 

@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import {
-  IArticleDataTypes,
   ICategoriesTypes,
   ICommentTypes,
+  IStrapiArticleData,
   ITableHeaders,
   IUserTypes,
 } from '../../../../types/dataTypes';
@@ -18,12 +18,11 @@ const TableWrapper = ({
   content,
   headers,
 }: {
-  content: (
-    | IArticleDataTypes
-    | IUserTypes
-    | ICommentTypes
-    | ICategoriesTypes
-  )[];
+  content:
+    | IStrapiArticleData[]
+    | IUserTypes[]
+    | ICommentTypes[]
+    | ICategoriesTypes[];
   headers: ITableHeaders[];
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();

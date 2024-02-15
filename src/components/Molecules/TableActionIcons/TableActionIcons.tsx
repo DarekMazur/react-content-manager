@@ -53,7 +53,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const article = (articles as IArticleDataTypes[]).data.attributes?.find(
+  const article = (articles as IArticleDataTypes).data.find(
     (article) => article.id === id,
   );
 
@@ -75,7 +75,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
             switchPopup({
               isOpen: true,
               ids: [id],
-              title: article ? article.title : undefined,
+              title: article ? article.attributes.title : undefined,
             }),
           );
         case 'users':

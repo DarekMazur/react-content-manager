@@ -15,9 +15,11 @@ import TableSorting from '../../../Molecules/TableSorting/TableSorting.tsx';
 
 interface ITableProps {
   headers: ITableHeaders[];
-  data: Array<
-    IArticleDataTypes | IUserTypes | ICommentTypes | ICategoriesTypes
-  >;
+  data:
+    | IArticleDataTypes['data']
+    | IUserTypes[]
+    | ICommentTypes[]
+    | ICategoriesTypes[];
   tag: string;
 }
 
@@ -25,7 +27,7 @@ const Table: FC<ITableProps> = ({ headers, data, tag }) => {
   const getBody = (tag: string) => {
     switch (tag) {
       case 'articles':
-        return <ArticlesTableBody data={data as IArticleDataTypes[]} />;
+        return <ArticlesTableBody data={data as IArticleDataTypes['data']} />;
       case 'users':
         return <UsersTableBody data={data as IUserTypes[]} />;
       case 'comments':

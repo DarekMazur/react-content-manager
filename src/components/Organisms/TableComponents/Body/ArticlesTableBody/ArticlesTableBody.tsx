@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { IArticleDataTypes } from '../../../../../types/dataTypes';
+import { IStrapiArticleData } from '../../../../../types/dataTypes';
 import {
   RootState,
   addSelected,
@@ -13,14 +13,14 @@ import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import { db } from '../../../../../mocks/db';
 
-const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
+const ArticlesTableBody = ({ data }: { data: IStrapiArticleData[] }) => {
   const dispatch = useDispatch();
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
   const [updateArticle] = useUpdateArticleMutation();
 
-  const [checkedArticles, setCheckedArticles] = useState<IArticleDataTypes[]>(
-    selectedArticles as IArticleDataTypes[],
+  const [checkedArticles, setCheckedArticles] = useState<IStrapiArticleData[]>(
+    selectedArticles as IStrapiArticleData[],
   );
 
   useEffect(() => {
@@ -28,33 +28,35 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
   }, []);
 
   useEffect(() => {
-    setCheckedArticles(selectedArticles as IArticleDataTypes[]);
+    setCheckedArticles(selectedArticles as IStrapiArticleData[]);
   }, [selectedArticles]);
 
   const handleClickSelect = (uuid: string) => {
-    const checkedElement = data.find((article) => article.uuid === uuid);
+    const checkedElement = data.find(
+      (article) => article.attributes.uuid === uuid,
+    );
     if (
       checkedElement &&
-      checkedArticles.includes(checkedElement as IArticleDataTypes)
+      checkedArticles.includes(checkedElement as IStrapiArticleData)
     ) {
       dispatch(removeSelected(checkedElement));
       setCheckedArticles(
-        checkedArticles.filter((article) => article.uuid !== uuid),
+        checkedArticles.filter((article) => article.attributes.uuid !== uuid),
       );
     } else if (checkedElement) {
       dispatch(addSelected(checkedElement));
       setCheckedArticles((prevState) => [
         ...prevState,
-        checkedElement as IArticleDataTypes,
+        checkedElement as IStrapiArticleData,
       ]);
     }
   };
 
   const handleClickSticky = (uuid: string) => {
-    const article = data.find((article) => article.uuid === uuid);
+    const article = data.find((article) => article.attributes.uuid === uuid);
     updateArticle({
       ...article,
-      isSticky: !(article as IArticleDataTypes)?.isSticky,
+      isSticky: !(article as IStrapiArticleData).attributes.isSticky,
     });
   };
   return (
@@ -74,11 +76,11 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
               handleClick={handleClickSelect}
               uuid={article.attributes.uuid}
               isChecked={Array.from(
-                checkedArticles as IArticleDataTypes[],
+                checkedArticles as IStrapiArticleData[],
               ).includes(article)}
             />
           </td>
-          <td>{article.attributes.id}</td>
+          <td>{article.id}</td>
           <td
             style={{
               display: 'flex',
@@ -115,7 +117,7 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
               where: {
                 article: {
                   uuid: {
-                    equals: article.uuid,
+                    equals: article.attributes.uuid,
                   },
                 },
               },

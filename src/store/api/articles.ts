@@ -8,9 +8,9 @@ export const articlesApi = createApi({
   }),
   tagTypes: ['Articles'],
   endpoints: (builder) => ({
-    getArticles: builder.query<IArticleDataTypes[], void>({
+    getArticles: builder.query<IArticleDataTypes, void>({
       query: () => ({
-        url: 'articles?publicationState=preview&populate=*',
+        url: 'articles?publicationState=preview&populate=*&pagination[pageSize]=-1',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
