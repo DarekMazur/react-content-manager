@@ -9,13 +9,9 @@ import {
 } from '../../store';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import {
-  IArticleDataTypes,
   IFilterElementsTypes,
   IFilterTypes,
-  IStrapiArticleData,
-  IStrapiArticlesAttributes,
   ITableHeaders,
-  IUserTypes,
 } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
@@ -26,6 +22,8 @@ import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.s
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
+import { IArticleData, IArticlesDataTypes } from '../../types/articleTypes.ts';
+import { IStrapiUser, IUserData } from '../../types/userTypes.ts';
 
 interface IAuthorsList {
   label: string;
@@ -44,13 +42,11 @@ const Articles = () => {
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
-  const [availableArticles, setAvailableArticles] = useState<
-    IStrapiArticleData[]
-  >([]);
+  const [availableArticles, setAvailableArticles] = useState<IArticleData[]>(
+    [],
+  );
 
-  const [filteredArticles, setFilteredArticles] = useState<
-    IStrapiArticleData[]
-  >([]);
+  const [filteredArticles, setFilteredArticles] = useState<IArticleData[]>([]);
 
   const [authorsList, setAuthorsList] = useState<IAuthorsList[]>([]);
 
@@ -103,11 +99,12 @@ const Articles = () => {
   ];
 
   useEffect(() => {
-    (articles as IArticleDataTypes).data
+    articles && (articles as IArticlesDataTypes).data
       ? setAuthorsList(
-          (articles as IArticleDataTypes).data.map((article) => ({
-            label: article?.attributes.author.data.attributes.username,
-            id: article?.attributes.author.data.id,
+          (articles as IArticlesDataTypes).data.map((article) => ({
+            label: (article as IArticleData).attributes.author.data.attributes
+              .username,
+            id: article.attributes.author.data.id,
           })),
         )
       : null;
@@ -197,17 +194,18 @@ const Articles = () => {
           ? b.attributes.comments.length
           : 0;
         return commentsA - commentsB;
+      } else if ((sort as ISortTypes).sortBy === 'id') {
+        return a.id - b.id;
       } else {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const sortingElementA =
-          a.attributes[
-            (sort as ISortTypes).sortBy as keyof IStrapiArticlesAttributes
-          ];
-        const sortingElementB =
-          b.attributes[
-            (sort as ISortTypes).sortBy as keyof IStrapiArticlesAttributes
-          ];
+        // @ts-expect-error
+        const sortingElementA = a.attributes[(sort as ISortTypes).sortBy];
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const sortingElementB = b.attributes[(sort as ISortTypes).sortBy];
+
+        console.log(sortingElementA);
         if (
           (sortingElementA ? sortingElementA : 0) <
           (sortingElementB ? sortingElementB : 0)
@@ -248,13 +246,13 @@ const Articles = () => {
         (filter) => filter.type === 'author',
       );
 
-      let filtered: IStrapiArticleData[] = [];
+      let filtered: IArticleData[] = [];
 
       if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
         filtered.push(
           ...availableArticles.filter((article) =>
             filteredAuthor[0].value.includes(
-              String(article.attributes.author.id),
+              String(article.attributes.author.data.id),
             ),
           ),
         );
@@ -290,13 +288,13 @@ const Articles = () => {
   }, [filters, availableArticles]);
 
   useEffect(() => {
-    if ((currentUser as IUserTypes).role.id === 3) {
+    if ((currentUser as IStrapiUser).role.id === 3) {
       articles &&
         setAvailableArticles(
-          articles.data.filter(
+          (articles as IArticlesDataTypes).data.filter(
             (article) =>
-              article.attributes.author.uuid ===
-              (currentUser as IUserTypes).uuid,
+              article.attributes.author.data.attributes.uuid ===
+              (currentUser as IUserData).attributes.uuid,
           ),
         );
     } else {
@@ -310,15 +308,12 @@ const Articles = () => {
 
   return (
     <Main $minHeight={height}>
-      {console.log(articles)}
       <FilterMenu menuItems={articleFilters} />
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('article.header')}
       </Heading>
-      {(selectedArticles as IArticleDataTypes[]).length > 0 ? (
-        <MultiAction
-          counter={(selectedArticles as IArticleDataTypes[]).length}
-        />
+      {(selectedArticles as IArticleData[]).length > 0 ? (
+        <MultiAction counter={(selectedArticles as IArticleData[]).length} />
       ) : null}
       <div
         style={{

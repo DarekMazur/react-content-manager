@@ -3,9 +3,10 @@ import Heading from '../../components/Atoms/Heading/Heading';
 import { RootState, useGetArticlesQuery } from '../../store';
 import { useEffect, useState } from 'react';
 import {
-  IArticleDataTypes,
-  IStrapiArticleData,
-  IUserTypes,
+  IDataTypes,
+  IStrapiArticlesAttributes,
+  IStrapiData,
+  IStrapiUser,
 } from '../../types/dataTypes';
 import ArticleForm from '../../components/Organisms/Forms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
@@ -22,13 +23,12 @@ const Article = () => {
   const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
 
-  const [currentArticle, setCurrentArticle] =
-    useState<IStrapiArticleData | null>();
+  const [currentArticle, setCurrentArticle] = useState<IStrapiData | null>();
 
   useEffect(() => {
-    if (articles && (articles as IArticleDataTypes).data.length > 0) {
+    if (articles && (articles as IDataTypes).data.length > 0) {
       setCurrentArticle(
-        (articles as IArticleDataTypes).data.find(
+        (articles as IDataTypes).data.find(
           (article) => article.id === Number(id),
         ),
       );
@@ -48,10 +48,10 @@ const Article = () => {
             : t('article.newArticle')}
         </Heading>
         {!currentArticle ||
-        (currentUser as IUserTypes).uuid ===
+        (currentUser as IStrapiUser).uuid ===
           currentArticle.attributes.author.data.attributes.uuid ||
-        (currentUser as IUserTypes).role.type === 'admin' ||
-        (currentUser as IUserTypes).role.type === 'redactor' ? (
+        (currentUser as IStrapiUser).role.type === 'admin' ||
+        (currentUser as IStrapiUser).role.type === 'redactor' ? (
           <ArticleForm />
         ) : (
           <UnauthorisedView />

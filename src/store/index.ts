@@ -1,14 +1,12 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  IFilterTypes,
-  IUserTypes,
-} from '../types/dataTypes';
+import { IFilterTypes } from '../types/dataTypes';
 import { articlesApi } from './api/articles.ts';
 import { usersApi } from './api/users.ts';
 import { commentsApi } from './api/comments.ts';
 import { categoriesApi } from './api/categories.ts';
+import { IArticleData } from '../types/articleTypes.ts';
+import { IUserData } from '../types/userTypes.ts';
+import { ICategoryData } from '../types/categoryTypes.ts';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -24,11 +22,7 @@ export interface ISortTypes {
   order: string;
 }
 
-const initialSelectedItems: (
-  | IArticleDataTypes
-  | IUserTypes
-  | ICategoriesTypes
-)[] = [];
+const initialSelectedItems: (IArticleData | IUserData | ICategoryData)[] = [];
 const initialUser = {};
 const initialPopup: IPopupTypes = {
   isOpen: false,
@@ -40,7 +34,7 @@ const initialFilters: IFilterTypes[] = [];
 
 const initialSorting = {
   sortBy: 'id',
-  order: 'asc',
+  order: 'desc',
 };
 
 const filtersSlice = createSlice({
