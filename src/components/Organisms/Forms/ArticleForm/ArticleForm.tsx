@@ -336,7 +336,12 @@ const ArticleForm = () => {
         <aside>
           <ImageController
             image={image}
-            defaultImage={articleCover}
+            // defaultImage={articleCover}
+            defaultImage={
+              articleCover.data
+                ? articleCover.data.attributes.formats.small.url
+                : placeholder
+            }
             altText={`${articleTitle} cover image`}
             imageUrl={imageUrl as string}
             onFilesChange={(selectedFiles) => setImage(selectedFiles)}
