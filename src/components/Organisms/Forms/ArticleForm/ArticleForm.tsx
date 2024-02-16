@@ -59,7 +59,7 @@ const ArticleForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data: articles, isLoading } = useGetArticlesQuery();
-  const { data: categories = [] } = useGetCategoriesQuery();
+  const { data: categories } = useGetCategoriesQuery();
   const [updateArticle, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateArticleMutation();
   const [createArticle] = useCreateArticleMutation();
@@ -94,8 +94,8 @@ const ArticleForm = () => {
   const articleInitCategories: IOptionTypes[] = [];
 
   useEffect(() => {
-    if (categories && categories.length > 0) {
-      (categories as ICategoryData[]).map((category) =>
+    if (categories && categories.data.length > 0) {
+      categories.data.map((category) =>
         categoriesOptions.push({
           value: category.attributes.title,
           label: category.attributes.title,
@@ -147,7 +147,7 @@ const ArticleForm = () => {
       setArticleTitle(currentArticle.attributes.title);
       setArticleDescription(currentArticle.attributes.description);
       setArticleCover(currentArticle.attributes.cover);
-      setArticleCategories(currentArticle.attributes.categories);
+      setArticleCategories(currentArticle.attributes.categories.data);
       setArticleTags(currentArticle.attributes.tags);
       setArticlePublished(currentArticle.attributes.publishedAt);
       setArticleIsSticky(currentArticle.attributes.isSticky);
@@ -193,11 +193,12 @@ const ArticleForm = () => {
   const handleSelectChange = (value: IOptionTypes[]) => {
     const articleCategories: ICategoryData[] = [];
     for (let i = 0; i < value.length; ++i) {
-      categories.map((category) =>
-        category.title === value[i].value
-          ? articleCategories.push(category)
-          : null,
-      );
+      categories &&
+        categories.data.map((category) =>
+          category.attributes.title === value[i].value
+            ? articleCategories.push(category)
+            : null,
+        );
     }
     setArticleCategories(articleCategories);
   };
@@ -341,17 +342,17 @@ const ArticleForm = () => {
             onFilesChange={(selectedFiles) => setImage(selectedFiles)}
           />
           <P>
-            {t('article.form.author')}
+            {t('article.form.author')}{' '}
             <InLink
               target={
                 currentArticle
                   ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
-                  : `/users/${(currentUser as IUserData).attributes.uuid}`
+                  : `/users/${(currentUser as IUserData).uuid}`
               }
               name={
                 currentArticle
                   ? currentArticle.attributes.author.data.attributes.username
-                  : (currentUser as IUserData).attributes.username
+                  : (currentUser as IUserData).username
               }
             />
           </P>

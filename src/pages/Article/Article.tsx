@@ -15,13 +15,14 @@ import { IStrapiUser } from '../../types/userTypes.ts';
 const Article = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const { data: articles, isLoading } = useGetArticlesQuery();
   const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [currentArticle, setCurrentArticle] = useState<IArticleData | null>();
 
   useEffect(() => {
+    // console.log(articles);
     if (articles && (articles as IArticlesDataTypes).data.length > 0) {
       setCurrentArticle(
         (articles as IArticlesDataTypes).data.find(
