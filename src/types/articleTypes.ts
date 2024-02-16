@@ -21,6 +21,10 @@ export interface IStrapiUserArticleTypes extends IArticleTypes {
   id: number;
 }
 
+export interface IStrapiAttributeArticle {
+  data: IArticleData;
+}
+
 export interface IStrapiArticlesAttributes extends IArticleTypes {
   cover: IStrapiFileTypes | null;
   categories: IAttributesCategories;

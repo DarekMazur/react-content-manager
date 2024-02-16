@@ -1,5 +1,6 @@
 import { IStrapiAttributeUser } from './userTypes.ts';
 import { IStrapiMeta } from './strapiTypes.ts';
+import { IStrapiAttributeArticle } from './articleTypes.ts';
 
 export interface IStrapiCommentAttributes {
   body: string;
@@ -7,7 +8,8 @@ export interface IStrapiCommentAttributes {
   createdAt: Date;
   updatedAt: Date;
   shadowed: boolean;
-  user: IStrapiAttributeUser;
+  author: IStrapiAttributeUser;
+  article: IStrapiAttributeArticle;
 }
 
 export interface ICommentTypes extends IStrapiCommentAttributes {

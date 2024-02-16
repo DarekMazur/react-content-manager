@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IArticleDataTypes } from '../../types/dataTypes';
+import { IArticlesDataTypes } from '../../types/articleTypes.ts';
 
 export const articlesApi = createApi({
   reducerPath: 'articlesApi',
@@ -8,7 +8,7 @@ export const articlesApi = createApi({
   }),
   tagTypes: ['Articles'],
   endpoints: (builder) => ({
-    getArticles: builder.query<IArticleDataTypes, void>({
+    getArticles: builder.query<IArticlesDataTypes, void>({
       query: () => ({
         url: 'articles?publicationState=preview&populate=*&pagination[pageSize]=9999',
         headers: {

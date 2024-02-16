@@ -27,7 +27,7 @@ export interface IStrapiAttributeUser {
 
 export interface IUserData {
   id: number;
-  attributes: IUserTypes;
+  attributes: IStrapiUser;
 }
 
 export interface IUserDataTypes {

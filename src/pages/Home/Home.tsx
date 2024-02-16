@@ -2,13 +2,13 @@ import { FC } from 'react';
 import Button from '../../components/Atoms/Button/Button.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
-import { IUserTypes } from '../../types/dataTypes.ts';
 import { useNavigate } from 'react-router';
 import HomeSection from '../../components/Organisms/HomeSection/HomeSection.tsx';
 import { useTranslation } from 'react-i18next';
+import { IUserData } from '../../types/userTypes.ts';
 
 interface IHomeProps {
-  user: IUserTypes;
+  user: IUserData;
 }
 
 const Home: FC<IHomeProps> = ({ user }) => {
@@ -32,7 +32,7 @@ const Home: FC<IHomeProps> = ({ user }) => {
         margin="2rem 0"
         padding="1rem 0"
       >
-        {t('home.header', { role: user.role.name })}
+        {/*{t('home.header', { role: user.attributes.role.name })}*/}
       </Heading>
       <Wrapper justify="space-evenly" align="center">
         <HomeSection />

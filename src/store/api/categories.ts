@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ICategoriesTypes } from '../../types/dataTypes';
+import { ICategoriesDataTypes } from '../../types/categoryTypes.ts';
 
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ['Categories'],
   endpoints: (builder) => ({
-    getCategories: builder.query<ICategoriesTypes[], void>({
+    getCategories: builder.query<ICategoriesDataTypes, void>({
       query: () => ({
         url: 'categories',
         headers: {

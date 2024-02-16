@@ -17,13 +17,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  IStrapiArticleData,
-  IStrapiFileTypes,
-  IUserTypes,
-} from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
 import {
@@ -47,6 +40,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import placeholder from '../../../../assets/placeholder.png';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage';
 import { useTranslation } from 'react-i18next';
+import {
+  IArticleData,
+  IArticlesDataTypes,
+} from '../../../../types/articleTypes.ts';
+import { IStrapiFileTypes } from '../../../../types/strapiTypes.ts';
+import { ICategoryData } from '../../../../types/categoryTypes.ts';
+import { IUserData } from '../../../../types/userTypes.ts';
 
 interface IOptionTypes {
   readonly label: string;
@@ -66,23 +66,22 @@ const ArticleForm = () => {
   const [addCategory] = useAddCategoryMutation();
   const currentUser = useSelector<RootState>((state) => state.user);
 
-  const [currentArticle, setCurrentArticle] =
-    useState<IStrapiArticleData | null>();
+  const [currentArticle, setCurrentArticle] = useState<IArticleData | null>();
 
   const [articleTitle, setArticleTitle] = useState<string>('');
   const [articleDescription, setArticleDescription] = useState<string>('');
   const [articleCover, setArticleCover] = useState<
     IStrapiFileTypes | string | null
   >(placeholder);
-  const [articleCategories, setArticleCategories] = useState<
-    ICategoriesTypes[]
-  >([]);
+  const [articleCategories, setArticleCategories] = useState<ICategoryData[]>(
+    [],
+  );
   const [articleTags, setArticleTags] = useState<string>('');
   const [articlePublished, setArticlePublished] = useState<Date | null>(null);
   const [articleIsSticky, setArticleIsSticky] = useState<boolean>(false);
-  const [initialValues, setInitialValues] = useState<
-    IStrapiArticleData | undefined
-  >(currentArticle ? { ...currentArticle } : undefined);
+  const [initialValues, setInitialValues] = useState<IArticleData | undefined>(
+    currentArticle ? { ...currentArticle } : undefined,
+  );
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
@@ -96,10 +95,10 @@ const ArticleForm = () => {
 
   useEffect(() => {
     if (categories && categories.length > 0) {
-      (categories as ICategoriesTypes[]).map((category) =>
+      (categories as ICategoryData[]).map((category) =>
         categoriesOptions.push({
-          value: category.title,
-          label: category.title,
+          value: category.attributes.title,
+          label: category.attributes.title,
         }),
       );
       setOptions(categoriesOptions);
@@ -119,7 +118,7 @@ const ArticleForm = () => {
   }, [imageUrl]);
 
   useEffect(() => {
-    if (articles && (articles as IArticleDataTypes).data.length > 0) {
+    if (articles && (articles as IArticlesDataTypes).data.length > 0) {
       articles &&
         setCurrentArticle(
           articles.data.find((article) => article.id === Number(id)),
@@ -135,7 +134,7 @@ const ArticleForm = () => {
       articles.data.filter(
         (article) =>
           article.attributes.uuid ===
-          (currentArticle as IStrapiArticleData).attributes.uuid,
+          (currentArticle as IArticleData).attributes.uuid,
       ).length === 0
     ) {
       navigate(-1);
@@ -192,7 +191,7 @@ const ArticleForm = () => {
   };
 
   const handleSelectChange = (value: IOptionTypes[]) => {
-    const articleCategories: ICategoriesTypes[] = [];
+    const articleCategories: ICategoryData[] = [];
     for (let i = 0; i < value.length; ++i) {
       categories.map((category) =>
         category.title === value[i].value
@@ -309,8 +308,8 @@ const ArticleForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentArticle as IStrapiArticleData).id],
-        title: (currentArticle as IStrapiArticleData).attributes.title,
+        ids: [(currentArticle as IArticleData).id],
+        title: (currentArticle as IArticleData).attributes.title,
       }),
     );
   };
@@ -342,17 +341,17 @@ const ArticleForm = () => {
             onFilesChange={(selectedFiles) => setImage(selectedFiles)}
           />
           <P>
-            {t('article.form.author')}{' '}
+            {t('article.form.author')}
             <InLink
               target={
                 currentArticle
                   ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
-                  : `/users/${(currentUser as IUserTypes).data.attributes.uuid}`
+                  : `/users/${(currentUser as IUserData).attributes.uuid}`
               }
               name={
                 currentArticle
                   ? currentArticle.attributes.author.data.attributes.username
-                  : (currentUser as IUserTypes).data.attributes.username
+                  : (currentUser as IUserData).attributes.username
               }
             />
           </P>

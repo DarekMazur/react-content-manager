@@ -4,10 +4,10 @@ import { RootState, setUser, useGetUsersQuery } from '../../store';
 import Authorised from '../../components/Templates/Authorised/Authorised.tsx';
 import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 import FooterWrapper from '../../components/Organisms/Footer/Footer.tsx';
-import { IUserTypes } from '../../types/dataTypes.ts';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
+import { IUserData } from '../../types/userTypes.ts';
 
-interface ILoggedUser extends IUserTypes {
+interface ILoggedUser extends IUserData {
   isAuthorised: boolean;
 }
 
