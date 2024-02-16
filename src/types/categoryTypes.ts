@@ -8,10 +8,14 @@ export interface IStrapiCategoriesAttributes {
   createdAt: Date;
   updatedAt: Date;
   locale: string;
-  articles: IArticleData[];
+  articles: Array<IArticleData>;
   localizations: {
     data: string[];
   };
+}
+
+export interface IAttributesCategories {
+  data: ICategoryData;
 }
 
 export interface ICategoryData {

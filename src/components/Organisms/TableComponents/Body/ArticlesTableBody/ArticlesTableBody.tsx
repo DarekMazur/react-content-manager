@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { IStrapiArticleData } from '../../../../../types/dataTypes';
 import {
   RootState,
   addSelected,
@@ -12,23 +11,20 @@ import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
 import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import { db } from '../../../../../mocks/db';
+import { IArticleData } from '../../../../../types/articleTypes.ts';
 
-const ArticlesTableBody = ({ data }: { data: IStrapiArticleData[] }) => {
+const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
   const dispatch = useDispatch();
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
   const [updateArticle] = useUpdateArticleMutation();
 
-  const [checkedArticles, setCheckedArticles] = useState<IStrapiArticleData[]>(
-    selectedArticles as IStrapiArticleData[],
+  const [checkedArticles, setCheckedArticles] = useState<IArticleData[]>(
+    selectedArticles as IArticleData[],
   );
 
   useEffect(() => {
-    console.log(data);
-  }, []);
-
-  useEffect(() => {
-    setCheckedArticles(selectedArticles as IStrapiArticleData[]);
+    setCheckedArticles(selectedArticles as IArticleData[]);
   }, [selectedArticles]);
 
   const handleClickSelect = (uuid: string) => {
@@ -37,7 +33,7 @@ const ArticlesTableBody = ({ data }: { data: IStrapiArticleData[] }) => {
     );
     if (
       checkedElement &&
-      checkedArticles.includes(checkedElement as IStrapiArticleData)
+      checkedArticles.includes(checkedElement as IArticleData)
     ) {
       dispatch(removeSelected(checkedElement));
       setCheckedArticles(
@@ -47,7 +43,7 @@ const ArticlesTableBody = ({ data }: { data: IStrapiArticleData[] }) => {
       dispatch(addSelected(checkedElement));
       setCheckedArticles((prevState) => [
         ...prevState,
-        checkedElement as IStrapiArticleData,
+        checkedElement as IArticleData,
       ]);
     }
   };
@@ -56,7 +52,7 @@ const ArticlesTableBody = ({ data }: { data: IStrapiArticleData[] }) => {
     const article = data.find((article) => article.attributes.uuid === uuid);
     updateArticle({
       ...article,
-      isSticky: !(article as IStrapiArticleData).attributes.isSticky,
+      isSticky: !(article as IArticleData).attributes.isSticky,
     });
   };
   return (
@@ -75,9 +71,9 @@ const ArticlesTableBody = ({ data }: { data: IStrapiArticleData[] }) => {
             <Checkbox
               handleClick={handleClickSelect}
               uuid={article.attributes.uuid}
-              isChecked={Array.from(
-                checkedArticles as IStrapiArticleData[],
-              ).includes(article)}
+              isChecked={Array.from(checkedArticles as IArticleData[]).includes(
+                article,
+              )}
             />
           </td>
           <td>{article.id}</td>

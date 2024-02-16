@@ -1,7 +1,7 @@
 import { IStrapiAttributeUser } from './userTypes.ts';
 import { ICommentTypes } from './commentTypes.ts';
 import { IStrapiFileTypes, IStrapiMeta } from './strapiTypes.ts';
-import { ICategoryData } from './categoryTypes.ts';
+import { IAttributesCategories } from './categoryTypes.ts';
 
 export interface IArticleTypes {
   uuid: string;
@@ -23,7 +23,7 @@ export interface IStrapiUserArticleTypes extends IArticleTypes {
 
 export interface IStrapiArticlesAttributes extends IArticleTypes {
   cover: IStrapiFileTypes | null;
-  categories: ICategoryData[];
+  categories: IAttributesCategories[];
   author: IStrapiAttributeUser;
   comments: ICommentTypes[];
   localizations: string[];
