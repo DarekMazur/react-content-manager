@@ -2,12 +2,6 @@ import { useParams } from 'react-router';
 import Heading from '../../components/Atoms/Heading/Heading';
 import { RootState, useGetArticlesQuery } from '../../store';
 import { useEffect, useState } from 'react';
-import {
-  IDataTypes,
-  IStrapiArticlesAttributes,
-  IStrapiData,
-  IStrapiUser,
-} from '../../types/dataTypes';
 import ArticleForm from '../../components/Organisms/Forms/ArticleForm/ArticleForm';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
@@ -15,6 +9,8 @@ import { Main } from '../../components/Organisms/Main/Main.styles';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { useTranslation } from 'react-i18next';
 import UnauthorisedView from '../UnauthorisedView/UnauthorisedView.tsx';
+import { IArticleData, IArticlesDataTypes } from '../../types/articleTypes.ts';
+import { IStrapiUser } from '../../types/userTypes.ts';
 
 const Article = () => {
   const { t } = useTranslation();
@@ -23,12 +19,12 @@ const Article = () => {
   const height = useMinHeight();
   const currentUser = useSelector<RootState>((state) => state.user);
 
-  const [currentArticle, setCurrentArticle] = useState<IStrapiData | null>();
+  const [currentArticle, setCurrentArticle] = useState<IArticleData | null>();
 
   useEffect(() => {
-    if (articles && (articles as IDataTypes).data.length > 0) {
+    if (articles && (articles as IArticlesDataTypes).data.length > 0) {
       setCurrentArticle(
-        (articles as IDataTypes).data.find(
+        (articles as IArticlesDataTypes).data.find(
           (article) => article.id === Number(id),
         ),
       );
