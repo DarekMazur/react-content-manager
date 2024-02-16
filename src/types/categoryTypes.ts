@@ -15,7 +15,7 @@ export interface IStrapiCategoriesAttributes {
 }
 
 export interface IAttributesCategories {
-  data: ICategoryData;
+  data: ICategoryData[];
 }
 
 export interface ICategoryData {

@@ -23,7 +23,7 @@ export interface IStrapiUserArticleTypes extends IArticleTypes {
 
 export interface IStrapiArticlesAttributes extends IArticleTypes {
   cover: IStrapiFileTypes | null;
-  categories: IAttributesCategories[];
+  categories: IAttributesCategories;
   author: IStrapiAttributeUser;
   comments: ICommentTypes[];
   localizations: string[];
