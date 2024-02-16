@@ -204,7 +204,12 @@ const ArticleForm = () => {
   };
 
   const handleRemoveTag = (removed: string) => {
-    setArticleTags((prevState) => prevState.filter((tag) => tag !== removed));
+    setArticleTags((prevState) =>
+      prevState
+        .split(',')
+        .filter((tag) => tag !== removed)
+        .toString(),
+    );
   };
 
   const handleCreate = (inputValue: string) => {
@@ -292,11 +297,15 @@ const ArticleForm = () => {
   };
 
   const handleOnKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
     if (e.key === ',') {
-      setArticleTags((prevState) => [
-        ...prevState,
-        (e.target as HTMLInputElement).value.slice(0, -1),
-      ]);
+      setArticleTags((prevState) =>
+        [
+          ...prevState.split(','),
+          (e.target as HTMLInputElement).value.slice(0, -1),
+        ].toString(),
+      );
       setNewTag(null);
     }
   };
@@ -387,8 +396,8 @@ const ArticleForm = () => {
           <div>
             <P>{t('article.form.tagLabel')}</P>
             <P>
-              {articleTags && articleTags.length > 0
-                ? articleTags.map((tag, index) => (
+              {articleTags && articleTags.split(',').length > 0
+                ? articleTags.split(',').map((tag, index) => (
                     <Tag key={index}>
                       <FontAwesomeIcon
                         style={{

@@ -22,7 +22,6 @@ const Article = () => {
   const [currentArticle, setCurrentArticle] = useState<IArticleData | null>();
 
   useEffect(() => {
-    // console.log(articles);
     if (articles && (articles as IArticlesDataTypes).data.length > 0) {
       setCurrentArticle(
         (articles as IArticlesDataTypes).data.find(
