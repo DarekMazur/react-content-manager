@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IUserDataTypes } from '../../types/userTypes.ts';
+import { IStrapiUser, IUserDataTypes } from '../../types/userTypes.ts';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -8,7 +8,7 @@ export const usersApi = createApi({
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
-    getUsers: builder.query<IUserDataTypes[], void>({
+    getUsers: builder.query<IStrapiUser[], void>({
       query: () => ({
         url: 'users',
         headers: {

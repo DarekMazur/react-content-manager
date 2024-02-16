@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import InLink from '../../Atoms/InLink/InLink.tsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Loading } from '../../Atoms/Loading/Loading.styles.ts';
 import { IArticlesDataTypes } from '../../../types/articleTypes.ts';
-import { IUserData } from '../../../types/userTypes.ts';
+import { IStrapiUser, IUserData } from '../../../types/userTypes.ts';
 import { ICategoryData } from '../../../types/categoryTypes.ts';
 
 interface IActionIconsTypes {
@@ -42,23 +42,41 @@ interface ITableActionProps {
 }
 
 const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
-  const { data: articles = [], isLoading: articlesLoading } =
-    useGetArticlesQuery();
-  const { data: users = [], isLoading: usersLoading } = useGetUsersQuery();
-  const { data: categories = [], isLoading: categoriesLoading } =
+  const { data: articles, isLoading: articlesLoading } = useGetArticlesQuery();
+  const { data: users, isLoading: usersLoading } = useGetUsersQuery();
+  const { data: categories, isLoading: categoriesLoading } =
     useGetCategoriesQuery();
   const currentUser = useSelector<RootState>((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
 
+  const [category, setCategory] = useState<ICategoryData | null>();
+  const [user, setUser] = useState<IStrapiUser | null>();
+
+  useEffect(() => {
+    if (categories) {
+      const actionCategory = categories.data.find(
+        (category) => category.id === id,
+      );
+      if (actionCategory) {
+        setCategory(actionCategory);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories]);
+
+  useEffect(() => {
+    if (users) {
+      const actionUser = users.find((user) => user.uuid === uuid);
+      if (actionUser) {
+        setUser(actionUser);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   const article = (articles as IArticlesDataTypes).data.find(
     (article) => article.id === id,
-  );
-
-  const user = (users as IUserData[]).find((user) => user.id === id);
-
-  const category = (categories as ICategoryData[]).find(
-    (category) => category.id === id,
   );
 
   const handleDelete = (id: number, type: string) => {
@@ -81,7 +99,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
             switchPopup({
               isOpen: true,
               ids: [id],
-              title: user ? user.attributes.username : undefined,
+              title: user ? user.username : undefined,
             }),
           );
         case 'comments':
