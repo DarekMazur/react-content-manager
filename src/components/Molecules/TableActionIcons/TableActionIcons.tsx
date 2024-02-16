@@ -12,15 +12,13 @@ import {
 } from '../../../store';
 import { styled } from 'styled-components';
 import { StyledInLink } from '../../Atoms/InLink/InLink.styles.ts';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  IUserTypes,
-} from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Loading } from '../../Atoms/Loading/Loading.styles.ts';
+import { IArticlesDataTypes } from '../../../types/articleTypes.ts';
+import { IUserData } from '../../../types/userTypes.ts';
+import { ICategoryData } from '../../../types/categoryTypes.ts';
 
 interface IActionIconsTypes {
   $disabled?: boolean;
@@ -53,19 +51,19 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const article = (articles as IArticleDataTypes).data.find(
+  const article = (articles as IArticlesDataTypes).data.find(
     (article) => article.id === id,
   );
 
-  const user = (users as IUserTypes[]).find((user) => user.id === id);
+  const user = (users as IUserData[]).find((user) => user.id === id);
 
-  const category = (categories as ICategoriesTypes[]).find(
+  const category = (categories as ICategoryData[]).find(
     (category) => category.id === id,
   );
 
   const handleDelete = (id: number, type: string) => {
     if (
-      (currentUser as IUserTypes).id !== id ||
+      (currentUser as IUserData).id !== id ||
       location.pathname !== '/users'
     ) {
       dispatch(clearSelected());
@@ -83,7 +81,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
             switchPopup({
               isOpen: true,
               ids: [id],
-              title: user ? user.username : undefined,
+              title: user ? user.attributes.username : undefined,
             }),
           );
         case 'comments':
@@ -99,7 +97,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
             switchPopup({
               isOpen: true,
               ids: [id],
-              title: category ? category.title : undefined,
+              title: category ? category.attributes.title : undefined,
             }),
           );
       }
@@ -118,7 +116,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
           <FontAwesomeIcon style={{ margin: '0 1rem' }} icon={['fas', 'pen']} />
         }
       />
-      {(currentUser as IUserTypes).id === id &&
+      {(currentUser as IUserData).id === id &&
       location.pathname === '/users' ? (
         <Tippy
           content={<span>You can't delete yourself</span>}
@@ -130,7 +128,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
             as={FontAwesomeIcon}
             onClick={() => handleDelete(id, location.pathname.slice(1))}
             icon={['fas', 'trash']}
-            $disabled={(currentUser as IUserTypes).id === id}
+            $disabled={(currentUser as IUserData).id === id}
           />
         </Tippy>
       ) : (
