@@ -124,7 +124,6 @@ const ArticleForm = () => {
         formData.append('refId', currentArticle.id);
         formData.append('field', 'cover');
 
-        console.log(formData);
         await fetch(`${import.meta.env.VITE_API_URL}upload`, {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
@@ -320,8 +319,6 @@ const ArticleForm = () => {
         publishedAt: publishedStatus(),
       },
     };
-
-    console.log(updatedArticle);
 
     updateArticle({
       data: {
