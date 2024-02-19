@@ -112,7 +112,36 @@ const ArticleForm = () => {
 
   useEffect(() => {
     if (imageUrl) {
-      setArticleCover(imageUrl);
+      const fetchImage = async () => {
+        const myImage = await fetch(imageUrl);
+        const myBlob = await myImage.blob();
+
+        const formData = new FormData();
+        formData.append('files', myBlob, imageUrl);
+        formData.append('ref', 'api::event.event');
+        formData.append('field', 'image');
+        await fetch(`${import.meta.env.VITE_API_URL}upload`, {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+          },
+          method: 'POST',
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const filtered = { ...data[0] };
+            delete filtered.id;
+            const file = {
+              data: {
+                id: data[0].id,
+                attributes: filtered,
+              },
+            };
+            setArticleCover(file);
+          });
+      };
+      // noinspection JSIgnoredPromiseFromCall
+      fetchImage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
@@ -347,9 +376,12 @@ const ArticleForm = () => {
             image={image}
             // defaultImage={articleCover}
             defaultImage={
-              articleCover.data
-                ? articleCover.data.attributes.formats.small.url
-                : placeholder
+              articleCover && (articleCover as IStrapiFileTypes).data
+                ? (articleCover as IStrapiFileTypes).data.attributes.formats
+                    .small.url
+                : imageUrl
+                  ? imageUrl
+                  : placeholder
             }
             altText={`${articleTitle} cover image`}
             imageUrl={imageUrl as string}
@@ -482,6 +514,7 @@ const ArticleForm = () => {
           </FormButtonWrapper>
         </div>
       </StyledArticleForm>
+      {/*<input type="file" id="image" accept="image/*" onChange={handleTest} />*/}
     </>
   );
 };

@@ -36,20 +36,20 @@ export interface IStrapiFileTypes {
         small: IStrapiImageFormat;
         medium: IStrapiFileTypes;
         thumbnail: IStrapiImageFormat;
-        hash: string;
-        ext: string;
-        mime: string;
-        size: number;
-        url: string;
-        previewUrl: null;
-        provider: string;
-        provider_metadata: {
-          public_id: string;
-          resource_type: string;
-          createdAt: Date;
-        };
-        updatedAt: Date;
       };
+      hash: string;
+      ext: string;
+      mime: string;
+      size: number;
+      url: string;
+      previewUrl: null;
+      provider: string;
+      provider_metadata: {
+        public_id: string;
+        resource_type: string;
+      };
+      createdAt: Date;
+      updatedAt: Date;
     };
   };
 }
