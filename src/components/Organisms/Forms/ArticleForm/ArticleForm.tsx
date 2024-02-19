@@ -306,20 +306,6 @@ const ArticleForm = () => {
       navigate('/articles');
     }
 
-    const updatedArticle = {
-      data: {
-        ...currentArticle,
-        title: CKETitle[0].replace(/<\/?h1>/g, ''),
-        description: articleDescription,
-        categories: articleCategories,
-        body: CKEBody,
-        cover: articleCover,
-        isSticky: articleIsSticky,
-        tags: articleTags,
-        publishedAt: publishedStatus(),
-      },
-    };
-
     updateArticle({
       data: {
         ...currentArticle,
