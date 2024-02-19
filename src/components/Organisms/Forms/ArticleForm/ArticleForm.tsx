@@ -118,8 +118,13 @@ const ArticleForm = () => {
 
         const formData = new FormData();
         formData.append('files', myBlob, imageUrl);
-        formData.append('ref', 'api::event.event');
-        formData.append('field', 'image');
+        formData.append('ref', 'api::article.article');
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        formData.append('refId', currentArticle.id);
+        formData.append('field', 'cover');
+
+        console.log(formData);
         await fetch(`${import.meta.env.VITE_API_URL}upload`, {
           headers: {
             Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
@@ -302,16 +307,34 @@ const ArticleForm = () => {
       navigate('/articles');
     }
 
+    const updatedArticle = {
+      data: {
+        ...currentArticle,
+        title: CKETitle[0].replace(/<\/?h1>/g, ''),
+        description: articleDescription,
+        categories: articleCategories,
+        body: CKEBody,
+        cover: articleCover,
+        isSticky: articleIsSticky,
+        tags: articleTags,
+        publishedAt: publishedStatus(),
+      },
+    };
+
+    console.log(updatedArticle);
+
     updateArticle({
-      ...currentArticle,
-      title: CKETitle[0].replace(/<\/?h1>/g, ''),
-      description: articleDescription,
-      categories: articleCategories,
-      body: CKEBody,
-      cover: articleCover,
-      isSticky: articleIsSticky,
-      tags: articleTags,
-      publishedAt: publishedStatus(),
+      data: {
+        ...currentArticle,
+        title: CKETitle[0].replace(/<\/?h1>/g, ''),
+        description: articleDescription,
+        categories: articleCategories,
+        body: CKEBody,
+        cover: articleCover,
+        isSticky: articleIsSticky,
+        tags: articleTags,
+        publishedAt: publishedStatus(),
+      },
     });
   };
 

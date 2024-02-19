@@ -19,8 +19,8 @@ export const articlesApi = createApi({
     }),
     updateArticle: builder.mutation({
       query: (body) => ({
-        url: `articles/${body.id}`,
-        method: 'PATCH',
+        url: `articles/${body.data.id}`,
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
