@@ -303,7 +303,7 @@ const ArticleForm = () => {
         cover:
           typeof articleCover === 'string'
             ? null
-            : (articleCover as IStrapiFileTypes).data.attributes
+            : (articleCover as IStrapiFileTypes).data?.attributes
               ? {
                   data: (articleCover as IStrapiFileTypes).data.attributes,
                   id: (articleCover as IStrapiFileTypes).data.id,

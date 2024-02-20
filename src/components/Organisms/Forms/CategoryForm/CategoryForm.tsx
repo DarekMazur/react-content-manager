@@ -125,7 +125,13 @@ const CategoryForm = () => {
       navigate('/categories');
       return addCategory(updatedCategory);
     }
-    updateCategory(updatedCategory);
+    const dataToUpload = {
+      data: {
+        id: updatedCategory.id,
+        ...updatedCategory.attributes,
+      },
+    };
+    updateCategory(dataToUpload);
   };
 
   const handleOnCancel = () => {

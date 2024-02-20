@@ -10,7 +10,7 @@ export const categoriesApi = createApi({
   endpoints: (builder) => ({
     getCategories: builder.query<ICategoriesDataTypes, void>({
       query: () => ({
-        url: 'categories',
+        url: 'categories?populate=*&pagination[pageSize]=9999',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
@@ -30,8 +30,8 @@ export const categoriesApi = createApi({
     }),
     updateCategory: builder.mutation({
       query: (body) => ({
-        url: `categories/${body.uuid}`,
-        method: 'PATCH',
+        url: `categories/${body.data.id}`,
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
