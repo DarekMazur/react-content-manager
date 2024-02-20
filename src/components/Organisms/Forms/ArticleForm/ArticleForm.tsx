@@ -327,7 +327,6 @@ const ArticleForm = () => {
       navigate('/articles');
     } else {
       dataToUpload.data.updatedAt = new Date();
-      console.log(dataToUpload);
 
       updateArticle(dataToUpload);
     }

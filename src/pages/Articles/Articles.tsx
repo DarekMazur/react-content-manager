@@ -205,7 +205,6 @@ const Articles = () => {
         // @ts-expect-error
         const sortingElementB = b.attributes[(sort as ISortTypes).sortBy];
 
-        console.log(sortingElementA);
         if (
           (sortingElementA ? sortingElementA : 0) <
           (sortingElementB ? sortingElementB : 0)
