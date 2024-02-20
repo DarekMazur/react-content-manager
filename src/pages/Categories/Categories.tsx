@@ -67,10 +67,6 @@ const CategoriesView = () => {
   }, [categories, isSuccess]);
 
   useEffect(() => {
-    console.log(sortedCategories);
-  }, [sortedCategories]);
-
-  useEffect(() => {
     if (sortedCategories) {
       const sorted = [...sortedCategories];
       sorted.sort((a, b) => {

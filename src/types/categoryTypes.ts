@@ -4,7 +4,7 @@ import { IArticleData } from './articleTypes.ts';
 export interface IStrapiCategoriesAttributes {
   title: string;
   uuid: string;
-  description: string | null;
+  description: string;
   createdAt: Date;
   updatedAt: Date;
   locale: string;
@@ -16,6 +16,15 @@ export interface IStrapiCategoriesAttributes {
 
 export interface IAttributesCategories {
   data: ICategoryData[];
+}
+
+export interface ICategoryBaseData {
+  id: number;
+  attributes: {
+    uuid: string;
+    title: string;
+    description: string;
+  };
 }
 
 export interface ICategoryData {

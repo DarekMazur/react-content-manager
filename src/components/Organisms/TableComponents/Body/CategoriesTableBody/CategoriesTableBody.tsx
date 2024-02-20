@@ -41,7 +41,6 @@ const CategoriesTableBody = ({ data }: { data: ICategoryData[] }) => {
 
   return (
     <>
-      {console.log(data)}
       {data.map((category) => (
         <tr key={category.attributes.uuid}>
           <td

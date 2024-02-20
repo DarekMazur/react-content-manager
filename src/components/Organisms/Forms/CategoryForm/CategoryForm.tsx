@@ -6,7 +6,6 @@ import {
 } from '../UserForm/UserForm.styles.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { ICategoriesTypes } from '../../../../types/dataTypes.ts';
 import {
   switchPopup,
   useAddCategoryMutation,
@@ -19,45 +18,57 @@ import Modal from '../../Modal/Modal.tsx';
 import { useDispatch } from 'react-redux';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 import { useTranslation } from 'react-i18next';
+import {
+  ICategoryBaseData,
+  ICategoryData,
+} from '../../../../types/categoryTypes.ts';
 
 const CategoryForm = () => {
-  const initCategory: ICategoriesTypes = {
+  const initCategory: ICategoryBaseData = {
     id: 0,
-    uuid: '',
-    title: '',
-    description: '',
+    attributes: {
+      uuid: '',
+      title: '',
+      description: '',
+    },
   };
   const { t } = useTranslation();
   const { uuid } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: categories = [] } = useGetCategoriesQuery();
+  const { data: categories } = useGetCategoriesQuery();
   const [addCategory] = useAddCategoryMutation();
   const [updateCategory, { status, isSuccess, isLoading }] =
     useUpdateCategoryMutation();
   const [currentCategory, setCurrentCategory] = useState<
-    ICategoriesTypes | undefined
+    ICategoryData | undefined
   >(undefined);
   const [updatedCategory, setUpdatedCategory] =
-    useState<ICategoriesTypes>(initCategory);
-  const [initialValues, setInitialValues] = useState<
-    ICategoriesTypes | undefined
-  >(currentCategory ? { ...currentCategory } : undefined);
+    useState<ICategoryBaseData>(initCategory);
+  const [initialValues, setInitialValues] = useState<ICategoryData | undefined>(
+    currentCategory ? { ...currentCategory } : undefined,
+  );
   const [modal, setModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (categories && categories.length > 0) {
-      setCurrentCategory(categories.find((category) => category.uuid === uuid));
+    if (categories && categories.data.length > 0) {
+      setCurrentCategory(
+        categories.data.find((category) => category.attributes.uuid === uuid),
+      );
       setInitialValues({
-        ...categories.find((category) => category.uuid === uuid)!,
+        ...categories.data.find(
+          (category) => category.attributes.uuid === uuid,
+        )!,
       });
     }
     if (
       currentCategory &&
-      categories.filter(
+      categories &&
+      categories.data.filter(
         (category) =>
-          category.uuid === (currentCategory as ICategoriesTypes).uuid,
+          category.attributes.uuid ===
+          (currentCategory as ICategoryData).attributes.uuid,
       ).length === 0
     ) {
       navigate(-1);
@@ -84,18 +95,29 @@ const CategoryForm = () => {
     const content = e.target.value;
     switch (fieldType) {
       case 'title':
-        return setUpdatedCategory({ ...updatedCategory, title: content });
+        return setUpdatedCategory({
+          id: updatedCategory.id,
+          attributes: {
+            uuid: updatedCategory.attributes.uuid,
+            title: content,
+            description: updatedCategory.attributes.description,
+          },
+        });
       case 'description':
         return setUpdatedCategory({
-          ...updatedCategory,
-          description: content,
+          id: updatedCategory.id,
+          attributes: {
+            uuid: updatedCategory.attributes.uuid,
+            title: updatedCategory.attributes.title,
+            description: content,
+          },
         });
     }
   };
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!updatedCategory.title) {
+    if (!updatedCategory.attributes.title) {
       return setErrorMessage('Title is required');
     }
 
@@ -115,8 +137,8 @@ const CategoryForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentCategory as ICategoriesTypes).id],
-        title: (currentCategory as ICategoriesTypes).title,
+        ids: [(currentCategory as ICategoryData).id],
+        title: (currentCategory as ICategoryData).attributes.title,
       }),
     );
   };
@@ -141,8 +163,8 @@ const CategoryForm = () => {
             label={t('category.form.category')}
             type={'text'}
             id={'title'}
-            value={updatedCategory.title}
-            uuid={updatedCategory.uuid}
+            value={updatedCategory.attributes.title}
+            uuid={updatedCategory.attributes.uuid}
             handleOnChange={(e) => handleOnChange(e, 'title')}
           />
           <FormErrorMessage message={errorMessage} />
@@ -151,7 +173,11 @@ const CategoryForm = () => {
               {t('category.form.description')}
             </label>
             <textarea
-              value={updatedCategory.description}
+              value={
+                updatedCategory.attributes.description
+                  ? updatedCategory.attributes.description
+                  : ''
+              }
               id="description"
               style={{
                 width: '100%',
