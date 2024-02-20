@@ -93,10 +93,10 @@ const ArticleForm = () => {
   const [editorBody, setEditorBody] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const categoriesOptions: IOptionTypes[] = [];
   const articleInitCategories: IOptionTypes[] = [];
 
   useEffect(() => {
+    const categoriesOptions: IOptionTypes[] = [];
     if (categories && categories.data.length > 0) {
       categories.data.map((category) =>
         categoriesOptions.push({
