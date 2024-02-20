@@ -259,8 +259,10 @@ const ArticleForm = () => {
     const newOption = createOption(inputValue);
     setOptions((prev) => [...prev, newOption]);
     const newCategory = {
-      title: newOption.label,
-      description: '',
+      data: {
+        title: newOption.label,
+        description: '',
+      },
     };
     addCategory(newCategory);
   };
