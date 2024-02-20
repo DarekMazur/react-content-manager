@@ -121,16 +121,23 @@ const CategoryForm = () => {
       return setErrorMessage('Title is required');
     }
 
-    if (location.pathname.includes('create')) {
-      navigate('/categories');
-      return addCategory(updatedCategory);
-    }
-    const dataToUpload = {
+    const dataToUpload: {
+      data: {
+        id?: number;
+      };
+    } = {
       data: {
         id: updatedCategory.id,
         ...updatedCategory.attributes,
       },
     };
+
+    if (location.pathname.includes('create')) {
+      delete dataToUpload.data.id;
+      navigate('/categories');
+      return addCategory(dataToUpload);
+    }
+
     updateCategory(dataToUpload);
   };
 

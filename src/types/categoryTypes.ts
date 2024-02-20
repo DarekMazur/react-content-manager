@@ -18,13 +18,15 @@ export interface IAttributesCategories {
   data: ICategoryData[];
 }
 
+export interface ICategoryBaseAttrs {
+  uuid: string;
+  title: string;
+  description: string;
+}
+
 export interface ICategoryBaseData {
   id: number;
-  attributes: {
-    uuid: string;
-    title: string;
-    description: string;
-  };
+  attributes: ICategoryBaseAttrs;
 }
 
 export interface ICategoryData {
