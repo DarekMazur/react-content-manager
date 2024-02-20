@@ -44,7 +44,10 @@ import {
   IArticleData,
   IArticlesDataTypes,
 } from '../../../../types/articleTypes.ts';
-import { IStrapiFileTypes } from '../../../../types/strapiTypes.ts';
+import {
+  IStrapiFileTypes,
+  IStrapiImagePostFormat,
+} from '../../../../types/strapiTypes.ts';
 import { ICategoryData } from '../../../../types/categoryTypes.ts';
 import { IUserData } from '../../../../types/userTypes.ts';
 
@@ -71,7 +74,7 @@ const ArticleForm = () => {
   const [articleTitle, setArticleTitle] = useState<string>('');
   const [articleDescription, setArticleDescription] = useState<string>('');
   const [articleCover, setArticleCover] = useState<
-    IStrapiFileTypes | string | null
+    IStrapiFileTypes | IStrapiImagePostFormat | string | null
   >(placeholder);
   const [articleCategories, setArticleCategories] = useState<ICategoryData[]>(
     [],
@@ -131,14 +134,16 @@ const ArticleForm = () => {
           method: 'POST',
           body: formData,
         })
-          .then((response) => response.json())
+          .then((response) => {
+            return response.json();
+          })
           .then((data) => {
             const filtered = { ...data[0] };
             delete filtered.id;
             const file = {
               data: {
                 id: data[0].id,
-                attributes: filtered,
+                ...filtered,
               },
             };
             setArticleCover(file);
@@ -287,38 +292,37 @@ const ArticleForm = () => {
       return setErrorMessage('Article content is required');
     }
 
-    if (location.pathname.includes('create')) {
-      const newArticle = {
-        ...currentArticle,
-        title: CKETitle[0].replace(/<\/?h1>/g, ''),
-        description: articleDescription,
-        categories: articleCategories,
-        body: CKEBody,
-        cover: articleCover,
-        isSticky: articleIsSticky,
-        tags: articleTags,
-        author: currentUser,
-        publishedAt: publishedStatus(),
-      };
-      createArticle({
-        ...newArticle,
-      });
-      navigate('/articles');
-    }
-
-    updateArticle({
+    const dataToUpload = {
       data: {
-        ...currentArticle,
+        id: currentArticle?.id,
+        ...currentArticle?.attributes,
         title: CKETitle[0].replace(/<\/?h1>/g, ''),
         description: articleDescription,
         categories: articleCategories,
         body: CKEBody,
-        cover: articleCover,
+        cover: typeof articleCover === 'string' ? null : articleCover,
         isSticky: articleIsSticky,
         tags: articleTags,
         publishedAt: publishedStatus(),
+        updatedAt: new Date(),
       },
-    });
+    };
+
+    if (location.pathname.includes('create')) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dataToUpload.data.author = { connect: [1] };
+
+      createArticle(dataToUpload);
+
+      navigate('/articles');
+    } else {
+      dataToUpload.data.updatedAt = new Date();
+
+      updateArticle(dataToUpload);
+
+      navigate(0);
+    }
   };
 
   const handleOnCancel = (e: FormEvent<HTMLFormElement>) => {
@@ -380,11 +384,13 @@ const ArticleForm = () => {
         <aside>
           <ImageController
             image={image}
-            // defaultImage={articleCover}
             defaultImage={
               articleCover && (articleCover as IStrapiFileTypes).data
-                ? (articleCover as IStrapiFileTypes).data.attributes.formats
-                    .small.url
+                ? (articleCover as IStrapiFileTypes).data.attributes
+                  ? (articleCover as IStrapiFileTypes).data.attributes.formats
+                      .small.url
+                  : (articleCover as IStrapiImagePostFormat).data.formats.small
+                      .url
                 : imageUrl
                   ? imageUrl
                   : placeholder
