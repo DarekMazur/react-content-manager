@@ -300,7 +300,15 @@ const ArticleForm = () => {
         description: articleDescription,
         categories: articleCategories,
         body: CKEBody,
-        cover: typeof articleCover === 'string' ? null : articleCover,
+        cover:
+          typeof articleCover === 'string'
+            ? null
+            : (articleCover as IStrapiFileTypes).data.attributes
+              ? {
+                  data: (articleCover as IStrapiFileTypes).data.attributes,
+                  id: (articleCover as IStrapiFileTypes).data.id,
+                }
+              : articleCover,
         isSticky: articleIsSticky,
         tags: articleTags,
         publishedAt: publishedStatus(),
@@ -312,16 +320,16 @@ const ArticleForm = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       dataToUpload.data.author = { connect: [1] };
+      // dataToUpload.data.author = { connect: [currentUser.id] };
 
       createArticle(dataToUpload);
 
       navigate('/articles');
     } else {
       dataToUpload.data.updatedAt = new Date();
+      console.log(dataToUpload);
 
       updateArticle(dataToUpload);
-
-      navigate(0);
     }
   };
 
@@ -351,6 +359,10 @@ const ArticleForm = () => {
 
   const handleCloseModal = () => {
     setModal(false);
+
+    if (status !== 'rejected') {
+      navigate(0);
+    }
   };
 
   const handleDelete = () => {
