@@ -95,6 +95,10 @@ const ArticleForm = () => {
 
   const articleInitCategories: IOptionTypes[] = [];
 
+  const [initCategoriesOption, setInitCategoriesOption] = useState<
+    IOptionTypes[] | null
+  >();
+
   useEffect(() => {
     const categoriesOptions: IOptionTypes[] = [];
     if (categories && categories.data.length > 0) {
@@ -190,12 +194,13 @@ const ArticleForm = () => {
       setArticlePublished(currentArticle.attributes.publishedAt);
       setArticleIsSticky(currentArticle.attributes.isSticky);
 
-      currentArticle.attributes.categories.data.map((category) =>
+      currentArticle.attributes.categories.data.map((category) => {
         articleInitCategories.push({
           value: category.attributes.title,
           label: category.attributes.title,
-        }),
-      );
+        });
+      });
+      setInitCategoriesOption(articleInitCategories);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentArticle]);
@@ -434,19 +439,21 @@ const ArticleForm = () => {
           </P>
           <div style={{ position: 'relative', zIndex: '3' }}>
             {t('article.form.categoryLabel')}{' '}
-            <CreatableSelect
-              noOptionsMessage={() => 'create first category'}
-              defaultValue={articleInitCategories}
-              isMulti
-              isClearable
-              isSearchable
-              closeMenuOnSelect={false}
-              options={options}
-              onChange={(newValue) =>
-                handleSelectChange(newValue as IOptionTypes[])
-              }
-              onCreateOption={handleCreate}
-            />
+            {initCategoriesOption ? (
+              <CreatableSelect
+                noOptionsMessage={() => 'create first category'}
+                defaultValue={initCategoriesOption}
+                isMulti
+                isClearable
+                isSearchable
+                closeMenuOnSelect={false}
+                options={options}
+                onChange={(newValue) =>
+                  handleSelectChange(newValue as IOptionTypes[])
+                }
+                onCreateOption={handleCreate}
+              />
+            ) : null}
           </div>
           <div>
             <P>{t('article.form.tagLabel')}</P>
