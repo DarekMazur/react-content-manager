@@ -16,7 +16,10 @@ import { useLocation } from 'react-router';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Loading } from '../../Atoms/Loading/Loading.styles.ts';
-import { IArticlesDataTypes } from '../../../types/articleTypes.ts';
+import {
+  IArticleData,
+  IArticlesDataTypes,
+} from '../../../types/articleTypes.ts';
 import { IStrapiUser, IUserData } from '../../../types/userTypes.ts';
 import { ICategoryData } from '../../../types/categoryTypes.ts';
 
@@ -52,6 +55,7 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
 
   const [category, setCategory] = useState<ICategoryData | null>();
   const [user, setUser] = useState<IStrapiUser | null>();
+  const [article, setArticle] = useState<IArticleData | null>();
 
   useEffect(() => {
     if (categories) {
@@ -75,9 +79,16 @@ const TableActionIcons: FC<ITableActionProps> = ({ id, uuid }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  const article = (articles as IArticlesDataTypes).data.find(
-    (article) => article.id === id,
-  );
+  useEffect(() => {
+    if (articles) {
+      const actionArticle = (articles as IArticlesDataTypes).data.find(
+        (article) => article.id === id,
+      );
+
+      setArticle(actionArticle);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [articles]);
 
   const handleDelete = (id: number, type: string) => {
     if (
