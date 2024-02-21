@@ -14,40 +14,45 @@ interface ILoggedUser extends IUserData {
 const Root = () => {
   const dispatch = useDispatch();
   const user = useSelector<RootState>((state) => state.user);
-  const { data: users = [], isLoading } = useGetUsersQuery();
+  const { data: users, isLoading } = useGetUsersQuery();
 
   useEffect(() => {
-    if (localStorage.getItem('username') && localStorage.getItem('id')) {
-      const authorised = users.find(
-        (user) => user.uuid === localStorage.getItem('id'),
-      );
+    if (users) {
+      if (localStorage.getItem('username') && localStorage.getItem('id')) {
+        const authorised = users.find(
+          (user) => user.uuid === localStorage.getItem('id'),
+        );
 
-      if (authorised) {
-        if (!authorised.confirmed) {
-          alert(
-            'You are not confirmed. Please check your email and follow instructions.',
-          );
-        }
+        if (authorised) {
+          if (!authorised.confirmed) {
+            alert(
+              'You are not confirmed. Please check your email and follow instructions.',
+            );
+          }
 
-        if (authorised.blocked) {
-          alert('Your account is blocked. Please contact administration.');
+          if (authorised.blocked) {
+            alert('Your account is blocked. Please contact administration.');
+          }
+          dispatch(setUser({ ...authorised, isAuthorised: true }));
         }
-        dispatch(setUser({ ...authorised, isAuthorised: true }));
       }
     }
   }, [dispatch, users]);
 
   const handleMockLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
-    const authorised = users.find(
-      (user) => user.role.id === 1 && user.confirmed && !user.blocked,
-    );
+    if (users) {
+      const authorised = users.find(
+        (user) =>
+          user.role.type === 'administrator' && user.confirmed && !user.blocked,
+      );
 
-    if (authorised) {
-      dispatch(setUser({ ...authorised, isAuthorised: true }));
-      localStorage.setItem('username', authorised.username);
-      localStorage.setItem('id', authorised.uuid);
-    } else alert("You're not authorised");
+      if (authorised) {
+        dispatch(setUser({ ...authorised, isAuthorised: true }));
+        localStorage.setItem('username', authorised.username);
+        localStorage.setItem('id', authorised.uuid);
+      } else alert("You're not authorised");
+    }
   };
 
   if (isLoading) {

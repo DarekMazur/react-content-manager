@@ -4,13 +4,13 @@ import { IStrapiUser } from '../../types/userTypes.ts';
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
     getUsers: builder.query<IStrapiUser[], void>({
       query: () => ({
-        url: 'users',
+        url: 'users?publicationState=preview&populate=*&pagination[pageSize]=9999',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
