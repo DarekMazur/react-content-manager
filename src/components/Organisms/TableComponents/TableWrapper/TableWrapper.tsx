@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { ITableHeaders } from '../../../../types/dataTypes';
 import { IArticleData } from '../../../../types/articleTypes.ts';
-import { IUserData } from '../../../../types/userTypes.ts';
+import { IStrapiUser } from '../../../../types/userTypes.ts';
 import { ICommentData } from '../../../../types/commentTypes.ts';
 import { ICategoryData } from '../../../../types/categoryTypes.ts';
 
@@ -16,7 +16,7 @@ const TableWrapper = ({
   content,
   headers,
 }: {
-  content: IArticleData[] | IUserData[] | ICommentData[] | ICategoryData[];
+  content: IArticleData[] | IStrapiUser[] | ICommentData[] | ICategoryData[];
   headers: ITableHeaders[];
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();

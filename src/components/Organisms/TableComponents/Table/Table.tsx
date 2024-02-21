@@ -7,13 +7,13 @@ import CommentsTableBody from '../Body/CommentsTableBody/CommentsTableBody.tsx';
 import CategoriesTableBody from '../Body/CategoriesTableBody/CategoriesTableBody.tsx';
 import TableSorting from '../../../Molecules/TableSorting/TableSorting.tsx';
 import { IArticleData } from '../../../../types/articleTypes.ts';
-import { IUserData } from '../../../../types/userTypes.ts';
+import { IStrapiUser } from '../../../../types/userTypes.ts';
 import { ICommentData } from '../../../../types/commentTypes.ts';
 import { ICategoryData } from '../../../../types/categoryTypes.ts';
 
 interface ITableProps {
   headers: ITableHeaders[];
-  data: IArticleData[] | IUserData[] | ICommentData[] | ICategoryData[];
+  data: IArticleData[] | IStrapiUser[] | ICommentData[] | ICategoryData[];
   tag: string;
 }
 
@@ -23,7 +23,7 @@ const Table: FC<ITableProps> = ({ headers, data, tag }) => {
       case 'articles':
         return <ArticlesTableBody data={data as IArticleData[]} />;
       case 'users':
-        return <UsersTableBody data={data as IUserData[]} />;
+        return <UsersTableBody data={data as IStrapiUser[]} />;
       case 'comments':
         return <CommentsTableBody data={data as ICommentData[]} />;
       case 'categories':
