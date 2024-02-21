@@ -130,11 +130,12 @@ const CommentForm = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     if (currentComment) {
-      const updatedComment = { ...currentComment };
-      updatedComment.attributes.shadowed = (
-        e.target as HTMLInputElement
-      ).checked;
-      setCurrentComment({ ...(updatedComment as ICommentData) });
+      const updatedCommentStatus = { ...currentComment.attributes };
+      updatedCommentStatus.shadowed = (e.target as HTMLInputElement).checked;
+      setCurrentComment({
+        id: currentComment.id,
+        attributes: updatedCommentStatus,
+      });
     }
   };
 
