@@ -46,7 +46,7 @@ const Article = () => {
         {!currentArticle ||
         (currentUser as IStrapiUser).uuid ===
           currentArticle.attributes.author.data.attributes.uuid ||
-        (currentUser as IStrapiUser).role.type === 'admin' ||
+        (currentUser as IStrapiUser).role.type === 'administrator' ||
         (currentUser as IStrapiUser).role.type === 'redactor' ? (
           <ArticleForm />
         ) : (

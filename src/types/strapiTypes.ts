@@ -32,7 +32,7 @@ export interface IStrapiImageAttributes {
   formats: {
     large: IStrapiImageFormat;
     small: IStrapiImageFormat;
-    medium: IStrapiFileTypes;
+    medium: IStrapiImageFormat;
     thumbnail: IStrapiImageFormat;
   };
   hash: string;

@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { RootState, useGetUsersQuery } from '../../store';
-import { IUserTypes } from '../../types/dataTypes';
 import UserForm from '../../components/Organisms/Forms/UserForm/UserForm';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import UnauthorisedView from '../UnauthorisedView/UnauthorisedView.tsx';
+import { IStrapiUser } from '../../types/userTypes.ts';
 
 const UserView = () => {
   const { uuid } = useParams();
@@ -18,9 +18,9 @@ const UserView = () => {
   return (
     <>
       {users.length > 0 ? (
-        (currentUser as IUserTypes).uuid === uuid ||
-        (currentUser as IUserTypes).role.type === 'admin' ||
-        (currentUser as IUserTypes).role.type === 'redactor' ? (
+        (currentUser as IStrapiUser).uuid === uuid ||
+        (currentUser as IStrapiUser).role.type === 'administrator' ||
+        (currentUser as IStrapiUser).role.type === 'redactor' ? (
           <UserForm uuid={uuid as string} />
         ) : (
           <UnauthorisedView />

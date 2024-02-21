@@ -122,7 +122,6 @@ const ArticleForm = () => {
       const fetchImage = async () => {
         const myImage = await fetch(imageUrl);
         const myBlob = await myImage.blob();
-
         const formData = new FormData();
         formData.append('files', myBlob, imageUrl);
         formData.append('ref', 'api::article.article');

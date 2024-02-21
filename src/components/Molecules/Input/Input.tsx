@@ -42,7 +42,7 @@ const Input: FC<IInputTypes> = ({
         onKeyUp={(e) => (handleKeyPress ? handleKeyPress(e) : {})}
         disabled={
           (currentUser as IUserTypes).uuid !== uuid &&
-          (currentUser as IUserTypes).role.type !== 'admin'
+          (currentUser as IUserTypes).role.type !== 'administrator'
         }
       />
     </FormWrapper>

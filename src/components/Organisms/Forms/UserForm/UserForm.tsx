@@ -16,7 +16,6 @@ import {
   useGetUsersQuery,
   useUpdateUserMutation,
 } from '../../../../store';
-import { IUserTypes } from '../../../../types/dataTypes';
 import { roles } from '../../../../mocks/db';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import Modal from '../../Modal/Modal';
@@ -25,19 +24,24 @@ import Input from '../../../Molecules/Input/Input';
 import InputCheckbox from '../../../Molecules/InputCheckbox/InputCheckbox';
 import InputSelect from '../../../Molecules/InputSelect/InputSelect';
 import { useTranslation } from 'react-i18next';
+import { IStrapiUser } from '../../../../types/userTypes.ts';
+import userIcon from '../../../../assets/user.png';
+import user from '../../../../pages/User/User.tsx';
+import { IStrapiImageAttributes } from '../../../../types/strapiTypes.ts';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { data: users = [], isLoading } = useGetUsersQuery();
-  const currentUser = useSelector<RootState>((state) => state.user);
   const [updateUser, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateUserMutation();
-  const dispatch = useDispatch();
+  const currentUser = useSelector<RootState>((state) => state.user);
 
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
-  const [userData, setUserData] = useState<IUserTypes | undefined>(undefined);
+  const [userData, setUserData] = useState<IStrapiUser | undefined>(undefined);
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
@@ -46,18 +50,59 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   useEffect(() => {
     if (imageUrl && userData) {
-      const updateUser: IUserTypes = { ...userData };
-      updateUser.avatar = imageUrl;
-      setUserData({ ...(updateUser as IUserTypes) });
+      const fetchImage = async () => {
+        const myImage = await fetch(imageUrl);
+        const myBlob = await myImage.blob();
+
+        const formData = new FormData();
+        formData.append('files', myBlob, imageUrl);
+        formData.append('ref', 'plugin::users-permissions.user');
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        formData.append('refId', userData.id);
+        formData.append('field', 'avatar');
+
+        await fetch(`${import.meta.env.VITE_API_URL}upload`, {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+          },
+          method: 'POST',
+          body: formData,
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            const file = { ...data[0] };
+            // delete filtered.id;
+            // const file = {
+            //   data: {
+            //     id: data[0].id,
+            //     ...filtered,
+            //   },
+            // };
+            console.log(file);
+            setUserData({
+              ...updateUser,
+              avatar: file as IStrapiImageAttributes,
+            });
+            // userData.avatar = file;
+          });
+      };
+      // noinspection JSIgnoredPromiseFromCall
+      fetchImage();
+      // const updateUser: IStrapiUser = { ...userData };
+      // updateUser.avatar.formats.medium.url = imageUrl;
+      // setUserData({ ...(updateUser as IStrapiUser) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
 
   useEffect(() => {
-    setUserData(users.find((user) => user.uuid === uuid) as IUserTypes);
+    setUserData(users.find((user) => user.uuid === uuid) as IStrapiUser);
     if (
       userData &&
-      users.filter((user) => user.uuid === (userData as IUserTypes).uuid)
+      users.filter((user) => user.uuid === (userData as IStrapiUser).uuid)
         .length === 0
     ) {
       navigate(-1);
@@ -73,22 +118,22 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    fieldType: keyof IUserTypes,
+    fieldType: keyof IStrapiUser,
   ) => {
     if (userData) {
-      const updateUser: IUserTypes = { ...userData };
+      const updateUser: IStrapiUser = { ...userData };
       if (fieldType === 'role') {
         const newRole = roles.find((role) => role.name === e.target.value);
         updateUser[fieldType] = newRole || userData?.role;
-        setUserData({ ...(updateUser as IUserTypes) });
+        setUserData({ ...(updateUser as IStrapiUser) });
       } else {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
+        // @ts-ignore
         updateUser[fieldType] =
           e.target.type === 'checkbox'
             ? (e.target as HTMLInputElement).checked
             : e.target.value;
-        setUserData({ ...(updateUser as IUserTypes) });
+        setUserData({ ...(updateUser as IStrapiUser) });
       }
     }
   };
@@ -97,13 +142,13 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     e.preventDefault();
 
     updateUser({ ...userData });
-    if (userData && userData.uuid === (currentUser as IUserTypes).uuid) {
+    if (userData && userData.uuid === (currentUser as IStrapiUser).uuid) {
       dispatch(setUser({ ...userData, isAuthorised: true }));
     }
   };
 
   const handleCancel = () => {
-    setUserData(users.find((user) => user.uuid === uuid) as IUserTypes);
+    setUserData(users.find((user) => user.uuid === uuid) as IStrapiUser);
     setImage([]);
     navigate(-1);
   };
@@ -112,8 +157,8 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(userData as IUserTypes).id],
-        title: (userData as IUserTypes).username,
+        ids: [(userData as IStrapiUser).id],
+        title: (userData as IStrapiUser).username,
       }),
     );
   };
@@ -141,7 +186,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
       <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
         <ImageController
           image={image}
-          defaultImage={userData.avatar}
+          defaultImage={userData.avatar ? userData.avatar.url : userIcon}
           altText={userData.username}
           imageUrl={imageUrl as string}
           uuid={uuid}
@@ -197,7 +242,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
                 {t('form.cancelButton')}
               </FormButton>
             </EditButtonsWrapper>
-            {(currentUser as IUserTypes).uuid !== userData.uuid && (
+            {(currentUser as IStrapiUser).uuid !== userData.uuid && (
               <FormButton $type="delete" type="button" onClick={handleDelete}>
                 <FontAwesomeIcon icon={['fas', 'trash']} />{' '}
                 {t('form.deleteButton')}

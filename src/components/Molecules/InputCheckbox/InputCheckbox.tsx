@@ -48,7 +48,7 @@ const InputCheckbox: FC<ICheckboxTypes> = ({
             disabled={
               uuid
                 ? (currentUser as IUserTypes).uuid === uuid ||
-                  (currentUser as IUserTypes).role.type !== 'admin'
+                  (currentUser as IUserTypes).role.type !== 'administrator'
                 : false
             }
           />

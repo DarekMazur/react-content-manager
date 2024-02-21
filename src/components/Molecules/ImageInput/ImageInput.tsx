@@ -3,7 +3,7 @@ import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useTranslation } from 'react-i18next';
-import { IUserData } from '../../../types/userTypes.ts';
+import { IStrapiUser } from '../../../types/userTypes.ts';
 
 interface IImageTypes {
   uuid?: string;
@@ -31,8 +31,8 @@ const ImageInput: FC<IImageTypes> = ({ uuid, onFilesChange }) => {
         accept="image/*"
         onChange={handleImageChange}
         disabled={
-          (currentUser as IUserData).uuid !== uuid &&
-          (currentUser as IUserData).role.type !== 'admin'
+          (currentUser as IStrapiUser).uuid !== uuid &&
+          (currentUser as IStrapiUser).role.type !== 'administrator'
         }
       />
     </FormWrapper>
