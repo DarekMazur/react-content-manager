@@ -7,7 +7,6 @@ import {
   useUpdateUserMutation,
 } from '../../../../store';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { ICommentTypes, IUserTypes } from '../../../../types/dataTypes.ts';
 import Heading from '../../../Atoms/Heading/Heading.tsx';
 import InLink from '../../../Atoms/InLink/InLink.tsx';
 import { getDate } from '../../../../utils/methods/getDate.ts';
@@ -32,6 +31,9 @@ import {
 import Modal from '../../Modal/Modal.tsx';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { ICommentData } from '../../../../types/commentTypes.ts';
+import { IUserData } from '../../../../types/userTypes.ts';
+import userIcon from '../../../../assets/user.png';
 
 const CommentForm = () => {
   const { t } = useTranslation();
@@ -44,12 +46,12 @@ const CommentForm = () => {
   ] = useUpdateUserMutation();
   const [updateComment, { status, isSuccess, isLoading }] =
     useUpdateCommentMutation();
-  const { data: comments = [] } = useGetCommentsQuery();
+  const { data: comments } = useGetCommentsQuery();
   const { data: users = [] } = useGetUsersQuery();
 
-  const [userData, setUserData] = useState<IUserTypes | undefined>(undefined);
+  const [userData, setUserData] = useState<IUserData | undefined>(undefined);
   const [currentComment, setCurrentComment] = useState<
-    ICommentTypes | undefined
+    ICommentData | undefined
   >(undefined);
   const [initialData, setInitialData] = useState({
     authorBlocked: false,
@@ -61,37 +63,50 @@ const CommentForm = () => {
   );
 
   useEffect(() => {
-    setInitialData({
-      authorBlocked: !!users.find(
-        (user) => user.uuid === currentComment?.author.uuid,
-      )?.blocked,
-      commentShadowed: !!comments.find((comment) => comment.uuid === uuid)
-        ?.shadowed,
-    });
-    if (
-      currentComment &&
-      comments.filter(
-        (comment) => comment.uuid === (currentComment as ICommentTypes).uuid,
-      ).length === 0
-    ) {
-      navigate(-1);
+    if (comments) {
+      setInitialData({
+        authorBlocked: !!users.find(
+          (user) =>
+            user.uuid ===
+            currentComment?.attributes.author.data.attributes.uuid,
+        )?.blocked,
+        commentShadowed: !!comments.data.find(
+          (comment) => comment.attributes.uuid === uuid,
+        )?.attributes.shadowed,
+      });
+      if (
+        currentComment &&
+        comments.data.filter(
+          (comment) =>
+            comment.attributes.uuid ===
+            (currentComment as ICommentData).attributes.uuid,
+        ).length === 0
+      ) {
+        navigate(-1);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, comments, uuid]);
 
   useEffect(() => {
+    // if (currentComment && users.length > 0) {
+    //   setUserData(
+    //     users.find(
+    //       (user) =>
+    //         (user as IUserData).id === currentComment.attributes.author.data.id,
+    //     ),
+    //   );
+    // }
     if (currentComment && users.length > 0) {
-      setUserData(
-        users.find(
-          (user) => (user as IUserTypes).uuid === currentComment.author.uuid,
-        ),
-      );
+      setUserData(users.find((user) => (user as IUserData).id === 1));
     }
   }, [currentComment, users]);
 
   useEffect(() => {
-    if (comments.length > 0) {
-      setCurrentComment(comments.find((comment) => comment.uuid === uuid));
+    if (comments && comments.data.length > 0) {
+      setCurrentComment(
+        comments.data.find((comment) => comment.attributes.uuid === uuid),
+      );
     }
   }, [comments, uuid]);
 
@@ -105,9 +120,9 @@ const CommentForm = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     if (currentComment) {
-      const updateUser: IUserTypes = { ...currentComment.author };
+      const updateUser: IUserData = { ...currentComment.attributes.author };
       updateUser.blocked = (e.target as HTMLInputElement).checked;
-      setUserData({ ...(updateUser as IUserTypes) });
+      setUserData({ ...(updateUser as IUserData) });
     }
   };
 
@@ -116,8 +131,10 @@ const CommentForm = () => {
   ) => {
     if (currentComment) {
       const updatedComment = { ...currentComment };
-      updatedComment.shadowed = (e.target as HTMLInputElement).checked;
-      setCurrentComment({ ...(updatedComment as ICommentTypes) });
+      updatedComment.attributes.shadowed = (
+        e.target as HTMLInputElement
+      ).checked;
+      setCurrentComment({ ...(updatedComment as ICommentData) });
     }
   };
 
@@ -125,7 +142,7 @@ const CommentForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentComment as ICommentTypes).id],
+        ids: [(currentComment as ICommentData).id],
         title: undefined,
       }),
     );
@@ -144,10 +161,14 @@ const CommentForm = () => {
   const handleOnCancel = () => {
     setUserData(
       users.find(
-        (user) => user.uuid === (currentComment as ICommentTypes).author.uuid,
+        (user) =>
+          user.id ===
+          (currentComment as ICommentData).attributes.author.data.id,
       ),
     );
-    setCurrentComment(comments.find((comment) => comment.uuid === uuid));
+    setCurrentComment(
+      comments!.data.find((comment) => comment.attributes.uuid === uuid),
+    );
     navigate(-1);
   };
 
@@ -180,15 +201,26 @@ const CommentForm = () => {
               </P>
               <CommentDetailList>
                 <li>
-                  {t('comment.form.details.article')}{' '}
-                  <InLink
-                    target={`/articles/${currentComment?.article.id}`}
-                    name={currentComment?.article.title}
-                  ></InLink>
+                  {currentComment?.attributes.article.data ? (
+                    <>
+                      {t('comment.form.details.article')}{' '}
+                      <InLink
+                        target={`/articles/${currentComment?.attributes.article.data.id}`}
+                        name={
+                          currentComment?.attributes.article.data.attributes
+                            .title
+                        }
+                      ></InLink>
+                    </>
+                  ) : (
+                    <i>Article is not longer available</i>
+                  )}
                 </li>
                 <li>
                   {t('comment.form.details.publicationDate')}{' '}
-                  {getDate((currentComment as ICommentTypes).publishedAt)}
+                  {getDate(
+                    (currentComment as ICommentData).attributes.createdAt,
+                  )}
                 </li>
                 {userData.role.id !== 3 ? (
                   <li>
@@ -207,7 +239,7 @@ const CommentForm = () => {
               </CommentDetailList>
               <CommentContent>
                 <FontAwesomeIcon icon={['fas', 'quote-left']} />
-                <P>{currentComment?.content}</P>
+                <P>{currentComment?.attributes.body}</P>
                 <FontAwesomeIcon icon={['fas', 'quote-right']} />
               </CommentContent>
 
@@ -215,7 +247,7 @@ const CommentForm = () => {
                 <InputCheckbox
                   label={t('comment.form.details.shadowBan')}
                   id="blocked"
-                  value={(currentComment as ICommentTypes).shadowed}
+                  value={(currentComment as ICommentData).attributes.shadowed}
                   uuid={uuid}
                   handleOnChange={(e) => handleOnShadow(e)}
                 />
@@ -226,17 +258,29 @@ const CommentForm = () => {
                 {t('comment.form.author.title')}
               </P>
               <StyledImageControler>
-                <img src={currentComment?.author.avatar} alt="" />
+                <img
+                  src={
+                    currentComment?.attributes.author.data.attributes.avatar
+                      ? currentComment?.attributes.author.data.attributes.avatar
+                      : userIcon
+                  }
+                  alt=""
+                />
               </StyledImageControler>
               <P>
                 <InLink
-                  target={`/users/${currentComment?.author.uuid}`}
-                  name={currentComment?.author.username}
+                  target={`/users/${currentComment?.attributes.author.data.attributes.uuid}`}
+                  name={
+                    currentComment?.attributes.author.data.attributes.username
+                  }
                 ></InLink>
               </P>
               <P>
                 {t('comment.form.author.role')}{' '}
-                {currentComment?.author.role.name}
+                {
+                  currentComment?.attributes.author.data.attributes.role.data
+                    .attributes.name
+                }
               </P>
               <P>
                 {t('comment.form.author.status.title')}{' '}
@@ -257,7 +301,7 @@ const CommentForm = () => {
               <InputCheckbox
                 label={t('comment.form.author.blocked')}
                 id="blocked"
-                value={(userData as IUserTypes).blocked}
+                value={(userData as IUserData).blocked}
                 uuid={uuid}
                 handleOnChange={(e) => handleOnChange(e)}
               />

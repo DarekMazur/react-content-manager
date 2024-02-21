@@ -10,7 +10,7 @@ export const commentsApi = createApi({
   endpoints: (builder) => ({
     getComments: builder.query<ICommentsDataTypes, void>({
       query: () => ({
-        url: 'comments?publicationState=preview&populate[0]=author&populate[1]=article&populate[2]=article.author',
+        url: 'comments?publicationState=preview&populate[0]=author&populate[1]=author.role&populate[2]=article&populate[3]=article.author',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
