@@ -156,7 +156,9 @@ const CommentForm = () => {
       return updateUser(userData);
     }
     setUpdatedElement(t('modal.element.comment'));
-    updateComment(currentComment);
+    updateComment({
+      data: { id: currentComment?.id, ...currentComment?.attributes },
+    });
   };
 
   const handleOnCancel = () => {

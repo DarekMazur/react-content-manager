@@ -19,8 +19,8 @@ export const commentsApi = createApi({
     }),
     updateComment: builder.mutation({
       query: (body) => ({
-        url: `comments/${body.id}`,
-        method: 'PATCH',
+        url: `comments/${body.data.id}`,
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
