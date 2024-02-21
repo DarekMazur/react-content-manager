@@ -1,7 +1,7 @@
 import { IStrapiUserArticleTypes } from './articleTypes.ts';
 import { IStrapiRoles } from './roleTypes.ts';
 import { ICommentTypes } from './commentTypes.ts';
-import { IStrapiMeta } from './strapiTypes.ts';
+import { IStrapiImageAttributes, IStrapiMeta } from './strapiTypes.ts';
 
 export interface IUserTypes {
   username: string;
@@ -19,6 +19,7 @@ export interface IStrapiUser extends IUserTypes {
   role: IStrapiRoles;
   comment: ICommentTypes;
   articles: Array<IStrapiUserArticleTypes>;
+  avatar: IStrapiImageAttributes | null;
 }
 
 export interface IStrapiAttributeUser {
