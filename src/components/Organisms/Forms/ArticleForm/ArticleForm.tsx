@@ -49,7 +49,7 @@ import {
   IStrapiImagePostFormat,
 } from '../../../../types/strapiTypes.ts';
 import { ICategoryData } from '../../../../types/categoryTypes.ts';
-import { IUserData } from '../../../../types/userTypes.ts';
+import { IStrapiUser } from '../../../../types/userTypes.ts';
 
 interface IOptionTypes {
   readonly label: string;
@@ -422,12 +422,12 @@ const ArticleForm = () => {
               target={
                 currentArticle
                   ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
-                  : `/users/${(currentUser as IUserData).uuid}`
+                  : `/users/${(currentUser as IStrapiUser).uuid}`
               }
               name={
                 currentArticle
                   ? currentArticle.attributes.author.data.attributes.username
-                  : (currentUser as IUserData).username
+                  : (currentUser as IStrapiUser).username
               }
             />
           </P>
