@@ -34,6 +34,7 @@ import { useTranslation } from 'react-i18next';
 import { ICommentData } from '../../../../types/commentTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
+import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
 
 const CommentForm = () => {
   const { t } = useTranslation();
@@ -220,7 +221,7 @@ const CommentForm = () => {
                       ></InLink>
                     </>
                   ) : (
-                    <i>Article is not longer available</i>
+                    <Italic>Article is not longer available</Italic>
                   )}
                 </li>
                 <li>
@@ -320,7 +321,7 @@ const CommentForm = () => {
                 </>
               ) : (
                 <P>
-                  <i>Author is not longer available</i>
+                  <Italic>{t('article.form.noAuthor')}</Italic>
                 </P>
               )}
             </aside>

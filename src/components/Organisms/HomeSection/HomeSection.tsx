@@ -8,6 +8,7 @@ import { useGetArticlesQuery, useGetCommentsQuery } from '../../../store';
 import { useTranslation } from 'react-i18next';
 import { IArticleData } from '../../../types/articleTypes.ts';
 import { ICommentData } from '../../../types/commentTypes.ts';
+import { Italic } from '../../Atoms/Italic/Italic.styles.ts';
 
 const HomeSection = () => {
   const { t } = useTranslation();
@@ -76,7 +77,7 @@ const HomeSection = () => {
                     .author.data.attributes.username,
                 })
               ) : (
-                <i>{t('article.form.noAuthor')}</i>
+                <Italic>{t('article.form.noAuthor')}</Italic>
               )}{' '}
               ({latestArticle.publishedDate})
             </P>

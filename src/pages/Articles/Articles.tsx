@@ -104,7 +104,7 @@ const Articles = () => {
           (articles as IArticlesDataTypes).data.map((article) => ({
             label: article.attributes.author.data
               ? article.attributes.author.data.attributes.username
-              : 'Author deleted',
+              : t('article.form.noAuthor'),
             id: article.attributes.author.data
               ? article.attributes.author.data.id
               : 0,
@@ -177,10 +177,10 @@ const Articles = () => {
       } else if ((sort as ISortTypes).sortBy === 'author') {
         const authorA = a.attributes.author.data
           ? a.attributes.author.data.attributes.username
-          : 'Author deleted';
+          : t('article.form.noAuthor');
         const authorB = b.attributes.author.data
           ? b.attributes.author.data.attributes.username
-          : 'Author deleted';
+          : t('article.form.noAuthor');
 
         if (authorA < authorB) {
           return -1;

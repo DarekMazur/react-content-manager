@@ -12,6 +12,7 @@ import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
 import { ICommentData } from '../../../../../types/commentTypes.ts';
 import { IStrapiUser } from '../../../../../types/userTypes.ts';
 import { useTranslation } from 'react-i18next';
+import { Italic } from '../../../../Atoms/Italic/Italic.styles.ts';
 
 const CommentsTableBody = ({ data }: { data: ICommentData[] }) => {
   const { t } = useTranslation();
@@ -96,14 +97,14 @@ const CommentsTableBody = ({ data }: { data: ICommentData[] }) => {
             {comment.attributes.author.data ? (
               comment.attributes.author.data.attributes.username
             ) : (
-              <i>{t('article.form.noAuthor')}</i>
+              <Italic>{t('article.form.noAuthor')}</Italic>
             )}
           </td>
           <td style={{ textAlign: 'left' }}>
             {comment.attributes.article.data ? (
               comment.attributes.article.data.attributes.title
             ) : (
-              <i>{t('comment.form.details.noArticle')}</i>
+              <Italic>{t('comment.form.details.noArticle')}</Italic>
             )}
           </td>
           <td style={{ textAlign: 'left' }}>
