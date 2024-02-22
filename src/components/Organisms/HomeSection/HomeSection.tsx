@@ -93,10 +93,14 @@ const HomeSection = () => {
         {latestComment.latest ? (
           <>
             <P>
-              {t('home.lastCommentDetails', {
-                username: (latestComment.latest as ICommentData).attributes
-                  .author.data.attributes.username,
-              })}{' '}
+              {(latestComment.latest as ICommentData).attributes.author.data ? (
+                t('home.lastCommentDetails', {
+                  username: (latestComment.latest as ICommentData).attributes
+                    .author.data.attributes.username,
+                })
+              ) : (
+                <Italic>{t('article.form.noAuthor')}</Italic>
+              )}{' '}
               <InLink
                 target={`articles/${
                   (latestComment.latest as ICommentData).attributes.article.data
