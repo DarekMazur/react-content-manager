@@ -122,6 +122,7 @@
     "form": {
       "newArticle": "New article",
       "author": "by",
+      "noAuthor": "Deleted user",
       "description": "Article description",
       "draft": "Draft",
       "categoryLabel": "category:",
@@ -174,6 +175,7 @@
       "details": {
         "header": "Comment's details:",
         "article": "Commented article:",
+        "noArticle": "Commented article is not available",
         "publicationDate": "Publication date:",
         "status": {
           "title": "Status:",

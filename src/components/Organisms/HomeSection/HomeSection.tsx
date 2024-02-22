@@ -8,6 +8,7 @@ import { useGetArticlesQuery, useGetCommentsQuery } from '../../../store';
 import { useTranslation } from 'react-i18next';
 import { IArticleData } from '../../../types/articleTypes.ts';
 import { ICommentData } from '../../../types/commentTypes.ts';
+import { Italic } from '../../Atoms/Italic/Italic.styles.ts';
 
 const HomeSection = () => {
   const { t } = useTranslation();
@@ -76,7 +77,7 @@ const HomeSection = () => {
                     .author.data.attributes.username,
                 })
               ) : (
-                <i>Author is not longer available</i>
+                <Italic>{t('article.form.noAuthor')}</Italic>
               )}{' '}
               ({latestArticle.publishedDate})
             </P>
@@ -92,10 +93,14 @@ const HomeSection = () => {
         {latestComment.latest ? (
           <>
             <P>
-              {t('home.lastCommentDetails', {
-                username: (latestComment.latest as ICommentData).attributes
-                  .author.data.attributes.username,
-              })}{' '}
+              {(latestComment.latest as ICommentData).attributes.author.data ? (
+                t('home.lastCommentDetails', {
+                  username: (latestComment.latest as ICommentData).attributes
+                    .author.data.attributes.username,
+                })
+              ) : (
+                <Italic>{t('article.form.noAuthor')}</Italic>
+              )}{' '}
               <InLink
                 target={`articles/${
                   (latestComment.latest as ICommentData).attributes.article.data

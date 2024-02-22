@@ -12,8 +12,11 @@ import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 // import { db } from '../../../../../mocks/db';
 import { IArticleData } from '../../../../../types/articleTypes.ts';
+import { useTranslation } from 'react-i18next';
+import { Italic } from '../../../../Atoms/Italic/Italic.styles.ts';
 
 const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
@@ -89,9 +92,11 @@ const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
           </td>
           <td style={{ textAlign: 'left' }}>{article.attributes.title}</td>
           <td style={{ textAlign: 'left' }}>
-            {article.attributes.author.data
-              ? article.attributes.author.data.attributes.username
-              : 'Author deleted'}
+            {article.attributes.author.data ? (
+              article.attributes.author.data.attributes.username
+            ) : (
+              <Italic>{t('article.form.noAuthor')}</Italic>
+            )}
           </td>
           <td>
             <Checkbox
@@ -111,7 +116,7 @@ const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
             )}
           </td>
           <td>
-            4{/*{db.comment.count({*/}
+            {/*{db.comment.count({*/}
             {/*  where: {*/}
             {/*    article: {*/}
             {/*      uuid: {*/}
