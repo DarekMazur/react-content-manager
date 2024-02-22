@@ -26,8 +26,6 @@ import InputSelect from '../../../Molecules/InputSelect/InputSelect';
 import { useTranslation } from 'react-i18next';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
-import user from '../../../../pages/User/User.tsx';
-import { IStrapiImageAttributes } from '../../../../types/strapiTypes.ts';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
   const { t } = useTranslation();
@@ -74,26 +72,13 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           })
           .then((data) => {
             const file = { ...data[0] };
-            // delete filtered.id;
-            // const file = {
-            //   data: {
-            //     id: data[0].id,
-            //     ...filtered,
-            //   },
-            // };
-            console.log(file);
-            setUserData({
-              ...updateUser,
-              avatar: file as IStrapiImageAttributes,
-            });
-            // userData.avatar = file;
+            const updateUser: IStrapiUser = { ...userData };
+            updateUser.avatar = file;
+            setUserData({ ...(updateUser as IStrapiUser) });
           });
       };
       // noinspection JSIgnoredPromiseFromCall
       fetchImage();
-      // const updateUser: IStrapiUser = { ...userData };
-      // updateUser.avatar.formats.medium.url = imageUrl;
-      // setUserData({ ...(updateUser as IStrapiUser) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
