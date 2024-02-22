@@ -124,6 +124,7 @@
     "form": {
       "newArticle": "Nowy artykuł",
       "author": "utworzony przez",
+      "noAuthor": "Usunięty użytkownik",
       "description": "Opis artykułu",
       "draft": "Szkic",
       "categoryLabel": "kategoria:",
@@ -176,6 +177,7 @@
       "details": {
         "header": "Szczegóły komentarza:",
         "article": "Komentowany artykuł:",
+        "noArticle": "Komentowany artykuł nie jest już dostępny",
         "publicationDate": "Data publikacji:",
         "status": {
           "title": "Status:",

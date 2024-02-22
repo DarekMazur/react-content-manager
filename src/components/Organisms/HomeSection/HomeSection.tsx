@@ -76,7 +76,7 @@ const HomeSection = () => {
                     .author.data.attributes.username,
                 })
               ) : (
-                <i>Author is not longer available</i>
+                <i>{t('article.form.noAuthor')}</i>
               )}{' '}
               ({latestArticle.publishedDate})
             </P>

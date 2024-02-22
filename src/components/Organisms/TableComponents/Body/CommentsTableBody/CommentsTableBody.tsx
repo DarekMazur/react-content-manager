@@ -10,9 +10,11 @@ import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
 import { ICommentData } from '../../../../../types/commentTypes.ts';
-import { IUserData } from '../../../../../types/userTypes.ts';
+import { IStrapiUser } from '../../../../../types/userTypes.ts';
+import { useTranslation } from 'react-i18next';
 
 const CommentsTableBody = ({ data }: { data: ICommentData[] }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const currentUser = useSelector<RootState>((state) => state.user);
 
@@ -81,9 +83,9 @@ const CommentsTableBody = ({ data }: { data: ICommentData[] }) => {
           >
             <StatusInfo
               status={
-                (currentUser as IUserData).role.id === 3 ||
-                ((currentUser as IUserData).role.id === 2 &&
-                  (currentUser as IUserData).uuid ===
+                (currentUser as IStrapiUser).role.id === 3 ||
+                ((currentUser as IStrapiUser).role.id === 2 &&
+                  (currentUser as IStrapiUser).uuid ===
                     comment.attributes.author.data.attributes.uuid)
                   ? true
                   : !comment.attributes.shadowed
@@ -94,14 +96,14 @@ const CommentsTableBody = ({ data }: { data: ICommentData[] }) => {
             {comment.attributes.author.data ? (
               comment.attributes.author.data.attributes.username
             ) : (
-              <i>Author is no longer available</i>
+              <i>{t('article.form.noAuthor')}</i>
             )}
           </td>
           <td style={{ textAlign: 'left' }}>
             {comment.attributes.article.data ? (
               comment.attributes.article.data.attributes.title
             ) : (
-              <i>Commented article removed</i>
+              <i>{t('comment.form.details.noArticle')}</i>
             )}
           </td>
           <td style={{ textAlign: 'left' }}>
