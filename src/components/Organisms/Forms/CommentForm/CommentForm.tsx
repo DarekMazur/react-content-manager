@@ -32,7 +32,7 @@ import Modal from '../../Modal/Modal.tsx';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { ICommentData } from '../../../../types/commentTypes.ts';
-import { IUserData } from '../../../../types/userTypes.ts';
+import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
 
 const CommentForm = () => {
@@ -47,9 +47,9 @@ const CommentForm = () => {
   const [updateComment, { status, isSuccess, isLoading }] =
     useUpdateCommentMutation();
   const { data: comments } = useGetCommentsQuery();
-  const { data: users = [] } = useGetUsersQuery();
+  const { data: users } = useGetUsersQuery();
 
-  const [userData, setUserData] = useState<IUserData | undefined>(undefined);
+  const [userData, setUserData] = useState<IStrapiUser | undefined>(undefined);
   const [currentComment, setCurrentComment] = useState<
     ICommentData | undefined
   >(undefined);
@@ -63,7 +63,7 @@ const CommentForm = () => {
   );
 
   useEffect(() => {
-    if (comments) {
+    if (comments && users) {
       setInitialData({
         authorBlocked: !!users.find(
           (user) =>
@@ -97,8 +97,8 @@ const CommentForm = () => {
     //     ),
     //   );
     // }
-    if (currentComment && users.length > 0) {
-      setUserData(users.find((user) => (user as IUserData).id === 1));
+    if (currentComment && users && users.length > 0) {
+      setUserData(users.find((user) => (user as IStrapiUser).id === 1));
     }
   }, [currentComment, users]);
 
@@ -120,9 +120,12 @@ const CommentForm = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     if (currentComment) {
-      const updateUser: IUserData = { ...currentComment.attributes.author };
+      const updateUser: IStrapiUser = {
+        ...currentComment.attributes.author.data.attributes,
+        id: currentComment.attributes.author.data.id,
+      };
       updateUser.blocked = (e.target as HTMLInputElement).checked;
-      setUserData({ ...(updateUser as IUserData) });
+      setUserData({ ...(updateUser as IStrapiUser) });
     }
   };
 
@@ -163,11 +166,12 @@ const CommentForm = () => {
 
   const handleOnCancel = () => {
     setUserData(
-      users.find(
-        (user) =>
-          user.id ===
-          (currentComment as ICommentData).attributes.author.data.id,
-      ),
+      users &&
+        users.find(
+          (user) =>
+            user.id ===
+            (currentComment as ICommentData).attributes.author.data.id,
+        ),
     );
     setCurrentComment(
       comments!.data.find((comment) => comment.attributes.uuid === uuid),
@@ -263,51 +267,62 @@ const CommentForm = () => {
               <StyledImageControler>
                 <img
                   src={
+                    currentComment?.attributes.author.data &&
                     currentComment?.attributes.author.data.attributes.avatar
                       ? currentComment?.attributes.author.data.attributes.avatar
+                          .url
                       : userIcon
                   }
                   alt=""
                 />
               </StyledImageControler>
-              <P>
-                <InLink
-                  target={`/users/${currentComment?.attributes.author.data.attributes.uuid}`}
-                  name={
-                    currentComment?.attributes.author.data.attributes.username
-                  }
-                ></InLink>
-              </P>
-              <P>
-                {t('comment.form.author.role')}{' '}
-                {
-                  currentComment?.attributes.author.data.attributes.role.data
-                    .attributes.name
-                }
-              </P>
-              <P>
-                {t('comment.form.author.status.title')}{' '}
-                {initialData.authorBlocked ? (
-                  <CommentStatus $isRed>
-                    {t('comment.form.author.status.blocked')}
-                  </CommentStatus>
-                ) : userData.confirmed ? (
-                  <CommentStatus>
-                    {t('comment.form.author.status.active')}
-                  </CommentStatus>
-                ) : (
-                  <CommentStatus $isYellow>
-                    {t('comment.form.author.status.notActive')}
-                  </CommentStatus>
-                )}
-              </P>
-              <InputCheckbox
-                label={t('comment.form.author.blocked')}
-                id="blocked"
-                value={(userData as IUserData).blocked}
-                uuid={uuid}
-                handleOnChange={(e) => handleOnChange(e)}
-              />
+              {currentComment?.attributes.author.data ? (
+                <>
+                  <P>
+                    <InLink
+                      target={`/users/${currentComment?.attributes.author.data.attributes.uuid}`}
+                      name={
+                        currentComment?.attributes.author.data.attributes
+                          .username
+                      }
+                    ></InLink>
+                  </P>
+                  <P>
+                    {t('comment.form.author.role')}{' '}
+                    {
+                      currentComment?.attributes.author.data.attributes.role
+                        .name
+                    }
+                  </P>
+                  <P>
+                    {t('comment.form.author.status.title')}{' '}
+                    {initialData.authorBlocked ? (
+                      <CommentStatus $isRed>
+                        {t('comment.form.author.status.blocked')}
+                      </CommentStatus>
+                    ) : userData.confirmed ? (
+                      <CommentStatus>
+                        {t('comment.form.author.status.active')}
+                      </CommentStatus>
+                    ) : (
+                      <CommentStatus $isYellow>
+                        {t('comment.form.author.status.notActive')}
+                      </CommentStatus>
+                    )}
+                  </P>
+                  <InputCheckbox
+                    label={t('comment.form.author.blocked')}
+                    id="blocked"
+                    value={(userData as IStrapiUser).blocked}
+                    uuid={uuid}
+                    handleOnChange={(e) => handleOnChange(e)}
+                  />
+                </>
+              ) : (
+                <P>
+                  <i>Author is not longer available</i>
+                </P>
+              )}
             </aside>
           </CommentFormWrapper>
           <FormButtonWrapper>
