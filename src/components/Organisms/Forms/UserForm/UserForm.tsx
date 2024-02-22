@@ -32,7 +32,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: users = [], isLoading } = useGetUsersQuery();
+  const { data: users, isLoading } = useGetUsersQuery();
   const [updateUser, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateUserMutation();
   const currentUser = useSelector<RootState>((state) => state.user);
@@ -84,13 +84,15 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   }, [imageUrl]);
 
   useEffect(() => {
-    setUserData(users.find((user) => user.uuid === uuid) as IStrapiUser);
-    if (
-      userData &&
-      users.filter((user) => user.uuid === (userData as IStrapiUser).uuid)
-        .length === 0
-    ) {
-      navigate(-1);
+    if (users) {
+      setUserData(users.find((user) => user.uuid === uuid) as IStrapiUser);
+      if (
+        userData &&
+        users.filter((user) => user.uuid === (userData as IStrapiUser).uuid)
+          .length === 0
+      ) {
+        navigate(-1);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, uuid]);
@@ -126,14 +128,25 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    updateUser({ ...userData });
+    const dataToUpdate = {
+      id: userData?.id,
+      username: userData?.username,
+      email: userData?.email,
+      confirmed: userData?.confirmed,
+      blocked: userData?.blocked,
+      newRole: userData?.role,
+      role:
+        users && users.filter((user) => user.uuid === userData?.uuid)[0].role,
+    };
+
+    updateUser(dataToUpdate);
     if (userData && userData.uuid === (currentUser as IStrapiUser).uuid) {
       dispatch(setUser({ ...userData, isAuthorised: true }));
     }
   };
 
   const handleCancel = () => {
-    setUserData(users.find((user) => user.uuid === uuid) as IStrapiUser);
+    setUserData(users!.find((user) => user.uuid === uuid) as IStrapiUser);
     setImage([]);
     navigate(-1);
   };
