@@ -89,7 +89,9 @@ const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
           </td>
           <td style={{ textAlign: 'left' }}>{article.attributes.title}</td>
           <td style={{ textAlign: 'left' }}>
-            {article.attributes.author.data.attributes.username}
+            {article.attributes.author.data
+              ? article.attributes.author.data.attributes.username
+              : 'Author deleted'}
           </td>
           <td>
             <Checkbox

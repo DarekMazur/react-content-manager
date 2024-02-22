@@ -102,9 +102,12 @@ const Articles = () => {
     articles && (articles as IArticlesDataTypes).data
       ? setAuthorsList(
           (articles as IArticlesDataTypes).data.map((article) => ({
-            label: (article as IArticleData).attributes.author.data.attributes
-              .username,
-            id: article.attributes.author.data.id,
+            label: article.attributes.author.data
+              ? article.attributes.author.data.attributes.username
+              : 'Author deleted',
+            id: article.attributes.author.data
+              ? article.attributes.author.data.id
+              : 0,
           })),
         )
       : null;
@@ -172,16 +175,17 @@ const Articles = () => {
           : 0;
         return dateA - dateB;
       } else if ((sort as ISortTypes).sortBy === 'author') {
-        if (
-          a.attributes.author.data.attributes.username <
-          b.attributes.author.data.attributes.username
-        ) {
+        const authorA = a.attributes.author.data
+          ? a.attributes.author.data.attributes.username
+          : 'Author deleted';
+        const authorB = b.attributes.author.data
+          ? b.attributes.author.data.attributes.username
+          : 'Author deleted';
+
+        if (authorA < authorB) {
           return -1;
         }
-        if (
-          a.attributes.author.data.attributes.username >
-          b.attributes.author.data.attributes.username
-        ) {
+        if (authorA > authorB) {
           return 1;
         }
 
@@ -251,7 +255,9 @@ const Articles = () => {
         filtered.push(
           ...availableArticles.filter((article) =>
             filteredAuthor[0].value.includes(
-              String(article.attributes.author.data.id),
+              article.attributes.author.data
+                ? String(article.attributes.author.data.id)
+                : '0',
             ),
           ),
         );
