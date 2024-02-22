@@ -3,20 +3,20 @@ import { StyledUserMenu } from './UserMenu.styles';
 import { setUser } from '../../../store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { IUserTypes } from '../../../types/dataTypes';
 import Icon from '../../Atoms/Icon/Icon';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import flagGb from '../../../assets/icons/gb.svg';
 import flagPl from '../../../assets/icons/pl.svg';
 import LanguageButton from '../../Atoms/LanguageButton/LanguageButton.tsx';
+import { IStrapiUser } from '../../../types/userTypes.ts';
 
 const UserMenu = ({
   user,
   isOpen,
   handleClick,
 }: {
-  user: IUserTypes;
+  user: IStrapiUser;
   isOpen?: boolean;
   handleClick: () => void;
 }) => {
@@ -64,7 +64,12 @@ const UserMenu = ({
       }}
       ref={menuRef}
     >
-      <Icon customIcon={user?.avatar} handleClick={handleClick} />
+      <Icon
+        customIcon={
+          user?.avatar ? user.avatar.formats.thumbnail.url : undefined
+        }
+        handleClick={handleClick}
+      />
       <StyledUserMenu $open={isOpen}>
         <ul>
           <li>

@@ -2,13 +2,13 @@ import { FC } from 'react';
 import Button from '../../components/Atoms/Button/Button.tsx';
 import Wrapper from '../../components/Organisms/Wrapper/Wrapper.tsx';
 import Heading from '../../components/Atoms/Heading/Heading.tsx';
-import { IUserTypes } from '../../types/dataTypes.ts';
 import { useNavigate } from 'react-router';
 import HomeSection from '../../components/Organisms/HomeSection/HomeSection.tsx';
 import { useTranslation } from 'react-i18next';
+import { IStrapiUser } from '../../types/userTypes.ts';
 
 interface IHomeProps {
-  user: IUserTypes;
+  user: IStrapiUser;
 }
 
 const Home: FC<IHomeProps> = ({ user }) => {

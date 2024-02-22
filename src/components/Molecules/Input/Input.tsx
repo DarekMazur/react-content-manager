@@ -3,7 +3,7 @@ import { StyledInput } from './Input.styles.ts';
 import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { IUserTypes } from '../../../types/dataTypes.ts';
+import { IStrapiUser } from '../../../types/userTypes.ts';
 
 interface IInputTypes {
   label: string;
@@ -41,8 +41,8 @@ const Input: FC<IInputTypes> = ({
         onChange={(e) => handleOnChange(e)}
         onKeyUp={(e) => (handleKeyPress ? handleKeyPress(e) : {})}
         disabled={
-          (currentUser as IUserTypes).uuid !== uuid &&
-          (currentUser as IUserTypes).role.type !== 'admin'
+          (currentUser as IStrapiUser).uuid !== uuid &&
+          (currentUser as IStrapiUser).role.type !== 'administrator'
         }
       />
     </FormWrapper>

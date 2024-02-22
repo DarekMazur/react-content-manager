@@ -1,14 +1,13 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  IFilterTypes,
-  IUserTypes,
-} from '../types/dataTypes';
+import { IFilterTypes } from '../types/dataTypes';
 import { articlesApi } from './api/articles.ts';
 import { usersApi } from './api/users.ts';
 import { commentsApi } from './api/comments.ts';
 import { categoriesApi } from './api/categories.ts';
+import { IArticleData } from '../types/articleTypes.ts';
+import { IUserData } from '../types/userTypes.ts';
+import { ICategoryData } from '../types/categoryTypes.ts';
+import { rolesApi } from './api/roles.ts';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -24,11 +23,7 @@ export interface ISortTypes {
   order: string;
 }
 
-const initialSelectedItems: (
-  | IArticleDataTypes
-  | IUserTypes
-  | ICategoriesTypes
-)[] = [];
+const initialSelectedItems: (IArticleData | IUserData | ICategoryData)[] = [];
 const initialUser = {};
 const initialPopup: IPopupTypes = {
   isOpen: false,
@@ -40,7 +35,7 @@ const initialFilters: IFilterTypes[] = [];
 
 const initialSorting = {
   sortBy: 'id',
-  order: 'asc',
+  order: 'desc',
 };
 
 const filtersSlice = createSlice({
@@ -179,6 +174,7 @@ export * from './api/articles.ts';
 export * from './api/users.ts';
 export * from './api/comments.ts';
 export * from './api/categories.ts';
+export * from './api/roles.ts';
 
 export const store = configureStore({
   reducer: {
@@ -186,6 +182,7 @@ export const store = configureStore({
     [usersApi.reducerPath]: usersApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
+    [rolesApi.reducerPath]: rolesApi.reducer,
     filters: filtersSlice.reducer,
     sort: sortSlice.reducer,
     selected: selectedSlice.reducer,
@@ -200,5 +197,6 @@ export const store = configureStore({
       .concat(articlesApi.middleware)
       .concat(usersApi.middleware)
       .concat(commentsApi.middleware)
-      .concat(categoriesApi.middleware),
+      .concat(categoriesApi.middleware)
+      .concat(rolesApi.middleware),
 });

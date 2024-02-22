@@ -9,11 +9,9 @@ import {
 } from '../../store';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import {
-  IArticleDataTypes,
   IFilterElementsTypes,
   IFilterTypes,
   ITableHeaders,
-  IUserTypes,
 } from '../../types/dataTypes.ts';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper.tsx';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
@@ -24,11 +22,18 @@ import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.s
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
+import { IArticleData, IArticlesDataTypes } from '../../types/articleTypes.ts';
+import { IStrapiUser, IUserData } from '../../types/userTypes.ts';
+
+interface IAuthorsList {
+  label: string;
+  id: number;
+}
 
 const Articles = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { data: articles = [], isLoading } = useGetArticlesQuery();
+  const { data: articles, isLoading } = useGetArticlesQuery();
   const sort = useSelector<RootState>((state) => state.sort);
   const filters = useSelector<RootState>((state) => state.filters);
   const navigate = useNavigate();
@@ -37,12 +42,13 @@ const Articles = () => {
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
 
-  const [availableArticles, setAvailableArticles] = useState<
-    IArticleDataTypes[]
-  >([]);
+  const [availableArticles, setAvailableArticles] = useState<IArticleData[]>(
+    [],
+  );
 
-  const [filteredArticles, setFilteredArticles] =
-    useState<IArticleDataTypes[]>(articles);
+  const [filteredArticles, setFilteredArticles] = useState<IArticleData[]>([]);
+
+  const [authorsList, setAuthorsList] = useState<IAuthorsList[]>([]);
 
   const articlesTableHeaders: ITableHeaders[] = [
     {
@@ -92,10 +98,20 @@ const Articles = () => {
     },
   ];
 
-  const authorsList = articles.map((article) => ({
-    label: article.author.username,
-    id: article.author.id,
-  }));
+  useEffect(() => {
+    articles && (articles as IArticlesDataTypes).data
+      ? setAuthorsList(
+          (articles as IArticlesDataTypes).data.map((article) => ({
+            label: article.attributes.author.data
+              ? article.attributes.author.data.attributes.username
+              : 'Author deleted',
+            id: article.attributes.author.data
+              ? article.attributes.author.data.id
+              : 0,
+          })),
+        )
+      : null;
+  }, [articles]);
 
   const articleFilters: IFilterElementsTypes[] = [
     {
@@ -147,33 +163,52 @@ const Articles = () => {
 
     sortedArticles.sort((a, b) => {
       if ((sort as ISortTypes).sortBy === 'status') {
-        const statusA = Number(a.publishedAt !== null);
-        const statusB = Number(b.publishedAt !== null);
+        const statusA = Number(a.attributes.publishedAt !== null);
+        const statusB = Number(b.attributes.publishedAt !== null);
         return statusA - statusB;
       } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
-        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        const dateA = a.attributes.publishedAt
+          ? new Date(a.attributes.publishedAt).getTime()
+          : 0;
+        const dateB = b.attributes.publishedAt
+          ? new Date(b.attributes.publishedAt).getTime()
+          : 0;
         return dateA - dateB;
       } else if ((sort as ISortTypes).sortBy === 'author') {
-        if (a.author.username < b.author.username) {
+        const authorA = a.attributes.author.data
+          ? a.attributes.author.data.attributes.username
+          : 'Author deleted';
+        const authorB = b.attributes.author.data
+          ? b.attributes.author.data.attributes.username
+          : 'Author deleted';
+
+        if (authorA < authorB) {
           return -1;
         }
-        if (a.author.username > b.author.username) {
+        if (authorA > authorB) {
           return 1;
         }
 
         return 0;
       } else if ((sort as ISortTypes).sortBy === 'comments') {
-        const commentsA = a.comments ? a.comments.length : 0;
-        const commentsB = b.comments ? b.comments.length : 0;
+        const commentsA = a.attributes.comments
+          ? a.attributes.comments.length
+          : 0;
+        const commentsB = b.attributes.comments
+          ? b.attributes.comments.length
+          : 0;
         return commentsA - commentsB;
+      } else if ((sort as ISortTypes).sortBy === 'id') {
+        return a.id - b.id;
       } else {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const sortingElementA =
-          a[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
-        const sortingElementB =
-          b[(sort as ISortTypes).sortBy as keyof IArticleDataTypes];
+        // @ts-expect-error
+        const sortingElementA = a.attributes[(sort as ISortTypes).sortBy];
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const sortingElementB = b.attributes[(sort as ISortTypes).sortBy];
+
         if (
           (sortingElementA ? sortingElementA : 0) <
           (sortingElementB ? sortingElementB : 0)
@@ -214,16 +249,20 @@ const Articles = () => {
         (filter) => filter.type === 'author',
       );
 
-      let filtered: IArticleDataTypes[] = [];
+      let filtered: IArticleData[] = [];
 
       if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
         filtered.push(
           ...availableArticles.filter((article) =>
-            filteredAuthor[0].value.includes(String(article.author.id)),
+            filteredAuthor[0].value.includes(
+              article.attributes.author.data
+                ? String(article.attributes.author.data.id)
+                : '0',
+            ),
           ),
         );
       } else {
-        filtered.push(...articles);
+        articles && filtered.push(...articles.data);
       }
 
       if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
@@ -231,8 +270,8 @@ const Articles = () => {
           filteredStatus[0].value.includes('draft')
             ? filteredStatus[0].value.includes('published')
               ? article
-              : article.publishedAt === null
-            : article.publishedAt !== null,
+              : article.attributes.publishedAt === null
+            : article.attributes.publishedAt !== null,
         );
       }
 
@@ -241,8 +280,8 @@ const Articles = () => {
           filteredPinned[0].value.includes('sticky')
             ? filteredPinned[0].value.includes('normal')
               ? article
-              : article.isSticky
-            : !article.isSticky,
+              : article.attributes.isSticky
+            : !article.attributes.isSticky,
         );
       }
 
@@ -254,14 +293,17 @@ const Articles = () => {
   }, [filters, availableArticles]);
 
   useEffect(() => {
-    if ((currentUser as IUserTypes).role.id === 3) {
-      setAvailableArticles(
-        articles.filter(
-          (article) => article.author.uuid === (currentUser as IUserTypes).uuid,
-        ),
-      );
+    if ((currentUser as IStrapiUser).role.id === 3) {
+      articles &&
+        setAvailableArticles(
+          (articles as IArticlesDataTypes).data.filter(
+            (article) =>
+              article.attributes.author.data.attributes.uuid ===
+              (currentUser as IUserData).attributes.uuid,
+          ),
+        );
     } else {
-      setAvailableArticles(articles);
+      setAvailableArticles(articles?.data || []);
     }
   }, [articles, currentUser]);
 
@@ -275,10 +317,8 @@ const Articles = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('article.header')}
       </Heading>
-      {(selectedArticles as IArticleDataTypes[]).length > 0 ? (
-        <MultiAction
-          counter={(selectedArticles as IArticleDataTypes[]).length}
-        />
+      {(selectedArticles as IArticleData[]).length > 0 ? (
+        <MultiAction counter={(selectedArticles as IArticleData[]).length} />
       ) : null}
       <div
         style={{
@@ -297,7 +337,12 @@ const Articles = () => {
           <FontAwesomeIcon icon={['fas', 'pen']} /> {t('article.newArticle')}
         </FormButton>
       </div>
-      <TableWrapper content={filteredArticles} headers={articlesTableHeaders} />
+      {filteredArticles ? (
+        <TableWrapper
+          content={filteredArticles}
+          headers={articlesTableHeaders}
+        />
+      ) : null}
     </Main>
   );
 };

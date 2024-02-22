@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { IArticleDataTypes } from '../../../../../types/dataTypes';
 import {
   RootState,
   addSelected,
@@ -11,52 +10,55 @@ import Checkbox from '../../../../Molecules/Checkbox/Checkbox';
 import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
 import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
-import { db } from '../../../../../mocks/db';
+// import { db } from '../../../../../mocks/db';
+import { IArticleData } from '../../../../../types/articleTypes.ts';
 
-const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
+const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
   const dispatch = useDispatch();
 
   const selectedArticles = useSelector<RootState>((state) => state.selected);
   const [updateArticle] = useUpdateArticleMutation();
 
-  const [checkedArticles, setCheckedArticles] = useState<IArticleDataTypes[]>(
-    selectedArticles as IArticleDataTypes[],
+  const [checkedArticles, setCheckedArticles] = useState<IArticleData[]>(
+    selectedArticles as IArticleData[],
   );
 
   useEffect(() => {
-    setCheckedArticles(selectedArticles as IArticleDataTypes[]);
+    setCheckedArticles(selectedArticles as IArticleData[]);
   }, [selectedArticles]);
 
   const handleClickSelect = (uuid: string) => {
-    const checkedElement = data.find((article) => article.uuid === uuid);
+    const checkedElement = data.find(
+      (article) => article.attributes.uuid === uuid,
+    );
     if (
       checkedElement &&
-      checkedArticles.includes(checkedElement as IArticleDataTypes)
+      checkedArticles.includes(checkedElement as IArticleData)
     ) {
       dispatch(removeSelected(checkedElement));
       setCheckedArticles(
-        checkedArticles.filter((article) => article.uuid !== uuid),
+        checkedArticles.filter((article) => article.attributes.uuid !== uuid),
       );
     } else if (checkedElement) {
       dispatch(addSelected(checkedElement));
       setCheckedArticles((prevState) => [
         ...prevState,
-        checkedElement as IArticleDataTypes,
+        checkedElement as IArticleData,
       ]);
     }
   };
 
   const handleClickSticky = (uuid: string) => {
-    const article = data.find((article) => article.uuid === uuid);
+    const article = data.find((article) => article.attributes.uuid === uuid);
     updateArticle({
       ...article,
-      isSticky: !(article as IArticleDataTypes)?.isSticky,
+      isSticky: !(article as IArticleData).attributes.isSticky,
     });
   };
   return (
     <>
       {data.map((article) => (
-        <tr key={article.uuid}>
+        <tr key={article.attributes.uuid}>
           <td
             style={{
               height: '6rem',
@@ -68,10 +70,10 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
           >
             <Checkbox
               handleClick={handleClickSelect}
-              uuid={article.uuid}
-              isChecked={Array.from(
-                checkedArticles as IArticleDataTypes[],
-              ).includes(article)}
+              uuid={article.attributes.uuid}
+              isChecked={Array.from(checkedArticles as IArticleData[]).includes(
+                article,
+              )}
             />
           </td>
           <td>{article.id}</td>
@@ -83,38 +85,48 @@ const ArticlesTableBody = ({ data }: { data: IArticleDataTypes[] }) => {
               padding: '0 1rem',
             }}
           >
-            <StatusInfo status={!!article.publishedAt} />
+            <StatusInfo status={!!article.attributes.publishedAt} />
           </td>
-          <td style={{ textAlign: 'left' }}>{article.title}</td>
-          <td style={{ textAlign: 'left' }}>{article.author.username}</td>
+          <td style={{ textAlign: 'left' }}>{article.attributes.title}</td>
+          <td style={{ textAlign: 'left' }}>
+            {article.attributes.author.data
+              ? article.attributes.author.data.attributes.username
+              : 'Author deleted'}
+          </td>
           <td>
             <Checkbox
-              isChecked={article.isSticky}
+              isChecked={article.attributes.isSticky}
               handleClick={handleClickSticky}
-              uuid={article.uuid}
+              uuid={article.attributes.uuid}
             />
           </td>
           <td>
-            {article.categories.map((category, index, array) => (
-              <span key={index}>
-                {category.title}
-                {index + 1 === array.length ? null : ', '}
-              </span>
-            ))}
+            {article.attributes.categories.data.map(
+              (category, index, array) => (
+                <span key={index}>
+                  {category.attributes.title}
+                  {index + 1 === array.length ? null : ', '}
+                </span>
+              ),
+            )}
           </td>
           <td>
-            {db.comment.count({
-              where: {
-                article: {
-                  uuid: {
-                    equals: article.uuid,
-                  },
-                },
-              },
-            })}
+            4{/*{db.comment.count({*/}
+            {/*  where: {*/}
+            {/*    article: {*/}
+            {/*      uuid: {*/}
+            {/*        equals: article.attributes.uuid,*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*  },*/}
+            {/*})}*/}
           </td>
-          <td>{article.likes}</td>
-          <td>{article.publishedAt ? getDate(article.publishedAt) : '-'}</td>
+          <td>{article.attributes.likes}</td>
+          <td>
+            {article.attributes.publishedAt
+              ? getDate(article.attributes.publishedAt)
+              : '-'}
+          </td>
           <td style={{ textAlign: 'left' }}>
             <TableActionIcons id={article.id} />
           </td>

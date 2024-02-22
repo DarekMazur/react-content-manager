@@ -9,7 +9,7 @@ import {
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { ICategoriesTypes, ITableHeaders } from '../../types/dataTypes.ts';
+import { ITableHeaders } from '../../types/dataTypes.ts';
 import MultiAction from '../../components/Molecules/MultiAction/MultiAction.tsx';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { FormButton } from '../../components/Organisms/Forms/UserForm/UserForm.styles.ts';
@@ -17,24 +17,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { ICategoryData } from '../../types/categoryTypes.ts';
 
 const CategoriesView = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const sort = useSelector<RootState>((state) => state.sort);
-  const {
-    data: categories = [],
-    isLoading,
-    isSuccess,
-  } = useGetCategoriesQuery();
+  const { data: categories, isLoading, isSuccess } = useGetCategoriesQuery();
   const height = useMinHeight();
   const selectedCategories = useSelector<RootState>(
     (state) => state.selectedCategories,
   );
 
-  const [sortedCategories, setSortedCategories] =
-    useState<ICategoriesTypes[]>(categories);
+  const [sortedCategories, setSortedCategories] = useState<ICategoryData[]>([]);
 
   const categoriesTableHeaders: ITableHeaders[] = [
     {
@@ -66,33 +62,35 @@ const CategoriesView = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setSortedCategories(categories);
+      setSortedCategories(categories.data);
     }
   }, [categories, isSuccess]);
 
   useEffect(() => {
-    const sorted = [...sortedCategories];
-    sorted.sort((a, b) => {
-      if (
-        a[(sort as ISortTypes).sortBy as keyof ICategoriesTypes] <
-        b[(sort as ISortTypes).sortBy as keyof ICategoriesTypes]
-      ) {
-        return -1;
-      }
-      if (
-        a[(sort as ISortTypes).sortBy as keyof ICategoriesTypes] >
-        b[(sort as ISortTypes).sortBy as keyof ICategoriesTypes]
-      ) {
-        return 1;
-      }
+    if (sortedCategories.length > 0) {
+      const sorted = [...sortedCategories];
+      sorted.sort((a, b) => {
+        if (
+          a[(sort as ISortTypes).sortBy as keyof ICategoryData] <
+          b[(sort as ISortTypes).sortBy as keyof ICategoryData]
+        ) {
+          return -1;
+        }
+        if (
+          a[(sort as ISortTypes).sortBy as keyof ICategoryData] >
+          b[(sort as ISortTypes).sortBy as keyof ICategoryData]
+        ) {
+          return 1;
+        }
 
-      return 0;
-    });
+        return 0;
+      });
 
-    if ((sort as ISortTypes).order === 'asc') {
-      setSortedCategories(sorted);
-    } else {
-      setSortedCategories(sorted.reverse());
+      if ((sort as ISortTypes).order === 'asc') {
+        setSortedCategories(sorted);
+      } else {
+        setSortedCategories(sorted.reverse());
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,10 +105,8 @@ const CategoriesView = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('category.header')}
       </Heading>
-      {(selectedCategories as ICategoriesTypes[]).length > 0 ? (
-        <MultiAction
-          counter={(selectedCategories as ICategoriesTypes[]).length}
-        />
+      {selectedCategories && (selectedCategories as ICategoryData[]).length ? (
+        <MultiAction counter={(selectedCategories as ICategoryData[]).length} />
       ) : null}
       <div
         style={{

@@ -10,8 +10,8 @@ import {
 } from './InputCheckbox.styles.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { IUserTypes } from '../../../types/dataTypes.ts';
 import { useTranslation } from 'react-i18next';
+import { IStrapiUser } from '../../../types/userTypes.ts';
 
 interface ICheckboxTypes {
   label: string;
@@ -47,8 +47,8 @@ const InputCheckbox: FC<ICheckboxTypes> = ({
             onChange={(e) => handleOnChange(e)}
             disabled={
               uuid
-                ? (currentUser as IUserTypes).uuid === uuid ||
-                  (currentUser as IUserTypes).role.type !== 'admin'
+                ? (currentUser as IStrapiUser).uuid === uuid ||
+                  (currentUser as IStrapiUser).role.type !== 'administrator'
                 : false
             }
           />

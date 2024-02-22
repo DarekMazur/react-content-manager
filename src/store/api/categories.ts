@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ICategoriesTypes } from '../../types/dataTypes';
+import { ICategoriesDataTypes } from '../../types/categoryTypes.ts';
 
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ['Categories'],
   endpoints: (builder) => ({
-    getCategories: builder.query<ICategoriesTypes[], void>({
+    getCategories: builder.query<ICategoriesDataTypes, void>({
       query: () => ({
-        url: 'categories',
+        url: 'categories?populate=*&pagination[pageSize]=9999',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
@@ -30,8 +30,8 @@ export const categoriesApi = createApi({
     }),
     updateCategory: builder.mutation({
       query: (body) => ({
-        url: `categories/${body.uuid}`,
-        method: 'PATCH',
+        url: `categories/${body.data.id}`,
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },

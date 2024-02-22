@@ -1,7 +1,3 @@
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-} from '../../../../../types/dataTypes.ts';
 import Checkbox from '../../../../Molecules/Checkbox/Checkbox.tsx';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons.tsx';
 import {
@@ -11,31 +7,34 @@ import {
 } from '../../../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+import { ICategoryData } from '../../../../../types/categoryTypes.ts';
 
-const CategoriesTableBody = ({ data }: { data: ICategoriesTypes[] }) => {
+const CategoriesTableBody = ({ data }: { data: ICategoryData[] }) => {
   const dispatch = useDispatch();
   const selectedCategories = useSelector<RootState>(
     (state) => state.selectedCategories,
   );
 
-  const [checkedCategories, setCheckedCategories] = useState<
-    ICategoriesTypes[]
-  >(selectedCategories as ICategoriesTypes[]);
+  const [checkedCategories, setCheckedCategories] = useState<ICategoryData[]>(
+    selectedCategories as ICategoryData[],
+  );
   const handleClickSelect = (uuid: string) => {
-    const checkedElement = data.find((category) => category.uuid === uuid);
+    const checkedElement = data.find(
+      (category) => category.attributes.uuid === uuid,
+    );
     if (
       checkedElement &&
-      checkedCategories.includes(checkedElement as IArticleDataTypes)
+      checkedCategories.includes(checkedElement as ICategoryData)
     ) {
       dispatch(removeCategorySelected(checkedElement));
       setCheckedCategories(
-        checkedCategories.filter((article) => article.uuid !== uuid),
+        checkedCategories.filter((article) => article.attributes.uuid !== uuid),
       );
     } else if (checkedElement) {
       dispatch(addCategorySelected(checkedElement));
       setCheckedCategories((prevState) => [
         ...prevState,
-        checkedElement as IArticleDataTypes,
+        checkedElement as ICategoryData,
       ]);
     }
   };
@@ -43,7 +42,7 @@ const CategoriesTableBody = ({ data }: { data: ICategoriesTypes[] }) => {
   return (
     <>
       {data.map((category) => (
-        <tr key={category.uuid}>
+        <tr key={category.attributes.uuid}>
           <td
             style={{
               height: '6rem',
@@ -55,17 +54,22 @@ const CategoriesTableBody = ({ data }: { data: ICategoriesTypes[] }) => {
           >
             <Checkbox
               handleClick={handleClickSelect}
-              uuid={category.uuid}
+              uuid={category.attributes.uuid}
               isChecked={Array.from(
-                checkedCategories as ICategoriesTypes[],
+                checkedCategories as ICategoryData[],
               ).includes(category)}
             />
           </td>
           <td>{category.id}</td>
-          <td style={{ textAlign: 'left' }}>{category.title}</td>
-          <td style={{ textAlign: 'left' }}>{category.description}</td>
+          <td style={{ textAlign: 'left' }}>{category.attributes.title}</td>
           <td style={{ textAlign: 'left' }}>
-            <TableActionIcons id={category.id} uuid={category.uuid} />
+            {category.attributes.description}
+          </td>
+          <td style={{ textAlign: 'left' }}>
+            <TableActionIcons
+              id={category.id}
+              uuid={category.attributes.uuid}
+            />
           </td>
         </tr>
       ))}

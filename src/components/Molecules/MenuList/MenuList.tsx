@@ -3,7 +3,7 @@ import MenuListItem from '../../Atoms/MenuListItem/MenuListItem.tsx';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { IUserTypes } from '../../../types/dataTypes.ts';
+import { IStrapiUser } from '../../../types/userTypes.ts';
 
 const MenuList = () => {
   const { t } = useTranslation();
@@ -22,8 +22,8 @@ const MenuList = () => {
         <MenuListItem target="/categories">
           {t('navigation.menu.categories')}
         </MenuListItem>
-        {(currentUser as IUserTypes).role.type === 'admin' ||
-        (currentUser as IUserTypes).role.type === 'redactor' ? (
+        {(currentUser as IStrapiUser).role.type === 'administrator' ||
+        (currentUser as IStrapiUser).role.type === 'redactor' ? (
           <MenuListItem target="/users">
             {t('navigation.menu.users')}
           </MenuListItem>

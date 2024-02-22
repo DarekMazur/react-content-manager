@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IUserTypes } from '../../types/dataTypes';
+import { IStrapiUser } from '../../types/userTypes.ts';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
-    getUsers: builder.query<IUserTypes[], void>({
+    getUsers: builder.query<IStrapiUser[], void>({
       query: () => ({
-        url: 'users',
+        url: 'users?publicationState=preview&populate=*&pagination[pageSize]=9999',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
@@ -19,12 +19,22 @@ export const usersApi = createApi({
     }),
     updateUser: builder.mutation({
       query: (body) => ({
-        url: `users/${body.uuid}`,
-        method: 'PATCH',
+        url: `users/${body.id}`,
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
-        body,
+        body: {
+          username: body.username,
+          email: body.email,
+          confirmed: body.confirmed,
+          blocked: body.blocked,
+          updatedAt: new Date(),
+          role: {
+            disconnect: [{ id: body.role.id }],
+            connect: [{ id: body.newRole.id }],
+          },
+        },
       }),
       invalidatesTags: ['Users'],
     }),

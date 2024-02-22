@@ -17,11 +17,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  IUserTypes,
-} from '../../../../types/dataTypes';
 import InLink from '../../../Atoms/InLink/InLink';
 import { getDate } from '../../../../utils/methods/getDate';
 import {
@@ -45,6 +40,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import placeholder from '../../../../assets/placeholder.png';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage';
 import { useTranslation } from 'react-i18next';
+import {
+  IArticleData,
+  IArticlesDataTypes,
+} from '../../../../types/articleTypes.ts';
+import {
+  IStrapiFileTypes,
+  IStrapiImagePostFormat,
+} from '../../../../types/strapiTypes.ts';
+import { ICategoryData } from '../../../../types/categoryTypes.ts';
+import { IStrapiUser } from '../../../../types/userTypes.ts';
 
 interface IOptionTypes {
   readonly label: string;
@@ -56,29 +61,30 @@ const ArticleForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: articles = [], isLoading } = useGetArticlesQuery();
-  const { data: categories = [] } = useGetCategoriesQuery();
+  const { data: articles, isLoading } = useGetArticlesQuery();
+  const { data: categories } = useGetCategoriesQuery();
   const [updateArticle, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateArticleMutation();
   const [createArticle] = useCreateArticleMutation();
   const [addCategory] = useAddCategoryMutation();
   const currentUser = useSelector<RootState>((state) => state.user);
 
-  const [currentArticle, setCurrentArticle] =
-    useState<IArticleDataTypes | null>();
+  const [currentArticle, setCurrentArticle] = useState<IArticleData | null>();
 
   const [articleTitle, setArticleTitle] = useState<string>('');
   const [articleDescription, setArticleDescription] = useState<string>('');
-  const [articleCover, setArticleCover] = useState<string>(placeholder);
-  const [articleCategories, setArticleCategories] = useState<
-    ICategoriesTypes[]
-  >([]);
-  const [articleTags, setArticleTags] = useState<string[]>([]);
+  const [articleCover, setArticleCover] = useState<
+    IStrapiFileTypes | IStrapiImagePostFormat | string | null
+  >(placeholder);
+  const [articleCategories, setArticleCategories] = useState<ICategoryData[]>(
+    [],
+  );
+  const [articleTags, setArticleTags] = useState<string>('');
   const [articlePublished, setArticlePublished] = useState<Date | null>(null);
   const [articleIsSticky, setArticleIsSticky] = useState<boolean>(false);
-  const [initialValues, setInitialValues] = useState<
-    IArticleDataTypes | undefined
-  >(currentArticle ? { ...currentArticle } : undefined);
+  const [initialValues, setInitialValues] = useState<IArticleData | undefined>(
+    currentArticle ? { ...currentArticle } : undefined,
+  );
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState<File[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
@@ -87,15 +93,19 @@ const ArticleForm = () => {
   const [editorBody, setEditorBody] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const categoriesOptions: IOptionTypes[] = [];
   const articleInitCategories: IOptionTypes[] = [];
 
+  const [initCategoriesOption, setInitCategoriesOption] = useState<
+    IOptionTypes[] | null
+  >();
+
   useEffect(() => {
-    if (categories && categories.length > 0) {
-      (categories as ICategoriesTypes[]).map((category) =>
+    const categoriesOptions: IOptionTypes[] = [];
+    if (categories && categories.data.length > 0) {
+      categories.data.map((category) =>
         categoriesOptions.push({
-          value: category.title,
-          label: category.title,
+          value: category.attributes.title,
+          label: category.attributes.title,
         }),
       );
       setOptions(categoriesOptions);
@@ -109,23 +119,63 @@ const ArticleForm = () => {
 
   useEffect(() => {
     if (imageUrl) {
-      setArticleCover(imageUrl);
+      const fetchImage = async () => {
+        const myImage = await fetch(imageUrl);
+        const myBlob = await myImage.blob();
+        const formData = new FormData();
+        formData.append('files', myBlob, imageUrl);
+        formData.append('ref', 'api::article.article');
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        formData.append('refId', currentArticle.id);
+        formData.append('field', 'cover');
+
+        await fetch(`${import.meta.env.VITE_API_URL}upload`, {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+          },
+          method: 'POST',
+          body: formData,
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            const filtered = { ...data[0] };
+            delete filtered.id;
+            const file = {
+              data: {
+                id: data[0].id,
+                ...filtered,
+              },
+            };
+            setArticleCover(file);
+          });
+      };
+      // noinspection JSIgnoredPromiseFromCall
+      fetchImage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl]);
 
   useEffect(() => {
-    if (articles && articles.length > 0) {
-      setCurrentArticle(articles.find((article) => article.id === Number(id)));
-      setInitialValues({
-        ...articles.find((article) => article.id === Number(id))!,
-      });
+    if (articles && (articles as IArticlesDataTypes).data.length > 0) {
+      articles &&
+        setCurrentArticle(
+          articles.data.find((article) => article.id === Number(id)),
+        );
+      articles &&
+        setInitialValues({
+          ...articles.data.find((article) => article.id === Number(id))!,
+        });
     }
     if (
+      articles &&
       currentArticle &&
-      articles.filter(
+      articles.data.filter(
         (article) =>
-          article.uuid === (currentArticle as IArticleDataTypes).uuid,
+          article.attributes.uuid ===
+          (currentArticle as IArticleData).attributes.uuid,
       ).length === 0
     ) {
       navigate(-1);
@@ -135,20 +185,21 @@ const ArticleForm = () => {
 
   useEffect(() => {
     if (currentArticle) {
-      setArticleTitle(currentArticle.title);
-      setArticleDescription(currentArticle.description);
-      setArticleCover(currentArticle.cover);
-      setArticleCategories(currentArticle.categories);
-      setArticleTags(currentArticle.tags);
-      setArticlePublished(currentArticle.publishedAt);
-      setArticleIsSticky(currentArticle.isSticky);
+      setArticleTitle(currentArticle.attributes.title);
+      setArticleDescription(currentArticle.attributes.description);
+      setArticleCover(currentArticle.attributes.cover);
+      setArticleCategories(currentArticle.attributes.categories.data);
+      setArticleTags(currentArticle.attributes.tags);
+      setArticlePublished(currentArticle.attributes.publishedAt);
+      setArticleIsSticky(currentArticle.attributes.isSticky);
 
-      currentArticle.categories.map((category) =>
+      currentArticle.attributes.categories.data.map((category) => {
         articleInitCategories.push({
-          value: category.title,
-          label: category.title,
-        }),
-      );
+          value: category.attributes.title,
+          label: category.attributes.title,
+        });
+      });
+      setInitCategoriesOption(articleInitCategories);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentArticle]);
@@ -182,27 +233,35 @@ const ArticleForm = () => {
   };
 
   const handleSelectChange = (value: IOptionTypes[]) => {
-    const articleCategories: ICategoriesTypes[] = [];
+    const articleCategories: ICategoryData[] = [];
     for (let i = 0; i < value.length; ++i) {
-      categories.map((category) =>
-        category.title === value[i].value
-          ? articleCategories.push(category)
-          : null,
-      );
+      categories &&
+        categories.data.map((category) =>
+          category.attributes.title === value[i].value
+            ? articleCategories.push(category)
+            : null,
+        );
     }
     setArticleCategories(articleCategories);
   };
 
   const handleRemoveTag = (removed: string) => {
-    setArticleTags((prevState) => prevState.filter((tag) => tag !== removed));
+    setArticleTags((prevState) =>
+      prevState
+        .split(',')
+        .filter((tag) => tag !== removed)
+        .toString(),
+    );
   };
 
   const handleCreate = (inputValue: string) => {
     const newOption = createOption(inputValue);
     setOptions((prev) => [...prev, newOption]);
     const newCategory = {
-      title: newOption.label,
-      description: '',
+      data: {
+        title: newOption.label,
+        description: '',
+      },
     };
     addCategory(newCategory);
   };
@@ -239,36 +298,44 @@ const ArticleForm = () => {
       return setErrorMessage('Article content is required');
     }
 
-    if (location.pathname.includes('create')) {
-      const newArticle = {
-        ...currentArticle,
+    const dataToUpload = {
+      data: {
+        id: currentArticle?.id,
+        ...currentArticle?.attributes,
         title: CKETitle[0].replace(/<\/?h1>/g, ''),
         description: articleDescription,
         categories: articleCategories,
         body: CKEBody,
-        cover: articleCover,
+        cover:
+          typeof articleCover === 'string'
+            ? null
+            : (articleCover as IStrapiFileTypes).data?.attributes
+              ? {
+                  data: (articleCover as IStrapiFileTypes).data.attributes,
+                  id: (articleCover as IStrapiFileTypes).data.id,
+                }
+              : articleCover,
         isSticky: articleIsSticky,
         tags: articleTags,
-        author: currentUser,
         publishedAt: publishedStatus(),
-      };
-      createArticle({
-        ...newArticle,
-      });
-      navigate('/articles');
-    }
+        updatedAt: new Date(),
+      },
+    };
 
-    updateArticle({
-      ...currentArticle,
-      title: CKETitle[0].replace(/<\/?h1>/g, ''),
-      description: articleDescription,
-      categories: articleCategories,
-      body: CKEBody,
-      cover: articleCover,
-      isSticky: articleIsSticky,
-      tags: articleTags,
-      publishedAt: publishedStatus(),
-    });
+    if (location.pathname.includes('create')) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dataToUpload.data.author = { connect: [1] };
+      // dataToUpload.data.author = { connect: [currentUser.id] };
+
+      createArticle(dataToUpload);
+
+      navigate('/articles');
+    } else {
+      dataToUpload.data.updatedAt = new Date();
+
+      updateArticle(dataToUpload);
+    }
   };
 
   const handleOnCancel = (e: FormEvent<HTMLFormElement>) => {
@@ -282,25 +349,33 @@ const ArticleForm = () => {
   };
 
   const handleOnKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
     if (e.key === ',') {
-      setArticleTags((prevState) => [
-        ...prevState,
-        (e.target as HTMLInputElement).value.slice(0, -1),
-      ]);
+      setArticleTags((prevState) =>
+        [
+          ...prevState.split(','),
+          (e.target as HTMLInputElement).value.slice(0, -1),
+        ].toString(),
+      );
       setNewTag(null);
     }
   };
 
   const handleCloseModal = () => {
     setModal(false);
+
+    if (status !== 'rejected') {
+      navigate(0);
+    }
   };
 
   const handleDelete = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentArticle as IArticleDataTypes).id],
-        title: (currentArticle as IArticleDataTypes).title,
+        ids: [(currentArticle as IArticleData).id],
+        title: (currentArticle as IArticleData).attributes.title,
       }),
     );
   };
@@ -326,7 +401,17 @@ const ArticleForm = () => {
         <aside>
           <ImageController
             image={image}
-            defaultImage={articleCover}
+            defaultImage={
+              articleCover && (articleCover as IStrapiFileTypes).data
+                ? (articleCover as IStrapiFileTypes).data.attributes
+                  ? (articleCover as IStrapiFileTypes).data.attributes.formats
+                      .small.url
+                  : (articleCover as IStrapiImagePostFormat).data.formats.small
+                      .url
+                : imageUrl
+                  ? imageUrl
+                  : placeholder
+            }
             altText={`${articleTitle} cover image`}
             imageUrl={imageUrl as string}
             onFilesChange={(selectedFiles) => setImage(selectedFiles)}
@@ -336,13 +421,13 @@ const ArticleForm = () => {
             <InLink
               target={
                 currentArticle
-                  ? `/users/${currentArticle.author.uuid}`
-                  : `/users/${(currentUser as IUserTypes).uuid}`
+                  ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
+                  : `/users/${(currentUser as IStrapiUser).uuid}`
               }
               name={
                 currentArticle
-                  ? currentArticle.author.username
-                  : (currentUser as IUserTypes).username
+                  ? currentArticle.attributes.author.data.attributes.username
+                  : (currentUser as IStrapiUser).username
               }
             />
           </P>
@@ -355,25 +440,27 @@ const ArticleForm = () => {
           </P>
           <div style={{ position: 'relative', zIndex: '3' }}>
             {t('article.form.categoryLabel')}{' '}
-            <CreatableSelect
-              noOptionsMessage={() => 'create first category'}
-              defaultValue={articleInitCategories}
-              isMulti
-              isClearable
-              isSearchable
-              closeMenuOnSelect={false}
-              options={options}
-              onChange={(newValue) =>
-                handleSelectChange(newValue as IOptionTypes[])
-              }
-              onCreateOption={handleCreate}
-            />
+            {initCategoriesOption ? (
+              <CreatableSelect
+                noOptionsMessage={() => 'create first category'}
+                defaultValue={initCategoriesOption}
+                isMulti
+                isClearable
+                isSearchable
+                closeMenuOnSelect={false}
+                options={options}
+                onChange={(newValue) =>
+                  handleSelectChange(newValue as IOptionTypes[])
+                }
+                onCreateOption={handleCreate}
+              />
+            ) : null}
           </div>
           <div>
             <P>{t('article.form.tagLabel')}</P>
             <P>
-              {articleTags && articleTags.length > 0
-                ? articleTags.map((tag, index) => (
+              {articleTags && articleTags.split(',').length > 0
+                ? articleTags.split(',').map((tag, index) => (
                     <Tag key={index}>
                       <FontAwesomeIcon
                         style={{
@@ -410,9 +497,9 @@ const ArticleForm = () => {
         <div style={{ width: '80vw' }}>
           <CKEditor
             editor={ClassicEditor}
-            data={`<h1>${currentArticle ? currentArticle.title : ''}</h1>${
-              currentArticle ? currentArticle.body : ''
-            }`}
+            data={`<h1>${
+              currentArticle ? currentArticle.attributes.title : ''
+            }</h1>${currentArticle ? currentArticle.attributes.body : ''}`}
             config={editorConfiguration}
             onChange={(_event, editor) => handleEditorChange(editor.getData())}
           />
@@ -431,7 +518,7 @@ const ArticleForm = () => {
               <div>
                 <FormButton $type="submit" type="submit">
                   <FontAwesomeIcon icon={['fas', 'save']} />{' '}
-                  {currentArticle && currentArticle.publishedAt
+                  {currentArticle && currentArticle.attributes.publishedAt
                     ? t('article.form.button.save')
                     : t('article.form.button.publish')}
                 </FormButton>
@@ -441,7 +528,7 @@ const ArticleForm = () => {
                   onClick={(e) => handleSubmit(e, true)}
                 >
                   <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}
-                  {currentArticle && currentArticle.publishedAt
+                  {currentArticle && currentArticle.attributes.publishedAt
                     ? t('article.form.button.unpublish')
                     : t('article.form.button.draft')}
                 </FormButton>
@@ -458,6 +545,7 @@ const ArticleForm = () => {
           </FormButtonWrapper>
         </div>
       </StyledArticleForm>
+      {/*<input type="file" id="image" accept="image/*" onChange={handleTest} />*/}
     </>
   );
 };

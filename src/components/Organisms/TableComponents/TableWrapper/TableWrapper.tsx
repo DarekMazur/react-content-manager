@@ -6,24 +6,17 @@ import { StyledReactPaginate } from '../../../Molecules/ReactPaginate/ReactPagin
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  ICommentTypes,
-  ITableHeaders,
-  IUserTypes,
-} from '../../../../types/dataTypes';
+import { ITableHeaders } from '../../../../types/dataTypes';
+import { IArticleData } from '../../../../types/articleTypes.ts';
+import { IStrapiUser } from '../../../../types/userTypes.ts';
+import { ICommentData } from '../../../../types/commentTypes.ts';
+import { ICategoryData } from '../../../../types/categoryTypes.ts';
 
 const TableWrapper = ({
   content,
   headers,
 }: {
-  content: (
-    | IArticleDataTypes
-    | IUserTypes
-    | ICommentTypes
-    | ICategoriesTypes
-  )[];
+  content: IArticleData[] | IStrapiUser[] | ICommentData[] | ICategoryData[];
   headers: ITableHeaders[];
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();

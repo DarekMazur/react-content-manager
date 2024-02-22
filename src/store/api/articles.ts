@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IArticleDataTypes } from '../../types/dataTypes';
+import { IArticlesDataTypes } from '../../types/articleTypes.ts';
 
 export const articlesApi = createApi({
   reducerPath: 'articlesApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ['Articles'],
   endpoints: (builder) => ({
-    getArticles: builder.query<IArticleDataTypes[], void>({
+    getArticles: builder.query<IArticlesDataTypes, void>({
       query: () => ({
-        url: 'articles',
+        url: 'articles?publicationState=preview&populate=*&pagination[pageSize]=9999',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
@@ -18,14 +18,17 @@ export const articlesApi = createApi({
       providesTags: ['Articles'],
     }),
     updateArticle: builder.mutation({
-      query: (body) => ({
-        url: `articles/${body.id}`,
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-        },
-        body,
-      }),
+      query: (body) => (
+        console.log(body),
+        {
+          url: `articles/${body.data.id}`,
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+          },
+          body,
+        }
+      ),
       invalidatesTags: ['Articles'],
     }),
     createArticle: builder.mutation({

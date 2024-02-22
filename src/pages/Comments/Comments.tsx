@@ -7,11 +7,9 @@ import {
 } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  ICommentTypes,
   IFilterElementsTypes,
   IFilterTypes,
   ITableHeaders,
-  IUserTypes,
 } from '../../types/dataTypes';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import Heading from '../../components/Atoms/Heading/Heading';
@@ -21,11 +19,13 @@ import { Main } from '../../components/Organisms/Main/Main.styles';
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
+import { ICommentData } from '../../types/commentTypes.ts';
+import { IUserData } from '../../types/userTypes.ts';
 
 const CommentsView = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { data: comments = [], isLoading } = useGetCommentsQuery();
+  const { data: comments, isLoading } = useGetCommentsQuery();
   const sort = useSelector<RootState>((state) => state.sort);
   const filters = useSelector<RootState>((state) => state.filters);
   const height = useMinHeight();
@@ -33,12 +33,11 @@ const CommentsView = () => {
   const selectedComments = useSelector<RootState>(
     (state) => state.selectedComments,
   );
-  const [availableComments, setAvailableComments] = useState<ICommentTypes[]>(
+  const [availableComments, setAvailableComments] = useState<ICommentData[]>(
     [],
   );
 
-  const [filteredComments, setFilteredComments] =
-    useState<ICommentTypes[]>(comments);
+  const [filteredComments, setFilteredComments] = useState<ICommentData[]>([]);
 
   const commentsTableHeaders: ITableHeaders[] = [
     {
@@ -98,92 +97,110 @@ const CommentsView = () => {
   }, []);
 
   useEffect(() => {
-    const sortedComments = [...comments];
+    if (comments) {
+      const sortedComments = [...comments.data];
 
-    sortedComments.sort((a, b) => {
-      if ((sort as ISortTypes).sortBy === 'author') {
-        if (a.author.username < b.author.username) {
-          return -1;
-        }
-        if (a.author.username > b.author.username) {
-          return 1;
-        }
+      sortedComments.sort((a, b) => {
+        if ((sort as ISortTypes).sortBy === 'author') {
+          if (
+            a.attributes.author.data.attributes.username <
+            b.attributes.author.data.attributes.username
+          ) {
+            return -1;
+          }
+          if (
+            a.attributes.author.data.attributes.username >
+            b.attributes.author.data.attributes.username
+          ) {
+            return 1;
+          }
 
-        return 0;
-      } else if ((sort as ISortTypes).sortBy === 'article') {
-        if (a.article.title < b.article.title) {
-          return -1;
-        }
-        if (a.article.title > b.article.title) {
-          return 1;
-        }
+          return 0;
+        } else if ((sort as ISortTypes).sortBy === 'article') {
+          if (
+            a.attributes.article.data.attributes.title <
+            b.attributes.article.data.attributes.title
+          ) {
+            return -1;
+          }
+          if (
+            a.attributes.article.data.attributes.title >
+            b.attributes.article.data.attributes.title
+          ) {
+            return 1;
+          }
 
-        return 0;
-      } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
-        return (
-          new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
-        );
+          return 0;
+        } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
+          return (
+            new Date(a.attributes.createdAt).getTime() -
+            new Date(b.attributes.createdAt).getTime()
+          );
+        } else {
+          if (
+            a[(sort as ISortTypes).sortBy as keyof ICommentData] <
+            b[(sort as ISortTypes).sortBy as keyof ICommentData]
+          ) {
+            return -1;
+          }
+          if (
+            a[(sort as ISortTypes).sortBy as keyof ICommentData] >
+            b[(sort as ISortTypes).sortBy as keyof ICommentData]
+          ) {
+            return 1;
+          }
+
+          return 0;
+        }
+      });
+
+      if ((sort as ISortTypes).order === 'asc') {
+        setFilteredComments(sortedComments);
       } else {
-        if (
-          a[(sort as ISortTypes).sortBy as keyof ICommentTypes] <
-          b[(sort as ISortTypes).sortBy as keyof ICommentTypes]
-        ) {
-          return -1;
-        }
-        if (
-          a[(sort as ISortTypes).sortBy as keyof ICommentTypes] >
-          b[(sort as ISortTypes).sortBy as keyof ICommentTypes]
-        ) {
-          return 1;
-        }
-
-        return 0;
+        setFilteredComments(sortedComments.reverse());
       }
-    });
 
-    if ((sort as ISortTypes).order === 'asc') {
       setFilteredComments(sortedComments);
-    } else {
-      setFilteredComments(sortedComments.reverse());
     }
-
-    setFilteredComments(sortedComments);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort]);
 
   useEffect(() => {
-    if (
-      (filters as IFilterTypes[]).filter((filter) => filter.value.length > 0)
-        .length > 0
-    ) {
-      const filteredStatus = (filters as IFilterTypes[]).filter(
-        (filter) => filter.type === 'shadowed',
-      );
-
-      let filtered: ICommentTypes[] = [];
-
-      if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
-        filtered = comments.filter((comment) =>
-          filteredStatus[0].value.includes('visible')
-            ? filteredStatus[0].value.includes('hidden')
-              ? comment
-              : !comment.shadowed
-            : comment.shadowed,
+    if (comments) {
+      if (
+        (filters as IFilterTypes[]).filter((filter) => filter.value.length > 0)
+          .length > 0
+      ) {
+        const filteredStatus = (filters as IFilterTypes[]).filter(
+          (filter) => filter.type === 'shadowed',
         );
+
+        let filtered: ICommentData[] = [];
+
+        if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
+          filtered = comments.data.filter((comment) =>
+            filteredStatus[0].value.includes('visible')
+              ? filteredStatus[0].value.includes('hidden')
+                ? comment
+                : !comment.attributes.shadowed
+              : comment.attributes.shadowed,
+          );
+        }
+        setFilteredComments(filtered);
+      } else {
+        setFilteredComments(comments.data);
       }
-      setFilteredComments(filtered);
-    } else {
-      setFilteredComments(comments);
     }
   }, [filters, comments]);
 
   useEffect(() => {
-    if ((currentUser as IUserTypes).role.id === 3) {
+    if ((currentUser as IUserData).role.id === 3) {
       setAvailableComments(
         filteredComments.filter(
           (comment) =>
-            comment.article.author.uuid === (currentUser as IUserTypes).uuid,
+            comment.attributes.article.data.attributes.author.data.attributes
+              .uuid === (currentUser as IUserData).uuid,
         ),
       );
     } else {
@@ -201,8 +218,8 @@ const CommentsView = () => {
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('comment.header')}
       </Heading>
-      {(selectedComments as ICommentTypes[]).length > 0 ? (
-        <MultiAction counter={(selectedComments as ICommentTypes[]).length} />
+      {(selectedComments as ICommentData[]).length > 0 ? (
+        <MultiAction counter={(selectedComments as ICommentData[]).length} />
       ) : null}
       <TableWrapper
         content={availableComments}

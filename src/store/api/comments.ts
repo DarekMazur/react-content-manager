@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ICommentTypes } from '../../types/dataTypes';
+import { ICommentsDataTypes } from '../../types/commentTypes.ts';
 
 export const commentsApi = createApi({
   reducerPath: 'commentsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/',
+    baseUrl: import.meta.env.VITE_API_URL,
   }),
   tagTypes: ['Comments'],
   endpoints: (builder) => ({
-    getComments: builder.query<ICommentTypes[], void>({
+    getComments: builder.query<ICommentsDataTypes, void>({
       query: () => ({
-        url: 'comments',
+        url: 'comments?publicationState=preview&populate[0]=author&populate[1]=author.role&populate[2]=article&populate[3]=article.author',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
@@ -19,8 +19,8 @@ export const commentsApi = createApi({
     }),
     updateComment: builder.mutation({
       query: (body) => ({
-        url: `comments/${body.id}`,
-        method: 'PATCH',
+        url: `comments/${body.data.id}`,
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },

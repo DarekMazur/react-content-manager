@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { ICommentTypes, IUserTypes } from '../../../../../types/dataTypes';
 import { useEffect, useState } from 'react';
 import {
   RootState,
@@ -10,8 +9,10 @@ import Checkbox from '../../../../Molecules/Checkbox/Checkbox';
 import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
 import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
+import { ICommentData } from '../../../../../types/commentTypes.ts';
+import { IUserData } from '../../../../../types/userTypes.ts';
 
-const CommentsTableBody = ({ data }: { data: ICommentTypes[] }) => {
+const CommentsTableBody = ({ data }: { data: ICommentData[] }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector<RootState>((state) => state.user);
 
@@ -19,29 +20,31 @@ const CommentsTableBody = ({ data }: { data: ICommentTypes[] }) => {
     (state) => state.selectedComments,
   );
 
-  const [checkedComments, setCheckedComments] = useState<ICommentTypes[]>(
-    selectedComments as ICommentTypes[],
+  const [checkedComments, setCheckedComments] = useState<ICommentData[]>(
+    selectedComments as ICommentData[],
   );
 
   useEffect(() => {
-    setCheckedComments(selectedComments as ICommentTypes[]);
+    setCheckedComments(selectedComments as ICommentData[]);
   }, [selectedComments]);
 
   const handleClickSelect = (uuid: string) => {
-    const checkedElement = data.find((comment) => comment.uuid === uuid);
+    const checkedElement = data.find(
+      (comment) => comment.attributes.uuid === uuid,
+    );
     if (
       checkedElement &&
-      checkedComments.includes(checkedElement as ICommentTypes)
+      checkedComments.includes(checkedElement as ICommentData)
     ) {
       dispatch(removeCommentSelected(checkedElement));
       setCheckedComments(
-        checkedComments.filter((article) => article.uuid !== uuid),
+        checkedComments.filter((article) => article.attributes.uuid !== uuid),
       );
     } else if (checkedElement) {
       dispatch(addCommentSelected(checkedElement));
       setCheckedComments((prevState) => [
         ...prevState,
-        checkedElement as ICommentTypes,
+        checkedElement as ICommentData,
       ]);
     }
   };
@@ -49,7 +52,7 @@ const CommentsTableBody = ({ data }: { data: ICommentTypes[] }) => {
   return (
     <>
       {data.map((comment) => (
-        <tr key={comment.uuid}>
+        <tr key={comment.attributes.uuid}>
           <td
             style={{
               height: '6rem',
@@ -61,10 +64,10 @@ const CommentsTableBody = ({ data }: { data: ICommentTypes[] }) => {
           >
             <Checkbox
               handleClick={handleClickSelect}
-              uuid={comment.uuid}
-              isChecked={Array.from(
-                checkedComments as ICommentTypes[],
-              ).includes(comment)}
+              uuid={comment.attributes.uuid}
+              isChecked={Array.from(checkedComments as ICommentData[]).includes(
+                comment,
+              )}
             />
           </td>
           <td>{comment.id}</td>
@@ -78,24 +81,41 @@ const CommentsTableBody = ({ data }: { data: ICommentTypes[] }) => {
           >
             <StatusInfo
               status={
-                (currentUser as IUserTypes).role.id === 3 ||
-                ((currentUser as IUserTypes).role.id === 2 &&
-                  (currentUser as IUserTypes).uuid === comment.author.uuid)
+                (currentUser as IUserData).role.id === 3 ||
+                ((currentUser as IUserData).role.id === 2 &&
+                  (currentUser as IUserData).uuid ===
+                    comment.attributes.author.data.attributes.uuid)
                   ? true
-                  : !comment.shadowed
+                  : !comment.attributes.shadowed
               }
             />
           </td>
-          <td style={{ textAlign: 'left' }}>{comment.author.username}</td>
-          <td style={{ textAlign: 'left' }}>{comment.article.title}</td>
           <td style={{ textAlign: 'left' }}>
-            {comment.content.length > 50
-              ? `${comment.content.slice(0, 50)}[...]`
-              : comment.content}
+            {comment.attributes.author.data ? (
+              comment.attributes.author.data.attributes.username
+            ) : (
+              <i>Author is no longer available</i>
+            )}
           </td>
-          <td>{comment.publishedAt ? getDate(comment.publishedAt) : '-'}</td>
           <td style={{ textAlign: 'left' }}>
-            <TableActionIcons id={comment.id} uuid={comment.uuid} />
+            {comment.attributes.article.data ? (
+              comment.attributes.article.data.attributes.title
+            ) : (
+              <i>Commented article removed</i>
+            )}
+          </td>
+          <td style={{ textAlign: 'left' }}>
+            {comment.attributes.body.length > 50
+              ? `${comment.attributes.body.slice(0, 50)}[...]`
+              : comment.attributes.body}
+          </td>
+          <td>
+            {comment.attributes.createdAt
+              ? getDate(comment.attributes.createdAt)
+              : '-'}
+          </td>
+          <td style={{ textAlign: 'left' }}>
+            <TableActionIcons id={comment.id} uuid={comment.attributes.uuid} />
           </td>
         </tr>
       ))}
