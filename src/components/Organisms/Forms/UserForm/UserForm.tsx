@@ -13,10 +13,11 @@ import {
   RootState,
   setUser,
   switchPopup,
+  useGetRolesQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
 } from '../../../../store';
-import { roles } from '../../../../mocks/db';
+// import { roles } from '../../../../mocks/db';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import Modal from '../../Modal/Modal';
 import ImageController from '../../../Molecules/ImageControler/ImageController.tsx';
@@ -26,6 +27,7 @@ import InputSelect from '../../../Molecules/InputSelect/InputSelect';
 import { useTranslation } from 'react-i18next';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
+import { IRoleTypes } from '../../../../types/roleTypes.ts';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
   const { t } = useTranslation();
@@ -33,6 +35,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   const dispatch = useDispatch();
 
   const { data: users, isLoading } = useGetUsersQuery();
+  const { data: roles } = useGetRolesQuery();
   const [updateUser, { status, isSuccess, isLoading: loadingUpdate }] =
     useUpdateUserMutation();
   const currentUser = useSelector<RootState>((state) => state.user);
@@ -107,10 +110,12 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     fieldType: keyof IStrapiUser,
   ) => {
-    if (userData) {
+    if (userData && roles) {
       const updateUser: IStrapiUser = { ...userData };
       if (fieldType === 'role') {
-        const newRole = roles.find((role) => role.name === e.target.value);
+        const newRole = (roles as IRoleTypes).roles.find(
+          (role) => role.name === e.target.value,
+        );
         updateUser[fieldType] = newRole || userData?.role;
         setUserData({ ...(updateUser as IStrapiUser) });
       } else {
@@ -222,13 +227,17 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             uuid={uuid}
             handleOnChange={(e) => handleOnChange(e, 'blocked')}
           />
-          <InputSelect
-            value={userData.role}
-            label={t('user.form.role')}
-            handleOnChange={(e) => handleOnChange(e, 'role')}
-            uuid={uuid}
-            options={['Administrator', 'Redactor', 'Creator', 'Authenticated']}
-          />
+          {roles ? (
+            <InputSelect
+              value={userData.role}
+              label={t('user.form.role')}
+              handleOnChange={(e) => handleOnChange(e, 'role')}
+              uuid={uuid}
+              options={roles!.roles
+                .filter((role) => role.type !== 'public')
+                .map((role) => role.name)}
+            />
+          ) : null}
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <FormButton $type="submit" type="submit">

@@ -10,7 +10,7 @@ import Checkbox from '../../../../Molecules/Checkbox/Checkbox';
 import StatusInfo from '../../../../Atoms/StatusInfo/StatusInfo';
 import { getDate } from '../../../../../utils/methods/getDate';
 import TableActionIcons from '../../../../Molecules/TableActionIcons/TableActionIcons';
-import { db } from '../../../../../mocks/db';
+// import { db } from '../../../../../mocks/db';
 import { IArticleData } from '../../../../../types/articleTypes.ts';
 
 const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
@@ -109,15 +109,15 @@ const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
             )}
           </td>
           <td>
-            {db.comment.count({
-              where: {
-                article: {
-                  uuid: {
-                    equals: article.attributes.uuid,
-                  },
-                },
-              },
-            })}
+            4{/*{db.comment.count({*/}
+            {/*  where: {*/}
+            {/*    article: {*/}
+            {/*      uuid: {*/}
+            {/*        equals: article.attributes.uuid,*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*  },*/}
+            {/*})}*/}
           </td>
           <td>{article.attributes.likes}</td>
           <td>

@@ -3,10 +3,11 @@ import { StyledInputSelect } from './InputSelect.styles';
 import { FormWrapper } from '../../Organisms/Forms/UserForm/UserForm.styles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { IRoleTypes, IUserTypes } from '../../../types/dataTypes';
+import { IStrapiRoles } from '../../../types/roleTypes.ts';
+import { IStrapiUser } from '../../../types/userTypes.ts';
 
 interface ISelectTypes {
-  value: IRoleTypes;
+  value: IStrapiRoles;
   label: string;
   options: string[];
   uuid: string;
@@ -35,8 +36,8 @@ const InputSelect: FC<ISelectTypes> = ({
             // defaultValue={value.name}
             onChange={(e) => handleOnChange(e)}
             disabled={
-              (currentUser as IUserTypes).uuid === uuid ||
-              (currentUser as IUserTypes).role.type !== 'admin'
+              (currentUser as IStrapiUser).uuid === uuid ||
+              (currentUser as IStrapiUser).role.type !== 'administrator'
             }
           >
             {options.map((option) => (

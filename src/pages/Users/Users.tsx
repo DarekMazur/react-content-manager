@@ -3,6 +3,7 @@ import {
   clearSort,
   ISortTypes,
   RootState,
+  useGetRolesQuery,
   useGetUsersQuery,
 } from '../../store';
 import TableWrapper from '../../components/Organisms/TableComponents/TableWrapper/TableWrapper';
@@ -19,58 +20,66 @@ import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 import { useEffect, useState } from 'react';
-import { roles } from '../../mocks/db.ts';
+// import { roles } from '../../mocks/db.ts';
 import { IStrapiUser } from '../../types/userTypes.ts';
 
 const Users = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { data: users, isLoading } = useGetUsersQuery();
+  const { data: roles } = useGetRolesQuery();
   const filters = useSelector<RootState>((state) => state.filters);
   const sort = useSelector<RootState>((state) => state.sort);
   const height = useMinHeight();
   const selectedUsers = useSelector<RootState>((state) => state.selectedUsers);
-
+  const [usersFilters, setUsersFilters] = useState<IFilterElementsTypes[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<IStrapiUser[]>([]);
 
-  const usersFilters: IFilterElementsTypes[] = [
-    {
-      label: t('filters.users.role'),
-      type: 'role',
-      elements: roles.map((role) => ({
-        label: role.name,
-        id: role.type,
-      })),
-    },
-    {
-      label: t('filters.users.status'),
-      type: 'blocked',
-      elements: [
+  useEffect(() => {
+    if (roles) {
+      setUsersFilters([
         {
-          label: t('filters.users.active'),
-          id: 'active',
+          label: t('filters.users.role'),
+          type: 'role',
+          elements: roles.roles
+            .filter((role) => role.type !== 'public')
+            .map((role) => ({
+              label: role.name,
+              id: role.type,
+            })),
         },
         {
-          label: t('filters.users.blocked'),
-          id: 'blocked',
+          label: t('filters.users.status'),
+          type: 'blocked',
+          elements: [
+            {
+              label: t('filters.users.active'),
+              id: 'active',
+            },
+            {
+              label: t('filters.users.blocked'),
+              id: 'blocked',
+            },
+          ],
         },
-      ],
-    },
-    {
-      label: t('filters.users.confirmStatus'),
-      type: 'confirmed',
-      elements: [
         {
-          label: t('filters.users.confirmed'),
-          id: 'confirmed',
+          label: t('filters.users.confirmStatus'),
+          type: 'confirmed',
+          elements: [
+            {
+              label: t('filters.users.confirmed'),
+              id: 'confirmed',
+            },
+            {
+              label: t('filters.users.notConfirmed'),
+              id: 'notConfirmed',
+            },
+          ],
         },
-        {
-          label: t('filters.users.notConfirmed'),
-          id: 'notConfirmed',
-        },
-      ],
-    },
-  ];
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roles]);
 
   useEffect(() => {
     dispatch(clearSort());

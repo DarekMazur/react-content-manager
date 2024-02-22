@@ -70,10 +70,14 @@ const HomeSection = () => {
                 target={`articles/${latestArticle.latest.id}`}
                 name={(latestArticle.latest as IArticleData).attributes.title}
               />{' '}
-              {t('home.lastArticleDetails', {
-                username: (latestArticle.latest as IArticleData).attributes
-                  .author.data.attributes.username,
-              })}{' '}
+              {(latestArticle.latest as IArticleData).attributes.author.data ? (
+                t('home.lastArticleDetails', {
+                  username: (latestArticle.latest as IArticleData).attributes
+                    .author.data.attributes.username,
+                })
+              ) : (
+                <i>Author is not longer available</i>
+              )}{' '}
               ({latestArticle.publishedDate})
             </P>
           </>
