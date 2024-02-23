@@ -144,7 +144,8 @@
       "message": {
         "missingTitle": "Tytuł jest wymagany",
         "missingBody": "Treść jest wymagana",
-        "missing": "Tytuł i treść są wymagane"
+        "missing": "Tytuł i treść są wymagane",
+        "noChanges": "Artukuł nie został zmieniony"
       }
     }
   },
