@@ -62,6 +62,7 @@ const CommentForm = () => {
   const [updatedElement, setUpdatedElement] = useState<string | undefined>(
     undefined,
   );
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     if (comments && users) {
@@ -90,14 +91,6 @@ const CommentForm = () => {
   }, [users, comments, uuid]);
 
   useEffect(() => {
-    // if (currentComment && users.length > 0) {
-    //   setUserData(
-    //     users.find(
-    //       (user) =>
-    //         (user as IUserData).id === currentComment.attributes.author.data.id,
-    //     ),
-    //   );
-    // }
     if (currentComment && users && users.length > 0) {
       setUserData(users.find((user) => (user as IStrapiUser).id === 1));
     }
@@ -116,6 +109,22 @@ const CommentForm = () => {
       setModal(true);
     }
   }, [isLoading, loadingUser]);
+
+  useEffect(() => {
+    if (
+      currentComment?.attributes.shadowed === initialData.commentShadowed &&
+      userData?.blocked === initialData.authorBlocked
+    ) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [
+    currentComment?.attributes.shadowed,
+    initialData.authorBlocked,
+    initialData.commentShadowed,
+    userData?.blocked,
+  ]);
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -328,7 +337,7 @@ const CommentForm = () => {
           </CommentFormWrapper>
           <FormButtonWrapper>
             <EditButtonsWrapper>
-              <FormButton $type="submit" type="submit">
+              <FormButton $type="submit" type="submit" disabled={disabled}>
                 <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
                 {t('form.saveButton')}
               </FormButton>
