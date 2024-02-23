@@ -320,7 +320,6 @@ const ArticleForm = () => {
         isSticky: articleIsSticky,
         tags: articleTags,
         publishedAt: publishedStatus(),
-        updatedAt: new Date(),
       },
     };
 
