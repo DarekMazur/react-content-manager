@@ -51,6 +51,7 @@ import {
 import { ICategoryData } from '../../../../types/categoryTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import Uploading from '../../../Atoms/Uploading/Uploading.tsx';
+import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
 
 interface IOptionTypes {
   readonly label: string;
@@ -418,21 +419,25 @@ const ArticleForm = () => {
               onFilesChange={(selectedFiles) => setImage(selectedFiles)}
             />
           )}
-          <P>
-            {t('article.form.author')}{' '}
-            <InLink
-              target={
-                currentArticle
-                  ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
-                  : `/users/${(currentUser as IStrapiUser).uuid}`
-              }
-              name={
-                currentArticle
-                  ? currentArticle.attributes.author.data.attributes.username
-                  : (currentUser as IStrapiUser).username
-              }
-            />
-          </P>
+          {currentArticle?.attributes.author.data ? (
+            <P>
+              {t('article.form.author')}{' '}
+              <InLink
+                target={
+                  currentArticle
+                    ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
+                    : `/users/${(currentUser as IStrapiUser).uuid}`
+                }
+                name={
+                  currentArticle
+                    ? currentArticle.attributes.author.data.attributes.username
+                    : (currentUser as IStrapiUser).username
+                }
+              />
+            </P>
+          ) : (
+            <Italic>{t('article.form.noAuthor')}</Italic>
+          )}
           <P>
             {articlePublished ? (
               t('article.form.publishedAt', { date: getDate(articlePublished) })
