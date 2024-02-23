@@ -12,10 +12,13 @@ const borderScale = keyframes`
   }
 `;
 
-export const Loading = styled.div`
-  width: 35rem;
-  height: 35rem;
-  margin: 0 auto;
+export const Loading = styled.div<{
+  $size?: number;
+  $margin?: number | string;
+}>`
+  width: ${({ $size }) => ($size ? `${$size}rem` : '35rem')};
+  height: ${({ $size }) => ($size ? `${$size}rem` : '35rem')};
+  margin: ${({ $margin }) => ($margin ? $margin : '0 auto')};
   position: relative;
   border: ${({ theme }) => `0.5rem solid ${theme.colors.darkBlue}`};
   border-radius: 50%;

@@ -17,7 +17,6 @@ import {
   useGetUsersQuery,
   useUpdateUserMutation,
 } from '../../../../store';
-// import { roles } from '../../../../mocks/db';
 import { Loading } from '../../../Atoms/Loading/Loading.styles';
 import Modal from '../../Modal/Modal';
 import ImageController from '../../../Molecules/ImageControler/ImageController.tsx';
@@ -28,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
 import { IRoleTypes } from '../../../../types/roleTypes.ts';
+import Uploading from '../../../Atoms/Uploading/Uploading.tsx';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
   const { t } = useTranslation();
@@ -44,6 +44,8 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [userData, setUserData] = useState<IStrapiUser | undefined>(undefined);
   const [modal, setModal] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
 
   useEffect(() => {
     image.length > 0 && setImageUrl(URL.createObjectURL(image[0]));
@@ -52,16 +54,13 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   useEffect(() => {
     if (imageUrl && userData) {
       const fetchImage = async () => {
+        setDisabled(true);
+        setImageLoading(true);
         const myImage = await fetch(imageUrl);
         const myBlob = await myImage.blob();
 
         const formData = new FormData();
         formData.append('files', myBlob, imageUrl);
-        formData.append('ref', 'plugin::users-permissions.user');
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        formData.append('refId', userData.id);
-        formData.append('field', 'avatar');
 
         await fetch(`${import.meta.env.VITE_API_URL}upload`, {
           headers: {
@@ -75,9 +74,14 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           })
           .then((data) => {
             const file = { ...data[0] };
-            const updateUser: IStrapiUser = { ...userData };
-            updateUser.avatar = file;
+            const updateUser: IStrapiUser = {
+              ...userData,
+              avatar: file,
+            };
+            // updateUser.avatar = file;
             setUserData({ ...(updateUser as IStrapiUser) });
+            setDisabled(false);
+            setImageLoading(false);
           });
       };
       // noinspection JSIgnoredPromiseFromCall
@@ -136,6 +140,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     const dataToUpdate = {
       id: userData?.id,
       username: userData?.username,
+      avatar: userData?.avatar,
       email: userData?.email,
       confirmed: userData?.confirmed,
       blocked: userData?.blocked,
@@ -187,15 +192,20 @@ const UserForm = ({ uuid }: { uuid: string }) => {
         />
       ) : null}
       <StyledUserForm onSubmit={handleSubmit} onReset={handleCancel}>
-        <ImageController
-          image={image}
-          defaultImage={userData.avatar ? userData.avatar.url : userIcon}
-          altText={userData.username}
-          imageUrl={imageUrl as string}
-          uuid={uuid}
-          isRounded
-          onFilesChange={(selectedFiles) => setImage(selectedFiles)}
-        />
+        {imageLoading ? (
+          <Uploading />
+        ) : (
+          <ImageController
+            image={image}
+            defaultImage={userData.avatar ? userData.avatar.url : userIcon}
+            altText={userData.username}
+            imageUrl={imageUrl as string}
+            uuid={uuid}
+            isRounded
+            onFilesChange={(selectedFiles) => setImage(selectedFiles)}
+          />
+        )}
+
         <FormWrapper $direction="column" $gap={1.5} $minWidth={30}>
           <Input
             label={t('user.form.name')}
@@ -240,7 +250,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
           ) : null}
           <FormButtonWrapper>
             <EditButtonsWrapper>
-              <FormButton $type="submit" type="submit">
+              <FormButton $type="submit" type="submit" disabled={disabled}>
                 <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
                 {t('form.saveButton')}
               </FormButton>

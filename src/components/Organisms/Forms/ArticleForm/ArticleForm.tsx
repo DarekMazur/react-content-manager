@@ -50,6 +50,8 @@ import {
 } from '../../../../types/strapiTypes.ts';
 import { ICategoryData } from '../../../../types/categoryTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
+import Uploading from '../../../Atoms/Uploading/Uploading.tsx';
+import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
 
 interface IOptionTypes {
   readonly label: string;
@@ -92,6 +94,8 @@ const ArticleForm = () => {
   const [newTag, setNewTag] = useState<string | null>();
   const [editorBody, setEditorBody] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [disabled, setDisabled] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
 
   const articleInitCategories: IOptionTypes[] = [];
 
@@ -120,15 +124,12 @@ const ArticleForm = () => {
   useEffect(() => {
     if (imageUrl) {
       const fetchImage = async () => {
+        setDisabled(true);
+        setImageLoading(true);
         const myImage = await fetch(imageUrl);
         const myBlob = await myImage.blob();
         const formData = new FormData();
         formData.append('files', myBlob, imageUrl);
-        formData.append('ref', 'api::article.article');
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        formData.append('refId', currentArticle.id);
-        formData.append('field', 'cover');
 
         await fetch(`${import.meta.env.VITE_API_URL}upload`, {
           headers: {
@@ -141,15 +142,17 @@ const ArticleForm = () => {
             return response.json();
           })
           .then((data) => {
-            const filtered = { ...data[0] };
-            delete filtered.id;
-            const file = {
-              data: {
-                id: data[0].id,
-                ...filtered,
-              },
-            };
+            const file = { ...data[0] };
+            // delete filtered.id;
+            // const file = {
+            //   data: {
+            //     id: data[0].id,
+            //     ...filtered,
+            //   },
+            // };
             setArticleCover(file);
+            setDisabled(false);
+            setImageLoading(false);
           });
       };
       // noinspection JSIgnoredPromiseFromCall
@@ -311,25 +314,21 @@ const ArticleForm = () => {
             ? null
             : (articleCover as IStrapiFileTypes).data?.attributes
               ? {
-                  data: (articleCover as IStrapiFileTypes).data.attributes,
                   id: (articleCover as IStrapiFileTypes).data.id,
+                  ...(articleCover as IStrapiFileTypes).data.attributes,
                 }
               : articleCover,
         isSticky: articleIsSticky,
         tags: articleTags,
         publishedAt: publishedStatus(),
-        updatedAt: new Date(),
       },
     };
 
     if (location.pathname.includes('create')) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      dataToUpload.data.author = { connect: [1] };
-      // dataToUpload.data.author = { connect: [currentUser.id] };
-
+      dataToUpload.data.author = { connect: [currentUser.id] };
       createArticle(dataToUpload);
-
       navigate('/articles');
     } else {
       dataToUpload.data.updatedAt = new Date();
@@ -399,38 +398,46 @@ const ArticleForm = () => {
         onReset={(e) => handleOnCancel(e)}
       >
         <aside>
-          <ImageController
-            image={image}
-            defaultImage={
-              articleCover && (articleCover as IStrapiFileTypes).data
-                ? (articleCover as IStrapiFileTypes).data.attributes
-                  ? (articleCover as IStrapiFileTypes).data.attributes.formats
-                      .small.url
-                  : (articleCover as IStrapiImagePostFormat).data.formats.small
-                      .url
-                : imageUrl
-                  ? imageUrl
-                  : placeholder
-            }
-            altText={`${articleTitle} cover image`}
-            imageUrl={imageUrl as string}
-            onFilesChange={(selectedFiles) => setImage(selectedFiles)}
-          />
-          <P>
-            {t('article.form.author')}{' '}
-            <InLink
-              target={
-                currentArticle
-                  ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
-                  : `/users/${(currentUser as IStrapiUser).uuid}`
+          {imageLoading ? (
+            <Uploading />
+          ) : (
+            <ImageController
+              image={image}
+              defaultImage={
+                articleCover && (articleCover as IStrapiFileTypes).data
+                  ? (articleCover as IStrapiFileTypes).data.attributes
+                    ? (articleCover as IStrapiFileTypes).data.attributes.formats
+                        .small.url
+                    : (articleCover as IStrapiImagePostFormat).data.formats
+                        .small.url
+                  : imageUrl
+                    ? imageUrl
+                    : placeholder
               }
-              name={
-                currentArticle
-                  ? currentArticle.attributes.author.data.attributes.username
-                  : (currentUser as IStrapiUser).username
-              }
+              altText={`${articleTitle} cover image`}
+              imageUrl={imageUrl as string}
+              onFilesChange={(selectedFiles) => setImage(selectedFiles)}
             />
-          </P>
+          )}
+          {currentArticle?.attributes.author.data ? (
+            <P>
+              {t('article.form.author')}{' '}
+              <InLink
+                target={
+                  currentArticle
+                    ? `/users/${currentArticle.attributes.author.data.attributes.uuid}`
+                    : `/users/${(currentUser as IStrapiUser).uuid}`
+                }
+                name={
+                  currentArticle
+                    ? currentArticle.attributes.author.data.attributes.username
+                    : (currentUser as IStrapiUser).username
+                }
+              />
+            </P>
+          ) : (
+            <Italic>{t('article.form.noAuthor')}</Italic>
+          )}
           <P>
             {articlePublished ? (
               t('article.form.publishedAt', { date: getDate(articlePublished) })
@@ -516,7 +523,7 @@ const ArticleForm = () => {
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <div>
-                <FormButton $type="submit" type="submit">
+                <FormButton $type="submit" type="submit" disabled={disabled}>
                   <FontAwesomeIcon icon={['fas', 'save']} />{' '}
                   {currentArticle && currentArticle.attributes.publishedAt
                     ? t('article.form.button.save')
