@@ -140,6 +140,12 @@
         "publish": "Opublikuj",
         "unpublish": "Cofnij publikację",
         "draft": "Szkic"
+      },
+      "message": {
+        "missingTitle": "Tytuł jest wymagany",
+        "missingBody": "Treść jest wymagana",
+        "missing": "Tytuł i treść są wymagane",
+        "noChanges": "Artukuł nie został zmieniony"
       }
     }
   },

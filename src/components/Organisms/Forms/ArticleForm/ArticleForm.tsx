@@ -94,14 +94,16 @@ const ArticleForm = () => {
   const [newTag, setNewTag] = useState<string | null>();
   const [editorBody, setEditorBody] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [imageLoading, setImageLoading] = useState(false);
-
-  const articleInitCategories: IOptionTypes[] = [];
-
   const [initCategoriesOption, setInitCategoriesOption] = useState<
     IOptionTypes[] | null
   >();
+
+  const articleInitCategories: IOptionTypes[] = [];
+
+  const CKETitle = editorBody.match(/<h1>.*<\/h1>/) || '';
+  const CKEBody = editorBody.replace(CKETitle[0], '');
 
   useEffect(() => {
     const categoriesOptions: IOptionTypes[] = [];
@@ -143,13 +145,6 @@ const ArticleForm = () => {
           })
           .then((data) => {
             const file = { ...data[0] };
-            // delete filtered.id;
-            // const file = {
-            //   data: {
-            //     id: data[0].id,
-            //     ...filtered,
-            //   },
-            // };
             setArticleCover(file);
             setDisabled(false);
             setImageLoading(false);
@@ -212,6 +207,41 @@ const ArticleForm = () => {
       setModal(true);
     }
   }, [loadingUpdate]);
+
+  useEffect(() => {
+    if (
+      CKETitle[0] &&
+      currentArticle?.attributes.title ===
+        CKETitle[0].replace(/<\/?h1>/g, '') &&
+      currentArticle?.attributes.body === CKEBody &&
+      currentArticle?.attributes.description === articleDescription &&
+      currentArticle?.attributes.tags === articleTags &&
+      currentArticle?.attributes.isSticky === articleIsSticky &&
+      JSON.stringify(currentArticle?.attributes.cover) ===
+        JSON.stringify(articleCover) &&
+      JSON.stringify(currentArticle?.attributes.categories.data) ===
+        JSON.stringify(articleCategories)
+    ) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [
+    CKEBody,
+    CKETitle,
+    articleCategories,
+    articleCover,
+    articleDescription,
+    articleIsSticky,
+    articleTags,
+    currentArticle?.attributes.body,
+    currentArticle?.attributes.categories.data,
+    currentArticle?.attributes.cover,
+    currentArticle?.attributes.description,
+    currentArticle?.attributes.isSticky,
+    currentArticle?.attributes.tags,
+    currentArticle?.attributes.title,
+  ]);
 
   const createOption = (label: string) => ({
     label,
@@ -283,22 +313,26 @@ const ArticleForm = () => {
       }
     };
 
-    const CKETitle = editorBody.match(/<h1>.*<\/h1>/) || '';
-    const CKEBody = editorBody.replace(CKETitle[0], '');
-
     if (
       CKETitle.length === 0 ||
       CKETitle[0].replace(/<\/?h1>/g, '') === '&nbsp;'
     ) {
       return setErrorMessage(
         !CKEBody
-          ? 'Article title and content are required'
-          : 'Article title is required',
+          ? t('article.form.message.missing')
+          : t('article.form.message.missingTitle'),
       );
     }
 
     if (!CKEBody || CKEBody.replace(/<\/?p>/g, '') === '&nbsp;') {
-      return setErrorMessage('Article content is required');
+      return setErrorMessage(t('article.form.message.missingBody'));
+    }
+
+    if (
+      disabled &&
+      currentArticle?.attributes.publishedAt === publishedStatus()
+    ) {
+      return setErrorMessage(t('article.form.message.noChanges'));
     }
 
     const dataToUpload = {
@@ -331,8 +365,6 @@ const ArticleForm = () => {
       createArticle(dataToUpload);
       navigate('/articles');
     } else {
-      dataToUpload.data.updatedAt = new Date();
-
       updateArticle(dataToUpload);
     }
   };
@@ -523,7 +555,13 @@ const ArticleForm = () => {
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <div>
-                <FormButton $type="submit" type="submit" disabled={disabled}>
+                <FormButton
+                  $type="submit"
+                  type="submit"
+                  disabled={
+                    disabled && !!currentArticle?.attributes.publishedAt
+                  }
+                >
                   <FontAwesomeIcon icon={['fas', 'save']} />{' '}
                   {currentArticle && currentArticle.attributes.publishedAt
                     ? t('article.form.button.save')
@@ -532,6 +570,7 @@ const ArticleForm = () => {
                 <FormButton
                   $type="submit"
                   type="button"
+                  disabled={disabled && !currentArticle?.attributes.publishedAt}
                   onClick={(e) => handleSubmit(e, true)}
                 >
                   <FontAwesomeIcon icon={['fas', 'clipboard']} />{' '}

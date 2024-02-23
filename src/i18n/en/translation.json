@@ -138,6 +138,12 @@
         "publish": "Publish",
         "unpublish": "Unpublish",
         "draft": "Draft"
+      },
+      "message": {
+        "missingTitle": "Article title is required",
+        "missingBody": "Article content is required",
+        "missing": "Article title and content are required",
+        "noChanges": "Article has not been modified"
       }
     }
   },
