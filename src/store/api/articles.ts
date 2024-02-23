@@ -18,17 +18,26 @@ export const articlesApi = createApi({
       providesTags: ['Articles'],
     }),
     updateArticle: builder.mutation({
-      query: (body) => (
-        console.log(body),
-        {
-          url: `articles/${body.data.id}`,
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+      query: (body) => ({
+        url: `articles/${body.data.id}`,
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
+        body: {
+          data: {
+            title: body.data.title,
+            description: body.data.description,
+            categories: body.data.categories,
+            body: body.data.body,
+            cover: body.data.cover,
+            isSticky: body.data.isSticky,
+            tags: body.data.tags,
+            publishedAt: body.data.publishedAt,
+            updatedAt: new Date(),
           },
-          body,
-        }
-      ),
+        },
+      }),
       invalidatesTags: ['Articles'],
     }),
     createArticle: builder.mutation({

@@ -60,4 +60,13 @@ export const FormButton = styled.button<IFormButtonTypes>`
     box-shadow: ${({ theme }) =>
       `inset 0.1rem 0.1rem 1rem ${theme.colors.darkBlue}`};
   }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.darkGrey};
+    color: ${({ theme }) => theme.colors.grey};
+
+    &:active {
+      box-shadow: unset;
+    }
+  }
 `;

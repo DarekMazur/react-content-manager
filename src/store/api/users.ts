@@ -29,6 +29,7 @@ export const usersApi = createApi({
           email: body.email,
           confirmed: body.confirmed,
           blocked: body.blocked,
+          avatar: body.avatar,
           updatedAt: new Date(),
           role: {
             disconnect: [{ id: body.role.id }],
