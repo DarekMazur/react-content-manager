@@ -96,12 +96,11 @@ const ArticleForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
-
-  const articleInitCategories: IOptionTypes[] = [];
-
   const [initCategoriesOption, setInitCategoriesOption] = useState<
     IOptionTypes[] | null
   >();
+
+  const articleInitCategories: IOptionTypes[] = [];
 
   useEffect(() => {
     const categoriesOptions: IOptionTypes[] = [];
@@ -285,13 +284,13 @@ const ArticleForm = () => {
     ) {
       return setErrorMessage(
         !CKEBody
-          ? 'Article title and content are required'
-          : 'Article title is required',
+          ? t('article.form.message.missing')
+          : t('article.form.message.missingTitle'),
       );
     }
 
     if (!CKEBody || CKEBody.replace(/<\/?p>/g, '') === '&nbsp;') {
-      return setErrorMessage('Article content is required');
+      return setErrorMessage(t('article.form.message.missingBody'));
     }
 
     const dataToUpload = {
@@ -324,8 +323,6 @@ const ArticleForm = () => {
       createArticle(dataToUpload);
       navigate('/articles');
     } else {
-      dataToUpload.data.updatedAt = new Date();
-
       updateArticle(dataToUpload);
     }
   };
