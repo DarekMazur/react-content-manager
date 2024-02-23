@@ -143,13 +143,6 @@ const ArticleForm = () => {
           })
           .then((data) => {
             const file = { ...data[0] };
-            // delete filtered.id;
-            // const file = {
-            //   data: {
-            //     id: data[0].id,
-            //     ...filtered,
-            //   },
-            // };
             setArticleCover(file);
             setDisabled(false);
             setImageLoading(false);
