@@ -326,11 +326,8 @@ const ArticleForm = () => {
     if (location.pathname.includes('create')) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      dataToUpload.data.author = { connect: [1] };
-      // dataToUpload.data.author = { connect: [currentUser.id] };
-
+      dataToUpload.data.author = { connect: [currentUser.id] };
       createArticle(dataToUpload);
-
       navigate('/articles');
     } else {
       dataToUpload.data.updatedAt = new Date();
