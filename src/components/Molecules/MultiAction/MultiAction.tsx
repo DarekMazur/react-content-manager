@@ -20,6 +20,7 @@ import {
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { IArticleData } from '../../../types/articleTypes.ts';
+import { IStrapiUser, IUserData } from '../../../types/userTypes.ts';
 
 interface IMultiActionProps {
   counter: number;
@@ -80,23 +81,23 @@ const MultiAction: FC<IMultiActionProps> = ({ counter }) => {
   };
 
   const handleBlock = () => {
-    (selectedUsers as IUserTypes[]).forEach((user) => {
+    (selectedUsers as IStrapiUser[]).forEach((user) => {
       user = {
         ...user,
         blocked: true,
       };
-      updateUser({ ...user });
+      updateUser({ ...user, newRole: user.role });
     });
     dispatch(clearUsersSelected());
   };
 
   const handleUnblock = () => {
-    (selectedUsers as IUserTypes[]).forEach((user) => {
+    (selectedUsers as IStrapiUser[]).forEach((user) => {
       user = {
         ...user,
         blocked: false,
       };
-      updateUser({ ...user });
+      updateUser({ ...user, newRole: user.role });
     });
     dispatch(clearUsersSelected());
   };
