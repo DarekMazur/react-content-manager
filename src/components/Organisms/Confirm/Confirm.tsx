@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ActionButton from '../../Atoms/ActionButton/ActionButton';
 import { PopupWrapper } from '../PopupWrapper/PopupWrapper.styles.ts';
 import {
-  PopupTypes,
+  IPopupTypes,
   RootState,
   clearSelected,
   switchPopup,
@@ -32,7 +32,7 @@ const Confirm = () => {
   const popup = useSelector<RootState>((state) => state.popup);
   const location = useLocation();
 
-  const popupState = popup as PopupTypes;
+  const popupState = popup as IPopupTypes;
 
   const counter = popupState.ids ? popupState.ids.length : 0;
 
@@ -44,9 +44,9 @@ const Confirm = () => {
         if (counter > 1) {
           return t('confirmation.element.users');
         }
-        return `${t('confirmation.element.user')} <strong>${
-          popupState.title ? popupState.title : null
-        }</strong>`;
+        return `${t('confirmation.element.user')}${
+          popupState.title ? ` <strong>${popupState.title}</strong>` : ``
+        }`;
       case 'articles':
         if (counter > 1) {
           if (
@@ -58,9 +58,9 @@ const Confirm = () => {
           }
           return t('confirmation.element.articlesMany');
         }
-        return `${t('confirmation.element.article')} <strong>${
-          popupState.title ? popupState.title : null
-        }</strong>`;
+        return `${t('confirmation.element.article')}${
+          popupState.title ? ` <strong>${popupState.title}</strong>` : ``
+        }`;
       case 'comments':
         if (counter > 1) {
           if (
@@ -72,9 +72,9 @@ const Confirm = () => {
           }
           return t('confirmation.element.commentsMany');
         }
-        return `${t('confirmation.element.comment')} <strong>${
-          popupState.title ? popupState.title : null
-        }</strong>`;
+        return `${t('confirmation.element.comment')}${
+          popupState.title ? ` <strong>${popupState.title}</strong>` : ``
+        }`;
       case 'categories':
         if (counter > 1) {
           if (
@@ -86,9 +86,9 @@ const Confirm = () => {
           }
           return t('confirmation.element.categoriesMany');
         }
-        return `${t('confirmation.element.category')} <strong>${
-          popupState.title ? popupState.title : null
-        }</strong>`;
+        return `${t('confirmation.element.category')}${
+          popupState.title ? ` <strong>${popupState.title}</strong>` : ``
+        }`;
     }
   };
 
@@ -155,9 +155,11 @@ const Confirm = () => {
         />
         <div>
           <ActionButton handleClick={handleDelete} isDel>
-            delete
+            {t('confirmation.delete')}
           </ActionButton>
-          <ActionButton handleClick={handleCancel}>cancel</ActionButton>
+          <ActionButton handleClick={handleCancel}>
+            {t('confirmation.cancel')}
+          </ActionButton>
         </div>
       </div>
     </PopupWrapper>
