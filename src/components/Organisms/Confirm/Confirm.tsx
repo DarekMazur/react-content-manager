@@ -155,9 +155,11 @@ const Confirm = () => {
         />
         <div>
           <ActionButton handleClick={handleDelete} isDel>
-            delete
+            {t('confirmation.delete')}
           </ActionButton>
-          <ActionButton handleClick={handleCancel}>cancel</ActionButton>
+          <ActionButton handleClick={handleCancel}>
+            {t('confirmation.cancel')}
+          </ActionButton>
         </div>
       </div>
     </PopupWrapper>
