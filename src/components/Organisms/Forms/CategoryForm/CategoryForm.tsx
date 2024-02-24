@@ -22,6 +22,7 @@ import {
   ICategoryBaseData,
   ICategoryData,
 } from '../../../../types/categoryTypes.ts';
+import { set } from 'husky';
 
 const CategoryForm = () => {
   const initCategory: ICategoryBaseData = {
@@ -50,6 +51,7 @@ const CategoryForm = () => {
   );
   const [modal, setModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     if (categories && categories.data.length > 0) {
@@ -87,6 +89,18 @@ const CategoryForm = () => {
       setModal(true);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (
+      currentCategory?.attributes.title === updatedCategory.attributes.title &&
+      currentCategory.attributes.description ===
+        updatedCategory.attributes.description
+    ) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [updatedCategory]);
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -202,7 +216,7 @@ const CategoryForm = () => {
           </div>
           <FormButtonWrapper>
             <EditButtonsWrapper>
-              <FormButton $type="submit" type="submit">
+              <FormButton $type="submit" type="submit" disabled={disabled}>
                 <FontAwesomeIcon icon={['fas', 'edit']} />{' '}
                 {t('form.saveButton')}
               </FormButton>
