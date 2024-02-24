@@ -67,11 +67,13 @@ const CommentForm = () => {
   useEffect(() => {
     if (comments && users) {
       setInitialData({
-        authorBlocked: !!users.find(
-          (user) =>
-            user.uuid ===
-            currentComment?.attributes.author.data.attributes.uuid,
-        )?.blocked,
+        authorBlocked: currentComment?.attributes.author.data
+          ? !!users.find(
+              (user) =>
+                user.uuid ===
+                currentComment?.attributes.author.data.attributes.uuid,
+            )?.blocked
+          : false,
         commentShadowed: !!comments.data.find(
           (comment) => comment.attributes.uuid === uuid,
         )?.attributes.shadowed,
