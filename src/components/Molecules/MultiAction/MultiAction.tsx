@@ -11,14 +11,15 @@ import {
   useUpdateArticleMutation,
   useUpdateUserMutation,
 } from '../../../store';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  ICommentTypes,
-  IUserTypes,
-} from '../../../types/dataTypes.ts';
+// import {
+//   IArticleDataTypes,
+//   ICategoriesTypes,
+//   ICommentTypes,
+//   IUserTypes,
+// } from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { IArticleData } from '../../../types/articleTypes.ts';
 
 interface IMultiActionProps {
   counter: number;
@@ -39,24 +40,41 @@ const MultiAction: FC<IMultiActionProps> = ({ counter }) => {
   const [updateArticle] = useUpdateArticleMutation();
   const [updateUser] = useUpdateUserMutation();
 
+  const dataToUpdate = (data: IArticleData) => {
+    return {
+      data: {
+        id: data.id,
+        ...data.attributes,
+      },
+    };
+  };
+
   const handlePublish = () => {
-    (selected as IArticleDataTypes[]).forEach((article) => {
+    (selected as IArticleData[]).forEach((article) => {
       article = {
-        ...article,
-        publishedAt: article.publishedAt ? article.publishedAt : new Date(),
+        id: article.id,
+        attributes: {
+          ...article.attributes,
+          publishedAt: article.attributes.publishedAt
+            ? article.attributes.publishedAt
+            : new Date(),
+        },
       };
-      updateArticle({ ...article });
+      updateArticle(dataToUpdate(article));
     });
     dispatch(clearSelected());
   };
 
   const handleUnpublish = () => {
-    (selected as IArticleDataTypes[]).forEach((article) => {
+    (selected as IArticleData[]).forEach((article) => {
       article = {
-        ...article,
-        publishedAt: null,
+        id: article.id,
+        attributes: {
+          ...article.attributes,
+          publishedAt: null,
+        },
       };
-      updateArticle({ ...article });
+      updateArticle(dataToUpdate(article));
     });
     dispatch(clearSelected());
   };
