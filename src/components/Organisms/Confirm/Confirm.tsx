@@ -7,13 +7,12 @@ import {
   clearSelected,
   switchPopup,
   useRemoveArticleMutation,
-  useRemoveArticlesMutation,
   useRemoveCommentMutation,
-  useRemoveCommentsMutation,
   useRemoveUserMutation,
-  useRemoveUsersMutation,
   useRemoveCategoryMutation,
-  useRemoveCategoriesMutation,
+  clearUsersSelected,
+  clearCommentsSelected,
+  clearCategoriesSelected,
 } from '../../../store';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -21,13 +20,9 @@ import { useTranslation } from 'react-i18next';
 const Confirm = () => {
   const { t } = useTranslation();
   const [removeArticle] = useRemoveArticleMutation();
-  const [removeArticles] = useRemoveArticlesMutation();
   const [removeUser] = useRemoveUserMutation();
-  const [removeUsers] = useRemoveUsersMutation();
   const [removeComment] = useRemoveCommentMutation();
-  const [removeComments] = useRemoveCommentsMutation();
   const [removeCategory] = useRemoveCategoryMutation();
-  const [removeCategories] = useRemoveCategoriesMutation();
   const dispatch = useDispatch();
   const popup = useSelector<RootState>((state) => state.popup);
   const location = useLocation();
@@ -106,40 +101,50 @@ const Confirm = () => {
       switch (locationName) {
         case 'articles':
           removeArticle(popupState.ids[0]);
+          dispatch(clearSelected());
           break;
         case 'users':
           removeUser(popupState.ids[0]);
+          dispatch(clearUsersSelected());
           break;
         case 'comments':
           removeComment(popupState.ids[0]);
+          dispatch(clearCommentsSelected());
           break;
         case 'categories':
           removeCategory(popupState.ids);
+          dispatch(clearCategoriesSelected());
           break;
       }
     } else {
       switch (location.pathname.slice(1)) {
         case 'articles':
-          removeArticles(popupState.ids);
+          popupState.ids.forEach((id) => removeArticle(id));
+          dispatch(clearSelected());
           break;
         case 'users':
-          removeUsers(popupState.ids);
+          popupState.ids.forEach((id) => removeUser(id));
+          dispatch(clearUsersSelected());
           break;
         case 'comments':
-          removeComments(popupState.ids);
+          popupState.ids.forEach((id) => removeComment(id));
+          dispatch(clearCommentsSelected());
           break;
         case 'categories':
-          removeCategories(popupState.ids);
+          popupState.ids.forEach((id) => removeCategory(id));
+          dispatch(clearCategoriesSelected());
           break;
       }
     }
     dispatch(switchPopup(false));
-    dispatch(clearSelected());
   };
 
   const handleCancel = () => {
     dispatch(switchPopup(false));
     dispatch(clearSelected());
+    dispatch(clearUsersSelected());
+    dispatch(clearCommentsSelected());
+    dispatch(clearCategoriesSelected());
   };
 
   return (

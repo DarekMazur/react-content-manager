@@ -11,14 +11,12 @@ import {
   useUpdateArticleMutation,
   useUpdateUserMutation,
 } from '../../../store';
-import {
-  IArticleDataTypes,
-  ICategoriesTypes,
-  ICommentTypes,
-  IUserTypes,
-} from '../../../types/dataTypes.ts';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { IArticleData } from '../../../types/articleTypes.ts';
+import { IStrapiUser } from '../../../types/userTypes.ts';
+import { ICommentTypes } from '../../../types/commentTypes.ts';
+import { ICategoryData } from '../../../types/categoryTypes.ts';
 
 interface IMultiActionProps {
   counter: number;
@@ -39,46 +37,63 @@ const MultiAction: FC<IMultiActionProps> = ({ counter }) => {
   const [updateArticle] = useUpdateArticleMutation();
   const [updateUser] = useUpdateUserMutation();
 
+  const dataToUpdate = (data: IArticleData) => {
+    return {
+      data: {
+        id: data.id,
+        ...data.attributes,
+      },
+    };
+  };
+
   const handlePublish = () => {
-    (selected as IArticleDataTypes[]).forEach((article) => {
+    (selected as IArticleData[]).forEach((article) => {
       article = {
-        ...article,
-        publishedAt: article.publishedAt ? article.publishedAt : new Date(),
+        id: article.id,
+        attributes: {
+          ...article.attributes,
+          publishedAt: article.attributes.publishedAt
+            ? article.attributes.publishedAt
+            : new Date(),
+        },
       };
-      updateArticle({ ...article });
+      updateArticle(dataToUpdate(article));
     });
     dispatch(clearSelected());
   };
 
   const handleUnpublish = () => {
-    (selected as IArticleDataTypes[]).forEach((article) => {
+    (selected as IArticleData[]).forEach((article) => {
       article = {
-        ...article,
-        publishedAt: null,
+        id: article.id,
+        attributes: {
+          ...article.attributes,
+          publishedAt: null,
+        },
       };
-      updateArticle({ ...article });
+      updateArticle(dataToUpdate(article));
     });
     dispatch(clearSelected());
   };
 
   const handleBlock = () => {
-    (selectedUsers as IUserTypes[]).forEach((user) => {
+    (selectedUsers as IStrapiUser[]).forEach((user) => {
       user = {
         ...user,
         blocked: true,
       };
-      updateUser({ ...user });
+      updateUser({ ...user, newRole: user.role });
     });
     dispatch(clearUsersSelected());
   };
 
   const handleUnblock = () => {
-    (selectedUsers as IUserTypes[]).forEach((user) => {
+    (selectedUsers as IStrapiUser[]).forEach((user) => {
       user = {
         ...user,
         blocked: false,
       };
-      updateUser({ ...user });
+      updateUser({ ...user, newRole: user.role });
     });
     dispatch(clearUsersSelected());
   };
@@ -89,25 +104,25 @@ const MultiAction: FC<IMultiActionProps> = ({ counter }) => {
     switch (location.pathname.slice(1)) {
       case 'articles':
         {
-          (selected as IArticleDataTypes[]).forEach((element) => {
+          (selected as IArticleData[]).forEach((element) => {
             ids.push(element.id);
           });
           singleTitle =
             ids.length === 1
-              ? (selected as IArticleDataTypes[]).find(
+              ? (selected as IArticleData[]).find(
                   (element) => element.id === ids[0],
-                )?.title
+                )?.attributes.title
               : undefined;
         }
         break;
       case 'users':
         {
-          (selectedUsers as IUserTypes[]).forEach((element) => {
+          (selectedUsers as IStrapiUser[]).forEach((element) => {
             ids.push(element.id);
           });
           singleTitle =
             ids.length === 1
-              ? (selectedUsers as IUserTypes[]).find(
+              ? (selectedUsers as IStrapiUser[]).find(
                   (element) => element.id === ids[0],
                 )?.username
               : undefined;
@@ -123,7 +138,7 @@ const MultiAction: FC<IMultiActionProps> = ({ counter }) => {
         break;
       case 'categories':
         {
-          (selectedCategories as ICategoriesTypes[]).forEach((element) => {
+          (selectedCategories as ICategoryData[]).forEach((element) => {
             ids.push(element.id);
           });
           singleTitle = undefined;

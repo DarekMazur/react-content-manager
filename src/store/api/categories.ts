@@ -50,18 +50,6 @@ export const categoriesApi = createApi({
       }),
       invalidatesTags: ['Categories'],
     }),
-    removeCategories: builder.mutation({
-      query: (body) => ({
-        url: 'categories',
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-        },
-        body,
-        credentials: 'include',
-      }),
-      invalidatesTags: ['Categories'],
-    }),
   }),
 });
 
@@ -70,5 +58,4 @@ export const {
   useAddCategoryMutation,
   useUpdateCategoryMutation,
   useRemoveCategoryMutation,
-  useRemoveCategoriesMutation,
 } = categoriesApi;

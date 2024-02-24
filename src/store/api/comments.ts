@@ -39,18 +39,6 @@ export const commentsApi = createApi({
       }),
       invalidatesTags: ['Comments'],
     }),
-    removeComments: builder.mutation({
-      query: (body) => ({
-        url: 'comments',
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-        },
-        body,
-        credentials: 'include',
-      }),
-      invalidatesTags: ['Comments'],
-    }),
   }),
 });
 
@@ -58,5 +46,4 @@ export const {
   useGetCommentsQuery,
   useUpdateCommentMutation,
   useRemoveCommentMutation,
-  useRemoveCommentsMutation,
 } = commentsApi;
