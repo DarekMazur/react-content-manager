@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ActionButton from '../../Atoms/ActionButton/ActionButton';
 import { PopupWrapper } from '../PopupWrapper/PopupWrapper.styles.ts';
 import {
-  PopupTypes,
+  IPopupTypes,
   RootState,
   clearSelected,
   switchPopup,
@@ -32,7 +32,7 @@ const Confirm = () => {
   const popup = useSelector<RootState>((state) => state.popup);
   const location = useLocation();
 
-  const popupState = popup as PopupTypes;
+  const popupState = popup as IPopupTypes;
 
   const counter = popupState.ids ? popupState.ids.length : 0;
 
