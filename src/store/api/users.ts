@@ -50,18 +50,6 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ['Users'],
     }),
-    removeUsers: builder.mutation({
-      query: (body) => ({
-        url: 'users',
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-        },
-        body,
-        credentials: 'include',
-      }),
-      invalidatesTags: ['Users'],
-    }),
   }),
 });
 
@@ -69,5 +57,4 @@ export const {
   useGetUsersQuery,
   useUpdateUserMutation,
   useRemoveUserMutation,
-  useRemoveUsersMutation,
 } = usersApi;

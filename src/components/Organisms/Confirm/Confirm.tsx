@@ -10,6 +10,9 @@ import {
   useRemoveCommentMutation,
   useRemoveUserMutation,
   useRemoveCategoryMutation,
+  clearUsersSelected,
+  clearCommentsSelected,
+  clearCategoriesSelected,
 } from '../../../store';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -98,40 +101,50 @@ const Confirm = () => {
       switch (locationName) {
         case 'articles':
           removeArticle(popupState.ids[0]);
+          dispatch(clearSelected());
           break;
         case 'users':
           removeUser(popupState.ids[0]);
+          dispatch(clearUsersSelected());
           break;
         case 'comments':
           removeComment(popupState.ids[0]);
+          dispatch(clearCommentsSelected());
           break;
         case 'categories':
           removeCategory(popupState.ids);
+          dispatch(clearCategoriesSelected());
           break;
       }
     } else {
       switch (location.pathname.slice(1)) {
         case 'articles':
           popupState.ids.forEach((id) => removeArticle(id));
+          dispatch(clearSelected());
           break;
         case 'users':
           popupState.ids.forEach((id) => removeUser(id));
+          dispatch(clearUsersSelected());
           break;
         case 'comments':
           popupState.ids.forEach((id) => removeComment(id));
+          dispatch(clearCommentsSelected());
           break;
         case 'categories':
           popupState.ids.forEach((id) => removeCategory(id));
+          dispatch(clearCategoriesSelected());
           break;
       }
     }
     dispatch(switchPopup(false));
-    dispatch(clearSelected());
   };
 
   const handleCancel = () => {
     dispatch(switchPopup(false));
     dispatch(clearSelected());
+    dispatch(clearUsersSelected());
+    dispatch(clearCommentsSelected());
+    dispatch(clearCategoriesSelected());
   };
 
   return (

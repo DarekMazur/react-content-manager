@@ -62,18 +62,6 @@ export const articlesApi = createApi({
       }),
       invalidatesTags: ['Articles'],
     }),
-    removeArticles: builder.mutation({
-      query: (body) => ({
-        url: 'articles',
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-        },
-        body,
-        credentials: 'include',
-      }),
-      invalidatesTags: ['Articles'],
-    }),
   }),
 });
 
@@ -82,5 +70,4 @@ export const {
   useCreateArticleMutation,
   useUpdateArticleMutation,
   useRemoveArticleMutation,
-  useRemoveArticlesMutation,
 } = articlesApi;
