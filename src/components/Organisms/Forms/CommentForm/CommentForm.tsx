@@ -175,14 +175,16 @@ const CommentForm = () => {
   };
 
   const handleOnCancel = () => {
-    setUserData(
-      users &&
-        users.find(
-          (user) =>
-            user.id ===
-            (currentComment as ICommentData).attributes.author.data.id,
-        ),
-    );
+    if ((currentComment as ICommentData).attributes.author.data) {
+      setUserData(
+        users &&
+          users.find(
+            (user) =>
+              user.id ===
+              (currentComment as ICommentData).attributes.author.data.id,
+          ),
+      );
+    }
     setCurrentComment(
       comments!.data.find((comment) => comment.attributes.uuid === uuid),
     );
