@@ -22,7 +22,6 @@ import {
   ICategoryBaseData,
   ICategoryData,
 } from '../../../../types/categoryTypes.ts';
-import { set } from 'husky';
 
 const CategoryForm = () => {
   const initCategory: ICategoryBaseData = {

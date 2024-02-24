@@ -17,10 +17,16 @@ export const StyledTable = styled.table`
       background-color: ${({ theme }) => theme.colors.darkBlue};
 
       &:first-of-type {
+        width: 3rem;
         border-radius: 0.7rem 0 0 0;
       }
 
+      &:nth-of-type(2) {
+        width: 6rem;
+      }
+
       &:last-of-type {
+        width: 10rem;
         border-radius: 0 0.7rem 0 0;
       }
 
