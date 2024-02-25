@@ -44,8 +44,9 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [userData, setUserData] = useState<IStrapiUser | undefined>(undefined);
   const [modal, setModal] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [imageLoading, setImageLoading] = useState(false);
+  const [initialUser, setInitialUser] = useState<IStrapiUser | null>();
 
   useEffect(() => {
     image.length > 0 && setImageUrl(URL.createObjectURL(image[0]));
@@ -93,6 +94,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   useEffect(() => {
     if (users) {
       setUserData(users.find((user) => user.uuid === uuid) as IStrapiUser);
+      setInitialUser(users.find((user) => user.uuid === uuid) as IStrapiUser);
       if (
         userData &&
         users.filter((user) => user.uuid === (userData as IStrapiUser).uuid)
@@ -109,6 +111,22 @@ const UserForm = ({ uuid }: { uuid: string }) => {
       setModal(true);
     }
   }, [loadingUpdate]);
+
+  useEffect(() => {
+    if (
+      userData?.blocked === initialUser?.blocked &&
+      userData?.confirmed === initialUser?.confirmed &&
+      JSON.stringify(userData?.avatar) ===
+        JSON.stringify(initialUser?.avatar) &&
+      userData?.role.id === initialUser?.role.id &&
+      userData?.email === initialUser?.email &&
+      userData?.username === initialUser?.username
+    ) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [userData]);
 
   const handleOnChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
