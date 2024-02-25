@@ -208,6 +208,9 @@
           "notActive": "NIEAKTYWNY"
         },
         "blocked": "Zablokowany:"
+      },
+      "message": {
+        "noChanges": "Komentarz nie został zmieniony"
       }
     }
   },

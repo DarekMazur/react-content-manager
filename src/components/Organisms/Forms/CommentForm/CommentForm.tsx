@@ -35,6 +35,7 @@ import { ICommentData } from '../../../../types/commentTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
 import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
+import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 
 const CommentForm = () => {
   const { t } = useTranslation();
@@ -63,6 +64,7 @@ const CommentForm = () => {
     undefined,
   );
   const [disabled, setDisabled] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (comments && users) {
@@ -166,6 +168,11 @@ const CommentForm = () => {
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (disabled) {
+      return setErrorMessage(t('comment.form.message.noChanges'));
+    }
+
     if (userData?.blocked !== initialData.authorBlocked) {
       setUpdatedElement(t('modal.element.user'));
       return updateUser(userData);
@@ -339,6 +346,7 @@ const CommentForm = () => {
               )}
             </aside>
           </CommentFormWrapper>
+          <FormErrorMessage left={true} message={errorMessage} />
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <FormButton $type="submit" type="submit" disabled={disabled}>

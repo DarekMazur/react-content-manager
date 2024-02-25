@@ -206,6 +206,9 @@
           "notActive": "NOT ACTIVATED"
         },
         "blocked": "Blocked:"
+      },
+      "message": {
+        "noChanges": "Comment has not been modified"
       }
     }
   },
