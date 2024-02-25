@@ -128,6 +128,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
     } else {
       setDisabled(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
 
   const handleOnChange = (
@@ -156,6 +157,18 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!userData?.username) {
+      return setErrorMessage(
+        userData?.email
+          ? t('user.form.message.missingName')
+          : t('user.form.message.missing'),
+      );
+    }
+
+    if (!userData?.email) {
+      return setErrorMessage(t('user.form.message.missingEmail'));
+    }
 
     if (disabled) {
       return setErrorMessage(t('user.form.message.noChanges'));

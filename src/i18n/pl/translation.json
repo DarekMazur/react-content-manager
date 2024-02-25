@@ -167,6 +167,9 @@
       "role": "Funkcja:",
       "pictureUpload": "Załaduj swoją grafikę:",
       "message": {
+        "missingName": "Nazwa użytkownika jest wymagana",
+        "missingEmail": "Email jest wymagany",
+        "missing": "Nazwa użytkownika i email są wymagane",
         "noChanges": "Użytkownik nie został zmieniony"
       }
     }
