@@ -163,7 +163,13 @@
       "confirmed": "Confirmed:",
       "blocked": "Blocked:",
       "role": "Role:",
-      "pictureUpload": "Upload your picture:"
+      "pictureUpload": "Upload your picture:",
+      "message": {
+        "missingName": "Username is required",
+        "missingEmail": "User email is required",
+        "missing": "Username and email are required",
+        "noChanges": "User has not been modified"
+      }
     }
   },
   "comment": {
