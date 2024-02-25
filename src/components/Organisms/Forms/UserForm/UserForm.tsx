@@ -28,6 +28,7 @@ import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
 import { IRoleTypes } from '../../../../types/roleTypes.ts';
 import Uploading from '../../../Atoms/Uploading/Uploading.tsx';
+import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 
 const UserForm = ({ uuid }: { uuid: string }) => {
   const { t } = useTranslation();
@@ -47,6 +48,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
   const [disabled, setDisabled] = useState(true);
   const [imageLoading, setImageLoading] = useState(false);
   const [initialUser, setInitialUser] = useState<IStrapiUser | null>();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     image.length > 0 && setImageUrl(URL.createObjectURL(image[0]));
@@ -154,6 +156,10 @@ const UserForm = ({ uuid }: { uuid: string }) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (disabled) {
+      return setErrorMessage(t('user.form.message.noChanges'));
+    }
 
     const dataToUpdate = {
       id: userData?.id,
@@ -266,6 +272,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
                 .map((role) => role.name)}
             />
           ) : null}
+          <FormErrorMessage message={errorMessage} />
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <FormButton $type="submit" type="submit" disabled={disabled}>

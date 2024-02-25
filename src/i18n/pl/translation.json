@@ -165,7 +165,10 @@
       "confirmed": "Potwierdzony:",
       "blocked": "Zablokowany:",
       "role": "Funkcja:",
-      "pictureUpload": "Załaduj swoją grafikę:"
+      "pictureUpload": "Załaduj swoją grafikę:",
+      "message": {
+        "noChanges": "Użytkownik nie został zmieniony"
+      }
     }
   },
   "comment": {

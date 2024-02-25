@@ -163,7 +163,10 @@
       "confirmed": "Confirmed:",
       "blocked": "Blocked:",
       "role": "Role:",
-      "pictureUpload": "Upload your picture:"
+      "pictureUpload": "Upload your picture:",
+      "message": {
+        "noChanges": "User has not been modified"
+      }
     }
   },
   "comment": {
