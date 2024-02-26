@@ -1,7 +1,15 @@
 import { StyledFormErrorMessage } from './FormErrorMessage.styles.ts';
 
-const FormErrorMessage = ({ message }: { message: string | null }) => {
-  return <StyledFormErrorMessage>{message}</StyledFormErrorMessage>;
+const FormErrorMessage = ({
+  message,
+  left,
+}: {
+  message: string | null;
+  left?: boolean;
+}) => {
+  return (
+    <StyledFormErrorMessage $left={left}>{message}</StyledFormErrorMessage>
+  );
 };
 
 export default FormErrorMessage;
