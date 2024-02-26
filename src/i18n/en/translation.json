@@ -224,7 +224,11 @@
     "form": {
       "header": "New category",
       "category": "Category",
-      "description": "Description"
+      "description": "Description",
+      "message": {
+        "missingTitle": "Category title is required",
+        "noChanges": "Category has not been modified"
+      }
     }
   },
   "filters": {

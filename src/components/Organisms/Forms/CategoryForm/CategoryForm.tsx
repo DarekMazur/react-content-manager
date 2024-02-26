@@ -99,6 +99,7 @@ const CategoryForm = () => {
     } else {
       setDisabled(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatedCategory]);
 
   const handleOnChange = (
@@ -131,7 +132,11 @@ const CategoryForm = () => {
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!updatedCategory.attributes.title) {
-      return setErrorMessage('Title is required');
+      return setErrorMessage(t('category.form.message.missingTitle'));
+    }
+
+    if (disabled) {
+      return setErrorMessage(t('category.form.message.noChanges'));
     }
 
     const dataToUpload: {
@@ -193,7 +198,6 @@ const CategoryForm = () => {
             uuid={updatedCategory.attributes.uuid}
             handleOnChange={(e) => handleOnChange(e, 'title')}
           />
-          <FormErrorMessage message={errorMessage} />
           <div style={{ padding: '2rem 0 1rem' }}>
             <label htmlFor="description">
               {t('category.form.description')}
@@ -213,6 +217,7 @@ const CategoryForm = () => {
               onChange={(e) => handleOnChange(e, 'description')}
             />
           </div>
+          <FormErrorMessage left message={errorMessage} />
           <FormButtonWrapper>
             <EditButtonsWrapper>
               <FormButton $type="submit" type="submit" disabled={disabled}>

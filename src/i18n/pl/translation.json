@@ -226,7 +226,11 @@
     "form": {
       "header": "Nowa kategoria",
       "category": "Kategoria",
-      "description": "Opis"
+      "description": "Opis",
+      "message": {
+        "missingTitle": "Nazwa kategorii jest wymagana",
+        "noChanges": "Kategoria nie została zmieniona"
+      }
     }
   },
   "filters": {
