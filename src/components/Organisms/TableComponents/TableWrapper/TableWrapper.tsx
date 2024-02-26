@@ -11,6 +11,7 @@ import { IArticleData } from '../../../../types/articleTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import { ICommentData } from '../../../../types/commentTypes.ts';
 import { ICategoryData } from '../../../../types/categoryTypes.ts';
+import NoContent from '../../../Molecules/NoContent/NoContent.tsx';
 
 const TableWrapper = ({
   content,
@@ -82,44 +83,52 @@ const TableWrapper = ({
 
   return (
     <>
-      <Wrapper width="100%" justify="center" align="flex-start" padding="0">
-        <Table
-          headers={headers}
-          data={contentToDisplay}
-          tag={location.pathname.slice(1)}
-        />
-      </Wrapper>
-      <Wrapper justify="space-between" align="center" width="97.5vw">
-        <EntriesNumberPicker
-          perPage={perPage}
-          isExpand={isExpand}
-          handleExpand={handleExpand}
-          handleChoseEntriesNumber={handleChoseEntriesNumber}
-          handleClose={handleClose}
-        />
-        <StyledReactPaginate>
-          <ReactPaginate
-            previousLabel={<FontAwesomeIcon icon={['fas', 'chevron-left']} />}
-            nextLabel={<FontAwesomeIcon icon={['fas', 'chevron-right']} />}
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={1}
-            marginPagesDisplayed={1}
-            pageCount={pages}
-            previousClassName="page-nav"
-            previousLinkClassName="page-link"
-            nextClassName="page-nav"
-            nextLinkClassName="page-link"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            breakLabel="..."
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            activeClassName="active"
-            renderOnZeroPageCount={null}
-          />
-        </StyledReactPaginate>
-      </Wrapper>
+      {contentToDisplay.length > 0 ? (
+        <>
+          <Wrapper width="100%" justify="center" align="flex-start" padding="0">
+            <Table
+              headers={headers}
+              data={contentToDisplay}
+              tag={location.pathname.slice(1)}
+            />
+          </Wrapper>
+          <Wrapper justify="space-between" align="center" width="97.5vw">
+            <EntriesNumberPicker
+              perPage={perPage}
+              isExpand={isExpand}
+              handleExpand={handleExpand}
+              handleChoseEntriesNumber={handleChoseEntriesNumber}
+              handleClose={handleClose}
+            />
+            <StyledReactPaginate>
+              <ReactPaginate
+                previousLabel={
+                  <FontAwesomeIcon icon={['fas', 'chevron-left']} />
+                }
+                nextLabel={<FontAwesomeIcon icon={['fas', 'chevron-right']} />}
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={1}
+                marginPagesDisplayed={1}
+                pageCount={pages}
+                previousClassName="page-nav"
+                previousLinkClassName="page-link"
+                nextClassName="page-nav"
+                nextLinkClassName="page-link"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+              />
+            </StyledReactPaginate>
+          </Wrapper>
+        </>
+      ) : (
+        <NoContent />
+      )}
     </>
   );
 };
