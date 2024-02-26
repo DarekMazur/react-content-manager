@@ -20,7 +20,7 @@ import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 import { ICommentData } from '../../types/commentTypes.ts';
-import { IUserData } from '../../types/userTypes.ts';
+import { IStrapiUser } from '../../types/userTypes.ts';
 
 const CommentsView = () => {
   const { t } = useTranslation();
@@ -195,12 +195,12 @@ const CommentsView = () => {
   }, [filters, comments]);
 
   useEffect(() => {
-    if ((currentUser as IUserData).role.id === 3) {
+    if ((currentUser as IStrapiUser).role.id === 3) {
       setAvailableComments(
         filteredComments.filter(
           (comment) =>
             comment.attributes.article.data.attributes.author.data.attributes
-              .uuid === (currentUser as IUserData).uuid,
+              .uuid === (currentUser as IStrapiUser).uuid,
         ),
       );
     } else {
@@ -214,7 +214,9 @@ const CommentsView = () => {
 
   return (
     <Main $minHeight={height}>
-      <FilterMenu menuItems={commentsFilters} />
+      {availableComments.length > 0 ? (
+        <FilterMenu menuItems={commentsFilters} />
+      ) : null}
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('comment.header')}
       </Heading>

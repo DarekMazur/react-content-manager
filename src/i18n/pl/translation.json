@@ -259,5 +259,9 @@
       "no": "Nie",
       "author": "Autor"
     }
+  },
+  "noContent": {
+    "header": "Jeszcze nic tu nie ma",
+    "create": "Utwórz pierwszy wpis"
   }
 }

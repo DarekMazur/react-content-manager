@@ -117,13 +117,16 @@ const CategoriesView = () => {
           alignItems: 'center',
         }}
       >
-        <FormButton
-          $type="submit"
-          type="button"
-          onClick={() => navigate('/categories/create')}
-        >
-          <FontAwesomeIcon icon={['fas', 'pen']} /> {t('category.newCategory')}
-        </FormButton>
+        {sortedCategories.length > 0 ? (
+          <FormButton
+            $type="submit"
+            type="button"
+            onClick={() => navigate('/categories/create')}
+          >
+            <FontAwesomeIcon icon={['fas', 'pen']} />{' '}
+            {t('category.newCategory')}
+          </FormButton>
+        ) : null}
       </div>
       <TableWrapper
         content={sortedCategories}

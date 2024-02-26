@@ -257,5 +257,9 @@
       "no": "No",
       "author": "Author"
     }
+  },
+  "noContent": {
+    "header": "Nothing here yet",
+    "create": "Create first entry"
   }
 }

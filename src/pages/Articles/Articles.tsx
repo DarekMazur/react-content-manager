@@ -313,7 +313,9 @@ const Articles = () => {
 
   return (
     <Main $minHeight={height}>
-      <FilterMenu menuItems={articleFilters} />
+      {filteredArticles.length > 0 ? (
+        <FilterMenu menuItems={articleFilters} />
+      ) : null}
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('article.header')}
       </Heading>
@@ -329,13 +331,15 @@ const Articles = () => {
           alignItems: 'center',
         }}
       >
-        <FormButton
-          $type="submit"
-          type="button"
-          onClick={() => navigate('/articles/create')}
-        >
-          <FontAwesomeIcon icon={['fas', 'pen']} /> {t('article.newArticle')}
-        </FormButton>
+        {filteredArticles.length > 0 ? (
+          <FormButton
+            $type="submit"
+            type="button"
+            onClick={() => navigate('/articles/create')}
+          >
+            <FontAwesomeIcon icon={['fas', 'pen']} /> {t('article.newArticle')}
+          </FormButton>
+        ) : null}
       </div>
       {filteredArticles ? (
         <TableWrapper
