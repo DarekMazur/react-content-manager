@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 
 export const StyledNoContent = styled.div`
-  min-height: 40rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 2rem;
+  margin: 1rem;
 
   h3 {
     font-size: ${({ theme }) => theme.fontSize.xxl};
@@ -18,6 +17,7 @@ export const StyledNoContent = styled.div`
   }
 
   img {
-    height: 20rem;
+    height: 30rem;
+    margin: 1rem 0 3rem;
   }
 `;

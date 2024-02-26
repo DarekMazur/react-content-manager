@@ -127,7 +127,7 @@ const TableWrapper = ({
           </Wrapper>
         </>
       ) : (
-        <NoContent />
+        <NoContent tag={location.pathname.slice(1)} />
       )}
     </>
   );
