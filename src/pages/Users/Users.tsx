@@ -231,7 +231,9 @@ const Users = () => {
 
   return (
     <Main $minHeight={height}>
-      <FilterMenu menuItems={usersFilters} />
+      {filteredUsers.length > 0 ? (
+        <FilterMenu menuItems={usersFilters} />
+      ) : null}
       <Heading tag="h2" align="center" size="l" padding="2rem 0 4rem">
         {t('user.header')}
       </Heading>
