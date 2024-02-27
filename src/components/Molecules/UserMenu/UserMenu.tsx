@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StyledUserMenu } from './UserMenu.styles';
 import { setUser } from '../../../store';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Icon from '../../Atoms/Icon/Icon';
 import { useEffect, useRef } from 'react';
@@ -22,7 +22,6 @@ const UserMenu = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
 
   const langs = {
@@ -48,11 +47,16 @@ const UserMenu = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const handleMockLogout = () => {
+  const handleLogout = () => {
     dispatch(setUser([]));
+    localStorage.removeItem('jwt');
     localStorage.removeItem('id');
     localStorage.removeItem('username');
-    navigate('/');
+    window.location.replace(
+      `https://${import.meta.env.VITE_AUTH_DOMAIN}/v2/logout?returnTo=${
+        window.location.origin
+      }`,
+    );
   };
 
   return (
@@ -78,7 +82,7 @@ const UserMenu = ({
               {t('navigation.userArea.myProfile')}
             </Link>
           </li>
-          <li onClick={handleMockLogout}>
+          <li onClick={handleLogout}>
             <FontAwesomeIcon icon={['fas', 'arrow-right-from-bracket']} />
             {t('navigation.userArea.logout')}
           </li>

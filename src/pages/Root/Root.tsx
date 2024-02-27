@@ -13,6 +13,7 @@ interface ILoggedUser extends IUserData {
 
 const Root = () => {
   const dispatch = useDispatch();
+
   const user = useSelector<RootState>((state) => state.user);
   const { data: users, isLoading } = useGetUsersQuery();
 
@@ -20,7 +21,7 @@ const Root = () => {
     if (users) {
       if (localStorage.getItem('username') && localStorage.getItem('id')) {
         const authorised = users.find(
-          (user) => user.uuid === localStorage.getItem('id'),
+          (user) => String(user.id) === localStorage.getItem('id'),
         );
 
         if (authorised) {
@@ -39,20 +40,12 @@ const Root = () => {
     }
   }, [dispatch, users]);
 
-  const handleMockLogin = (e?: ChangeEvent<HTMLInputElement>) => {
+  const handleLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
-    if (users) {
-      const authorised = users.find(
-        (user) =>
-          user.role.type === 'administrator' && user.confirmed && !user.blocked,
-      );
 
-      if (authorised) {
-        dispatch(setUser({ ...authorised, isAuthorised: true }));
-        localStorage.setItem('username', authorised.username);
-        localStorage.setItem('id', authorised.uuid);
-      } else alert("You're not authorised");
-    }
+    window.location.replace(
+      `${import.meta.env.VITE_BACKEND_URL}/api/connect/auth0`,
+    );
   };
 
   if (isLoading) {
@@ -64,7 +57,7 @@ const Root = () => {
       {(user as ILoggedUser).isAuthorised ? (
         <Authorised />
       ) : (
-        <Unauthorised handleMockLogin={handleMockLogin} />
+        <Unauthorised handleMockLogin={handleLogin} />
       )}
       <FooterWrapper />
     </>

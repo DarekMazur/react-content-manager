@@ -6,12 +6,16 @@ import { useNavigate } from 'react-router';
 import HomeSection from '../../components/Organisms/HomeSection/HomeSection.tsx';
 import { useTranslation } from 'react-i18next';
 import { IStrapiUser } from '../../types/userTypes.ts';
+import { setUser } from '../../store';
+import { useDispatch } from 'react-redux';
 
 interface IHomeProps {
   user: IStrapiUser;
 }
 
 const Home: FC<IHomeProps> = ({ user }) => {
+  const dispatch = useDispatch();
+
   const { t } = useTranslation();
   const navigation = useNavigate();
 

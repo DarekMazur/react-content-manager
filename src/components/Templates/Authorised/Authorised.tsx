@@ -13,6 +13,7 @@ import CategoriesView from '../../../pages/Categories/Categories.tsx';
 import CategoryView from '../../../pages/Category/Category.tsx';
 import Page404 from '../../../pages/404/404.tsx';
 import { IStrapiUser } from '../../../types/userTypes.ts';
+import Login from '../../../pages/Login/Login.tsx';
 
 const Authorised = () => {
   const user = useSelector<RootState>((state) => state.user);
@@ -32,6 +33,7 @@ const Authorised = () => {
         <Route path="categories" element={<CategoriesView />} />
         <Route path="categories/:uuid" element={<CategoryView />} />
         <Route path="categories/create" element={<CategoryView />} />
+        <Route path="/login" element={<Login />} />
         <Route path="404" element={<Page404 />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
