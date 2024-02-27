@@ -9,19 +9,20 @@ import CommentsView from '../../../pages/Comments/Comments.tsx';
 import CommentView from '../../../pages/Comment/Comment.tsx';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { IUserTypes } from '../../../types/dataTypes.ts';
 import CategoriesView from '../../../pages/Categories/Categories.tsx';
 import CategoryView from '../../../pages/Category/Category.tsx';
 import Page404 from '../../../pages/404/404.tsx';
+import { IStrapiUser } from '../../../types/userTypes.ts';
+import Login from '../../../pages/Login/Login.tsx';
 
 const Authorised = () => {
   const user = useSelector<RootState>((state) => state.user);
 
   return (
     <>
-      <Header user={user as IUserTypes} />
+      <Header user={user as IStrapiUser} />
       <Routes>
-        <Route path="/" element={<Home user={user as IUserTypes} />} />
+        <Route path="/" element={<Home user={user as IStrapiUser} />} />
         <Route path="articles" element={<Articles />} />
         <Route path="articles/:id" element={<Article />} />
         <Route path="articles/create" element={<Article />} />
@@ -32,6 +33,7 @@ const Authorised = () => {
         <Route path="categories" element={<CategoriesView />} />
         <Route path="categories/:uuid" element={<CategoryView />} />
         <Route path="categories/create" element={<CategoryView />} />
+        <Route path="/login" element={<Login />} />
         <Route path="404" element={<Page404 />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
