@@ -451,7 +451,7 @@ const ArticleForm = () => {
               onFilesChange={(selectedFiles) => setImage(selectedFiles)}
             />
           )}
-          {currentArticle?.attributes.author.data ? (
+          {!currentArticle || currentArticle?.attributes.author.data ? (
             <P>
               {t('article.form.author')}{' '}
               <InLink
