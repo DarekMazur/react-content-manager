@@ -17,6 +17,15 @@ export const usersApi = createApi({
       }),
       providesTags: ['Users'],
     }),
+    getMe: builder.query<IStrapiUser, void>({
+      query: () => ({
+        url: 'users/me?populate=*',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        },
+      }),
+      providesTags: ['Users'],
+    }),
     updateUser: builder.mutation({
       query: (body) => ({
         url: `users/${body.id}`,
@@ -25,6 +34,7 @@ export const usersApi = createApi({
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
         body: {
+          uuid: body.uuid,
           username: body.username,
           email: body.email,
           confirmed: body.confirmed,
@@ -33,7 +43,7 @@ export const usersApi = createApi({
           updatedAt: new Date(),
           role: {
             disconnect: [{ id: body.role.id }],
-            connect: [{ id: body.newRole.id }],
+            connect: [{ id: body.newRole ? body.newRole.id : body.role.id }],
           },
         },
       }),
@@ -54,6 +64,7 @@ export const usersApi = createApi({
 });
 
 export const {
+  useGetMeQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
   useRemoveUserMutation,

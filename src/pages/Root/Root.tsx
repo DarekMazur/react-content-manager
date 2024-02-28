@@ -1,44 +1,24 @@
 import { ChangeEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setUser, useGetUsersQuery } from '../../store';
+import { RootState, setUser, useGetMeQuery } from '../../store';
 import Authorised from '../../components/Templates/Authorised/Authorised.tsx';
 import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 import FooterWrapper from '../../components/Organisms/Footer/Footer.tsx';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles.ts';
-import { IUserData } from '../../types/userTypes.ts';
-
-interface ILoggedUser extends IUserData {
-  isAuthorised: boolean;
-}
+import { IStrapiUser } from '../../types/userTypes.ts';
+import UnauthorisedView from '../UnauthorisedView/UnauthorisedView.tsx';
 
 const Root = () => {
   const dispatch = useDispatch();
 
   const user = useSelector<RootState>((state) => state.user);
-  const { data: users, isLoading } = useGetUsersQuery();
+  const { data: myUser, isLoading } = useGetMeQuery();
 
   useEffect(() => {
-    if (users) {
-      if (localStorage.getItem('username') && localStorage.getItem('id')) {
-        const authorised = users.find(
-          (user) => String(user.id) === localStorage.getItem('id'),
-        );
-
-        if (authorised) {
-          if (!authorised.confirmed) {
-            alert(
-              'You are not confirmed. Please check your email and follow instructions.',
-            );
-          }
-
-          if (authorised.blocked) {
-            alert('Your account is blocked. Please contact administration.');
-          }
-          dispatch(setUser({ ...authorised, isAuthorised: true }));
-        }
-      }
+    if (myUser) {
+      dispatch(setUser(myUser));
     }
-  }, [dispatch, users]);
+  }, [dispatch, myUser]);
 
   const handleLogin = (e?: ChangeEvent<HTMLInputElement>) => {
     e && e.preventDefault();
@@ -54,10 +34,13 @@ const Root = () => {
 
   return (
     <>
-      {(user as ILoggedUser).isAuthorised ? (
-        <Authorised />
-      ) : (
+      {Object.keys(user as IStrapiUser).length === 0 ? (
         <Unauthorised handleMockLogin={handleLogin} />
+      ) : (user as IStrapiUser).role.type === 'public' ||
+        (user as IStrapiUser).role.type === 'authenticated' ? (
+        <UnauthorisedView />
+      ) : (
+        <Authorised />
       )}
       <FooterWrapper />
     </>
