@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import FilterMenu from '../../components/Organisms/FilterMenu/FilterMenu.tsx';
 import { IArticleData, IArticlesDataTypes } from '../../types/articleTypes.ts';
-import { IStrapiUser, IUserData } from '../../types/userTypes.ts';
+import { IStrapiUser } from '../../types/userTypes.ts';
 
 interface IAuthorsList {
   label: string;
@@ -111,6 +111,7 @@ const Articles = () => {
           })),
         )
       : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [articles]);
 
   const articleFilters: IFilterElementsTypes[] = [
@@ -299,7 +300,7 @@ const Articles = () => {
           (articles as IArticlesDataTypes).data.filter(
             (article) =>
               article.attributes.author.data.attributes.uuid ===
-              (currentUser as IUserData).attributes.uuid,
+              (currentUser as IStrapiUser).uuid,
           ),
         );
     } else {

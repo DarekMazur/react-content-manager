@@ -50,7 +50,7 @@ const UserMenu = ({
   const handleLogout = () => {
     dispatch(setUser([]));
     localStorage.removeItem('jwt');
-    localStorage.removeItem('id');
+    localStorage.removeItem('uuid');
     localStorage.removeItem('username');
     window.location.replace(
       `https://${import.meta.env.VITE_AUTH_DOMAIN}/v2/logout?returnTo=${
