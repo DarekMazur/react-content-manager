@@ -46,10 +46,10 @@ const FilterMenu: FC<IFilterMenuTypes> = ({ menuItems }) => {
           modifyFilter(
             (filters as IFilterTypes[]).map((filter) =>
               filter.type === type
-                ? (filter = {
+                ? {
                     type,
                     value: [...filter.value, e.target.id],
-                  })
+                  }
                 : filter,
             ),
           ),
@@ -67,10 +67,10 @@ const FilterMenu: FC<IFilterMenuTypes> = ({ menuItems }) => {
         modifyFilter(
           (filters as IFilterTypes[]).map((filter) =>
             filter.type === type
-              ? (filter = {
+              ? {
                   type,
                   value: filter.value.filter((value) => value !== e.target.id),
-                })
+                }
               : filter,
           ),
         ),
