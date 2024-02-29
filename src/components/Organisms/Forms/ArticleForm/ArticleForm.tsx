@@ -469,7 +469,9 @@ const ArticleForm = () => {
               />
             </P>
           ) : (
-            <Italic>{t('article.form.noAuthor')}</Italic>
+            <P>
+              <Italic>{t('article.form.noAuthor')}</Italic>
+            </P>
           )}
           <P>
             {articlePublished ? (
