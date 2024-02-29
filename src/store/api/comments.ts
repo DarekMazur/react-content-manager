@@ -17,6 +17,15 @@ export const commentsApi = createApi({
       }),
       providesTags: ['Comments'],
     }),
+    getComment: builder.query<ICommentsDataTypes, void>({
+      query: (id) => ({
+        url: `comments/${id}`,
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
+      }),
+      providesTags: ['Comments'],
+    }),
     updateComment: builder.mutation({
       query: (body) => ({
         url: `comments/${body.data.id}`,
