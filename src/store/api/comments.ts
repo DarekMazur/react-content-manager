@@ -19,7 +19,7 @@ export const commentsApi = createApi({
     }),
     getComment: builder.query<ICommentsDataTypes, void>({
       query: (id) => ({
-        url: `comments/${id}`,
+        url: `comments/${id}?populate[0]=author&populate[1]=author.role&populate[2]=article&populate[3]=article.author`,
         headers: {
           Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
         },
@@ -53,6 +53,7 @@ export const commentsApi = createApi({
 
 export const {
   useGetCommentsQuery,
+  useGetCommentQuery,
   useUpdateCommentMutation,
   useRemoveCommentMutation,
 } = commentsApi;

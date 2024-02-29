@@ -17,6 +17,15 @@ export const usersApi = createApi({
       }),
       providesTags: ['Users'],
     }),
+    getUser: builder.query<IStrapiUser, void>({
+      query: (id) => ({
+        url: `users/${id}?populate=*`,
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
+      }),
+      providesTags: ['Users'],
+    }),
     getMe: builder.query<IStrapiUser, void>({
       query: () => ({
         url: 'users/me?populate=*',
@@ -65,6 +74,7 @@ export const usersApi = createApi({
 
 export const {
   useGetMeQuery,
+  useGetUserQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
   useRemoveUserMutation,

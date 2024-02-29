@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router';
 import {
   switchPopup,
   useGetCommentsQuery,
+  useGetUserQuery,
   useGetUsersQuery,
   useUpdateCommentMutation,
   useUpdateUserMutation,
@@ -37,7 +38,7 @@ import userIcon from '../../../../assets/user.png';
 import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 
-const CommentForm = () => {
+const CommentForm = ({ currentComment }) => {
   const { t } = useTranslation();
   const { uuid } = useParams();
   const dispatch = useDispatch();
@@ -50,11 +51,13 @@ const CommentForm = () => {
     useUpdateCommentMutation();
   const { data: comments } = useGetCommentsQuery();
   const { data: users } = useGetUsersQuery();
+  const { data: commentAuthor } = useGetUserQuery(
+    currentComment.attributes.author.data.id,
+  );
 
   const [userData, setUserData] = useState<IStrapiUser | undefined>(undefined);
-  const [currentComment, setCurrentComment] = useState<
-    ICommentData | undefined
-  >(undefined);
+  const [updatedComment, setUpdatedComment] =
+    useState<ICommentData>(currentComment);
   const [initialData, setInitialData] = useState({
     authorBlocked: false,
     commentShadowed: false,
@@ -67,6 +70,14 @@ const CommentForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log(commentAuthor);
+    if (commentAuthor) {
+      setUserData(commentAuthor);
+    }
+  }, [commentAuthor]);
+
+  useEffect(() => {
+    console.log(currentComment);
     if (comments && users) {
       setInitialData({
         authorBlocked: currentComment?.attributes.author.data
@@ -96,17 +107,23 @@ const CommentForm = () => {
 
   useEffect(() => {
     if (currentComment && users && users.length > 0) {
-      setUserData(users.find((user) => (user as IStrapiUser).id === 1));
+      setUserData(
+        users.find(
+          (user) =>
+            (user as IStrapiUser).id ===
+            currentComment.attributes.author.data.attributes.id,
+        ),
+      );
     }
   }, [currentComment, users]);
 
-  useEffect(() => {
-    if (comments && comments.data.length > 0) {
-      setCurrentComment(
-        comments.data.find((comment) => comment.attributes.uuid === uuid),
-      );
-    }
-  }, [comments, uuid]);
+  // useEffect(() => {
+  //   if (comments && comments.data.length > 0) {
+  //     setCurrentComment(
+  //       comments.data.find((comment) => comment.attributes.uuid === uuid),
+  //     );
+  //   }
+  // }, [comments, uuid]);
 
   useEffect(() => {
     if (isLoading || loadingUser) {
@@ -149,7 +166,7 @@ const CommentForm = () => {
     if (currentComment) {
       const updatedCommentStatus = { ...currentComment.attributes };
       updatedCommentStatus.shadowed = (e.target as HTMLInputElement).checked;
-      setCurrentComment({
+      setUpdatedComment({
         id: currentComment.id,
         attributes: updatedCommentStatus,
       });
@@ -194,7 +211,7 @@ const CommentForm = () => {
           ),
       );
     }
-    setCurrentComment(
+    setUpdatedComment(
       comments!.data.find((comment) => comment.attributes.uuid === uuid),
     );
     navigate(-1);
@@ -214,7 +231,7 @@ const CommentForm = () => {
           dataType={updatedElement}
         />
       ) : null}
-      {currentComment && userData ? (
+      {updatedComment && userData ? (
         <StyledCommentForm
           onSubmit={handleOnSubmit}
           style={{ width: '80vw', margin: 'auto' }}
@@ -312,7 +329,7 @@ const CommentForm = () => {
                     {t('comment.form.author.role')}{' '}
                     {
                       currentComment?.attributes.author.data.attributes.role
-                        .name
+                        .data.attributes.name
                     }
                   </P>
                   <P>
@@ -364,7 +381,9 @@ const CommentForm = () => {
             </FormButton>
           </FormButtonWrapper>
         </StyledCommentForm>
-      ) : null}
+      ) : (
+        'null'
+      )}
     </>
   );
 };

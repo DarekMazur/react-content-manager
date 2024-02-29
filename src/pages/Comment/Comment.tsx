@@ -1,5 +1,9 @@
 import { useParams } from 'react-router';
-import { RootState, useGetCommentsQuery } from '../../store';
+import {
+  RootState,
+  useGetCommentQuery,
+  useGetCommentsQuery,
+} from '../../store';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -11,9 +15,9 @@ import { IStrapiUser } from '../../types/userTypes.ts';
 import { ICommentData } from '../../types/commentTypes.ts';
 
 const CommentView = () => {
-  const { uuid } = useParams();
+  const { id } = useParams();
   const height = useMinHeight();
-  const { data: comments, isLoading } = useGetCommentsQuery();
+  const { data: singleComment, isLoading } = useGetCommentQuery(id);
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [currentComment, setCurrentComment] = useState<
@@ -21,12 +25,10 @@ const CommentView = () => {
   >(undefined);
 
   useEffect(() => {
-    if (comments && comments.data.length > 0) {
-      setCurrentComment(
-        comments.data.find((comment) => comment.attributes.uuid === uuid),
-      );
+    if (singleComment) {
+      setCurrentComment(singleComment.data);
     }
-  }, [comments, uuid]);
+  }, [singleComment]);
 
   if (isLoading) {
     return <Loading>Loading...</Loading>;
@@ -39,13 +41,11 @@ const CommentView = () => {
           currentComment.attributes.author.data.id ||
         (currentUser as IStrapiUser).role.type !== 'authenticated' ||
         (currentUser as IStrapiUser).role.type === 'public' ? (
-          <CommentForm />
+          <CommentForm currentComment={currentComment} />
         ) : (
           <Unauthorised />
         )
-      ) : (
-        'null'
-      )}
+      ) : null}
     </Main>
   );
 };
