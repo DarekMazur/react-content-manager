@@ -9,6 +9,11 @@ export const StyledArticleForm = styled.form`
   aside {
     width: 20vw;
     max-width: 20vw;
+
+    p {
+      margin: 0;
+      padding: 1.5rem 0;
+    }
   }
 
   .ck-content {

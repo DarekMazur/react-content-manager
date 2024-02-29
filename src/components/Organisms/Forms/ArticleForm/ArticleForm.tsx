@@ -453,7 +453,8 @@ const ArticleForm = () => {
           )}
           {!currentArticle || currentArticle?.attributes.author.data ? (
             <P>
-              {t('article.form.author')}{' '}
+              {t('article.form.author')}
+              <br />
               <InLink
                 target={
                   currentArticle
@@ -496,8 +497,8 @@ const ArticleForm = () => {
             ) : null}
           </div>
           <div>
-            <P>{t('article.form.tagLabel')}</P>
             <P>
+              <span>{t('article.form.tagLabel')}</span>
               {articleTags && articleTags.split(',').length > 0
                 ? articleTags.split(',').map((tag, index) => (
                     <Tag key={index}>
