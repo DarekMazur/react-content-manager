@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from 'react-router';
 import {
+  RootState,
   switchPopup,
-  useGetCommentsQuery,
   useGetUserQuery,
-  useGetUsersQuery,
   useUpdateCommentMutation,
   useUpdateUserMutation,
 } from '../../../../store';
@@ -30,7 +29,7 @@ import {
   StyledCommentForm,
 } from './CommentForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { ICommentData } from '../../../../types/commentTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
@@ -38,7 +37,7 @@ import userIcon from '../../../../assets/user.png';
 import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 
-const CommentForm = ({ currentComment }) => {
+const CommentForm = ({ currentComment }: { currentComment: ICommentData }) => {
   const { t } = useTranslation();
   const { uuid } = useParams();
   const dispatch = useDispatch();
@@ -49,19 +48,14 @@ const CommentForm = ({ currentComment }) => {
   ] = useUpdateUserMutation();
   const [updateComment, { status, isSuccess, isLoading }] =
     useUpdateCommentMutation();
-  const { data: comments } = useGetCommentsQuery();
-  const { data: users } = useGetUsersQuery();
   const { data: commentAuthor } = useGetUserQuery(
     currentComment.attributes.author.data.id,
   );
+  const currentUser = useSelector<RootState>((state) => state.user);
 
   const [userData, setUserData] = useState<IStrapiUser | undefined>(undefined);
   const [updatedComment, setUpdatedComment] =
     useState<ICommentData>(currentComment);
-  const [initialData, setInitialData] = useState({
-    authorBlocked: false,
-    commentShadowed: false,
-  });
   const [modal, setModal] = useState(false);
   const [updatedElement, setUpdatedElement] = useState<string | undefined>(
     undefined,
@@ -70,60 +64,10 @@ const CommentForm = ({ currentComment }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log(commentAuthor);
     if (commentAuthor) {
       setUserData(commentAuthor);
     }
   }, [commentAuthor]);
-
-  useEffect(() => {
-    console.log(currentComment);
-    if (comments && users) {
-      setInitialData({
-        authorBlocked: currentComment?.attributes.author.data
-          ? !!users.find(
-              (user) =>
-                user.uuid ===
-                currentComment?.attributes.author.data.attributes.uuid,
-            )?.blocked
-          : false,
-        commentShadowed: !!comments.data.find(
-          (comment) => comment.attributes.uuid === uuid,
-        )?.attributes.shadowed,
-      });
-      if (
-        currentComment &&
-        comments.data.filter(
-          (comment) =>
-            comment.attributes.uuid ===
-            (currentComment as ICommentData).attributes.uuid,
-        ).length === 0
-      ) {
-        navigate(-1);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users, comments, uuid]);
-
-  useEffect(() => {
-    if (currentComment && users && users.length > 0) {
-      setUserData(
-        users.find(
-          (user) =>
-            (user as IStrapiUser).id ===
-            currentComment.attributes.author.data.attributes.id,
-        ),
-      );
-    }
-  }, [currentComment, users]);
-
-  // useEffect(() => {
-  //   if (comments && comments.data.length > 0) {
-  //     setCurrentComment(
-  //       comments.data.find((comment) => comment.attributes.uuid === uuid),
-  //     );
-  //   }
-  // }, [comments, uuid]);
 
   useEffect(() => {
     if (isLoading || loadingUser) {
@@ -133,17 +77,18 @@ const CommentForm = ({ currentComment }) => {
 
   useEffect(() => {
     if (
-      currentComment?.attributes.shadowed === initialData.commentShadowed &&
-      userData?.blocked === initialData.authorBlocked
+      updatedComment?.attributes.shadowed ===
+        currentComment.attributes.shadowed &&
+      userData?.blocked === commentAuthor?.blocked
     ) {
       setDisabled(true);
     } else {
       setDisabled(false);
     }
   }, [
-    currentComment?.attributes.shadowed,
-    initialData.authorBlocked,
-    initialData.commentShadowed,
+    commentAuthor?.blocked,
+    currentComment.attributes.shadowed,
+    updatedComment?.attributes.shadowed,
     userData?.blocked,
   ]);
 
@@ -190,30 +135,32 @@ const CommentForm = ({ currentComment }) => {
       return setErrorMessage(t('comment.form.message.noChanges'));
     }
 
-    if (userData?.blocked !== initialData.authorBlocked) {
+    if (userData?.blocked !== commentAuthor?.blocked) {
       setUpdatedElement(t('modal.element.user'));
-      return updateUser(userData);
+      const dataToUpdate = {
+        id: userData?.id,
+        username: userData?.username,
+        avatar: userData?.avatar,
+        email: userData?.email,
+        confirmed: userData?.confirmed,
+        blocked: userData?.blocked,
+        role: userData?.role.data,
+      };
+      return updateUser(dataToUpdate);
     }
+
     setUpdatedElement(t('modal.element.comment'));
+
     updateComment({
-      data: { id: currentComment?.id, ...currentComment?.attributes },
+      data: { id: updatedComment?.id, ...updatedComment?.attributes },
     });
   };
 
   const handleOnCancel = () => {
     if ((currentComment as ICommentData).attributes.author.data) {
-      setUserData(
-        users &&
-          users.find(
-            (user) =>
-              user.id ===
-              (currentComment as ICommentData).attributes.author.data.id,
-          ),
-      );
+      setUserData(commentAuthor);
     }
-    setUpdatedComment(
-      comments!.data.find((comment) => comment.attributes.uuid === uuid),
-    );
+    setUpdatedComment(currentComment);
     navigate(-1);
   };
 
@@ -267,10 +214,11 @@ const CommentForm = ({ currentComment }) => {
                     (currentComment as ICommentData).attributes.createdAt,
                   )}
                 </li>
-                {userData.role.id !== 3 ? (
+                {(currentUser as IStrapiUser).role.type === 'administrator' ||
+                (currentUser as IStrapiUser).role.type === 'redactor' ? (
                   <li>
                     {t('comment.form.details.status.title')}{' '}
-                    {initialData.commentShadowed ? (
+                    {currentComment.attributes.shadowed ? (
                       <CommentStatus $isRed>
                         {t('comment.form.details.status.shadowed')}
                       </CommentStatus>
@@ -292,7 +240,7 @@ const CommentForm = ({ currentComment }) => {
                 <InputCheckbox
                   label={t('comment.form.details.shadowBan')}
                   id="blocked"
-                  value={(currentComment as ICommentData).attributes.shadowed}
+                  value={(updatedComment as ICommentData).attributes.shadowed}
                   uuid={uuid}
                   handleOnChange={(e) => handleOnShadow(e)}
                 />
@@ -334,7 +282,7 @@ const CommentForm = ({ currentComment }) => {
                   </P>
                   <P>
                     {t('comment.form.author.status.title')}{' '}
-                    {initialData.authorBlocked ? (
+                    {commentAuthor?.blocked ? (
                       <CommentStatus $isRed>
                         {t('comment.form.author.status.blocked')}
                       </CommentStatus>
