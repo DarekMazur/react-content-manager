@@ -1,10 +1,13 @@
-export interface IRolesTypes {
-  id: number;
+export interface IRoleBasicTypes {
   name: string;
   description: string;
   type: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IRolesTypes extends IRoleBasicTypes {
+  id: number;
 }
 
 export interface IStrapiRoles extends IRolesTypes {
@@ -13,4 +16,11 @@ export interface IStrapiRoles extends IRolesTypes {
 
 export interface IRoleTypes {
   roles: IStrapiRoles[];
+}
+
+export interface IRolesData {
+  data: {
+    id: number;
+    attributes: IRoleBasicTypes;
+  };
 }

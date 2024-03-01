@@ -1,9 +1,5 @@
 import { useParams } from 'react-router';
-import {
-  RootState,
-  useGetCommentQuery,
-  useGetCommentsQuery,
-} from '../../store';
+import { RootState, useGetCommentQuery } from '../../store';
 import { Loading } from '../../components/Atoms/Loading/Loading.styles';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -12,16 +8,16 @@ import CommentForm from '../../components/Organisms/Forms/CommentForm/CommentFor
 import { useMinHeight } from '../../utils/hooks/useMinHeight.ts';
 import Unauthorised from '../../components/Templates/Unauthorised/Unauthorised.tsx';
 import { IStrapiUser } from '../../types/userTypes.ts';
-import { ICommentData } from '../../types/commentTypes.ts';
+import { ICommentPopulated } from '../../types/commentTypes.ts';
 
 const CommentView = () => {
   const { id } = useParams();
   const height = useMinHeight();
-  const { data: singleComment, isLoading } = useGetCommentQuery(id);
+  const { data: singleComment, isLoading } = useGetCommentQuery(id as string);
   const currentUser = useSelector<RootState>((state) => state.user);
 
   const [currentComment, setCurrentComment] = useState<
-    ICommentData | undefined
+    ICommentPopulated | undefined
   >(undefined);
 
   useEffect(() => {
@@ -38,7 +34,7 @@ const CommentView = () => {
     <Main $minHeight={height}>
       {currentComment ? (
         (currentUser as IStrapiUser).id ===
-          currentComment.attributes.author.data.id ||
+          currentComment.attributes.author.data?.id ||
         (currentUser as IStrapiUser).role.type !== 'authenticated' ||
         (currentUser as IStrapiUser).role.type === 'public' ? (
           <CommentForm currentComment={currentComment} />

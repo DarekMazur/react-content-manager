@@ -17,7 +17,7 @@ export const usersApi = createApi({
       }),
       providesTags: ['Users'],
     }),
-    getUser: builder.query<IStrapiUser, void>({
+    getUser: builder.query<IStrapiUser, number>({
       query: (id) => ({
         url: `users/${id}?populate=*`,
         headers: {

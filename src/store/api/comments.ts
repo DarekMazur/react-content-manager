@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ICommentsDataTypes } from '../../types/commentTypes.ts';
+import {
+  ICommentPopulatedData,
+  ICommentsDataTypes,
+} from '../../types/commentTypes.ts';
 
 export const commentsApi = createApi({
   reducerPath: 'commentsApi',
@@ -17,7 +20,7 @@ export const commentsApi = createApi({
       }),
       providesTags: ['Comments'],
     }),
-    getComment: builder.query<ICommentsDataTypes, void>({
+    getComment: builder.query<ICommentPopulatedData, string>({
       query: (id) => ({
         url: `comments/${id}?populate[0]=author&populate[1]=author.role&populate[2]=article&populate[3]=article.author`,
         headers: {
