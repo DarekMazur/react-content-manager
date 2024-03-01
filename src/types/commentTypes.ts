@@ -1,4 +1,4 @@
-import { IStrapiAttributeUser } from './userTypes.ts';
+import { IPopulatedUser, IStrapiAttributeUser } from './userTypes.ts';
 import { IStrapiMeta } from './strapiTypes.ts';
 import { IStrapiAttributeArticle } from './articleTypes.ts';
 
@@ -24,4 +24,22 @@ export interface ICommentData {
 export interface ICommentsDataTypes {
   data: Array<ICommentData>;
   meta: IStrapiMeta;
+}
+
+export interface ICommentPopulated {
+  id: number;
+  attributes: {
+    body: string;
+    uuid: string;
+    createdAt: Date;
+    updatedAt: Date;
+    shadowed: boolean;
+    author: IPopulatedUser;
+    article: IStrapiAttributeArticle;
+  };
+}
+
+export interface ICommentPopulatedData {
+  data: ICommentPopulated;
+  meta: Record<PropertyKey, never>;
 }

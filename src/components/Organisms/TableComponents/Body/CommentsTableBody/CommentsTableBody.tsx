@@ -118,7 +118,8 @@ const CommentsTableBody = ({ data }: { data: ICommentData[] }) => {
               : '-'}
           </td>
           <td style={{ textAlign: 'left' }}>
-            <TableActionIcons id={comment.id} uuid={comment.attributes.uuid} />
+            {/*<TableActionIcons id={comment.id} uuid={comment.attributes.uuid} />*/}
+            <TableActionIcons id={comment.id} />
           </td>
         </tr>
       ))}

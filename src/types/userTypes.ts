@@ -1,5 +1,5 @@
 import { IStrapiUserArticleTypes } from './articleTypes.ts';
-import { IStrapiRoles } from './roleTypes.ts';
+import { IRolesData, IStrapiRoles } from './roleTypes.ts';
 import { ICommentTypes } from './commentTypes.ts';
 import { IStrapiImageAttributes } from './strapiTypes.ts';
 
@@ -26,7 +26,18 @@ export interface IStrapiAttributeUser {
   data: IUserData;
 }
 
+export interface IPopulatedUserAttributes extends IUserTypes {
+  role: IRolesData;
+}
+
 export interface IUserData {
   id: number;
   attributes: IStrapiUser;
+}
+
+export interface IPopulatedUser {
+  data: {
+    id: number;
+    attributes: IPopulatedUserAttributes;
+  };
 }

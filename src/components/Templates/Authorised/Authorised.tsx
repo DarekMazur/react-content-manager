@@ -29,7 +29,7 @@ const Authorised = () => {
         <Route path="users" element={<Users />} />
         <Route path="users/:uuid" element={<UserView />} />
         <Route path="comments" element={<CommentsView />} />
-        <Route path="comments/:uuid" element={<CommentView />} />
+        <Route path="comments/:id" element={<CommentView />} />
         <Route path="categories" element={<CategoriesView />} />
         <Route path="categories/:uuid" element={<CategoryView />} />
         <Route path="categories/create" element={<CategoryView />} />

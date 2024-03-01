@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router';
 import {
+  RootState,
   switchPopup,
-  useGetCommentsQuery,
-  useGetUsersQuery,
+  useGetUserQuery,
   useUpdateCommentMutation,
   useUpdateUserMutation,
 } from '../../../../store';
@@ -29,36 +29,43 @@ import {
   StyledCommentForm,
 } from './CommentForm.styles.ts';
 import Modal from '../../Modal/Modal.tsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { ICommentData } from '../../../../types/commentTypes.ts';
+import { ICommentPopulated } from '../../../../types/commentTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import userIcon from '../../../../assets/user.png';
+import noUserIcon from '../../../../assets/noUserIcon.png';
 import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
 import FormErrorMessage from '../../../Atoms/FormErrorMessage/FormErrorMessage.tsx';
 
-const CommentForm = () => {
+const CommentForm = ({
+  currentComment,
+}: {
+  currentComment: ICommentPopulated;
+}) => {
   const { t } = useTranslation();
   const { uuid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const skip = !currentComment.attributes.author.data;
+  // const skip = true;
   const [
     updateUser,
     { status: userStatus, isSuccess: userIsSuccess, isLoading: loadingUser },
   ] = useUpdateUserMutation();
   const [updateComment, { status, isSuccess, isLoading }] =
     useUpdateCommentMutation();
-  const { data: comments } = useGetCommentsQuery();
-  const { data: users } = useGetUsersQuery();
+  const { data: commentAuthor } = useGetUserQuery(
+    currentComment.attributes.author.data?.id,
+    {
+      skip,
+    },
+  );
+  const currentUser = useSelector<RootState>((state) => state.user);
 
   const [userData, setUserData] = useState<IStrapiUser | undefined>(undefined);
-  const [currentComment, setCurrentComment] = useState<
-    ICommentData | undefined
-  >(undefined);
-  const [initialData, setInitialData] = useState({
-    authorBlocked: false,
-    commentShadowed: false,
-  });
+  const [updatedComment, setUpdatedComment] =
+    useState<ICommentPopulated>(currentComment);
   const [modal, setModal] = useState(false);
   const [updatedElement, setUpdatedElement] = useState<string | undefined>(
     undefined,
@@ -67,46 +74,10 @@ const CommentForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (comments && users) {
-      setInitialData({
-        authorBlocked: currentComment?.attributes.author.data
-          ? !!users.find(
-              (user) =>
-                user.uuid ===
-                currentComment?.attributes.author.data.attributes.uuid,
-            )?.blocked
-          : false,
-        commentShadowed: !!comments.data.find(
-          (comment) => comment.attributes.uuid === uuid,
-        )?.attributes.shadowed,
-      });
-      if (
-        currentComment &&
-        comments.data.filter(
-          (comment) =>
-            comment.attributes.uuid ===
-            (currentComment as ICommentData).attributes.uuid,
-        ).length === 0
-      ) {
-        navigate(-1);
-      }
+    if (commentAuthor) {
+      setUserData(commentAuthor);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users, comments, uuid]);
-
-  useEffect(() => {
-    if (currentComment && users && users.length > 0) {
-      setUserData(users.find((user) => (user as IStrapiUser).id === 1));
-    }
-  }, [currentComment, users]);
-
-  useEffect(() => {
-    if (comments && comments.data.length > 0) {
-      setCurrentComment(
-        comments.data.find((comment) => comment.attributes.uuid === uuid),
-      );
-    }
-  }, [comments, uuid]);
+  }, [commentAuthor]);
 
   useEffect(() => {
     if (isLoading || loadingUser) {
@@ -116,17 +87,18 @@ const CommentForm = () => {
 
   useEffect(() => {
     if (
-      currentComment?.attributes.shadowed === initialData.commentShadowed &&
-      userData?.blocked === initialData.authorBlocked
+      updatedComment?.attributes.shadowed ===
+        currentComment.attributes.shadowed &&
+      userData?.blocked === commentAuthor?.blocked
     ) {
       setDisabled(true);
     } else {
       setDisabled(false);
     }
   }, [
-    currentComment?.attributes.shadowed,
-    initialData.authorBlocked,
-    initialData.commentShadowed,
+    commentAuthor?.blocked,
+    currentComment.attributes.shadowed,
+    updatedComment?.attributes.shadowed,
     userData?.blocked,
   ]);
 
@@ -134,12 +106,12 @@ const CommentForm = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     if (currentComment) {
-      const updateUser: IStrapiUser = {
-        ...currentComment.attributes.author.data.attributes,
-        id: currentComment.attributes.author.data.id,
+      console.log(userData);
+      const updatedUser = {
+        ...userData,
+        blocked: (e.target as HTMLInputElement).checked,
       };
-      updateUser.blocked = (e.target as HTMLInputElement).checked;
-      setUserData({ ...(updateUser as IStrapiUser) });
+      setUserData(updatedUser as IStrapiUser);
     }
   };
 
@@ -149,7 +121,7 @@ const CommentForm = () => {
     if (currentComment) {
       const updatedCommentStatus = { ...currentComment.attributes };
       updatedCommentStatus.shadowed = (e.target as HTMLInputElement).checked;
-      setCurrentComment({
+      setUpdatedComment({
         id: currentComment.id,
         attributes: updatedCommentStatus,
       });
@@ -160,7 +132,7 @@ const CommentForm = () => {
     dispatch(
       switchPopup({
         isOpen: true,
-        ids: [(currentComment as ICommentData).id],
+        ids: [(currentComment as ICommentPopulated).id],
         title: undefined,
       }),
     );
@@ -173,30 +145,32 @@ const CommentForm = () => {
       return setErrorMessage(t('comment.form.message.noChanges'));
     }
 
-    if (userData?.blocked !== initialData.authorBlocked) {
+    if (userData?.blocked !== commentAuthor?.blocked) {
       setUpdatedElement(t('modal.element.user'));
-      return updateUser(userData);
+      const dataToUpdate = {
+        id: userData?.id,
+        username: userData?.username,
+        avatar: userData?.avatar,
+        email: userData?.email,
+        confirmed: userData?.confirmed,
+        blocked: userData?.blocked,
+        role: userData?.role,
+      };
+      return updateUser(dataToUpdate);
     }
+
     setUpdatedElement(t('modal.element.comment'));
+
     updateComment({
-      data: { id: currentComment?.id, ...currentComment?.attributes },
+      data: { id: updatedComment?.id, ...updatedComment?.attributes },
     });
   };
 
   const handleOnCancel = () => {
-    if ((currentComment as ICommentData).attributes.author.data) {
-      setUserData(
-        users &&
-          users.find(
-            (user) =>
-              user.id ===
-              (currentComment as ICommentData).attributes.author.data.id,
-          ),
-      );
+    if (commentAuthor) {
+      setUserData(commentAuthor);
     }
-    setCurrentComment(
-      comments!.data.find((comment) => comment.attributes.uuid === uuid),
-    );
+    setUpdatedComment(currentComment);
     navigate(-1);
   };
 
@@ -214,7 +188,7 @@ const CommentForm = () => {
           dataType={updatedElement}
         />
       ) : null}
-      {currentComment && userData ? (
+      {updatedComment ? (
         <StyledCommentForm
           onSubmit={handleOnSubmit}
           style={{ width: '80vw', margin: 'auto' }}
@@ -247,13 +221,14 @@ const CommentForm = () => {
                 <li>
                   {t('comment.form.details.publicationDate')}{' '}
                   {getDate(
-                    (currentComment as ICommentData).attributes.createdAt,
+                    (currentComment as ICommentPopulated).attributes.createdAt,
                   )}
                 </li>
-                {userData.role.id !== 3 ? (
+                {(currentUser as IStrapiUser).role.type === 'administrator' ||
+                (currentUser as IStrapiUser).role.type === 'redactor' ? (
                   <li>
                     {t('comment.form.details.status.title')}{' '}
-                    {initialData.commentShadowed ? (
+                    {currentComment.attributes.shadowed ? (
                       <CommentStatus $isRed>
                         {t('comment.form.details.status.shadowed')}
                       </CommentStatus>
@@ -275,7 +250,9 @@ const CommentForm = () => {
                 <InputCheckbox
                   label={t('comment.form.details.shadowBan')}
                   id="blocked"
-                  value={(currentComment as ICommentData).attributes.shadowed}
+                  value={
+                    (updatedComment as ICommentPopulated).attributes.shadowed
+                  }
                   uuid={uuid}
                   handleOnChange={(e) => handleOnShadow(e)}
                 />
@@ -288,36 +265,29 @@ const CommentForm = () => {
               <StyledImageControler>
                 <img
                   src={
-                    currentComment?.attributes.author.data &&
-                    currentComment?.attributes.author.data.attributes.avatar
-                      ? currentComment?.attributes.author.data.attributes.avatar
-                          .url
-                      : userIcon
+                    userData
+                      ? userData.avatar
+                        ? userData.avatar.url
+                        : userIcon
+                      : noUserIcon
                   }
                   alt=""
                 />
               </StyledImageControler>
-              {currentComment?.attributes.author.data ? (
+              {userData ? (
                 <>
                   <P>
                     <InLink
-                      target={`/users/${currentComment?.attributes.author.data.attributes.uuid}`}
-                      name={
-                        currentComment?.attributes.author.data.attributes
-                          .username
-                      }
+                      target={`/users/${userData.uuid}`}
+                      name={userData.username}
                     ></InLink>
                   </P>
                   <P>
-                    {t('comment.form.author.role')}{' '}
-                    {
-                      currentComment?.attributes.author.data.attributes.role
-                        .name
-                    }
+                    {t('comment.form.author.role')} {userData.role.name}
                   </P>
                   <P>
                     {t('comment.form.author.status.title')}{' '}
-                    {initialData.authorBlocked ? (
+                    {commentAuthor?.blocked ? (
                       <CommentStatus $isRed>
                         {t('comment.form.author.status.blocked')}
                       </CommentStatus>
@@ -364,7 +334,9 @@ const CommentForm = () => {
             </FormButton>
           </FormButtonWrapper>
         </StyledCommentForm>
-      ) : null}
+      ) : (
+        'null'
+      )}
     </>
   );
 };
