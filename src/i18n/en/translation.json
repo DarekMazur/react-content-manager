@@ -35,7 +35,9 @@
     "lastCommentDetails": "{{username}} in article",
     "mostLiked": "Most liked article:",
     "editButton": "Edit article",
-    "createButton": "Create article"
+    "createButton": "Create article",
+    "noComments": "No comments found",
+    "noArticles": "No articles found"
   },
   "form": {
     "pagination": {

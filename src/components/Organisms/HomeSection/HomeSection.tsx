@@ -83,7 +83,7 @@ const HomeSection = () => {
             </P>
           </>
         ) : (
-          <P>No articles found</P>
+          <P>{t('home.noArticles')}</P>
         )}
       </div>
       <div style={{ margin: '2rem 0' }}>
@@ -115,7 +115,7 @@ const HomeSection = () => {
             </P>
           </>
         ) : (
-          <P>No comments found</P>
+          <P>{t('home.noComments')}</P>
         )}
       </div>
       <div style={{ margin: '2rem 0' }}>
@@ -137,7 +137,7 @@ const HomeSection = () => {
             </P>
           </>
         ) : (
-          <P>No articles found</P>
+          <P>{t('home.noArticles')}</P>
         )}
       </div>
     </section>
