@@ -37,6 +37,7 @@ const CommentsView = () => {
     [],
   );
 
+  const [sortedComments, setSortedComments] = useState<ICommentData[]>([]);
   const [filteredComments, setFilteredComments] = useState<ICommentData[]>([]);
 
   const commentsTableHeaders: ITableHeaders[] = [
@@ -155,19 +156,19 @@ const CommentsView = () => {
       });
 
       if ((sort as ISortTypes).order === 'asc') {
-        setFilteredComments(sortedComments);
+        setSortedComments(sortedComments);
       } else {
-        setFilteredComments(sortedComments.reverse());
+        setSortedComments(sortedComments.reverse());
       }
 
-      setFilteredComments(sortedComments);
+      setSortedComments(sortedComments);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort]);
+  }, [sort, comments]);
 
   useEffect(() => {
-    if (comments) {
+    if (sortedComments.length > 0) {
       if (
         (filters as IFilterTypes[]).filter((filter) => filter.value.length > 0)
           .length > 0
@@ -179,7 +180,7 @@ const CommentsView = () => {
         let filtered: ICommentData[] = [];
 
         if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
-          filtered = comments.data.filter((comment) =>
+          filtered = sortedComments.filter((comment) =>
             filteredStatus[0].value.includes('visible')
               ? filteredStatus[0].value.includes('hidden')
                 ? comment
@@ -189,10 +190,10 @@ const CommentsView = () => {
         }
         setFilteredComments(filtered);
       } else {
-        setFilteredComments(comments.data);
+        setFilteredComments(sortedComments);
       }
     }
-  }, [filters, comments]);
+  }, [filters, sortedComments]);
 
   useEffect(() => {
     if ((currentUser as IStrapiUser).role.id === 3) {
