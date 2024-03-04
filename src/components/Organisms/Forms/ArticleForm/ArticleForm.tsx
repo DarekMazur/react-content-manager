@@ -542,6 +542,8 @@ const ArticleForm = () => {
             data={`<h1>${
               currentArticle ? currentArticle.attributes.title : ''
             }</h1>${currentArticle ? currentArticle.attributes.body : ''}`}
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            // @ts-ignore
             config={editorConfiguration}
             onChange={(_event, editor) => handleEditorChange(editor.getData())}
           />

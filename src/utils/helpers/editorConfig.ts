@@ -26,12 +26,12 @@ import { List } from '@ckeditor/ckeditor5-list';
 
 const token = localStorage.getItem('jwt');
 
-function uploadAdapter(loader) {
+function uploadAdapter(loader: { file: Promise<string | Blob> }) {
   return {
     upload: () => {
       return new Promise((resolve, reject) => {
         const body = new FormData();
-        loader.file.then((file) => {
+        loader.file.then((file: string | Blob) => {
           body.append('files', file);
           fetch(`${import.meta.env.VITE_API_URL}upload`, {
             method: 'post',
@@ -57,8 +57,12 @@ function uploadAdapter(loader) {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 function uploadPlugin(editor) {
-  editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+  editor.plugins.get('FileRepository').createUploadAdapter = (loader: {
+    file: Promise<string | Blob>;
+  }) => {
     return uploadAdapter(loader);
   };
 }
