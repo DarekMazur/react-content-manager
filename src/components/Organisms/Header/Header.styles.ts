@@ -12,6 +12,10 @@ export const StyledHeader = styled.header`
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   font-size: ${({ theme }) => theme.fontSize.m};
 
+  img {
+    height: 5rem;
+  }
+
   div {
     display: flex;
     align-items: center;
