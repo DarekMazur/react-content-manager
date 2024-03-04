@@ -5,6 +5,7 @@ import UserMenu from '../../Molecules/UserMenu/UserMenu.tsx';
 import { useTranslation } from 'react-i18next';
 import { IStrapiUser } from '../../../types/userTypes.ts';
 import Logo from '../../../assets/rcm4s_logo.svg';
+import { Link } from 'react-router-dom';
 
 interface IHeaderProps {
   user: IStrapiUser;
@@ -21,7 +22,9 @@ const Header: FC<IHeaderProps> = ({ user }) => {
   return (
     <StyledHeader>
       <div>
-        <img src={Logo} alt="" />
+        <Link to={`/`}>
+          <img src={Logo} alt="" />
+        </Link>
         <MenuList />
       </div>
       <div>
