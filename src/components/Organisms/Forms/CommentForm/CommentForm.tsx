@@ -106,7 +106,6 @@ const CommentForm = ({
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     if (currentComment) {
-      console.log(userData);
       const updatedUser = {
         ...userData,
         blocked: (e.target as HTMLInputElement).checked,

@@ -50,7 +50,7 @@ const Login = () => {
           });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setText('An error occurred, please see the developer console.');
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
