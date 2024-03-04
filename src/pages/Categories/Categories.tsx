@@ -30,6 +30,7 @@ const CategoriesView = () => {
     (state) => state.selectedCategories,
   );
 
+  const [initialCats, setInitialCats] = useState<ICategoryData[]>([]);
   const [sortedCategories, setSortedCategories] = useState<ICategoryData[]>([]);
 
   const categoriesTableHeaders: ITableHeaders[] = [
@@ -62,13 +63,13 @@ const CategoriesView = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setSortedCategories(categories.data);
+      setInitialCats(categories.data);
     }
   }, [categories, isSuccess]);
 
   useEffect(() => {
-    if (sortedCategories.length > 0) {
-      const sorted = [...sortedCategories];
+    if (initialCats.length > 0) {
+      const sorted = [...initialCats];
       sorted.sort((a, b) => {
         if (
           a[(sort as ISortTypes).sortBy as keyof ICategoryData] <
@@ -92,9 +93,7 @@ const CategoriesView = () => {
         setSortedCategories(sorted.reverse());
       }
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort]);
+  }, [sort, initialCats]);
 
   if (isLoading) {
     return <Loading>Loading...</Loading>;
