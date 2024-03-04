@@ -1,12 +1,12 @@
 import { StyledHeader } from './Header.styles.ts';
 import MenuList from '../../Molecules/MenuList/MenuList.tsx';
-import { IUserTypes } from '../../../types/dataTypes.ts';
 import { FC, useState } from 'react';
 import UserMenu from '../../Molecules/UserMenu/UserMenu.tsx';
 import { useTranslation } from 'react-i18next';
+import { IStrapiUser } from '../../../types/userTypes.ts';
 
 interface IHeaderProps {
-  user: IUserTypes;
+  user: IStrapiUser;
 }
 
 const Header: FC<IHeaderProps> = ({ user }) => {
