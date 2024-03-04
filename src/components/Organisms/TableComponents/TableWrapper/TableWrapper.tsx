@@ -28,29 +28,50 @@ const TableWrapper = ({
 
   const getPagesLength = Math.ceil(content.length / perPage);
   const [pages, setPages] = useState(getPagesLength);
-
-  const contentToDisplay = content.slice(
-    (Number(searchParams.get('page')) - 1) * perPage,
-    perPage * Number(searchParams.get('page')),
-  );
+  const [contentToDisplay, setContentToDisplay] = useState(content);
 
   useEffect(() => {
-    if (!searchParams.get('page')) {
+    setContentToDisplay(
+      content.slice(
+        (Number(searchParams.get('page')) - 1) * perPage,
+        perPage * Number(searchParams.get('page')),
+      ),
+    );
+  }, [content, perPage, searchParams]);
+
+  // const contentToDisplay = content.slice(
+  //   (Number(searchParams.get('page')) - 1) * perPage,
+  //   perPage * Number(searchParams.get('page')),
+  // );
+
+  useEffect(() => {
+    setContentToDisplay(
+      content.slice(
+        (Number(searchParams.get('page')) - 1) * perPage,
+        perPage * Number(searchParams.get('page')),
+      ),
+    );
+  }, [content, searchParams, perPage]);
+
+  useEffect(() => {
+    if (!searchParams.get('page') || searchParams.get('page') === null) {
       setSearchParams((params) => {
         params.set('page', '1');
         return params;
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
-    if (
-      contentToDisplay.length === 0 &&
-      Number(searchParams.get('page')) !== 1
-    ) {
+    if (contentToDisplay.length === 0 && Number(searchParams.get('page')) > 1) {
       setSearchParams((params) => {
         params.set('page', String(Number(searchParams.get('page')) - 1));
+        return params;
+      });
+    } else {
+      setSearchParams((params) => {
+        params.set('page', String(Number(searchParams.get('page'))));
         return params;
       });
     }
