@@ -37,7 +37,9 @@
     "lastCommentDetails": "{{username}} w artykule",
     "mostLiked": "Najpopularniejszy artykuł:",
     "editButton": "Edytuj artykuł",
-    "createButton": "Stwórz artykuł"
+    "createButton": "Stwórz artykuł",
+    "noComments": "Nie znaleziono komentarzy",
+    "noArticles": "Nie znaleziono artykułów"
   },
   "form": {
     "pagination": {
