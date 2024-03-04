@@ -160,80 +160,82 @@ const Articles = () => {
   }, []);
 
   useEffect(() => {
-    const sortedArticles = [...filteredArticles];
+    if (availableArticles.length > 0) {
+      const sortedArticles = [...availableArticles];
 
-    sortedArticles.sort((a, b) => {
-      if ((sort as ISortTypes).sortBy === 'status') {
-        const statusA = Number(a.attributes.publishedAt !== null);
-        const statusB = Number(b.attributes.publishedAt !== null);
-        return statusA - statusB;
-      } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
-        const dateA = a.attributes.publishedAt
-          ? new Date(a.attributes.publishedAt).getTime()
-          : 0;
-        const dateB = b.attributes.publishedAt
-          ? new Date(b.attributes.publishedAt).getTime()
-          : 0;
-        return dateA - dateB;
-      } else if ((sort as ISortTypes).sortBy === 'author') {
-        const authorA = a.attributes.author.data
-          ? a.attributes.author.data.attributes.username
-          : t('article.form.noAuthor');
-        const authorB = b.attributes.author.data
-          ? b.attributes.author.data.attributes.username
-          : t('article.form.noAuthor');
+      sortedArticles.sort((a, b) => {
+        if ((sort as ISortTypes).sortBy === 'status') {
+          const statusA = Number(a.attributes.publishedAt !== null);
+          const statusB = Number(b.attributes.publishedAt !== null);
+          return statusA - statusB;
+        } else if ((sort as ISortTypes).sortBy === 'publishedAt') {
+          const dateA = a.attributes.publishedAt
+            ? new Date(a.attributes.publishedAt).getTime()
+            : 0;
+          const dateB = b.attributes.publishedAt
+            ? new Date(b.attributes.publishedAt).getTime()
+            : 0;
+          return dateA - dateB;
+        } else if ((sort as ISortTypes).sortBy === 'author') {
+          const authorA = a.attributes.author.data
+            ? a.attributes.author.data.attributes.username
+            : t('article.form.noAuthor');
+          const authorB = b.attributes.author.data
+            ? b.attributes.author.data.attributes.username
+            : t('article.form.noAuthor');
 
-        if (authorA < authorB) {
-          return -1;
+          if (authorA < authorB) {
+            return -1;
+          }
+          if (authorA > authorB) {
+            return 1;
+          }
+
+          return 0;
+        } else if ((sort as ISortTypes).sortBy === 'comments') {
+          const commentsA = a.attributes.comments
+            ? a.attributes.comments.length
+            : 0;
+          const commentsB = b.attributes.comments
+            ? b.attributes.comments.length
+            : 0;
+          return commentsA - commentsB;
+        } else if ((sort as ISortTypes).sortBy === 'id') {
+          return a.id - b.id;
+        } else {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          const sortingElementA = a.attributes[(sort as ISortTypes).sortBy];
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          const sortingElementB = b.attributes[(sort as ISortTypes).sortBy];
+
+          if (
+            (sortingElementA ? sortingElementA : 0) <
+            (sortingElementB ? sortingElementB : 0)
+          ) {
+            return -1;
+          }
+          if (
+            (sortingElementA ? sortingElementA : 0) >
+            (sortingElementB ? sortingElementB : 0)
+          ) {
+            return 1;
+          }
+
+          return 0;
         }
-        if (authorA > authorB) {
-          return 1;
-        }
+      });
 
-        return 0;
-      } else if ((sort as ISortTypes).sortBy === 'comments') {
-        const commentsA = a.attributes.comments
-          ? a.attributes.comments.length
-          : 0;
-        const commentsB = b.attributes.comments
-          ? b.attributes.comments.length
-          : 0;
-        return commentsA - commentsB;
-      } else if ((sort as ISortTypes).sortBy === 'id') {
-        return a.id - b.id;
+      if ((sort as ISortTypes).order === 'asc') {
+        setFilteredArticles(sortedArticles);
       } else {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const sortingElementA = a.attributes[(sort as ISortTypes).sortBy];
-
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const sortingElementB = b.attributes[(sort as ISortTypes).sortBy];
-
-        if (
-          (sortingElementA ? sortingElementA : 0) <
-          (sortingElementB ? sortingElementB : 0)
-        ) {
-          return -1;
-        }
-        if (
-          (sortingElementA ? sortingElementA : 0) >
-          (sortingElementB ? sortingElementB : 0)
-        ) {
-          return 1;
-        }
-
-        return 0;
+        setFilteredArticles(sortedArticles.reverse());
       }
-    });
-
-    if ((sort as ISortTypes).order === 'asc') {
-      setFilteredArticles(sortedArticles);
-    } else {
-      setFilteredArticles(sortedArticles.reverse());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort]);
+  }, [sort, availableArticles]);
 
   useEffect(() => {
     if (
@@ -254,7 +256,7 @@ const Articles = () => {
 
       if (filteredAuthor[0] && filteredAuthor[0].value.length > 0) {
         filtered.push(
-          ...availableArticles.filter((article) =>
+          ...filteredArticles.filter((article) =>
             filteredAuthor[0].value.includes(
               article.attributes.author.data
                 ? String(article.attributes.author.data.id)
@@ -285,13 +287,12 @@ const Articles = () => {
             : !article.attributes.isSticky,
         );
       }
-
       setFilteredArticles(filtered);
     } else {
-      setFilteredArticles(availableArticles);
+      setFilteredArticles(filteredArticles);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, availableArticles]);
+  }, [filters]);
 
   useEffect(() => {
     if ((currentUser as IStrapiUser).role.id === 3) {
