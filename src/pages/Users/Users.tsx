@@ -88,17 +88,11 @@ const Users = () => {
 
   useEffect(() => {
     if (users) {
-      setFilteredUsers(users);
-    }
-  }, [users]);
-
-  useEffect(() => {
-    if (filteredUsers.length > 0) {
       if (
-        filteredUsers[0][(sort as ISortTypes).sortBy as keyof IStrapiUser] !==
+        users[0][(sort as ISortTypes).sortBy as keyof IStrapiUser] !==
         'undefined'
       ) {
-        const sortedUsers = [...filteredUsers];
+        const sortedUsers = [...users];
 
         sortedUsers.sort((a, b) => {
           if ((sort as ISortTypes).sortBy === 'role') {
@@ -130,11 +124,10 @@ const Users = () => {
         }
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort]);
+  }, [sort, users]);
 
   useEffect(() => {
-    if (users) {
+    if (filteredUsers.length > 0) {
       if (
         (filters as IFilterTypes[]).filter((filter) => filter.value.length > 0)
           .length > 0
@@ -153,12 +146,12 @@ const Users = () => {
 
         if (filteredRoles[0] && filteredRoles[0].value.length > 0) {
           filtered.push(
-            ...users.filter((user) =>
+            ...filteredUsers.filter((user) =>
               filteredRoles[0].value.includes(user.role.type),
             ),
           );
         } else {
-          filtered.push(...users);
+          filtered.push(...filteredUsers);
         }
 
         if (filteredStatus[0] && filteredStatus[0].value.length > 0) {
@@ -183,10 +176,11 @@ const Users = () => {
 
         setFilteredUsers(filtered);
       } else {
-        setFilteredUsers(users);
+        setFilteredUsers(filteredUsers);
       }
     }
-  }, [filters, users]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
 
   const usersTableHeaders: ITableHeaders[] = [
     {
