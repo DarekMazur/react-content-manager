@@ -53,8 +53,10 @@ const ArticlesTableBody = ({ data }: { data: IArticleData[] }) => {
   const handleClickSticky = (uuid: string) => {
     const article = data.find((article) => article.attributes.uuid === uuid);
     updateArticle({
-      ...article,
-      isSticky: !(article as IArticleData).attributes.isSticky,
+      data: {
+        ...article,
+        isSticky: !(article as IArticleData).attributes.isSticky,
+      },
     });
   };
   return (
