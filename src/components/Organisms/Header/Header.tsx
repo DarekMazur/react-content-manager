@@ -20,8 +20,10 @@ const Header: FC<IHeaderProps> = ({ user }) => {
 
   return (
     <StyledHeader>
-      <img src={Logo} alt="" />
-      <MenuList />
+      <div>
+        <img src={Logo} alt="" />
+        <MenuList />
+      </div>
       <div>
         {user &&
           t('navigation.userArea.greetings', { username: user.username })}
