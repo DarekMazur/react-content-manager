@@ -1,12 +1,13 @@
 import { StyledHeader } from './Header.styles.ts';
 import MenuList from '../../Molecules/MenuList/MenuList.tsx';
-import { IUserTypes } from '../../../types/dataTypes.ts';
 import { FC, useState } from 'react';
 import UserMenu from '../../Molecules/UserMenu/UserMenu.tsx';
 import { useTranslation } from 'react-i18next';
+import { IStrapiUser } from '../../../types/userTypes.ts';
+import Logo from '../../../assets/rcm4s_logo.svg';
 
 interface IHeaderProps {
-  user: IUserTypes;
+  user: IStrapiUser;
 }
 
 const Header: FC<IHeaderProps> = ({ user }) => {
@@ -19,6 +20,7 @@ const Header: FC<IHeaderProps> = ({ user }) => {
 
   return (
     <StyledHeader>
+      <img src={Logo} alt="" />
       <MenuList />
       <div>
         {user &&
