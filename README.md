@@ -64,7 +64,48 @@ In main directory you can find .env.example file with all variables needed to co
 <!-- Placeholder for Project Structure -->
 
 ## 6. API schema
-<!-- Placeholder for API schema -->
+```
+article
+  ├── uuid                  # uniqe uuid (string)
+  ├── cover                 # Media field
+  ├── isSticky              # boolean
+  ├── title                 # text field (string)
+  ├── description           # text field (string)
+  ├── likes                 # Number
+  ├── categories            # relation with Category
+  ├── tags                  # text field (string)
+  ├── author                # relation with User (from users-permissions)
+  ├── body                  # rich text (Markdown) - string
+  └── comments              # relation with Comment
+  
+category
+  ├── uuid                  # uniqe uuid (string)
+  ├── title                 # text field (string)
+  ├── description           # text field (string)
+  └── articles              # relation with Article
+  
+comment
+  ├── uuid                  # uniqe uuid (string)
+  ├── shadowed              # boolean
+  ├── author                # relation with User (from users-permissions)
+  ├── body                  # rich text (Markdown) - string
+  └── article               # relation with Article
+  
+user
+  ├── username              # default Strapi field
+  ├── email                 # default Strapi field
+  ├── provider              # default Strapi field
+  ├── password              # default Strapi field
+  ├── resetPasswordToken    # default Strapi field
+  ├── confirmationToken     # default Strapi field
+  ├── confirmed             # default Strapi field
+  ├── blocked               # default Strapi field
+  ├── role                  # default Strapi field
+  ├── uuid                  # uniqe uuid (string)
+  ├── articles              # relation with Article
+  ├── comments              # relation with Comment
+  └── avatar                # Media field
+```
 
 ## 7. Testing
 To run unit tests, execute the following command:
