@@ -56,6 +56,9 @@ To run the development version of the application, execute the following command
    npm run dev
 ```
 The application will be available at http://localhost:5173.
+Before running please check your .env file.
+
+In main directory you can find .env.example file with all variables needed to connect RCM4S with your Strapi backend.
 
 ## 5. Project Structure
 <!-- Placeholder for Project Structure -->
