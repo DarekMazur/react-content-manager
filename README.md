@@ -61,7 +61,42 @@ Before running please check your .env file.
 In main directory you can find .env.example file with all variables needed to connect RCM4S with your Strapi backend.
 
 ## 5. Project Structure
-<!-- Placeholder for Project Structure -->
+```
+react-content-manager/
+  ├── src/
+  │   ├── assets/           # Application assets
+  │   ├── components/       # Application components
+  │   ├── i18n/             # Translation files
+  │   ├── mocks/            # Mocking data
+  │   ├── pages/            # Application pages (views)
+  │   ├── store/            # Application store
+  │   ├── styles/           # Global styles
+  │   ├── types/            # Types
+  │   ├── utils/            # Application components
+  │   │   ├── helpers       # Application helpers
+  │   │   ├── hooks         # Application custom hooks
+  │   │   ├── methods       # Custom methods
+  │   │   ├── providers     # Application providers
+  │   │   ├── themes        # Style themes
+  │   │   └── data.ts       # Application data
+  │   ├── main.tsx          # Main react ts file
+  │   ├── setupTest.ts      # Tests config file
+  │   ├── vite-env.d.ts     # Configuration for Vite env
+  │   └── App.ts            # Main application component
+  ├── .env.example          # example env file
+  ├── .eslintrc             # Linter configuration
+  ├── .gitignore            # Ignore list for git
+  ├── .lintstagedrc.json    # Lint Staged configuration
+  ├── .prettioerignore      # Ignore list for Prettier
+  ├── .prettierrc           # Prettier configuration
+  ├── index.html            # Entry file
+  ├── package.json          # A manifest file for Node.js projects
+  ├── package-lock.json     # npm dependencies (You won’t change this file directly!)
+  ├── README.md             # Application documentation (current file)
+  ├── tsconfig.json         # TypeScript configuration
+  ├── tsconfig.node.json    # TypeScript configuration
+  └── vite.config.js        # Vite configuration
+```
 
 ## 6. API schema
 ```
