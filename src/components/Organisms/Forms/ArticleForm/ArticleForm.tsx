@@ -52,6 +52,8 @@ import { ICategoryData } from '../../../../types/categoryTypes.ts';
 import { IStrapiUser } from '../../../../types/userTypes.ts';
 import Uploading from '../../../Atoms/Uploading/Uploading.tsx';
 import { Italic } from '../../../Atoms/Italic/Italic.styles.ts';
+import '../../../../utils/translations/pl'
+import '../../../../utils/translations/en-gb'
 
 interface IOptionTypes {
   readonly label: string;
@@ -544,7 +546,7 @@ const ArticleForm = () => {
             }</h1>${currentArticle ? currentArticle.attributes.body : ''}`}
             /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
             // @ts-ignore
-            config={editorConfiguration}
+            config={{...editorConfiguration, language: localStorage.getItem('i18nextLng') === 'en' ? 'en-gb' : localStorage.getItem('i18nextLng')}}
             onChange={(_event, editor) => handleEditorChange(editor.getData())}
           />
           <FormErrorMessage message={errorMessage} />
