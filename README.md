@@ -24,7 +24,7 @@ The application utilizes the following technologies:
 * Vite (5.0.0)
 * React Router ()
 * Redux Toolkit (2.0.1)
-* CKEditor (41.0.0)
+* ckeditor5-react (6.2.0)
 * Mock Service Worker (2.0.11)
 * TypeScript (5.2.2)
 * styled-components (6.1.1)
