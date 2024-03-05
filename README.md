@@ -5,19 +5,25 @@
 
 ## Table of content
 1. Introduction
-2. Technologies
-3. Installation
-4. Running
-5. Project Structure
-6. API schema
-7. Testing
-8. Production Version
+2. Requirement
+3. Technologies
+4. Installation
+5. Running
+6. Project Structure
+7. API schema
+8. Testing
+9. Production Version
 
 
 ## 1. Introduction
 The React Content Manager for Strapi (RCM4S) application is a tool designed to streamline content management tasks with Strapi. Built using ReactJS, this application provides a seamless user experience for managing content efficiently. It leverages various libraries and tools including React Router, Redux Toolkit, Redux Toolkit Query, Styled Components, and CKEditor to enhance functionality and user interface.
 
-## 2. Technologies
+## 2. Requirement
+
+* npm (9.6.7 or higher)
+
+
+## 3. Technologies
 The application utilizes the following technologies:
 
 * ReactJS (18.2.0)
@@ -30,9 +36,8 @@ The application utilizes the following technologies:
 * styled-components (6.1.1)
 * i18next (23.8.2)
 * auth0 (2.2.4)
-* npm (9.6.7)
 
-## 3. Installation
+## 4. Installation
 To install the application, follow these steps:
 
 1. Clone the repository with the application source code to your local computer:
@@ -50,7 +55,7 @@ git clone https://github.com/DarekMazur/react-content-manager.git
    npm install
 ```
 
-## 4. Running
+## 5. Running
 To run the development version of the application, execute the following command:
 ```bash
    npm run dev
@@ -60,7 +65,7 @@ Before running please check your .env file.
 
 In main directory you can find .env.example file with all variables needed to connect RCM4S with your Strapi backend.
 
-## 5. Project Structure
+## 6. Project Structure
 ```
 react-content-manager/
   ├── src/
@@ -98,7 +103,7 @@ react-content-manager/
   └── vite.config.js        # Vite configuration
 ```
 
-## 6. API schema
+## 7. API schema
 ```
 article
   ├── uuid                  # uniqe uuid (string)
@@ -142,13 +147,13 @@ user
   └── avatar                # Media field
 ```
 
-## 7. Testing
+## 8. Testing
 To run unit tests, execute the following command:
 ```bash
     npm run test
 ```
 
-## 8. Production Version
+## 9. Production Version
 To build the production version of the application, use the following command:
 ```bash
     npm run build
