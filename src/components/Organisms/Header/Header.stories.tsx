@@ -20,7 +20,9 @@ export const AuthorisedNoAvatar: Story = {
       id: faker.number.int(),
       username: faker.helpers.fake(`{{person.firstName}} {{person.lastName}}`),
       email: faker.internet.email(),
-      avatar: '',
+      createdAt: faker.date.past(),
+      updatedAt: faker.date.recent(),
+      avatar: null,
       provider: 'local',
       confirmed: true,
       blocked: true,
@@ -29,29 +31,12 @@ export const AuthorisedNoAvatar: Story = {
         name: 'Administrator',
         description: 'Page admin',
         type: 'admin',
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.recent(),
+        nb_users: faker.number.int()
       },
-    },
-  },
-};
-
-/** View for authorised user with avatar */
-export const AuthorisedWithAvatar: Story = {
-  args: {
-    user: {
-      uuid: faker.string.uuid(),
-      id: faker.number.int(),
-      username: faker.helpers.fake(`{{person.firstName}} {{person.lastName}}`),
-      email: faker.internet.email(),
-      avatar: faker.internet.avatar(),
-      provider: 'local',
-      confirmed: true,
-      blocked: true,
-      role: {
-        id: 1,
-        name: 'Administrator',
-        description: 'Page admin',
-        type: 'admin',
-      },
+      articles: [],
+      comments: []
     },
   },
 };

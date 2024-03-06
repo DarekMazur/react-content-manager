@@ -10,7 +10,9 @@ const getUser = () => {
     id: faker.number.int(),
     username: faker.helpers.fake(`{{person.firstName}} {{person.lastName}}`),
     email: faker.internet.email(),
-    avatar: faker.internet.avatar(),
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.recent(),
+    avatar: null,
     provider: 'local',
     confirmed: faker.datatype.boolean(0.8),
     blocked: faker.datatype.boolean(0.15),
@@ -19,7 +21,12 @@ const getUser = () => {
       name: 'Administrator',
       description: 'Page admin',
       type: 'admin',
+      createdAt: faker.date.past(),
+      updatedAt: faker.date.recent(),
+      nb_users: faker.number.int()
     },
+    articles: [],
+    comments: []
   };
 
   return admin;
