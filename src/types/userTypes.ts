@@ -17,7 +17,7 @@ export interface IUserTypes {
 export interface IStrapiUser extends IUserTypes {
   id: number;
   role: IStrapiRoles;
-  comment: ICommentTypes;
+  comments: Array<ICommentTypes>;
   articles: Array<IStrapiUserArticleTypes>;
   avatar: IStrapiImageAttributes | null;
 }
