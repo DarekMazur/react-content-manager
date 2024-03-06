@@ -52,11 +52,7 @@ const UserMenu = ({
     localStorage.removeItem('jwt');
     localStorage.removeItem('uuid');
     localStorage.removeItem('username');
-    window.location.replace(
-      `https://${import.meta.env.VITE_AUTH_DOMAIN}/v2/logout?returnTo=${
-        window.location.origin
-      }`,
-    );
+    window.location.replace(import.meta.env.VITE_AUTH0_LOGOUT_URL);
   };
 
   return (
