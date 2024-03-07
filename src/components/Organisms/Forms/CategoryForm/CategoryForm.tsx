@@ -194,6 +194,7 @@ const CategoryForm = () => {
             label={t('category.form.category')}
             type={'text'}
             id={'title'}
+            required
             value={updatedCategory.attributes.title}
             uuid={updatedCategory.attributes.uuid}
             handleOnChange={(e) => handleOnChange(e, 'title')}
