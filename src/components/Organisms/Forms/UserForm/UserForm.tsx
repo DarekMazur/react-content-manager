@@ -248,6 +248,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             label={t('user.form.name')}
             type="text"
             id="username"
+            required
             value={userData.username}
             uuid={uuid}
             handleOnChange={(e) => handleOnChange(e, 'username')}
@@ -257,6 +258,7 @@ const UserForm = ({ uuid }: { uuid: string }) => {
             type="email"
             id="email"
             value={userData.email}
+            required
             uuid={uuid}
             handleOnChange={(e) => handleOnChange(e, 'email')}
           />
