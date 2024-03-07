@@ -16,16 +16,12 @@ const UnauthorisedView = () => {
     localStorage.removeItem('jwt');
     localStorage.removeItem('uuid');
     localStorage.removeItem('username');
-    window.location.replace(
-      `https://${import.meta.env.VITE_AUTH_DOMAIN}/v2/logout?returnTo=${
-        window.location.origin
-      }`,
-    );
+    window.location.replace(import.meta.env.VITE_AUTH0_LOGOUT_URL);
   };
 
   return (
     <StyledUnauthorizedView>
-      <Heading tag={'h3'}>{t('unauthorised.header')}</Heading>
+      <Heading tag={'h3'} size={'l'}>{t('unauthorised.header')}</Heading>
       <P>{t('unauthorised.message')}</P>
       <FormButton $type="button" type="button" onClick={handleLogout}>
         <FontAwesomeIcon icon={['fas', 'arrow-right-from-bracket']} />{' '}

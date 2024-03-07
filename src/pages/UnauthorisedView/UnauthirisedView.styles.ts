@@ -7,4 +7,8 @@ export const StyledUnauthorizedView = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+    
+    p {
+        margin: 4rem 2rem;
+    }
 `;
